@@ -3,15 +3,16 @@
 FactoryGirl.define do
   factory :user do
     type_id 1
-    last_name "MyString"
-    first_name "MyString"
-    last_name "MyString"
-    address "MyString"
-    city "MyString"
-    state "MyString"
-    postal_code "MyString"
-    phone "MyString"
-    email "MyString"
-    member_since "MyString"
+    first_name 'Matt'
+    last_name 'Reis'
+    username 'mattreis'
+    address '1600 Pennsylvania Ave'
+    city 'Boston'
+    state 'MA'
+    postal_code '02135'
+    phone '207-867-5309'
+    email 'test@test.com'
+    member_since 2010
+    password 'Password1$'
   end
 end
