@@ -28,12 +28,11 @@
       = f.password_field :current_password
       %p.hint (we need your current password to confirm your changes)
   - if can? :create
-    = fields_for resource.roles do |roles_select|
-      .row
-        .large-4.columns
-          = roles_select.label :role_ids
-        .large-8.columns
-          = roles_select.collection_select :role_ids, Role.all, :id, :name, resource.roles.map(&:id), multiple: true
+    .row
+      .large-4.columns
+        = roles_select.label :role_ids
+      .large-8.columns
+        = roles_select.collection_select :role_ids, Role.all, :id, :name, {}, multiple: true
   .row.text-right
     .small-12.columns= f.submit 'Update', class: 'button'
 %h3 Cancel my account

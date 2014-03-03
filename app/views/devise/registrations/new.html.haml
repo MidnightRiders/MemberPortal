@@ -56,6 +56,21 @@
         .small-8.medium-4.columns
           = f.label :postal_code
           = f.text_field :postal_code
+  - if can? :create, User
+    .row
+      .large-4.columns
+        %h3 Administrative Info
+      .large-8.columns
+        .row
+          .large-4.columns
+            = f.label :roles
+          .large-8.columns
+            - Role.all.each do |role|
+              - if can? :create, role.name
+                .row
+                  .small-12.columns
+                    = check_box_tag 'user[roles][]', role.id.to_s, resource.role?(role), id: "user_roles_#{role.id}"
+                    = label_tag "user_roles_#{role.id}", role.name.titleize
   .row.text-right
     .small-12.columns= f.submit 'Sign up', class: 'button'
 = render 'devise/shared/links'
