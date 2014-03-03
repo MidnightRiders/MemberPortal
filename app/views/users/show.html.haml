@@ -1,0 +1,39 @@
+%p#notice= notice
+
+%p
+  %b Type:
+  = @user.type_id
+%p
+  %b Last name:
+  = @user.last_name
+%p
+  %b First name:
+  = @user.first_name
+%p
+  %b Last name:
+  = @user.last_name
+%p
+  %b Address:
+  = @user.address
+%p
+  %b City:
+  = @user.city
+%p
+  %b State:
+  = @user.state
+%p
+  %b Postal code:
+  = @user.postal_code
+%p
+  %b Phone:
+  = @user.phone
+%p
+  %b Email:
+  = @user.email
+%p
+  %b Member since:
+  = @user.member_since
+
+= link_to 'Edit', edit_user_path(@user)
+\|
+= link_to 'Back', users_path
