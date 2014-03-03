@@ -1,0 +1,16 @@
+!!!
+%html
+  %head
+    %title= yield(:title) || 'Midnight Riders'
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    %header
+      %nav
+        - if user_signed_in?
+          = link_to 'Sign Out', new_user_session_path
+        - else
+          = link_to 'Sign Up', new_user_registration_path
+          = button_to 'Sign In', destroy_user_session_path, method: :delete
+    = yield
