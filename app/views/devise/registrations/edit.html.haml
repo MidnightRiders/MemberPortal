@@ -2,28 +2,33 @@
   Edit #{resource_name.to_s.humanize}
 = form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f|
   = devise_error_messages!
-  %div
-    = f.label :email
-    %br/
-    = f.email_field :email, :autofocus => true
+  .row
+    .large-4.columns
+      = f.label :email, class: 'inline'
+    .large-8.columns
+      = f.email_field :email, :autofocus => true
   - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-    %div
+    %p.hint
       Currently waiting confirmation for: #{resource.unconfirmed_email}
-  %div
-    = f.label :password
-    %i (leave blank if you don't want to change it)
-    %br/
-    = f.password_field :password, :autocomplete => 'off'
-  %div
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation
-  %div
-    = f.label :current_password
-    %i (we need your current password to confirm your changes)
-    %br/
-    = f.password_field :current_password
-  %div= f.submit 'Update'
+  .row
+    .large-4.columns
+      = f.label :password, class: 'inline'
+    .large-8.columns
+      = f.password_field :password, :autocomplete => 'off'
+      %p.hint (leave blank if you don't want to change it)
+  .row
+    .large-4.columns
+      = f.label :password_confirmation, class: 'inline'
+    .large-8.columns
+      = f.password_field :password_confirmation
+  .row
+    .large-4.columns
+      = f.label :current_password, class: 'inline'
+    .large-8.columns
+      = f.password_field :current_password
+      %p.hint (we need your current password to confirm your changes)
+  .row.text-right
+    .small-12.columns= f.submit 'Update', class: 'button'
 %h3 Cancel my account
 %p
   Unhappy? #{button_to 'Cancel my account', registration_path(resource_name), :data => { :confirm => 'Are you sure?' }, :method => :delete}

@@ -1,0 +1,10 @@
+#error_explanation {
+  max-width: $row-width;
+  margin-left: auto;
+  margin-right: auto;
+  @include alert;
+  h2 {
+    font-size: $h3-font-size;
+    color: $alert-font-color;
+  }
+}

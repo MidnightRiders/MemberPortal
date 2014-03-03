@@ -1,17 +1,61 @@
-%h2 Sign up
+- content_for :title, 'Sign Up'
+.row
+  .small-12.columns
+    %h2 Become a Midnight Rider
 = form_for(resource, :as => resource_name, :url => registration_path(resource_name)) do |f|
-  = devise_error_messages!
-  %div
-    = f.label :email
-    %br/
-    = f.email_field :email, :autofocus => true
-  %div
-    = f.label :password
-    %br/
-    = f.password_field :password
-  %div
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation
-  %div= f.submit 'Sign up'
+  -#= render partial: 'devise/shared/errors'
+  .row
+    .large-4.columns
+      %h3 Account Setup
+    .large-8.columns
+      .row
+        .large-6.columns
+          = f.label :first_name, class: ('error' if resource.errors.include? :first_name)
+          = f.text_field :first_name, class: ('error' if resource.errors.include? :first_name)
+          - if resource.errors.include? :first_name
+            %small.error
+              #{resource.class.human_attribute_name(:first_name)} #{resource.errors[:first_name].to_sentence()}.
+        .large-6.columns
+          = f.label :last_name
+          = f.text_field :last_name
+      .row
+        .large-4.columns
+          = f.label :username, class: 'inline'
+        .large-8.columns
+          = f.text_field :username, autocapitalize: 'false', autocorrect: 'false'
+      .row
+        .large-4.columns
+          = f.label :password, class: 'inline'
+        .large-8.columns
+          = f.password_field :password
+      .row
+        .large-4.columns
+          = f.label :password_confirmation, class: 'inline'
+        .large-8.columns
+          = f.password_field :password_confirmation
+  .row
+    .large-4.columns
+      %h3 Contact Information
+    .large-8.columns
+      .row
+        .large-4.columns
+          = f.label :email, class: 'inline'
+        .large-8.columns
+          = f.email_field :email, :autofocus => true
+      .row
+        .small-12.columns
+          = f.label :address, 'Street Address'
+          = f.text_area :address, rows: 3
+      .row
+        .small-12.medium-5.large-6.columns
+          = f.label :city
+          = f.text_field :city
+        .small-4.medium-3.large-2.columns
+          = f.label :state
+          = f.text_field :state, size: 2
+        .small-8.medium-4.columns
+          = f.label :postal_code
+          = f.text_field :postal_code
+  .row.text-right
+    .small-12.columns= f.submit 'Sign up', class: 'button'
 = render 'devise/shared/links'
