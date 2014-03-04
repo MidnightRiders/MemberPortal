@@ -3,4 +3,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-MLSPickEm::Application.load_tasks
+MidnightRiders::Application.load_tasks
