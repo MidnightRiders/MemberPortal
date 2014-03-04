@@ -1,10 +1,9 @@
-!!! Strict
+!!!
 %html{ xmlns: 'http://www.w3.org/1999/xhtml' }
   %head
     %meta{'http-equip' => 'Content-Type', :content => 'text/html; charset=utf-8'}
-    %meta{:name => 'viewport', :content => 'widt=device-width, initial-scale=1.0'}
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
     %title= @title
-
   %body
     %table{ border: 0, cellpadding: 0, cellspacing: 0, width: '100%', height: '100%' }
       %tr
@@ -26,4 +25,10 @@
                     = link_to 'Facebook', 'http://facebook.com/MidnightRiders'
                     \|
                     = link_to 'Twitter', 'http://twitter.com/MidnightRiders'
-                  Copyright © 1995 – #{Time.now.year}, Midnight Riders
+                  %p{ style: 'text-align: center; font-size: 11px;' }
+                    Copyright © 1995 – #{Time.now.year}, Midnight Riders
+                    %br
+                    You are receiving this email because this address was registered to a member of the Midnight Riders. If that is not you, please
+                    = link_to 'email us', 'mailto:web@midnightriders.com'
+                    to resolve the situation.
+                    This will be the only email from this system that is not based on user interactions – you can always unsubscribe from our weekly emails sent through VerticalResponse by clicking the provided link at the foot of any email.
