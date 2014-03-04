@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
         end
       end
       if user.save
-        puts "  Randomly-generated temporary password: #{pass}" if pass
+        UserMailer.send(:new_user_creation_email,user,pass) if pass
       else
         puts "  Could not save user #{row['first_name']} #{row['last_name']}:"
         puts '  ' + user.errors.to_hash.map{|k,v| "#{k}: #{v.to_sentence}"}.join("\n  ")
