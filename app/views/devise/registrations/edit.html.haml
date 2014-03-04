@@ -23,16 +23,41 @@
       = f.password_field :password_confirmation
   .row
     .large-4.columns
-      = f.label :current_password, class: 'inline'
+      %h3 Contact Information
     .large-8.columns
-      = f.password_field :current_password
-      %p.hint (we need your current password to confirm your changes)
-  - if can? :create
+      .row
+        .large-4.columns
+          = f.label :email, class: 'inline'
+        .large-8.columns
+          = f.email_field :email, :autofocus => true
+      .row
+        .small-12.columns
+          = f.label :address, 'Street Address'
+          = f.text_area :address, rows: 3
+      .row
+        .small-12.medium-5.large-6.columns
+          = f.label :city
+          = f.text_field :city
+        .small-4.medium-3.large-2.columns
+          = f.label :state
+          = f.text_field :state, size: 2
+        .small-8.medium-4.columns
+          = f.label :postal_code
+          = f.text_field :postal_code
+  = render partial: 'devise/shared/roles_selection', locals: { resource: resource, params: params }
+  - if resource == current_user
     .row
       .large-4.columns
-        = roles_select.label :role_ids
+        %h3
+          Confirm Changes
+          %br
+          %small (we need your current password to confirm your changes)
       .large-8.columns
-        = roles_select.collection_select :role_ids, Role.all, :id, :name, {}, multiple: true
+        .row
+          .large-4.columns
+            = f.label :current_password, class: 'inline'
+          .large-8.columns
+            = f.password_field :current_password
   .row.text-right
     .small-12.columns= f.submit 'Update', class: 'button'
 %h3 Cancel my account

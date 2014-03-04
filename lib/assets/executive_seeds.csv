@@ -1,0 +1,11 @@
+first_name,last_name,username,address,city,state,postal_code,email,phone,membership_type
+Ben,Saufley,bensaufley,23 Lanark Rd #15,Brighton,MA,02135,bensaufley@gmail.com,207.232.7703,individual
+Chris,Camille,chriscamille,"238 Columbia St
+Apt 1S,"Cambridge,MA,2139,,christophercamille@gmail.com,individual
+Julie,Kumor,juliekumor,34 Clyde Rd,Watertown,MA,2472,,jrkumor@gmail.com,individual
+Bryan,Lincks,bryanlincks,157 Mansfield Ave #16,Norton,MA,2766,781-908-0932,bryan.lincks@gmail.com,individual
+Fran,Harrington,franharrington,"6 Greenough Ave
+#2,"Jamaica Plain,MA,2130,,,individual
+Zach,Saffrin,zachsaffrin,5 Hastings St,Framingham,MA,1701,617-947-6209,awesomezach@gmail.com,family
+Matt,Zytka,mattzytka,"24 Everett St
+Apt 3,"Boston,MA,2134,,mattzytka@gmail.com,individual

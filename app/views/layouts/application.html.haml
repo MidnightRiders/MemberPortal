@@ -1,0 +1,38 @@
+!!!
+%html
+  %head
+    %title= content_for?(:title) ? "Midnight Riders | #{content_for(:title)}" : 'Midnight Riders'
+    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato:300,700'
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    .contain-to-grid.sticky
+      %nav.top-bar{ data: { topbar: true }}
+        %ul.title-area
+          %li.name
+            %h1= link_to 'Midnight Riders', root_path
+
+        %section.top-bar-section
+          %ul.right
+            - if user_signed_in?
+              - if can? :view, :users
+                %li= link_to 'Users', users_path
+              %li= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'button secondary'
+            - else
+              %li= link_to 'Sign Up', new_user_registration_path
+              %li= link_to 'Sign In', new_user_session_path
+    %header.row
+      .small-12.columns
+        %h1= yield(:title) || 'Midnight Riders'
+        = yield(:header)
+    %main.row
+      - if notice
+        .small-12.columns
+          %p= notice
+      .small-12.columns
+        = yield
+    %footer.small-12.columns
+      = yield(:footer)
+      Copyright ©1995 – #{Time.now.year}, Midnight Riders.
+      = link_to 'Webmaster', 'mailto:web@midnightriders.com'
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true

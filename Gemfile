@@ -15,6 +15,9 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'foundation-rails'
 
+gem 'roo' # For imports
+gem 'iconv'
+
 # Users/auth
 gem 'devise'
 gem 'cancan'

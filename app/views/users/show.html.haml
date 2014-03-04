@@ -1,39 +1,28 @@
-%p#notice= notice
-
-%p
-  %b Type:
-  = @user.type_id
-%p
-  %b Last name:
-  = @user.last_name
-%p
-  %b First name:
+- content_for :title do
   = @user.first_name
-%p
-  %b Last name:
-  = @user.last_name
+  %strong=  @user.last_name
+  %small @#{@user.username}
+
 %p
   %b Address:
   = @user.address
-%p
-  %b City:
-  = @user.city
-%p
-  %b State:
+  %br
+  #{@user.city},
   = @user.state
-%p
-  %b Postal code:
   = @user.postal_code
 %p
   %b Phone:
   = @user.phone
 %p
   %b Email:
-  = @user.email
+  = link_to @user.email, "mailto#{@user.email}"
 %p
   %b Member since:
   = @user.member_since
+%p
+  %b Roles:
+  = @user.list_roles
 
-= link_to 'Edit', edit_user_path(@user)
+= link_to 'Edit', edit_user_registration_path(@user)
 \|
 = link_to 'Back', users_path
