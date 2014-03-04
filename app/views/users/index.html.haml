@@ -36,7 +36,7 @@
           = user.address
           %br
           #{user.city}, #{user.state} #{user.postal_code}
-        .td= user.phone
+        .td= number_to_phone(user.phone)
         .td= link_to user.email, "mailto: #{user.email}"
         .td= user.member_since
         .td= user.list_roles

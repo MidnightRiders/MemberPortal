@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :city
       t.string :state
       t.string :postal_code
-      t.integer :phone
+      t.integer :phone,             :limit => 8
       t.string :email,              :null => false, :default => ''
       t.string :username,           :null => false, :default => ''
       t.integer :member_since

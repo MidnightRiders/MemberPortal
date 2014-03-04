@@ -8,7 +8,6 @@ class User < ActiveRecord::Base
   has_many :roles, through: :user_roles
 
   validates :first_name, :last_name, presence: true
-  validates :phone, format: { with: /[0-9]{3} *.? *[0-9]{3} *.? *[0-9]{4}\z/ }, allow_blank: true
 
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone ]
 
@@ -57,8 +56,9 @@ class User < ActiveRecord::Base
     end
   end
 
-  def phone= phone
-    self.phone = phone.gsub!(/[^\d]/,'') unless self.phone.nil?
+  def phone= value
+    value.gsub!(/\D/,'') if value.is_a? String
+    super(value)
   end
 
 end
