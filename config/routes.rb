@@ -1,7 +1,9 @@
 MLSPickEm::Application.routes.draw do
 
   devise_for :users
-  resources :users, only: [ :index, :show ]
+  resources :users, only: [ :index, :show ] do
+    collection { post :import }
+  end
   get '/home', to: 'users#home'
 
   get 'faq', to: 'static_pages#faq'

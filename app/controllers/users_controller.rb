@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.all.order('last_name ASC, first_name ASC')
   end
 
   # GET /users/1
@@ -19,8 +19,12 @@ class UsersController < ApplicationController
   end
 
   def import
-    User.import(params[:file])
-    redirect_to users_path, notice: 'Users imported.'
+    if params[:file]
+      User.import(params[:file])
+      redirect_to users_path, notice: 'Users imported.'
+    else
+      redirect_to users_path, alert: 'No file was selected'
+    end
   end
 
   private

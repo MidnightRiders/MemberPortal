@@ -1,0 +1,61 @@
+.table {
+  display: table;
+  background: $table-bg;
+  margin-bottom: $table-margin-bottom;
+  border: $table-border-style $table-border-size $table-border-color;
+  list-style: none;
+  margin-left: 0;
+  .td, .thd {
+    display: table-cell;
+  }
+  .thead {
+    display: table-header-group;
+  }
+  .tbody {
+    display: table-row-group;
+  }
+  .tfoot {
+    display: table-footer-group;
+  }
+  .thead, .tfoot{
+    background: $table-head-bg;
+    .tr {
+      .td, .thd {
+        padding: $table-head-padding;
+        font-size: $table-head-font-size;
+        font-weight: $table-head-font-weight;
+        color: $table-head-font-color;
+        text-align: $default-float;
+      }
+    }
+  }
+  .tr {
+    display: table-row;
+    .thd,
+    .td {
+      padding: $table-row-padding;
+      font-size: $table-row-font-size;
+      color: $table-row-font-color;
+    }
+
+    &.even,
+    &.alt,
+    &:nth-of-type(even) { background: $table-even-row-bg; }
+  }
+
+  .thead .tr .thd,
+  .tfoot .tr .thd,
+  .tbody .tr .td,
+  .tr .td,
+  .tfoot .tr .td { display: $table-display; line-height: $table-line-height; }
+  
+  .thd {
+    text-align: center;
+    font-weight: bold; }
+  .td,
+  .thd {
+    padding: 2px;
+    &.numeric {
+      text-align: right; }
+  }
+}

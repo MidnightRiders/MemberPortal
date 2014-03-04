@@ -26,9 +26,15 @@
         %h1= yield(:title) || 'Midnight Riders'
         = yield(:header)
     %main.row
-      - if notice
+      - if notice || alert
         .small-12.columns
-          %p= notice
+          - if notice
+            .alert-box
+              = notice
+          - if alert
+            .alert-box.alert
+              %strong Error:
+              = alert
       .small-12.columns
         = yield
     %footer.small-12.columns

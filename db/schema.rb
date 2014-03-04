@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20140303211320) do
     t.string   "city"
     t.string   "state"
     t.string   "postal_code"
-    t.string   "phone"
+    t.integer  "phone"
     t.string   "email",                  default: "", null: false
     t.string   "username",               default: "", null: false
     t.integer  "member_since"
