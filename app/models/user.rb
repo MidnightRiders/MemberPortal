@@ -34,6 +34,7 @@ class User < ActiveRecord::Base
       user.attributes = row.to_hash.select { |x| allowed_attributes.include? :"#{x}"  }
       user.roles = roles
       user.roles << Role.find_by(name: row['membership_type']) if row['membership_type']
+      pass = false
       if user.new_record?
         puts "Adding #{row['first_name']} #{row['last_name']}…"
         user.password = (pass = rand(36**10).to_s(36))
@@ -45,13 +46,11 @@ class User < ActiveRecord::Base
           puts '  No changes' unless user.changed?
         end
       end
-      if !user.save
+      if user.save
+        puts "  Randomly-generated temporary password: #{pass}" if pass
+      else
         puts "  Could not save user #{row['first_name']} #{row['last_name']}:"
         puts '  ' + user.errors.to_hash.map{|k,v| "#{k}: #{v.to_sentence}"}.join("\n  ")
-      else
-        if pass
-          puts "  Randomly-generated temporary password: #{pass}"
-        end
       end
     end
   end
