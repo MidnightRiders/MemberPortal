@@ -1,0 +1,29 @@
+%h1 Listing clubs
+
+%table
+  %tr
+    %th Name
+    %th Conference
+    %th Primary color
+    %th Secondary color
+    %th Accent color
+    %th Abbrv
+    %th
+    %th
+    %th
+
+  - @clubs.each do |club|
+    %tr
+      %td= club.name
+      %td= club.conference
+      %td= club.primary_color
+      %td= club.secondary_color
+      %td= club.accent_color
+      %td= club.abbrv
+      %td= link_to 'Show', club
+      %td= link_to 'Edit', edit_club_path(club)
+      %td= link_to 'Destroy', club, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Club', new_club_path

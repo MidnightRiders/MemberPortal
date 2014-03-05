@@ -6,6 +6,8 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+require 'csv'
+
 Role.create([
     { name: 'admin' },
     { name: 'executive_board' },
@@ -13,3 +15,9 @@ Role.create([
     { name: 'individual' },
     { name: 'family' }
 ])
+
+clubs = CSV.parse(File.read(Rails.root.join('lib/assets/clubs.csv')), headers: true)
+
+clubs.each do |club|
+  Club.create!(club.to_hash)
+end

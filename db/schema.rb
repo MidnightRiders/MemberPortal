@@ -11,10 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140303211320) do
+ActiveRecord::Schema.define(version: 20140305170228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "clubs", force: true do |t|
+    t.string   "name"
+    t.string   "conference"
+    t.integer  "primary_color"
+    t.integer  "secondary_color"
+    t.integer  "accent_color"
+    t.string   "abbrv"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "clubs", ["conference"], name: "index_clubs_on_conference", using: :btree
 
   create_table "roles", force: true do |t|
     t.string   "name"

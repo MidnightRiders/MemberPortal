@@ -1,5 +1,7 @@
 MidnightRiders::Application.routes.draw do
 
+  resources :clubs
+
   devise_for :users
   resources :users, only: [ :index, :show ] do
     collection { post :import }

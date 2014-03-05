@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @club.name
+%p
+  %b Conference:
+  = @club.conference
+%p
+  %b Primary color:
+  = @club.primary_color
+%p
+  %b Secondary color:
+  = @club.secondary_color
+%p
+  %b Accent color:
+  = @club.accent_color
+%p
+  %b Abbrv:
+  = @club.abbrv
+
+= link_to 'Edit', edit_club_path(@club)
+\|
+= link_to 'Back', clubs_path
