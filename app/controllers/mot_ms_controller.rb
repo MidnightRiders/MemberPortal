@@ -5,7 +5,7 @@ class MotMsController < ApplicationController
   # GET /mot_ms
   # GET /mot_ms.json
   def index
-    @mot_ms = current_user.mot_ms.all
+    @mot_ms = MotM.where(user_id: current_user.id)
   end
 
   # GET /mot_ms/1

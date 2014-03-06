@@ -38,6 +38,7 @@ class Ability
       else
         can :view, [User, Club, Match]
         can :index, [Club, Match]
+        can :manage, MotM, user_id: user.id
       end
     else
       can :create, User, roles: { name: [:family, :individual] }
