@@ -1,5 +1,7 @@
 MidnightRiders::Application.routes.draw do
 
+  resources :players
+
   resources :matches
 
   resources :clubs

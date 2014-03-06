@@ -34,6 +34,8 @@
                   %li= link_to 'Clubs', clubs_path
                 - if can? :view, :matches
                   %li= link_to 'Matches', matches_path
+                - if can? :view, :players
+                  %li= link_to 'Players', players_path
           %li= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'button secondary'
         - else
           %li= link_to 'Sign Up', new_user_registration_path

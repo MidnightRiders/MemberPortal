@@ -1,5 +1,10 @@
 - content_for :title, 'All Clubs'
 
+.row.actions
+  .small-12.columns.text-right
+    = link_to new_club_path, class: 'button' do
+      Add Club
+
 .table
   .tr
     .thd
@@ -22,8 +27,3 @@
         = link_to 'Edit', edit_club_path(club)
         - if can? :destroy, club
           = link_to 'Destroy', club, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
-.row
-  .small-12.columns.text-right
-    = link_to new_club_path, class: 'button' do
-      Add Club

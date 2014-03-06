@@ -1,0 +1,30 @@
+- content_for :title, 'Players'
+
+- if can? :create, Player
+  .row.actions
+    .small-12.columns.text-right
+      = link_to new_player_path, class: 'button' do
+        New Player
+
+.table
+  .tr
+    .thd.numeric #
+    .thd Name
+    .thd.text-center Club
+    .thd.text-center Position
+    .thd
+
+  - @players.each do |player|
+    .tr
+      .td.numeric= player.number
+      .td
+        = link_to player do
+          = player.first_name
+          %strong= player.last_name
+      .td.text-center= player.club.abbrv
+      .td.text-center= player.position
+      .td
+        - if can? :edit, player
+          = link_to 'Edit', edit_player_path(player)
+        - if can? :destroy, player
+          = link_to 'Destroy', player, :method => :delete, :data => { :confirm => 'Are you sure?' }

@@ -1,0 +1,18 @@
+= form_for @player do |f|
+  .field
+    = f.label :number
+    = f.number_field :number
+  .field
+    = f.label :first_name
+    = f.text_field :first_name
+  .field
+    = f.label :last_name
+    = f.text_field :last_name
+  .field
+    = f.label :club_id
+    = f.select :club_id, options_for_select(Club.all.order('name ASC').map{|x| [x.name,x.id]},f.object.club_id)
+  .field
+    = f.label :position
+    = f.select :position, options_for_select(Player::POSITIONS.map{|k,v| [k, k] },f.object.position)
+  .actions
+    = f.submit 'Save'
