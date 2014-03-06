@@ -37,6 +37,15 @@
   }
   .tr {
     display: table-row;
+    &.highlight, &.highlight:nth-of-type(1n) {
+      background-color: $revs-navy;
+      .td, .thd {
+        color: #fff;
+        a:link, a:visited {
+          color: #fff;
+        }
+      }
+    }
     .thd,
     .td {
       padding: $table-row-padding;
@@ -46,7 +55,7 @@
         margin-bottom: 0;
       }
       &.highlight {
-        background-color: saturate(lighten($maroon,15%),15%);
+        background-color: $revs-red;
         color: #fff;
       }
     }

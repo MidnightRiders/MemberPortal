@@ -19,25 +19,36 @@
 
 .table
   .tr
+    .thd
     .thd Home team
     .thd Away team
     .thd Kickoff
-    .thd Location
-    .thd Score
+    .thd.text-center Location
+    .thd.text-center Score
     .thd
 
   - @matches.each do |match|
-    .tr
+    .tr{ class: ('highlight' if revs.matches.include? match )}
+      .td
+        = link_to match, title: 'Show' do
+          %i.fi-eye
+        - if can? :edit, match
+          = link_to edit_match_path(match), title: 'Edit' do
+            %i.fi-pencil
+        - if can? :destroy, match
+          = link_to match, :method => :delete, :data => { :confirm => 'Are you sure?' }, title: 'Destroy' do
+            %i.fi-trash
       .td{ class: ('highlight' if match.home_team == revs)}= match.home_team.name
       .td{ class: ('highlight' if match.away_team == revs)}= match.away_team.name
       .td.text-center= match.kickoff.strftime('%_m.%-d %l:%M%P')
       .td= match.location
       .td.text-center
         = match.score
-      .td
-        = link_to 'Show', match
-        = link_to 'MotM', new_match_mot_m_path(match)
-        - if can? :edit, match
-          = link_to 'Edit', edit_match_path(match)
-        - if can? :destroy, match
-          = link_to 'Destroy', match, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      .td.text-right
+        .button-group
+          - if revs.matches.include? match
+            = link_to 'MotM', mot_m_path_for(match), class: 'button tiny secondary'
+            = link_to 'RevGuess', '#', class: 'button tiny secondary'
+            = link_to 'Pick ’Em', '#', class: 'button tiny secondary'
+          - else
+            = link_to 'Pick ’Em', '#', class: 'button tiny'
