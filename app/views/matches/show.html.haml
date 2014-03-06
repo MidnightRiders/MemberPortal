@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Home team:
+  = @match.home_team_id
+%p
+  %b Away team:
+  = @match.away_team_id
+%p
+  %b Kickoff:
+  = @match.kickoff
+%p
+  %b Location:
+  = @match.location
+%p
+  %b Home goals:
+  = @match.home_goals
+%p
+  %b Away goals:
+  = @match.away_goals
+
+= link_to 'Edit', edit_match_path(@match)
+\|
+= link_to 'Back', matches_path

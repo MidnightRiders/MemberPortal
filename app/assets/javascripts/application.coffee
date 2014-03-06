@@ -22,7 +22,8 @@ $ ->
 
   $(':input[name*=_color]').on('change', ->
       $this = $(this)
-      val = $this.val()
+      val = $this.val() || 'efefef'
+      val = "#{Array(6 - val.length+1).join('0')}#{val}"
       console.log val, darken(val), getContrastYIQ(val)
       $(".prefix[data-color-input=#{$this.attr('id')}").css
         'background-color': "##{val}"

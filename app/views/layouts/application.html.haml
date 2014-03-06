@@ -6,12 +6,7 @@
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = csrf_meta_tags
   %body
-    %header.page-header.row
-      .small-12.columns
-        %h1
-          = link_to 'Midnight Riders', root_path
-          = content_tag(:small, yield(:title)) if content_for?(:title)
-        = yield(:header)
+    = render partial: 'layouts/header'
     = render partial: 'layouts/navigation'
     %main.row
       = render partial: 'layouts/notifications'

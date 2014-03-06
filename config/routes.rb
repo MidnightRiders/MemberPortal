@@ -1,5 +1,7 @@
 MidnightRiders::Application.routes.draw do
 
+  resources :matches
+
   resources :clubs
 
   devise_for :users

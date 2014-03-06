@@ -1,10 +1,22 @@
 header.page-header {
   padding-top: rem-calc(10);
+  h1 {
+    margin-bottom: 0;
+  }
   &, * {
     color: #fff;
     text-shadow: 0 2px 3px #000;
-    small {
+    small, .subheader {
       opacity: .8;
+    }
+  }
+  .next-game {
+    h5, h3 {
+      margin: 0;
+      line-height: 1.2em;
+    }
+    h3 {
+      margin-bottom: 10px;
     }
   }
   //h1 a:link, h1 a:visited {

@@ -1,0 +1,24 @@
+%header.page-header.row
+  .medium-8.columns
+    %h1
+      = link_to 'Midnight Riders', root_path
+    = content_tag(:h2, yield(:title), class: 'subheader') if content_for?(:title)
+    = yield(:header)
+  .medium-4.columns.text-right.next-game
+    %h5 Next Game:
+    %h3
+      - if @m = revs.next_match
+        %small
+          = @m.kickoff.strftime('%A')
+          –
+        = @m.kickoff.strftime('%_m.%-d | %l:%M%P')
+        %small
+          %br
+          - if @m.home_team == revs
+            = @m.away_team.name
+          - else
+            = @m.home_team.name
+          |
+          = @m.location
+      -else
+        None Scheduled

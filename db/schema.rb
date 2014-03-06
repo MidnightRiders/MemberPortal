@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140305170228) do
+ActiveRecord::Schema.define(version: 20140306034214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,21 @@ ActiveRecord::Schema.define(version: 20140305170228) do
   end
 
   add_index "clubs", ["conference"], name: "index_clubs_on_conference", using: :btree
+
+  create_table "matches", force: true do |t|
+    t.integer  "home_team_id"
+    t.integer  "away_team_id"
+    t.datetime "kickoff"
+    t.string   "location"
+    t.integer  "home_goals",   limit: 2
+    t.integer  "away_goals",   limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "matches", ["away_team_id"], name: "index_matches_on_away_team_id", using: :btree
+  add_index "matches", ["home_team_id", "away_team_id"], name: "index_matches_on_home_team_id_and_away_team_id", using: :btree
+  add_index "matches", ["home_team_id"], name: "index_matches_on_home_team_id", using: :btree
 
   create_table "roles", force: true do |t|
     t.string   "name"

@@ -1,0 +1,37 @@
+- content_for :title, 'Match Listings'
+
+.row.actions.text-right
+  .small-12.columns
+    = link_to new_match_path, class: 'button' do
+      New Match
+
+.table
+  .tr
+    .thd Home team
+    .thd Away team
+    .thd Kickoff
+    .thd Location
+    .thd Score
+    .thd
+    .thd
+    .thd
+
+  - @matches.each do |match|
+    .tr
+      .td{ class: ('highlight' if match.home_team == revs)}= match.home_team.name
+      .td{ class: ('highlight' if match.away_team == revs)}= match.away_team.name
+      .td.text-center= match.kickoff.strftime('%_m.%-d %l:%M%P')
+      .td= match.location
+      .td.text-center
+        - if match.home_goals.blank? && match.away_goals.blank?
+          –
+        - else
+          = match.home_goals || 0
+          –
+          = match.away_goals || 0
+      .td
+        = link_to 'Show', match
+        - if can? :edit, match
+          = link_to 'Edit', edit_match_path(match)
+        - if can? :destroy, match
+          = link_to 'Destroy', match, :method => :delete, :data => { :confirm => 'Are you sure?' }
