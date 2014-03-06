@@ -5,12 +5,16 @@ class MotMsController < ApplicationController
   # GET /mot_ms
   # GET /mot_ms.json
   def index
-    @mot_ms = MotM.all
+    @mot_ms = current_user.mot_ms.all
   end
 
   # GET /mot_ms/1
   # GET /mot_ms/1.json
   def show
+    respond_to do |format|
+      format.html { redirect_to matches_path }
+      format.json
+    end
   end
 
   # GET /mot_ms/new
@@ -25,11 +29,11 @@ class MotMsController < ApplicationController
   # POST /mot_ms
   # POST /mot_ms.json
   def create
-    @mot_m = @match.mot_ms.new(mot_m_params)
+    @mot_m = MotM.new(mot_m_params)
 
     respond_to do |format|
       if @mot_m.save
-        format.html { redirect_to @mot_m, notice: 'Mot m was successfully created.' }
+        format.html { redirect_to matches_path, notice: 'Your vote was successfully cast.' }
         format.json { render action: 'show', status: :created, location: @mot_m }
       else
         format.html { render action: 'new' }
@@ -43,7 +47,7 @@ class MotMsController < ApplicationController
   def update
     respond_to do |format|
       if @mot_m.update(mot_m_params)
-        format.html { redirect_to @mot_m, notice: 'Mot m was successfully updated.' }
+        format.html { redirect_to matches_path, notice: 'Your vote was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -57,7 +61,7 @@ class MotMsController < ApplicationController
   def destroy
     @mot_m.destroy
     respond_to do |format|
-      format.html { redirect_to mot_ms_url }
+      format.html { redirect_to matches_url }
       format.json { head :no_content }
     end
   end

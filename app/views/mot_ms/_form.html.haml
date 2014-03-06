@@ -3,7 +3,7 @@
   = @match.home_team.name
   vs
   = @match.away_team.name
-= form_for @mot_m do |f|
+= form_for [@match,@mot_m] do |f|
   - if @mot_m.errors.any?
     #error_explanation
       %h2= "#{pluralize(@mot_m.errors.count, "error")} prohibited this mot_m from being saved:"
@@ -18,9 +18,10 @@
     = f.select :first_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.first_id)
   .field
     = f.label :second_id
-    = f.select :second_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.second_id)
+    = f.select :second_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.second_id), include_blank: '–'
   .field
     = f.label :third_id
-    = f.select :second_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.third_id)
-  .actions
-    = f.submit
+    = f.select :third_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.third_id), include_blank: '–'
+  .actions.text-right
+    = f.button :submit do
+      = f.object.new_record? ? 'Vote' : 'Update'

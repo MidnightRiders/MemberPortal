@@ -1,11 +1,17 @@
-%p#notice= notice
-
+.row.actions
+  .small-12.columns.text-right
+    - if motm = @match.mot_ms.find_by(user_id: current_user.id)
+      = link_to 'Change MotM Vote', [@match, motm], class: 'button'
+    - else
+      = link_to 'Cast MotM Vote', new_match_mot_m_path(@match), class: 'button'
+    - if can? :edit, @match
+      = link_to 'Edit', edit_match_path(@match), class: 'button secondary'
 %p
   %b Home team:
-  = @match.home_team_id
+  = @match.home_team.name
 %p
   %b Away team:
-  = @match.away_team_id
+  = @match.away_team.name
 %p
   %b Kickoff:
   = @match.kickoff
@@ -13,12 +19,5 @@
   %b Location:
   = @match.location
 %p
-  %b Home goals:
-  = @match.home_goals
-%p
-  %b Away goals:
-  = @match.away_goals
-
-= link_to 'Edit', edit_match_path(@match)
-\|
-= link_to 'Back', matches_path
+  %b Score:
+  = @match.score

@@ -45,11 +45,11 @@ ActiveRecord::Schema.define(version: 20140306054019) do
   add_index "matches", ["home_team_id"], name: "index_matches_on_home_team_id", using: :btree
 
   create_table "mot_ms", force: true do |t|
-    t.string   "user_id"
-    t.string   "match_id"
-    t.string   "first_id"
-    t.string   "second_id"
-    t.string   "third_id"
+    t.integer  "user_id"
+    t.integer  "match_id"
+    t.integer  "first_id"
+    t.integer  "second_id"
+    t.integer  "third_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

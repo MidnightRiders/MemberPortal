@@ -21,12 +21,7 @@
       .td.text-center= match.kickoff.strftime('%_m.%-d %l:%M%P')
       .td= match.location
       .td.text-center
-        - if match.home_goals.blank? && match.away_goals.blank?
-          –
-        - else
-          = match.home_goals || 0
-          –
-          = match.away_goals || 0
+        = match.score
       .td
         = link_to 'Show', match
         = link_to 'MotM', new_match_mot_m_path(match)
