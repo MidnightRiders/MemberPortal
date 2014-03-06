@@ -1,8 +1,9 @@
 - content_for :title, 'Man of the Match'
 
 .row.actions
-  .small-12.columns.text-righ
-    = link_to 'Cast Your Vote', matches_path, class: 'button'
+  .small-12.columns.text-right
+    - if revs.last_match && Time.now - revs.last_match.kickoff < 2.months
+      = link_to (mot_m_for(revs.next_match) ? 'Change' : 'Cast') + ' MotM Vote', mot_m_path_for(revs.next_match), class: 'button'
 
 .table
   .tr
@@ -12,30 +13,42 @@
     .thd Third
     .thd
 
-  - @mot_ms.each do |mot_m|
+  - revs.matches.each do |match|
+    - mot_m = MotM.find_by(user_id: current_user.id, match_id: match.id)
     .tr
       .td
-        = mot_m.match.kickoff.strftime('%_m.%-d: ')
-        = mot_m.match.home_team.abbrv
+        = match.kickoff.strftime('%_m.%-d: ')
+        = match.home_team.abbrv
         v
-        = mot_m.match.away_team.abbrv
-      .td
-        = link_to mot_m.first do
-          = mot_m.first.first_name
-          %strong= mot_m.first.last_name
-      .td
-        - if mot_m.second
-          = link_to mot_m.second do
-            = mot_m.second.first_name
-            %strong= mot_m.second.last_name
-      .td
-        - if mot_m.third
-          = link_to mot_m.third do
-            = mot_m.third.first_name
-            %strong= mot_m.third.last_name
-      .td
-        - if can? :edit, mot_m
-          = link_to 'Edit', edit_match_mot_m_path(mot_m.match,mot_m)
-        - if can? :destroy, mot_m
-          = link_to 'Destroy', [mot_m.match,mot_m], :method => :delete, :data => { :confirm => 'Are you sure?' }
+        = match.away_team.abbrv
+      - if mot_m
+        .td
+          - if mot_m.first
+            = link_to mot_m.first do
+              = mot_m.first.first_name
+              %strong= mot_m.first.last_name
+        .td
+          - if mot_m.second
+            = link_to mot_m.second do
+              = mot_m.second.first_name
+              %strong= mot_m.second.last_name
+        .td
+          - if mot_m.third
+            = link_to mot_m.third do
+              = mot_m.third.first_name
+              %strong= mot_m.third.last_name
+        .td.text-right
+          - if can?(:edit, mot_m)
+            = link_to 'Edit', edit_match_mot_m_path(mot_m.match,mot_m), class: 'button tiny'
+          - if can?(:destroy, mot_m)
+            = link_to 'Destroy', [mot_m.match,mot_m], :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button tiny'
+      - else
+        .td
+        .td
+        .td
+        .td.text-right
+          - if Time.now > match.kickoff + 45.minutes
+            = link_to 'Vote', new_match_mot_m_path(match), class: 'button tiny'
+          - else
+            %p Not yet open for voting
 

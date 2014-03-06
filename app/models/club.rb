@@ -26,10 +26,10 @@ class Club < ActiveRecord::Base
   end
 
   def next_match
-    matches.reject{|x|
-      puts "X: #{x.home_team.name}"
-      x.kickoff < Time.now
-    }.first
+    matches.sort_by(&:kickoff).reject{|x| x.kickoff < Time.now }.first
+  end
+  def last_match
+    matches.sort_by(&:kickoff).reject{|x| x.kickoff > Time.now }.last
   end
 
   %w(primary secondary accent).each do |x|

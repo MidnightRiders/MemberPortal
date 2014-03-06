@@ -42,6 +42,9 @@
       padding: $table-row-padding;
       font-size: $table-row-font-size;
       color: $table-row-font-color;
+      button, .button, & > :last-child {
+        margin-bottom: 0;
+      }
       &.highlight {
         background-color: saturate(lighten($maroon,15%),15%);
         color: #fff;

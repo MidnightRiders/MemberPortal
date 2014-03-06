@@ -1,9 +1,6 @@
 .row.actions
   .small-12.columns.text-right
-    - if motm = @match.mot_ms.find_by(user_id: current_user.id)
-      = link_to 'Change MotM Vote', [@match, motm], class: 'button'
-    - else
-      = link_to 'Cast MotM Vote', new_match_mot_m_path(@match), class: 'button'
+    = link_to (mot_m_for(@match) ? 'Change' : 'Cast') + ' MotM Vote', mot_m_path_for(@match), class: 'button'
     - if can? :edit, @match
       = link_to 'Edit', edit_match_path(@match), class: 'button secondary'
 %p

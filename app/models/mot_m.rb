@@ -3,6 +3,7 @@ class MotM < ActiveRecord::Base
   validates :second, :third, associated: true, allow_nil: true
 
   validate :different_picks, message: 'must be different players'
+  validate :voteable, message: 'cannot be voted on yet'
 
   belongs_to :user
   belongs_to :match
@@ -16,4 +17,7 @@ class MotM < ActiveRecord::Base
       picks.detect{|e| picks.count(e) > 1 }
     end
 
+    def voteable
+      Time.now > match.kickoff + 45.minutes
+    end
 end
