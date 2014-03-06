@@ -60,4 +60,8 @@ class User < ActiveRecord::Base
     super(value)
   end
 
+  def to_param
+    username
+  end
+
 end

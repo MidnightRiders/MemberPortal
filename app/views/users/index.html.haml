@@ -2,14 +2,14 @@
 
 .row
   .small-12.columns.text-right
-    - if can? :create, User
-      = link_to new_user_registration_path, class: 'button' do
-        New User
     - if can? :manage, :users
       = form_tag import_users_path, multipart: true do
         = file_field_tag :file
-        = button_tag :submit, class: 'button' do
+        = button_tag :submit, class: 'button secondary' do
           Import
+    - if can? :create, User
+      = link_to new_user_path, class: 'button' do
+        New User
 
 
 %ul.table.members
@@ -26,16 +26,18 @@
     - @users.each do |user|
       %li.tr
         .td
-          %h5
-            %strong>= user.last_name
-            ,
-            = user.first_name
-          %h5.subheader @#{user.username}
+          = link_to user do
+            %h5
+              %strong>= user.last_name
+              ,
+              = user.first_name
+            %h5.subheader @#{user.username}
         .td.numeric= number_to_phone(user.phone,delimiter: '.')
         .td= link_to user.email, "mailto: #{user.email}"
         .td.numeric= user.member_since
         .td= user.list_roles
         .td
           -#= link_to 'Show', user
-          = link_to 'Edit', edit_user_registration_path(user)
-          = link_to 'Destroy', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
+          = link_to 'Edit', edit_user_path(user)
+          - if can? :destroy, user
+            = link_to 'Destroy', user, :method => :delete, :data => { :confirm => 'Are you sure?' }

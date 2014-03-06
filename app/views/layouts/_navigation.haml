@@ -7,6 +7,7 @@
     %section.top-bar-section
       %ul.right
         - if user_signed_in?
+          %li= link_to 'My Account', edit_user_registration_path(current_user)
           - if current_user.role?('admin') || current_user.role?('executive_board')
             %li.has-dropdown
               %a Administrative

@@ -36,7 +36,7 @@ class Ability
         can :create, UserRole, [:executive_board, :at_large_board, :family, :individual]
         can :view, :all
       else
-        can :view, [user, Club]
+        can :view, [User, Club]
         can :index, Club
       end
     else

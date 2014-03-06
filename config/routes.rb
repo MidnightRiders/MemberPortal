@@ -3,7 +3,7 @@ MidnightRiders::Application.routes.draw do
   resources :clubs
 
   devise_for :users
-  resources :users, only: [ :index, :show ] do
+  resources :users do
     collection { post :import }
   end
   get '/home', to: 'users#home'
