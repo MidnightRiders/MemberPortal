@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b User:
+  = @mot_m.user_id
+%p
+  %b Match:
+  = @mot_m.match_id
+%p
+  %b First:
+  = @mot_m.first_id
+%p
+  %b Second:
+  = @mot_m.second_id
+%p
+  %b Third:
+  = @mot_m.third_id
+
+= link_to 'Edit', edit_mot_m_path(@mot_m)
+\|
+= link_to 'Back', mot_ms_path

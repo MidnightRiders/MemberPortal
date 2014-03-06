@@ -1,0 +1,26 @@
+%h2
+  = @match.kickoff.strftime('%B %-d:')
+  = @match.home_team.name
+  vs
+  = @match.away_team.name
+= form_for @mot_m do |f|
+  - if @mot_m.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@mot_m.errors.count, "error")} prohibited this mot_m from being saved:"
+      %ul
+        - @mot_m.errors.full_messages.each do |msg|
+          %li= msg
+
+  = f.hidden_field :user_id, value: current_user.id
+  = f.hidden_field :match_id
+  .field
+    = f.label :first_id
+    = f.select :first_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.first_id)
+  .field
+    = f.label :second_id
+    = f.select :second_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.second_id)
+  .field
+    = f.label :third_id
+    = f.select :second_id, options_for_select(Player.all.sort.map{|x| ["#{x.number} #{x.first_name} #{x.last_name} (#{x.position})", x.id]}, f.object.third_id)
+  .actions
+    = f.submit

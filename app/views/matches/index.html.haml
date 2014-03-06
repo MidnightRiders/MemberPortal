@@ -13,8 +13,6 @@
     .thd Location
     .thd Score
     .thd
-    .thd
-    .thd
 
   - @matches.each do |match|
     .tr
@@ -31,6 +29,7 @@
           = match.away_goals || 0
       .td
         = link_to 'Show', match
+        = link_to 'MotM', new_match_mot_m_path(match)
         - if can? :edit, match
           = link_to 'Edit', edit_match_path(match)
         - if can? :destroy, match

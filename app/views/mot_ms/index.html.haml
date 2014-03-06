@@ -1,0 +1,30 @@
+- content_for :title, 'Man of the Match'
+
+.row.actions
+  .small-12.columns.text-righ
+    = link_to 'Cast Your Vote', matches_path, class: 'button'
+
+%table
+  %tr
+    %th User
+    %th Match
+    %th First
+    %th Second
+    %th Third
+    %th
+    %th
+    %th
+
+  - @mot_ms.each do |mot_m|
+    %tr
+      %td= mot_m.user_id
+      %td= mot_m.match_id
+      %td= mot_m.first_id
+      %td= mot_m.second_id
+      %td= mot_m.third_id
+      %td= link_to 'Show', mot_m
+      %td= link_to 'Edit', edit_mot_m_path(mot_m)
+      %td= link_to 'Destroy', mot_m, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+

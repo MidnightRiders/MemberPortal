@@ -2,7 +2,11 @@ MidnightRiders::Application.routes.draw do
 
   resources :players
 
-  resources :matches
+  resources :mot_ms, path: 'motm', only: [ :index ]
+
+  resources :matches do
+    resources :mot_ms, path: 'motm'
+  end
 
   resources :clubs
 
