@@ -5,8 +5,14 @@
   border: $table-border-style $table-border-size $table-border-color;
   list-style: none;
   margin-left: 0;
+  width: 100%;
   .td, .thd {
     display: table-cell;
+    &.color {
+      &.accent {
+        width: 3px;
+      }
+    }
   }
   .thead {
     display: table-header-group;

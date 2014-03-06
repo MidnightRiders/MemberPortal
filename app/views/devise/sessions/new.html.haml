@@ -16,5 +16,6 @@
         = f.check_box :remember_me
         = f.label :remember_me
   .row.text-right
-    .small-12.columns= f.submit 'Sign in', class: 'button'
-= render 'devise/shared/links'
+    .small-12.columns
+      = link_to 'Forgot your password?', new_password_path(resource_name)
+      = f.submit 'Sign in', class: 'button'

@@ -1,0 +1,10 @@
+main.row {
+  margin: rem-calc(10 5);
+  padding: rem-calc(10 0);
+  background: #fff;
+  border: 1px solid $silver;
+  @media #{$medium-up} {
+    margin: rem-calc(20) auto;
+    padding: rem-calc(20 10);
+  }
+}

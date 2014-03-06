@@ -11,7 +11,14 @@
  *= require_self
  */
 
+@import 'shared';
 @import 'foundation-setup';
 
+@import 'base';
+@import 'header';
+@import 'main';
+@import 'nav';
 @import 'devise';
 @import 'tables';
+
+@import 'clubs';

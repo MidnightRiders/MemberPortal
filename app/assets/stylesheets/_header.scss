@@ -1,0 +1,13 @@
+header.page-header {
+  padding-top: rem-calc(10);
+  &, * {
+    color: #fff;
+    text-shadow: 0 2px 3px #000;
+    small {
+      opacity: .8;
+    }
+  }
+  //h1 a:link, h1 a:visited {
+  //  color: $header-font-color;
+  //}
+}

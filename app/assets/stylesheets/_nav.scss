@@ -1,0 +1,29 @@
+.contain-to-grid.sticky {
+  box-shadow: 0 3px 6px #000;
+}
+.top-bar {
+  text-shadow: 0 1px 1px #333;
+  .title-area {
+    height: 0;
+    overflow: hidden;
+    .fixed & {
+      height: auto;
+    }
+    a:link, a:visited {
+      opacity: 0;
+      @include transition(opacity .5s);
+      .fixed & {
+        opacity: 1;
+      }
+      &:before {
+        width: 30px;
+        height: 100%;
+        content: '\00A0';
+        background: transparent image-url('logo.png') no-repeat center;
+        background-size: contain;
+        display: inline-block;
+        margin-right: .3em;
+      }
+    }
+  }
+}

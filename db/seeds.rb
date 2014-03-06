@@ -8,13 +8,9 @@
 
 require 'csv'
 
-Role.create([
-    { name: 'admin' },
-    { name: 'executive_board' },
-    { name: 'at_large_board'},
-    { name: 'individual' },
-    { name: 'family' }
-])
+%w(admin executive_board at_large_board individual family).each do |type|
+  Role.find_or_create_by(name: type)
+end
 
 clubs = CSV.parse(File.read(Rails.root.join('lib/assets/clubs.csv')), headers: true)
 

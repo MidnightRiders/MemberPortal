@@ -1,0 +1,14 @@
+- if notice || alert
+  .small-12.columns
+    - if notice
+      .alert-box
+        = notice
+    - if alert
+      .alert-box.alert
+        %strong Error:
+        = alert
+- if flash
+  - flash.each do |k,f|
+    .small-12.columns
+      .alert-box{class: (k == :error ? 'alert' : k)}
+        = f

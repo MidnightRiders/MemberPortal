@@ -1,7 +1,30 @@
 @import 'foundation/functions';
 
+$primary-color: $maroon;
+$secondary-color: desaturate(lighten($navy,30%),70%);
+
+$body-font-weight: 300;
+
 $include-open-sans: false;
 $body-font-family: 'Lato', sans-serif;
 $body-font-weight: 300;
+
+$header-font-family: 'Mayflower', Georgia, serif;
+$h1-font-size: rem-calc(32);
+$h2-font-size: rem-calc(28);
+$h3-font-size: rem-calc(24);
+$h4-font-size: rem-calc(20);
+$h5-font-size: $base-font-size;
+
+$link-color: $maroon;
+$link-visited-color: $maroon;
+$link-hover-color: saturate(lighten($maroon,15%),15%);
+
+$topbar-bg: $silver;
+$topbar-bg-color: $silver;
+$topbar-dropdown-bg: $silver;
+$topbar-dropdown-link-weight: 700;
+$topbar-link-weight: 700;
+$topbar-link-bg-hover: $maroon;
 
 @import 'foundation';

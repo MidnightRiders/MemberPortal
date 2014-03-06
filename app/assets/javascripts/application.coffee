@@ -13,7 +13,19 @@
 #= require jquery
 #= require jquery_ujs
 #= require turbolinks
+#= require foundation
+#= require hex_functions
 #= require_tree .
 
 $ ->
-  $.foundation()
+  $(document).foundation()
+
+  $(':input[name*=_color]').on('change', ->
+      $this = $(this)
+      val = $this.val()
+      console.log val, darken(val), getContrastYIQ(val)
+      $(".prefix[data-color-input=#{$this.attr('id')}").css
+        'background-color': "##{val}"
+        'border-color': "##{darken(val)}"
+        'color' : getContrastYIQ(val)
+    ).trigger 'change'

@@ -16,10 +16,9 @@
   .thead
     %li.tr
       .thd Member
-      .thd Address
-      .thd Phone
+      .thd.numeric Phone
       .thd Email
-      .thd Member since
+      .thd.numeric Member since
       .thd Roles
       .thd.actions
 
@@ -32,13 +31,9 @@
             ,
             = user.first_name
           %h5.subheader @#{user.username}
-        .td
-          = user.address
-          %br
-          #{user.city}, #{user.state} #{user.postal_code}
-        .td= number_to_phone(user.phone)
+        .td.numeric= number_to_phone(user.phone,delimiter: '.')
         .td= link_to user.email, "mailto: #{user.email}"
-        .td= user.member_since
+        .td.numeric= user.member_since
         .td= user.list_roles
         .td
           -#= link_to 'Show', user

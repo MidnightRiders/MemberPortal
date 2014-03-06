@@ -3,7 +3,7 @@
 %p Congratulations! You now have access to the new Midnight Riders Members-only site. Check it out at the link below.
 %p There, you'll be able to manage your account information, submit your RevGuess and Man of the Match votes every week, and participate in the new Pick 'Em game with other Riders.
 %p In the future, we plan for you to be able to manage a Riders Membership through PayPal, with the option for recurring yearly payments.
-%p To get started, click on the link below and log in with the username <%=@user.username%>. Your temporary password is <%=@temp_pass%>. Be sure to change this right away. You can change your username, too, if you'd like, by clicking the "My Account" button in the upper right once you're logged in.
+%p To get started, click on the link below and log in with the username #{@user.username}. Your temporary password is #{@temp_pass}. Be sure to change this right away. You can change your username, too, if you'd like, by clicking the "My Account" button in the upper right once you're logged in.
 %p
   = link_to 'Get started', new_user_session_url
   now.

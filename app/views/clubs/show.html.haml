@@ -1,24 +1,23 @@
-%p#notice= notice
-
-%p
-  %b Name:
+- content_for :title do
+  Club View
+  %small= link_to 'Return', clubs_path
+%h2.clubname{ style: "background-color:##{@club.primary_color}; color:##{get_contrast_yiq(@club.primary_color)}; border-right-color:##{@club.secondary_color == 'ffffff' ? @club.accent_color : @club.secondary_color};"}
   = @club.name
-%p
-  %b Conference:
-  = @club.conference
-%p
-  %b Primary color:
-  = @club.primary_color
-%p
-  %b Secondary color:
-  = @club.secondary_color
-%p
-  %b Accent color:
-  = @club.accent_color
-%p
-  %b Abbrv:
-  = @club.abbrv
-
-= link_to 'Edit', edit_club_path(@club)
-\|
-= link_to 'Back', clubs_path
+  %small{ style: "color:##{get_contrast_yiq(@club.primary_color)}"}= @club.abbrv
+.row
+  .medium-8.columns
+    %h3.subheader #{@club.conference.titleize}ern Conference
+  - if can? :manage, @club
+    .medium-4.columns.text-right
+      = link_to 'Edit', edit_club_path(@club), class: 'button small'
+      - if can? :destroy, @club
+        = link_to 'Destroy', @club, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button alert small'
+.row
+  .medium-4.large-3.columns
+    %h4 Colors:
+  .medium-8.large-9.columns
+    %table{ width: '100%' }
+      %tr
+        %td.text-center{ width: '40%', bgcolor: "##{@club.primary_color}", style: "color:##{get_contrast_yiq(@club.primary_color)};"} Primary: ##{@club.primary_color}
+        %td.text-center{ width: '40%', bgcolor: "##{@club.secondary_color}", style: "color:##{get_contrast_yiq(@club.secondary_color)};"} Secondary: ##{@club.secondary_color}
+        %td.text-center{ width: '20%', bgcolor: "##{@club.accent_color}", style: "color:##{get_contrast_yiq(@club.accent_color)};"} Accent: ##{@club.accent_color}
