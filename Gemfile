@@ -17,6 +17,7 @@ gem 'foundation-rails'
 
 gem 'roo' # For imports
 gem 'iconv'
+gem 'icalendar'
 
 # Users/auth
 gem 'devise'

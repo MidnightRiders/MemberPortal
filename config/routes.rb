@@ -5,6 +5,7 @@ MidnightRiders::Application.routes.draw do
   resources :mot_ms, path: 'motm', only: [ :index ]
 
   resources :matches do
+    collection { get :import }
     resources :mot_ms, path: 'motm'
   end
 

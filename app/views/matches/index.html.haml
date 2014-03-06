@@ -1,8 +1,20 @@
-- content_for :title, 'Match Listings'
+- content_for :title, 'Match listings for the week of' + @start_date.strftime('%_m.%-d.%Y')
 
 .row.actions
-  .small-12.columns.text-right
-    = link_to new_match_path, class: 'button' do
+  .medium-6.columns
+    = link_to matches_path(date: @start_date - 7.days), class: 'button secondary small' do
+      &laquo;
+      Previous Week
+    - if @start_date != Date.today.beginning_of_week
+      = link_to 'This Week', matches_path, class: 'button small'
+    = link_to matches_path(date: @start_date + 7.days), class: 'button secondary small' do
+      Next Week
+      &raquo;
+  .medium-6.columns.text-right
+    - if can? :manage, Match
+      = link_to import_matches_path, class: 'button secondary small' do
+        Import Matches
+    = link_to new_match_path, class: 'button small' do
       New Match
 
 .table

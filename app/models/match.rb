@@ -4,8 +4,8 @@ class Match < ActiveRecord::Base
 
   has_many :mot_ms
 
-  validates :home_team_id, :away_team_id, :kickoff, :location, presence: true
-  validate :has_both_teams
+  validates :home_team, :away_team, :kickoff, :location, presence: true
+  validates :uid, uniqueness: { case_sensitive: true, allow_blank: true }
 
   def score
     if home_goals.blank? && away_goals.blank?
@@ -15,8 +15,8 @@ class Match < ActiveRecord::Base
     end
   end
 
-  private
-    def has_both_teams
-      !home_team.name.nil? && !away_team.name.nil?
-    end
+  def voteable?
+    kickoff && Time.now > kickoff + 45.minutes
+  end
+
 end

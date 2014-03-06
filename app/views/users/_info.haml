@@ -1,0 +1,44 @@
+.row
+  .medium-8.columns
+    %h1
+      = user.first_name
+      %strong=  user.last_name
+      %small @#{user.username}
+    %h3.subheader
+      %b Member since
+      = user.member_since || "at least #{user.created_at.year}"
+  .medium-4.columns.text-right
+    - if can? :edit, user
+      = link_to edit_user_path(user), class: 'button small' do
+        Edit
+    - if can? :destroy, user
+      = link_to user, class: 'button secondary small', :method => :delete, :data => { :confirm => 'Are you sure?' } do
+        Destroy
+
+- if can? :manage, user
+  .row
+    .medium-4.large-2.columns
+      %label Address
+    .medium-8.large-10.columns
+      %p
+        = user.address.gsub(/\n/,'<br>').html_safe
+        %br
+        #{user.city},
+        = user.state
+        = user.postal_code
+  - if user.phone
+    .row
+      .medium-4.large-2.columns
+        %label Phone:
+      .medium-8.large-10.columns
+        %p= user.phone
+  .row
+    .medium-4.large-2.columns
+      %label Email:
+    .medium-8.large-10.columns
+      %p= link_to user.email, "mailto#{user.email}"
+  .row
+    .medium-4.large-2.columns
+      %label Roles:
+    .medium-8.large-10.columns
+      %p= user.list_roles

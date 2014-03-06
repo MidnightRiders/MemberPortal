@@ -4,12 +4,38 @@ class MatchesController < ApplicationController
   # GET /matches
   # GET /matches.json
   def index
-    @matches = Match.all
+    @start_date = params[:date] ? params[:date].to_date : Date.today
+    @start_date = @start_date.beginning_of_week
+    @matches = Match.where('kickoff >= :start_date AND kickoff <= :end_date', start_date: @start_date, end_date: @start_date + 7.days).order('kickoff ASC')
   end
 
   # GET /matches/1
   # GET /matches/1.json
   def show
+  end
+
+  def import
+    url = URI('https://r.e-c.al/ecal-sub/53187c3d7f4b3faf25000047/MLS+Calendar.ics')
+    cals = Icalendar.parse(Net::HTTP.get(url))
+    cal = cals.first
+    count = 0
+    cal.events.each do |m|
+      match = Match.find_or_initialize_by(uid: m.uid)
+      teams = m.summary.split(/\s*vs\s*/i)
+      teams.map!{|t| t.gsub(/[\.\-]/,'').gsub(/\s*(FC|SC)\s*/i,'')}
+      match.location = m.location
+      match.home_team = Club.where('replace(name,\'é\',\'e\') LIKE :name', name: "%#{teams[0]}%").first
+      match.away_team = Club.where('replace(name,\'é\',\'e\') LIKE :name', name: "%#{teams[1]}%").first
+      match.kickoff = m.dtstart
+      if match.save!
+        count += 1
+      else
+        flash.alert ||= ''
+        flash.alert += "\nCould not save #{m.summary}: #{match.errors.to_hash}"
+      end
+    end
+    flash[:notice] = "#{count} Matches were saved or updated."
+    redirect_to matches_path
   end
 
   # GET /matches/new

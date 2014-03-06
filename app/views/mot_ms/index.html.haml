@@ -47,7 +47,7 @@
         .td
         .td
         .td.text-right
-          - if Time.now > match.kickoff + 45.minutes
+          - if match.voteable?
             = link_to 'Vote', new_match_mot_m_path(match), class: 'button tiny'
           - else
             %p Not yet open for voting
