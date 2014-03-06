@@ -13,7 +13,7 @@
   .medium-6.columns.text-right
     - if can? :manage, Match
       = link_to import_matches_path, class: 'button secondary small' do
-        Import Matches
+        Import/Update Matches
     = link_to new_match_path, class: 'button small' do
       New Match
 

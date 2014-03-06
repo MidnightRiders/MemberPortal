@@ -1,5 +1,5 @@
 - if flash
   - flash.each do |k,f|
     .small-12.columns
-      .alert-box{class: (k == :error ? 'alert' : k)}
+      .alert-box{class: (k == :error ? 'alert' : (k == :notice ? 'info' : k))}
         = f
