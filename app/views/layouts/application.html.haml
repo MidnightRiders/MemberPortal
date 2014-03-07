@@ -4,6 +4,7 @@
     %title= content_for?(:title) ? "Midnight Riders | #{content_for(:title)}" : 'Midnight Riders'
     = stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato:300,700'
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag stylesheets_club_path
     = csrf_meta_tags
   %body
     = render partial: 'layouts/header'

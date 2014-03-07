@@ -27,7 +27,7 @@ class Player < ActiveRecord::Base
   has_many :motm_seconds, class_name: 'MotM', foreign_key: 'second_id'
   has_many :motm_thirds, class_name: 'MotM', foreign_key: 'third_id'
 
-  def motm_total
+  def mot_m_total
     (motm_firsts.length * 3) + (motm_seconds.length * 2) + (motm_thirds.length * 1)
   end
 

@@ -18,3 +18,26 @@
 %p
   %b Score:
   = @match.score
+
+%ul.table
+  - if @mot_ms.empty?
+    %li.thead
+      .tr
+        .td Man of the Match Standings
+      %li.tr
+        %td No votes cast yet
+  - else
+    .thead
+      %li.tr
+        .td Player
+        .td.numeric 1
+        .td.numeric 2
+        .td.numeric 3
+    - @mot_ms.each do |mot_m|
+      %li.tr
+        .td
+          = mot_m.first_name
+          %strong= mot_m.last_name
+        .td= mot_m.motm_firsts.length
+        .td= mot_m.motm_seconds.length
+        .td= mot_m.motm_thirds.length

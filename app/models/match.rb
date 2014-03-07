@@ -18,5 +18,8 @@ class Match < ActiveRecord::Base
   def voteable?
     kickoff && Time.now > kickoff + 45.minutes
   end
+  def in_future?
+    kickoff && kickoff > Time.now
+  end
 
 end

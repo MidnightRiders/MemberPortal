@@ -1,5 +1,6 @@
 MidnightRiders::Application.routes.draw do
 
+  get 'stylesheets/club'
   resources :players
 
   resources :mot_ms, path: 'motm', only: [ :index ]

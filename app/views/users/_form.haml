@@ -15,7 +15,6 @@
           = f.label :username, class: 'inline'
         .large-8.columns
           = f.text_field :username, :autofocus => true, autocorrect: false, autocapitalize: false
-      = render partial: 'devise/shared/roles_selection', locals: { user: user, params: params }
       - if devise
         .row
           .large-4.columns
@@ -24,6 +23,16 @@
             = f.password_field :password, autocorrect: false, autocapitalize: false
             - if f.object.new_record?
               %p.hint (leave blank if you don't want to change it)
+  .row
+    .large-4.columns
+      %h3 Membership Information
+    .large-8.columns
+      .row
+        .large-4.columns
+          = f.label :member_since, class: 'inline'
+        .large-8.columns
+          = f.number_field :member_since
+      = render partial: 'devise/shared/roles_selection', locals: { user: user, params: params }
   .row
     .large-4.columns
       %h3 Contact Information

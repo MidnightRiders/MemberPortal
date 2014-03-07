@@ -1,2 +1,6 @@
-%h1 Users#home
-%p Find me in app/views/users/home.html.haml
+- content_for :title, 'Member Portal | Home'
+
+.row
+  .large-6.columns
+    = render partial: 'users/info', locals: { user: current_user }
+  .large-6.columns

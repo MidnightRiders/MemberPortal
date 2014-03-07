@@ -1,6 +1,4 @@
-h2.clubname {
-  border: 0 solid;
-  border-right-width: 60px;
+h2.club {
   padding: 5px;
   @media #{$medium-up} {
     padding: 10px;
@@ -12,5 +10,17 @@ h2.clubname {
   }
   small {
     opacity: .8;
+  }
+}
+.club:not(.light) {
+  border: 0 solid;
+  border-left-width: 1px;
+  border-right-width: 60px;
+  @media #{$medium-up} {
+    border-left-width: 2px;
+    border-right-width: 140px;
+  }
+  @media #{$large-up} {
+    border-right-width: 220px;
   }
 }

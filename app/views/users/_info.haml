@@ -9,11 +9,11 @@
       = user.member_since || "at least #{user.created_at.year}"
   .medium-4.columns.text-right
     - if can? :edit, user
-      = link_to edit_user_path(user), class: 'button small' do
-        Edit
+      = link_to edit_user_path(user), class: 'button small', title: 'Edit' do
+        = icon 'pencil', '', class: 'fa-lg fa-fw'
     - if can? :destroy, user
-      = link_to user, class: 'button secondary small', :method => :delete, :data => { :confirm => 'Are you sure?' } do
-        Destroy
+      = link_to user, class: 'button secondary small', :method => :delete, :data => { :confirm => 'Are you sure?' }, title: 'Destroy' do
+        = icon 'trash-o', '', class: 'fa-lg fa-fw'
 
 - if can? :manage, user
   .row

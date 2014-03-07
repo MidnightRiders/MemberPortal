@@ -1,0 +1,22 @@
+<%- @clubs.each do |club| -%>
+.club.<%=club.abbrv.downcase%> {
+    background-color: #<%=club.primary_color%>;
+    border-right-color: #<%=club.secondary_color%>;
+    border-left-color: #<%=club.accent_color%>;
+}
+.club.<%=club.abbrv.downcase%>, .club.<%=club.abbrv.downcase%> * {
+    color: #<%=get_contrast_yiq(club.primary_color)%>;
+}
+.club.<%=club.abbrv.downcase%>.light {
+    border-bottom: 2px solid #<%=club.secondary_color%>;
+}
+.club.<%=club.abbrv.downcase%>.light, .club.<%=club.abbrv.downcase%>.light * {
+    color: #<%=club.primary_color%>;
+}
+.primary.<%=club.abbrv.downcase%> {
+    color: #<%=club.primary_color%>;
+}
+.secondary.<%=club.abbrv.downcase%> {
+    color: #<%=club.secondary_color%>;
+}
+<%- end %>

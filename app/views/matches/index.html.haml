@@ -3,18 +3,22 @@
 .row.actions
   .medium-6.columns
     = link_to matches_path(date: @start_date - 7.days), class: 'button secondary small' do
-      &laquo;
+      = icon 'arrow-circle-o-left'
       Previous Week
     - if @start_date != Date.today.beginning_of_week
-      = link_to 'This Week', matches_path, class: 'button small'
+      = link_to matches_path, class: 'button small' do
+        = icon 'calendar-o'
+        This Week
     = link_to matches_path(date: @start_date + 7.days), class: 'button secondary small' do
       Next Week
-      &raquo;
+      = icon 'arrow-circle-o-right'
   .medium-6.columns.text-right
     - if can? :manage, Match
       = link_to import_matches_path, class: 'button secondary small' do
+        = icon 'cloud-download'
         Import/Update Matches
     = link_to new_match_path, class: 'button small' do
+      = icon 'plus'
       New Match
 
 .table
@@ -23,7 +27,6 @@
     .thd Home team
     .thd Away team
     .thd Kickoff
-    .thd.text-center Location
     .thd.text-center Score
     .thd
 
@@ -31,24 +34,26 @@
     .tr{ class: ('highlight' if revs.matches.include? match )}
       .td
         = link_to match, title: 'Show' do
-          %i.fi-eye
+          = icon('eye','',class:'fa-fw')
         - if can? :edit, match
           = link_to edit_match_path(match), title: 'Edit' do
-            %i.fi-pencil
+            = icon('pencil','',class:'fa-fw')
         - if can? :destroy, match
-          = link_to match, :method => :delete, :data => { :confirm => 'Are you sure?' }, title: 'Destroy' do
-            %i.fi-trash
-      .td{ class: ('highlight' if match.home_team == revs)}= match.home_team.name
-      .td{ class: ('highlight' if match.away_team == revs)}= match.away_team.name
-      .td.text-center= match.kickoff.strftime('%_m.%-d %l:%M%P')
-      .td= match.location
+          = link_to match, method: :delete, data: { :confirm => 'Are you sure?' }, title: 'Destroy' do
+            = icon('trash-o','',class:'fa-fw')
+      .td{ class: ('highlight' if match.home_team == revs)}
+        %strong= link_to match.home_team.name, match.home_team, class: 'primary ' + match.home_team.abbrv.downcase
+      .td{ class: ('highlight' if match.away_team == revs)}
+        %strong= link_to match.away_team.name, match.away_team, class: 'primary ' + match.away_team.abbrv.downcase
+      .td.text-center
+        = match.kickoff.strftime('%_m.%-d %l:%M%P')
       .td.text-center
         = match.score
       .td.text-right
         .button-group
           - if revs.matches.include? match
-            = link_to 'MotM', mot_m_path_for(match), class: 'button tiny secondary'
-            = link_to 'RevGuess', '#', class: 'button tiny secondary'
-            = link_to 'Pick ’Em', '#', class: 'button tiny secondary'
+            = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + ' MotM', mot_m_path_for(match), class: 'button tiny secondary') if match.voteable?
+            = link_to(content_tag(:i,'',class: 'fa fa-certificate fa-fw') + ' Pick ’Em', '#', class: 'button tiny secondary') if match.in_future?
+            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + ' RevGuess', '#', class: 'button tiny secondary') if match.in_future?
           - else
-            = link_to 'Pick ’Em', '#', class: 'button tiny'
+            = link_to content_tag(:i,'',class: 'fa fa-certificate fa-fw') + ' Pick ’Em', '#', class: 'button tiny'

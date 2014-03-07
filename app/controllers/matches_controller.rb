@@ -12,6 +12,7 @@ class MatchesController < ApplicationController
   # GET /matches/1
   # GET /matches/1.json
   def show
+    @mot_ms = @match.mot_ms.sort(&:mot_m_total)
   end
 
   def import
