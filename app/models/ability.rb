@@ -29,12 +29,12 @@ class Ability
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
     if user
       can :home, [User]
-      if user.role? :admin
+      if user.role? 'admin'
         can :manage, :all
-      elsif user.role? :executive_board
+      elsif user.role? 'executive_board'
         can :manage, [ User, Club, Match, Player, RevGuess ]
         cannot :destroy, [ Club, Player ]
-        can :create, User, role: Role.where(name: ['executive_board', 'at_large_board', 'family', 'individual'])
+        can :create, User, role_id: [ 2,3,4,5]
         can :view, :all
       else
         can :view, [User, Club, Match]
@@ -42,8 +42,7 @@ class Ability
         can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
       end
     else
-      can :create, User
-      can :create, UserRole, role: Role.where(name: ['family', 'individual'])
+      can :create, User, roles: { id: [ 4, 5 ] }
     end
   end
 end

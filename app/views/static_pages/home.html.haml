@@ -1,3 +1,7 @@
-- content_for :title, 'Member Portal | Home'
+- content_for :title, 'Member Portal'
 
-= render partial: 'users/info', locals: { user: current_user }
+%h2 Welcome
+%p
+  Please sign in using the link in the top corner, or
+  = link_to 'email us', 'mailto:webczar+memberportal@midnightriders.com'
+  to gain access.
