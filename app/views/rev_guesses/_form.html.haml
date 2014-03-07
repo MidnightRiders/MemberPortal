@@ -1,0 +1,29 @@
+= render partial: 'shared/match_info', locals: { match: @match }
+= form_for [@match, @rev_guess] do |f|
+  - if @rev_guess.errors.any?
+    .alert-box.alert
+      - @rev_guess.errors.full_messages.each do |msg|
+        = msg
+        %br
+
+  = f.hidden_field :user_id, value: current_user.id
+  = f.hidden_field :match_id, value: @match.id
+  .row
+    .medium-8.medium-centered.columns
+      .row
+        .small-6.columns
+          = f.label :home_goals, @match.home_team.abbrv, class: 'text-center'
+          = f.number_field :home_goals, class: 'text-center', value: @rev_guess.home_goals || 0
+        .small-6.columns
+          = f.label :away_goals, @match.away_team.abbrv, class: 'text-center'
+          = f.number_field :away_goals, class: 'text-center', value: @rev_guess.away_goals || 0
+      .row
+        .large-3.columns
+          = f.label :comment, class: 'inline'
+        .large-9.columns
+          = f.text_field :comment
+      .actions.text-right
+        = link_to 'Back', matches_path(date: @match.kickoff.to_date)
+        = f.button :submit, class: 'button' do
+          = icon 'check'
+          = f.object.new_record? ? 'Vote' : 'Update'

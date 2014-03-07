@@ -1,0 +1,19 @@
+- content_for :title do
+  RevGuess
+  %small= link_to 'Return', match_rev_guesses_path(@match)
+
+%p
+  %b Match:
+  = @rev_guess.match
+%p
+  %b User:
+  = @rev_guess.user
+%p
+  %b Home goals:
+  = @rev_guess.home_goals
+%p
+  %b Away goals:
+  = @rev_guess.away_goals
+%p
+  %b Comment:
+  = @rev_guess.comment

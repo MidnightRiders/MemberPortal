@@ -1,0 +1,38 @@
+- content_for :title do
+  Listing RevGuesses
+  
+= render partial: 'shared/match_info', locals: { match: @match }
+
+.table
+  .tr
+    .thd User
+    .thd.text-center Score
+    .thd Comment
+    .thd
+
+  - @rev_guesses.each do |rev_guess|
+    .tr
+      .td= link_to rev_guess.user.username, rev_guess.user
+      .td.text-center
+        = rev_guess.match.home_team.abbrv
+        = rev_guess.home_goals
+        –
+        = rev_guess.away_goals
+        = rev_guess.match.away_team.abbrv
+      .td= rev_guess.comment
+      .td.text-right
+        - if can? :edit, rev_guess
+          = link_to edit_match_rev_guess_path(@match,rev_guess), class: 'button tiny' do
+            = icon 'pencil'
+            Edit
+        - if can? :destroy, rev_guess
+          = link_to [@match,rev_guess], :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button alert tiny' do
+            = icon 'trash-o'
+            Destroy
+
+.row
+  .small-12.columns.text-right
+    - if !rev_guess_for(@match)
+      = link_to new_match_rev_guess_path(@match), class: 'button' do
+        = icon 'certificate'
+        New RevGuess
