@@ -14,13 +14,13 @@
         .large-4.columns
           = f.label :username, class: 'inline'
         .large-8.columns
-          = f.text_field :username, :autofocus => true, autocorrect: false, autocapitalize: false
+          = f.text_field :username, :autofocus => true, autocapitalize: 'off', autocorrect: 'off'
       - if devise
         .row
           .large-4.columns
             = f.label :password, class: 'inline'
           .large-8.columns
-            = f.password_field :password, autocorrect: false, autocapitalize: false
+            = f.password_field :password, autocapitalize: 'off', autocorrect: 'off'
             - if f.object.new_record?
               %p.hint (leave blank if you don't want to change it)
   .row
