@@ -6,6 +6,7 @@
     %title= @title
   %body{bgcolor: '#290c2b', style: "background-color:#290c2b;background-image:url(#{image_url('bg.png')});background-repeat:repeat;color:#ffffff;font-family:sans-serif;margin:0;padding:0;border:0;"}
     :css
+      @import url('//fonts.googleapis.com/css?family=Lato:300,700');
       body, body > table, #maincell {
         margin:0; padding:0; border:0;
         background: #290c2b url(#{image_url('bg.png')}) repeat;
@@ -21,7 +22,7 @@
                     %a{href: 'http://midnightriders.com'}
                       %img{alt: 'Midnight Riders', src: image_url('email/header.jpg'), style: 'display:block;'}/
               %tr
-                %td{colspan: '2', style: 'padding:30px;padding-bottom: 15px;color:#111133; font-size:15px; line-height: 20px; font-family:sans-serif; background-color:#ffffff;text-align:left;'}
+                %td{colspan: '2', style: 'padding:30px;padding-bottom: 15px;color:#111133; font-size:15px; line-height: 20px; font-family: Lato, sans-serif; font-weight: 300; background-color:#ffffff;text-align:left;'}
 
                   = yield
 
