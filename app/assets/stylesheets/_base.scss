@@ -24,3 +24,12 @@ p.hint {
   font-size: .8em;
   font-style: italic;
 }
+
+.button {
+  span {
+    display: none;
+  }
+  &:hover span {
+    display: inline;
+  }
+}

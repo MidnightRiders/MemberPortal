@@ -1,14 +1,19 @@
 - content_for :title, 'Members'
 
 .row
-  .small-12.columns.text-right
+  .medium-6.columns
     - if can? :manage, :users
-      = form_tag import_users_path, multipart: true do
-        = file_field_tag :file
-        = button_tag :submit, class: 'button secondary' do
-          Import
+      = form_tag import_users_path, multipart: true, class: 'row' do
+        .small-6.columns
+          = file_field_tag :file
+        .small-6.columns.text-right
+          = button_tag :submit, class: 'button secondary' do
+            %i.fa.fa-upload.fa-fw
+            Import
+  .medium-6.columns.text-right
     - if can? :create, User
       = link_to new_user_path, class: 'button' do
+        = icon 'plus'
         New User
 
 
