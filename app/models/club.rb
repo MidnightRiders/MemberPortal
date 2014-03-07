@@ -25,11 +25,25 @@ class Club < ActiveRecord::Base
     (home_matches + away_matches).sort_by(&:kickoff)
   end
 
-  def next_match
-    matches.sort_by(&:kickoff).reject{|x| x.kickoff < Time.now }.first
+  def next_match(x = 1)
+    ms = matches.sort_by(&:kickoff).reject{|x| x.kickoff < Time.now }
+    if x == 1
+      ms.first
+    else
+      ms.first(x)
+    end
   end
-  def last_match
-    matches.sort_by(&:kickoff).reject{|x| x.kickoff > Time.now }.last
+  def last_match(x = 1)
+    ms = matches.sort_by(&:kickoff).reject{|x| x.kickoff > Time.now }.last(x)
+    if x == 1
+      ms.last
+    else
+      ms.last(x)
+    end
+  end
+
+  def dark_compliment
+    secondary_color == 'ffffff' ? accent_color : secondary_color
   end
 
   %w(primary secondary accent).each do |x|

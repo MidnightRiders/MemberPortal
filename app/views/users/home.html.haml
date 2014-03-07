@@ -4,3 +4,34 @@
   .large-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   .large-6.columns
+    %h2.club.ne Revs Games
+    .table
+      - if revs.last_match
+        - m = revs.last_match
+        - home = m.home_team == revs
+        .tr{ class: ( 'highlight' if home )}
+          .td.ne.border-left{ class: (home ? 'secondary-border' : 'primary-border') }
+            = (home ? "vs #{m.away_team.name}" : "at #{m.home_team.name}")
+            %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
+          .td.text-right
+            = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(m), class: 'button tiny secondary') if m.voteable?
+      - revs.next_match(3).each do |m|
+        - home = m.home_team == revs
+        .tr{ class: ('highlight' if home)}
+          .td.ne.border-left{ class: (home ? 'secondary-border' : 'primary-border') }
+            = (home ? "vs #{m.away_team.name}" : "at #{m.home_team.name}")
+            %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
+          .td.text-right
+            = link_to(content_tag(:i,'',class: 'fa fa-certificate fa-fw') + content_tag(:span,' Pick ’Em'), '#', class: 'button tiny secondary') if m.in_future?
+            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(m), class: 'button tiny secondary') if m.in_future?
+    %h3 Other Games
+    .table
+      - @matches.each do |m|
+        .tr
+          .td.secondary-border.border-left{class: m.home_team.abbrv.downcase}
+            %span.primary.solid{class: m.home_team.abbrv.downcase}= m.home_team.abbrv
+            vs
+            %span.primary.solid{class: m.away_team.abbrv.downcase}= m.away_team.abbrv
+            %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
+          .td.text-right
+            = link_to(content_tag(:i,'',class: 'fa fa-certificate fa-fw') + content_tag(:span,' Pick ’Em'), '#', class: 'button tiny secondary') if m.in_future?

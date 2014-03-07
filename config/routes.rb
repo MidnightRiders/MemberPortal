@@ -1,5 +1,6 @@
 MidnightRiders::Application.routes.draw do
 
+
   get 'stylesheets/club'
   resources :players
 
@@ -8,6 +9,7 @@ MidnightRiders::Application.routes.draw do
   resources :matches do
     collection { get :import }
     resources :mot_ms, path: 'motm'
+    resources :rev_guesses, path: 'revguess'
   end
 
   resources :clubs

@@ -31,14 +31,14 @@ class Ability
       if user.role? :admin
         can :manage, :all
       elsif user.role? :executive_board
-        can :manage, [ User, Club, Match, Player ]
+        can :manage, [ User, Club, Match, Player, RevGuess ]
         cannot :destroy, [ Club, Player ]
         can :create, UserRole, [:executive_board, :at_large_board, :family, :individual]
         can :view, :all
       else
         can :view, [User, Club, Match]
         can :index, [Club, Match]
-        can :manage, MotM, user_id: user.id
+        can :manage, [ MotM, RevGuess ], user_id: user.id
       end
     else
       can :create, User, roles: { name: [:family, :individual] }

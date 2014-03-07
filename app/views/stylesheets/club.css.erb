@@ -16,7 +16,24 @@
 .primary.<%=club.abbrv.downcase%> {
     color: #<%=club.primary_color%>;
 }
+.primary.solid.<%=club.abbrv.downcase%> {
+    background-color: #<%=club.primary_color%>;
+    color: #<%=get_contrast_yiq(club.primary_color)%>;
+    margin: -.3em .4em;
+    padding: .3em;
+    border-radius: 3px;
+}
+.primary-border.<%=club.abbrv.downcase%> {
+    border-color: #<%=club.primary_color%>;
+}
 .secondary.<%=club.abbrv.downcase%> {
     color: #<%=club.secondary_color%>;
+}
+.secondary-bg.<%=club.abbrv.downcase%>, .td.secondary-bg.<%=club.abbrv.downcase%>, .tr.secondary-bg.<%=club.abbrv.downcase%> {
+    background-color: #<%=club.dark_compliment%>;
+    color: #<%=get_contrast_yiq(club.dark_compliment)%>;
+}
+.secondary-border.<%=club.abbrv.downcase%> {
+    border-color: #<%=club.dark_compliment%>;
 }
 <%- end %>

@@ -14,7 +14,8 @@ class UsersController < ApplicationController
 
   # GET /home
   def home
-
+    @matches = Club.includes(:home_matches).all.map(&:next_match).reject{|x| x.nil? }.sort_by{|x| x.kickoff }
+    @matches.reject!{|x| @matches.select{|y| y.id==x.id}.length > 1}
   end
 
   def edit

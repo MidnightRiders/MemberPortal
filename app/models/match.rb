@@ -3,6 +3,7 @@ class Match < ActiveRecord::Base
   belongs_to :away_team, class_name: 'Club'
 
   has_many :mot_ms
+  has_many :rev_guesses
 
   validates :home_team, :away_team, :kickoff, :location, presence: true
   validates :uid, uniqueness: { case_sensitive: true, allow_blank: true }

@@ -1,8 +1,4 @@
-%h2
-  = @match.kickoff.strftime('%B %-d:')
-  = @match.home_team.name
-  vs
-  = @match.away_team.name
+= render partial: 'shared/match_info', locals: { match: @match }
 = form_for [@match,@mot_m] do |f|
   - if @mot_m.errors.any?
     #error_explanation

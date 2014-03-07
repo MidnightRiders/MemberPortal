@@ -54,6 +54,6 @@
           - if revs.matches.include? match
             = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(match), class: 'button tiny secondary') if match.voteable?
             = link_to(content_tag(:i,'',class: 'fa fa-certificate fa-fw') + content_tag(:span,' Pick ’Em'), '#', class: 'button tiny secondary') if match.in_future?
-            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), '#', class: 'button tiny secondary') if match.in_future?
+            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(match), class: 'button tiny secondary') if match.in_future?
           - else
             = link_to content_tag(:i,'',class: 'fa fa-certificate fa-fw') + content_tag(:span,' Pick ’Em'), '#', class: 'button tiny'

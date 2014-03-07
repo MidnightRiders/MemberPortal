@@ -23,6 +23,7 @@ en:
   activerecord:
     models:
       mot_m: 'Man of the Match vote'
+      rev_guess: 'RevGuess'
 
     attributes:
       club:

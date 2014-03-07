@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140307013212) do
+ActiveRecord::Schema.define(version: 20140307032218) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,20 @@ ActiveRecord::Schema.define(version: 20140307013212) do
     t.datetime "updated_at"
     t.integer  "number",     limit: 2
   end
+
+  create_table "rev_guesses", force: true do |t|
+    t.integer  "match_id"
+    t.integer  "user_id"
+    t.integer  "home_goals"
+    t.integer  "away_goals"
+    t.string   "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "rev_guesses", ["match_id", "user_id"], name: "index_rev_guesses_on_match_id_and_user_id", unique: true, using: :btree
+  add_index "rev_guesses", ["match_id"], name: "index_rev_guesses_on_match_id", using: :btree
+  add_index "rev_guesses", ["user_id"], name: "index_rev_guesses_on_user_id", using: :btree
 
   create_table "roles", force: true do |t|
     t.string   "name"

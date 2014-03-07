@@ -1,5 +1,5 @@
 class MatchesController < ApplicationController
-  before_action :set_match, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /matches
   # GET /matches.json

@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :roles, through: :user_roles
 
   has_many :mot_ms
+  has_many :rev_guesses
 
   validates :first_name, :last_name, presence: true
 
