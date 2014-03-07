@@ -27,7 +27,7 @@
     background-color: #<%=club.primary_color%>;
     color: #<%=get_contrast_yiq(club.primary_color)%>;
 }
-.button.primary-bg.<%=club.abbrv.downcase%>:hover {
+.button.primary-bg.<%=club.abbrv.downcase%>:hover, .choice.primary-bg.<%=club.abbrv.downcase%>:hover {
     background-color: #<%=darken(club.primary_color, 0.75)%>;
 }
 .primary-border.<%=club.abbrv.downcase%> {

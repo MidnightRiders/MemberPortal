@@ -30,22 +30,34 @@
               = icon 'list'
               Matches
           %li.has-dropdown
-            %a
+            = link_to games_path do
               = icon 'star'
               Games
             %ul.dropdown
               %li
-                = link_to mot_ms_path do
-                  %i.fa.fa-list-ol.fa-fw
-                  Man of the Match
+                %label Next
               %li
-                %a
+                = link_to matches_path do
                   %i.fa.fa-certificate.fa-fw
                   Pick ’Em
+              - if revs.next_match
+                %li
+                  = link_to new_match_rev_guess_path(revs.next_match) do
+                    %i.fa.fa-question.fa-fw
+                    RevGuess
+              - if revs.last_match
+                %li
+                  %label Latest
+                %li
+                  = link_to match_mot_ms_path(revs.last_match) do
+                    %i.fa.fa-list-ol.fa-fw
+                    Man of the Match
+                %li
+                  = link_to match_rev_guesses_path(revs.last_match) do
+                    %i.fa.fa-question.fa-fw
+                    RevGuess
               %li
-                %a
-                  %i.fa.fa-question.fa-fw
-                  RevGuess
+                %label External
               %li
                 = link_to 'http://fantasy.mlssoccer.com/my-leagues/173/join/?autojoin-code=978-173', target: '_blank' do
                   %i.fa.fa-users.fa-fw

@@ -20,7 +20,9 @@ MidnightRiders::Application.routes.draw do
   resources :users do
     collection { post :import }
   end
-  get '/home', to: 'users#home'
+  get 'home', to: 'users#home'
+
+  get 'games', to: 'static_pages#games'
 
   get 'faq', to: 'static_pages#faq'
   get 'contact', to: 'static_pages#contact'

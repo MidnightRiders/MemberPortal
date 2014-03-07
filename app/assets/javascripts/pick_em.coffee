@@ -4,4 +4,4 @@ $ ->
     $pickem = $(this).closest('.pick-em')
     if xhr.status == 'success'
       $pickem.find('.picked').removeClass('picked')
-      $pickem.find(".#{xhr.result} a.button").addClass('picked')
+      $pickem.find(".#{xhr.result} a.choice").addClass('picked')
