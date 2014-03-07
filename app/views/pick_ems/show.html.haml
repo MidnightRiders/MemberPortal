@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Match:
+  = @pick_em.match
+%p
+  %b User:
+  = @pick_em.user
+%p
+  %b Result:
+  = @pick_em.result
+
+= link_to 'Edit', edit_pick_em_path(@pick_em)
+\|
+= link_to 'Back', pick_ems_path

@@ -1,6 +1,5 @@
 MidnightRiders::Application.routes.draw do
 
-
   get 'stylesheets/club'
   resources :players
 
@@ -8,8 +7,11 @@ MidnightRiders::Application.routes.draw do
 
   resources :matches do
     collection { get :import }
-    resources :mot_ms, path: 'motm'
-    resources :rev_guesses, path: 'revguess'
+    resources :mot_ms, path: 'motm', except: [ :show ]
+    resources :rev_guesses, path: 'revguess', except: [ :show ]
+    resources :pick_ems, path: 'pickem', except: [ :new, :edit, :show, :create, :update ] do
+      collection { post :vote }
+    end
   end
 
   resources :clubs

@@ -4,6 +4,7 @@ class Match < ActiveRecord::Base
 
   has_many :mot_ms
   has_many :rev_guesses
+  has_many :pick_ems
 
   validates :home_team, :away_team, :kickoff, :location, presence: true
   validates :uid, uniqueness: { case_sensitive: true, allow_blank: true }

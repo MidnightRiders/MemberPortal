@@ -8,6 +8,7 @@
   width: 100%;
   .td, .thd {
     display: table-cell;
+    vertical-align: middle;
     &.color {
       &.accent {
         width: 3px;
@@ -51,8 +52,15 @@
       padding: $table-row-padding;
       font-size: $table-row-font-size;
       color: $table-row-font-color;
+      &.column, &.columns {
+        float: none;
+      }
       button, .button, & > :last-child {
         margin-bottom: 0;
+      }
+      &.no-pad {
+        padding-left: 0;
+        padding-right: 0;
       }
       &.highlight {
         background-color: $revs-red;

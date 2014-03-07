@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140307032218) do
+ActiveRecord::Schema.define(version: 20140307045250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,6 +57,18 @@ ActiveRecord::Schema.define(version: 20140307032218) do
   end
 
   add_index "mot_ms", ["user_id", "match_id"], name: "index_mot_ms_on_user_id_and_match_id", unique: true, using: :btree
+
+  create_table "pick_ems", force: true do |t|
+    t.integer  "match_id"
+    t.integer  "user_id"
+    t.integer  "result",     limit: 2
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pick_ems", ["match_id", "user_id"], name: "index_pick_ems_on_match_id_and_user_id", unique: true, using: :btree
+  add_index "pick_ems", ["match_id"], name: "index_pick_ems_on_match_id", using: :btree
+  add_index "pick_ems", ["user_id"], name: "index_pick_ems_on_user_id", using: :btree
 
   create_table "players", force: true do |t|
     t.string   "first_name"

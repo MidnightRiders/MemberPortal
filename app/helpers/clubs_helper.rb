@@ -21,6 +21,6 @@ module ClubsHelper
   def darken(hexcolor, amount = 0.5)
     amount = amount/100 if amount > 1
     v = parse_hex(hexcolor)
-    "#{getHex(v.r * amount)}#{getHex(v.g * amount)}#{getHex(v.b * amount)}"
+    "#{get_hex(v[:r] * amount)}#{get_hex(v[:g] * amount)}#{get_hex(v[:b] * amount)}"
   end
 end

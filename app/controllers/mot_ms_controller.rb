@@ -10,12 +10,12 @@ class MotMsController < ApplicationController
 
   # GET /mot_ms/1
   # GET /mot_ms/1.json
-  def show
-    respond_to do |format|
-      format.html { redirect_to matches_path }
-      format.json
-    end
-  end
+  # def show
+  #   respond_to do |format|
+  #     format.html { redirect_to matches_path }
+  #     format.json
+  #   end
+  # end
 
   # GET /mot_ms/new
   def new

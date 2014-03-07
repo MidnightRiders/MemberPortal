@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   has_many :mot_ms
   has_many :rev_guesses
+  has_many :pick_ems
 
   validates :first_name, :last_name, presence: true
 
@@ -25,6 +26,11 @@ class User < ActiveRecord::Base
     else
       rs.join(', ')
     end
+  end
+
+  def pick_for(match)
+    m = match.pick_ems.find_by(user_id: id)
+    m.nil? ? nil : m.result
   end
 
   def self.import(file, roles = [])

@@ -23,6 +23,13 @@
     padding: .3em;
     border-radius: 3px;
 }
+.primary-bg.<%=club.abbrv.downcase%>, .td.primary-bg.<%=club.abbrv.downcase%>, .tr.primary-bg.<%=club.abbrv.downcase%> {
+    background-color: #<%=club.primary_color%>;
+    color: #<%=get_contrast_yiq(club.primary_color)%>;
+}
+.button.primary-bg.<%=club.abbrv.downcase%>:hover {
+    background-color: #<%=darken(club.primary_color, 0.75)%>;
+}
 .primary-border.<%=club.abbrv.downcase%> {
     border-color: #<%=club.primary_color%>;
 }

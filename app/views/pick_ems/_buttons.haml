@@ -1,0 +1,7 @@
+.pick-em.row.collapse.button-group.secondary-border.border-all{ class: match.home_team.abbrv.downcase }
+  .small-4.columns.home
+    = link_to match.home_team.abbrv, vote_match_pick_ems_path(match), remote: true, method: :post, data: {params: { pick_em: { result: PickEm::RESULTS[:home], user_id: current_user.id, match_id: match.id } }.to_param }, class: match.home_team.abbrv.downcase + ' primary-bg button expand tiny' + (current_user.pick_for(match) == PickEm::RESULTS[:home] ? ' picked' : '')
+  .small-4.columns.draw
+    = link_to 'D', vote_match_pick_ems_path(match), remote: true, method: :post, data: { params: { pick_em: { result: PickEm::RESULTS[:draw], user_id: current_user.id, match_id: match.id }}.to_param }, class: 'button expand tiny secondary' + (current_user.pick_for(match) == PickEm::RESULTS[:draw] ? ' picked' : '')
+  .small-4.columns.away
+    = link_to match.away_team.abbrv, vote_match_pick_ems_path(match), remote: true, method: :post, data: { params: { pick_em: { result: PickEm::RESULTS[:away], user_id: current_user.id, match_id: match.id }}.to_param }, class: match.away_team.abbrv.downcase + ' primary-bg button expand tiny' + (current_user.pick_for(match) == PickEm::RESULTS[:away] ? ' picked' : '')

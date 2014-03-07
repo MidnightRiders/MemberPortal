@@ -25,6 +25,9 @@ h2.club {
   }
 }
 .secondary-border, .primary-border {
+  &.border-all {
+    border: 1px solid;
+  }
   &.border-left {
     border-left: 3px solid;
   }

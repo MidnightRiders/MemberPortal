@@ -1,0 +1,23 @@
+%h1 Listing pick_ems
+
+%table
+  %tr
+    %th Match
+    %th User
+    %th Result
+    %th
+    %th
+    %th
+
+  - @pick_ems.each do |pick_em|
+    %tr
+      %td= pick_em.match
+      %td= pick_em.user
+      %td= pick_em.result
+      %td= link_to 'Show', pick_em
+      %td= link_to 'Edit', edit_pick_em_path(pick_em)
+      %td= link_to 'Destroy', pick_em, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Pick em', new_pick_em_path
