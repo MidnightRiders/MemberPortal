@@ -1,7 +1,7 @@
 MidnightRiders::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.action_mailer.default_url_options = { :host => 'midnightriders.herokuapp.com' }
+  config.action_mailer.default_url_options = { :host => 'members.midnightriders.com' }
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both thread web servers
@@ -59,7 +59,9 @@ MidnightRiders::Application.configure do
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found).
