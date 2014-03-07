@@ -5,6 +5,10 @@
     = stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato:300,700'
     = stylesheet_link_tag    'application', media: 'all'
     = stylesheet_link_tag stylesheets_club_path
+    = favicon_link_tag 'icons/apple-touch-icon-precomposed-57x57.png',   rel: 'apple-touch-icon-precomposed', type: 'image/png'
+    = favicon_link_tag 'icons/apple-touch-icon-precomposed-72x72.png',   rel: 'apple-touch-icon-precomposed', sizes: '72x72', type: 'image/png'
+    = favicon_link_tag 'icons/apple-touch-icon-precomposed-114x114.png', rel: 'apple-touch-icon-precomposed', sizes: '114x114', type: 'image/png'
+    = favicon_link_tag 'icons/favicon.ico'
     %meta{ content: 'width=device-width, initial-scale=1', name: 'viewport'}
     = csrf_meta_tags
   %body
