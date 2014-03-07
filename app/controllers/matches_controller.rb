@@ -1,5 +1,6 @@
 class MatchesController < ApplicationController
   load_and_authorize_resource
+  require 'net/http'
 
   # GET /matches
   # GET /matches.json
