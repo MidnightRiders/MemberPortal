@@ -14,7 +14,8 @@ end
 
 def create_or_update x, y
   x.attributes = y
-  if x.new_record? || x.changed?
+  new = x.new_record?
+  if new || x.changed?
     if x.save
       if new
         '  Created.'
