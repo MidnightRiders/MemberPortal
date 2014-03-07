@@ -3,7 +3,7 @@
   %head
     %title= content_for?(:title) ? "Midnight Riders | #{content_for(:title)}" : 'Midnight Riders'
     = stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato:300,700'
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag    'application', media: 'all'
     = stylesheet_link_tag stylesheets_club_path
     = csrf_meta_tags
   %body
@@ -14,4 +14,4 @@
       .small-12.columns
         = yield
     = render partial: 'layouts/footer'
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application'

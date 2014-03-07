@@ -12,7 +12,6 @@
 #
 #= require jquery
 #= require jquery_ujs
-#= require turbolinks
 #= require foundation
 #= require hex_functions
 #= require pick_em

@@ -25,9 +25,6 @@ gem 'devise'
 gem 'cancan'
 gem 'paper_trail'
 
-# Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
@@ -40,6 +37,8 @@ group :development, :test do
   # Testing
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+
+  gem 'pry'
 end
 
 # Use ActiveModel has_secure_password

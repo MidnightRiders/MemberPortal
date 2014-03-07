@@ -28,20 +28,22 @@ class Ability
     # See the wiki for details:
     # https://github.com/ryanb/cancan/wiki/Defining-Abilities
     if user
+      can :home, [User]
       if user.role? :admin
         can :manage, :all
       elsif user.role? :executive_board
         can :manage, [ User, Club, Match, Player, RevGuess ]
         cannot :destroy, [ Club, Player ]
-        can :create, UserRole, [:executive_board, :at_large_board, :family, :individual]
+        can :create, User, role: Role.where(name: ['executive_board', 'at_large_board', 'family', 'individual'])
         can :view, :all
       else
         can :view, [User, Club, Match]
         can :index, [Club, Match]
-        can :manage, [ MotM, RevGuess ], user_id: user.id
+        can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
       end
     else
-      can :create, User, roles: { name: [:family, :individual] }
+      can :create, User
+      can :create, UserRole, role: Role.where(name: ['family', 'individual'])
     end
   end
 end

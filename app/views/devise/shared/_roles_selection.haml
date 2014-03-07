@@ -4,7 +4,7 @@
   .large-8.columns
     .row
       - Role.all.each_with_index do |role,i|
-        - if can? :create, User, roles: { name: role.name }
+        - if can? :create, User, role: role
           .medium-6.columns.left
-            = check_box_tag :role_ids, role.id, @user.role?(role.name) || (params[:user] && params[:user][:role_ids].include?(role.id.to_s)), name: 'user[role_ids][]', id: "user_role_ids_#{role.id}"
+            = check_box_tag 'user[role_ids][]', role.id, @user.role?(role.name) || (params[:user] && params[:user][:role_ids].include?(role.id.to_s)), name: 'user[role_ids][]', id: "user_role_ids_#{role.id}"
             = label_tag "user_role_ids_#{role.id}", role.name.titleize
