@@ -13,8 +13,8 @@ class User < ActiveRecord::Base
 
   validates :first_name, :last_name, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false
-  validates :username, format: { with: /\A[\w\-]{6,}\z/ }
-  validates :member_since, numericality: { less_than_or_equal_to: Date.today.year, greater_than_or_equal_to: 1995 }, allow_blank: true
+  validates :username, format: { with: /\A[\w\-]{5,}\z/i }
+  validates :member_since, numericality: { less_than_or_equal_to: Date.today.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
 
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone ]
 
