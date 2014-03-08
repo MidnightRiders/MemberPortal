@@ -30,3 +30,7 @@ $ ->
         'border-color': "##{darken(val)}"
         'color' : getContrastYIQ(val)
     ).trigger 'change'
+  $(document).on 'ajax:send', ->
+    $('body').addClass 'wait'
+  $(document).on 'ajax:complete', ->
+    $('body').removeClass 'wait'

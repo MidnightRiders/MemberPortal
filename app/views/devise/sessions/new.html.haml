@@ -1,18 +1,18 @@
 %h2 Sign in
 = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
   .row
-    .large-4.columns
+    .medium-4.columns
       = f.label :username, class: 'inline'
-    .large-8.columns
+    .medium-8.columns
       = f.text_field :username, autofocus: true, autocapitalize: 'off', autocorrect: 'off'
   .row
-    .large-4.columns
+    .medium-4.columns
       = f.label :password, class: 'inline'
-    .large-8.columns
+    .medium-8.columns
       = f.password_field :password
   - if devise_mapping.rememberable?
     .row
-      .large-8.columns.right
+      .medium-8.columns.right
         = f.check_box :remember_me
         = f.label :remember_me
   .row.text-right

@@ -1,0 +1,14 @@
+form {
+  input[type], select, textarea {
+    + .hint {
+      display: block;
+      margin-top: -($form-spacing - rem-calc(4));
+      margin-bottom: $form-spacing;
+    }
+  }
+  h3 + .hint {
+    display: block;
+    margin-top: -($header-bottom-margin - rem-calc(4));
+    margin-bottom: $header-bottom-margin;
+  }
+}

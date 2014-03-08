@@ -2,35 +2,42 @@
 - opts = devise ? { url: registration_path(user) } : {}
 
 = form_for(user, opts) do |f|
+  - if devise
+    = devise_error_messages!
   .row
     .large-4.columns
       %h3 User Information
       - if devise && devise_mapping.confirmable? && resource.pending_reconfirmation?
-        %p.hint
+        %small.hint
           Currently waiting confirmation for:
           = resource.unconfirmed_email
     .large-8.columns
       .row
-        .large-4.columns
+        .medium-4.columns
           = f.label :username, class: 'inline'
-        .large-8.columns
+        .medium-8.columns
           = f.text_field :username, :autofocus => true, autocapitalize: 'off', autocorrect: 'off'
       - if devise
         .row
-          .large-4.columns
+          .medium-4.columns
             = f.label :password, class: 'inline'
-          .large-8.columns
+          .medium-8.columns
             = f.password_field :password, autocapitalize: 'off', autocorrect: 'off'
-            - if f.object.new_record?
-              %p.hint (leave blank if you don't want to change it)
+            - if !f.object.new_record?
+              %small.hint (leave blank if you don't want to change it)
+        .row
+          .medium-4.columns
+            = f.label :password_confirmation, class: 'inline'
+          .medium-8.columns
+            = f.password_field :password_confirmation, autocapitalize: 'off', autocorrect: 'off'
   .row
     .large-4.columns
       %h3 Membership Information
     .large-8.columns
       .row
-        .large-4.columns
+        .medium-4.columns
           = f.label :member_since, class: 'inline'
-        .large-8.columns
+        .medium-8.columns
           = f.number_field :member_since
       = render partial: 'devise/shared/roles_selection', locals: { user: user, params: params }
   .row
@@ -38,9 +45,9 @@
       %h3 Contact Information
     .large-8.columns
       .row
-        .large-4.columns
+        .medium-4.columns
           = f.label :email, class: 'inline'
-        .large-8.columns
+        .medium-8.columns
           = f.email_field :email, autocorrect: false, autocapitalize: false
       .row
         .small-12.columns
@@ -61,7 +68,7 @@
       .large-4.columns
         %h3
           Confirm Changes
-        %p.hint (we need your current password to confirm your changes)
+        %small.hint (we need your current password to confirm your changes)
       .large-8.columns
         .row
           .large-4.columns

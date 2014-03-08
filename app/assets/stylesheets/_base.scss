@@ -18,6 +18,11 @@ body {
   position: relative;
   padding-bottom: 4rem;
   background: $maroon image-url('bg.png') repeat center;
+  &.wait {
+    &, * {
+      cursor: wait !important;
+    }
+  }
 }
 
 p.hint {

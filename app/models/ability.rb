@@ -35,10 +35,12 @@ class Ability
         can :manage, [ User, Club, Match, Player, RevGuess ]
         cannot :destroy, [ Club, Player ]
         can :create, User, role_id: [ 2,3,4,5]
-        can :view, :all
+        can :read, :all
       else
-        can :view, [User, Club, Match]
+        can :read, [User, Club, Match]
+        cannot :index, User
         can :index, [Club, Match]
+        cannot :index, Club
         can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
         can :manage, user
       end

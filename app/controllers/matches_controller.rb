@@ -7,7 +7,7 @@ class MatchesController < ApplicationController
   def index
     @start_date = params[:date] ? params[:date].to_date : Date.today
     @start_date = @start_date.beginning_of_week
-    @matches = Match.where('kickoff >= :start_date AND kickoff <= :end_date', start_date: @start_date, end_date: @start_date + 7.days).order('kickoff ASC')
+    @matches = Match.includes(:pick_ems).where('kickoff >= :start_date AND kickoff <= :end_date', start_date: @start_date, end_date: @start_date + 7.days).order('kickoff ASC')
   end
 
   # GET /matches/1

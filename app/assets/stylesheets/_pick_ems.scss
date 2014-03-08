@@ -44,8 +44,8 @@
       }
       &.wrong:before {
         content: $fa-var-times;
-        color: $alert-color;
-        opacity: .4;
+        color: transparentize($alert-color,.6);
+
         margin-top: -1px;
         @include text-shadow(none);
       }
