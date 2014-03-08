@@ -21,6 +21,8 @@ gem 'roo' # For imports
 gem 'iconv'
 gem 'icalendar'
 
+gem 'will_paginate'
+
 # Users/auth
 gem 'devise'
 gem 'cancan'

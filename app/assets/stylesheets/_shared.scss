@@ -12,3 +12,7 @@ $retina: unquote("only screen and (-webkit-min-device-pixel-ratio: 1.3),
 only screen and (min--moz-device-pixel-ratio:1.5),
 only screen and (-o-device-pixel-ratio: 13/10),
 only screen and (min-resolution: 120dpi)");
+
+@mixin text-stroke($width,$color) {
+  @include text-shadow(-$width 0 0 $color, $width 0 0 $color, 0 -$width 0 $color, 0 $width 0 $color);
+}

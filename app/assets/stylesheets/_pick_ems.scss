@@ -1,5 +1,26 @@
 .pick-em {
   width: 100%;
+  border-width: 2px;
+  @include radius;
+  &.closed {
+    background: #ddd;
+    border: none;
+    * {
+      opacity: .8;
+    }
+    :first-child .choice {
+      @include side-radius(left);
+    }
+    :last-child .choice {
+      @include side-radius(right);
+    }
+  }
+  :first-child .choice {
+    @include side-radius(left,$global-radius - 1);
+  }
+  :last-child .choice {
+    @include side-radius(right,$global-radius - 1);
+  }
   .choice {
     display: block;
     width: 100%;
@@ -34,19 +55,20 @@
           height: 100%;
           text-align: center;
           position: absolute;
-          opacity: .2;
           overflow: hidden;
           font-size: 2em;
         }
       }
       &.correct:before {
+        opacity: .3;
         content: $fa-var-certificate;
+        text-shadow: 0 0 6px #fff;
       }
       &.wrong:before {
         content: $fa-var-times;
-        color: transparentize($alert-color,.6);
-
+        color: $alert-color;
         margin-top: -1px;
+        opacity: .6;
         @include text-shadow(none);
       }
     }

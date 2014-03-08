@@ -16,7 +16,23 @@
         = icon 'plus'
         New User
 
-
+.row
+  .medium-3.columns
+    = link_to users_path, class: "button small expand #{'success' unless @role}" do
+      = icon 'users'
+      All Users
+  .medium-3.columns
+    = link_to users_path(role: 'admin'), class: "button small expand #{'success' if @role == 'admin'}" do
+      = icon 'bolt'
+      Admins
+  .medium-3.columns
+    = link_to users_path(role: 'executive_board'), class: "button small expand #{'success' if @role == 'executive_board'}" do
+      = icon 'suitcase'
+      Executive Board
+  .medium-3.columns
+    = link_to users_path(role: [ 'executive_board', 'at_large_board' ]), class: "button small expand #{'success' if @role == ['executive_board','at_large_board']}" do
+      = icon 'sitemap'
+      Boards
 %ul.table.members
   .thead
     %li.tr
@@ -41,8 +57,14 @@
         .td= link_to user.email, "mailto: #{user.email}"
         .td.numeric= user.member_since
         .td= user.list_roles
-        .td
+        .td.text-right
           -#= link_to 'Show', user
-          = link_to 'Edit', edit_user_path(user)
+          = link_to edit_user_path(user), class: 'button tiny', title: 'Edit' do
+            = icon 'pencil'
           - if can? :destroy, user
-            = link_to 'Destroy', user, :method => :delete, :data => { :confirm => 'Are you sure?' }
+            = link_to user, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button tiny alert', title: 'Destroy' do
+              = icon 'trash-o'
+
+.row
+  .small-12.text-right.columns
+    = will_paginate(@users, param_name: 'p')

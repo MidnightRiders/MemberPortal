@@ -1,17 +1,30 @@
-.row.actions
-  .small-12.columns.text-right
-    = link_to (mot_m_for(@match) ? 'Change' : 'Cast') + ' MotM Vote', mot_m_path_for(@match), class: 'button'
+.row.collapse
+  .small-12.medium-5.large-5.columns
+    %h3.primary-bg.secondary-border.border-bottom.thick{ class: @match.home_team.abbrv.downcase }
+      = @match.home_team.name
+  .small-12.medium-2.columns.text-center
+    %h2 vs
+  .small-12.medium-5.large-5.columns
+    %h3.primary-bg.secondary-border.border-bottom.thick{ class: @match.away_team.abbrv.downcase }
+      = @match.away_team.name
+.row
+  .small-12.medium-6.columns.right.text-right
+    - if @match.kickoff.future?
+      = link_to rev_guess_path_for(@match), class: 'button tiny' do
+        = icon 'question'
+        RevGuess
+    - elsif @match.kickoff + 45.minutes < Time.now
+      = link_to mot_m_path_for(@match), class: 'button tiny' do
+        = icon 'list-ol'
+        = (mot_m_for(@match) ? 'Change' : 'Cast')
+        MotM Vote
     - if can? :edit, @match
-      = link_to 'Edit', edit_match_path(@match), class: 'button secondary'
-%p
-  %b Home team:
-  = @match.home_team.name
-%p
-  %b Away team:
-  = @match.away_team.name
-%p
-  %b Kickoff:
-  = @match.kickoff
+      = link_to 'Edit', edit_match_path(@match), class: 'button secondary tiny'
+  .small-12.medium-6.columns
+    %h3.subheader
+      %strong Kickoff:
+      = @match.kickoff.strftime('')
+
 %p
   %b Location:
   = @match.location

@@ -27,17 +27,42 @@ h2.club {
 .secondary-border, .primary-border {
   &.border-all {
     border: 1px solid;
+    &.thick {
+      border-width: 5px;
+    }
   }
   &.border-left {
     border-left: 3px solid;
+    &.thick {
+      border-left-width: 10px;
+    }
   }
   &.border-right {
     border-right: 3px solid;
+    &.thick {
+      border-right-width: 10px;
+    }
   }
   &.border-top {
     border-top: 3px solid;
+    &.thick {
+      border-top-width: 10px;
+    }
   }
   &.border-bottom {
     border-bottom: 3px solid;
+    &.thick {
+      border-bottom-width: 10px;
+    }
+  }
+}
+
+h1, h2, h3, h4, h5, h6 {
+  &.primary-bg, &.secondary-bg {
+    margin-top: 0;
+    padding: {
+      left: .3em;
+      right: .3em;
+    }
   }
 }

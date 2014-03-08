@@ -44,7 +44,7 @@
                   Pick ’Em
               - if revs.next_match
                 %li
-                  = link_to new_match_rev_guess_path(revs.next_match) do
+                  = link_to rev_guess_path_for(revs.next_match) do
                     %i.fa.fa-question.fa-fw
                     RevGuess
               - if revs.last_match

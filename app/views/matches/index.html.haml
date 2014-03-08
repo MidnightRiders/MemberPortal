@@ -24,13 +24,14 @@
 .table
   .tr
     .thd
-    .thd
       = icon 'certificate'
       Pick ’Em
     .thd Match
     .thd Kickoff
     .thd.text-center Score
-    .thd.text-center Games
+    .thd.text-center
+      = icon 'star'
+      Games
 
   = render partial: 'match', collection: @matches
 
