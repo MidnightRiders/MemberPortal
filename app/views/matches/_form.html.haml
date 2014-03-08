@@ -6,23 +6,36 @@
         - @match.errors.full_messages.each do |msg|
           %li= msg
 
-  .field
-    = f.label :home_team_id
-    = f.number_field :home_team_id
-  .field
-    = f.label :away_team_id
-    = f.number_field :away_team_id
-  .field
-    = f.label :kickoff
-    = f.datetime_select :kickoff
-  .field
-    = f.label :location
-    = f.text_field :location
-  .field
-    = f.label :home_goals
-    = f.number_field :home_goals
-  .field
-    = f.label :away_goals
-    = f.number_field :away_goals
-  .actions
-    = f.submit 'Save'
+  .row
+    .large-8.columns.right
+      .row
+        .medium-6.columns
+          = f.label :home_team_id
+          = f.select :home_team_id, options_for_select(Club.all.map{|c| [c.name,c.id] },f.object.home_team_id)
+        .medium-6.columns
+          = f.label :away_team_id
+          = f.select :away_team_id, options_for_select(Club.all.map{|c| [c.name,c.id] },f.object.away_team_id)
+  .row
+    .large-4.columns
+      = f.label :kickoff
+    .large-8.columns
+      = f.text_field :kickoff, type: 'datetime'
+  .row
+    .large-4.columns
+      = f.label :location
+    .large-8.columns
+      = f.text_field :location
+  .row
+    .large-8.columns.right
+      .row
+        .medium-6.columns
+          = f.label :home_goals
+          = f.number_field :home_goals
+        .medium-6.columns
+          = f.label :away_goals
+          = f.number_field :away_goals
+  .row.actions
+    .small-12.columns.text-right
+      = f.button :submit, class: 'button' do
+        = icon 'check'
+        = f.object.new_record? ? 'Create' : 'Update'

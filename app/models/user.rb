@@ -40,6 +40,14 @@ class User < ActiveRecord::Base
     m.nil? ? nil : m.result
   end
 
+  def pick_em_score
+    pick_ems.select{|p| p.correct? }.length
+  end
+
+  def rev_guess_score
+    rev_guesses.sum(&:score)
+  end
+
   def self.import(file, roles = [])
     allowed_attributes = [:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username]
     spreadsheet = Roo::Spreadsheet.open(file.path.to_s,extension: 'csv')

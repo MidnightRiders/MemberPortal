@@ -9,16 +9,31 @@
       = user.member_since || "at least #{user.created_at.year}"
   .medium-4.columns.text-right
     - if can? :edit, user
-      = link_to edit_user_path(user), class: 'button small', title: 'Edit' do
+      = link_to edit_user_path(user), class: 'button tiny', title: 'Edit' do
         = icon 'pencil', '', class: 'fa-lg fa-fw'
     - if can? :destroy, user
-      = link_to user, class: 'button secondary small', :method => :delete, :data => { :confirm => 'Are you sure?' }, title: 'Destroy' do
+      = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => 'Are you sure?' }, title: 'Destroy' do
         = icon 'trash-o', '', class: 'fa-lg fa-fw'
+.row
+  .small-6.columns
+    %h4.subheader
+      RevGuess Score:
+    %p.text-center
+      = user.rev_guess_score
+      %small (#{user.rev_guesses.select{|r| r.match.complete? }.length} games)
+  .small-6.columns
+    %h4.subheader
+      Pick ’Em Score:
+    %p.text-center
+      = user.pick_em_score
+      %small (#{user.pick_ems.select{|r| r.match.complete? }.length} games)
+
+%hr
 
 - if can? :manage, user
   .row
     .medium-4.large-2.columns
-      %label Address
+      %label Address:
     .medium-8.large-10.columns
       %p
         - if user.address

@@ -1,13 +1,36 @@
+.row
+  .small-6.medium-3.large-2.columns
+    - if @match.previous
+      = link_to @match.previous, class: "button tiny expand primary-bg #{@match.next.home_team.abbrv.downcase}" do
+        = icon 'arrow-left'
+        = @match.previous.home_team.abbrv
+        v
+        = @match.previous.away_team.abbrv
+        = @match.previous.kickoff.strftime('%_m.%-d')
+  .small-6.medium-3.large-2.columns.right
+    - if @match.next
+      = link_to @match.next, class: "button tiny expand primary-bg #{@match.next.home_team.abbrv.downcase}" do
+        = @match.next.home_team.abbrv
+        v
+        = @match.next.away_team.abbrv
+        = @match.next.kickoff.strftime('%_m.%-d')
+        = icon 'arrow-right'
 .row.collapse
   .small-12.medium-5.large-5.columns
-    %h3.primary-bg.secondary-border.border-bottom.thick{ class: @match.home_team.abbrv.downcase }
+    %h2.primary-bg.secondary-border.border-bottom.thick{ class: @match.home_team.abbrv.downcase }
       = @match.home_team.name
   .small-12.medium-2.columns.text-center
-    %h2 vs
+    %h2= @match.score
   .small-12.medium-5.large-5.columns
-    %h3.primary-bg.secondary-border.border-bottom.thick{ class: @match.away_team.abbrv.downcase }
+    %h2.primary-bg.secondary-border.border-bottom.thick{ class: @match.away_team.abbrv.downcase }
       = @match.away_team.name
 .row
+  .small-12.medium-6.columns
+    %h3.subheader
+      %strong Kickoff:
+      = @match.kickoff.strftime('')
+      at
+      = @match.location
   .small-12.medium-6.columns.right.text-right
     - if @match.kickoff.future?
       = link_to rev_guess_path_for(@match), class: 'button tiny' do
@@ -19,38 +42,32 @@
         = (mot_m_for(@match) ? 'Change' : 'Cast')
         MotM Vote
     - if can? :edit, @match
-      = link_to 'Edit', edit_match_path(@match), class: 'button secondary tiny'
-  .small-12.medium-6.columns
-    %h3.subheader
-      %strong Kickoff:
-      = @match.kickoff.strftime('')
+      = link_to edit_match_path(@match), class: 'button secondary tiny' do
+        = icon 'pencil'
+        Edit
 
-%p
-  %b Location:
-  = @match.location
-%p
-  %b Score:
-  = @match.score
-
-%ul.table
-  - if @mot_ms.empty?
-    %li.thead
-      .tr
-        .td Man of the Match Standings
-      %li.tr
-        %td No votes cast yet
-  - else
-    .thead
-      %li.tr
-        .td Player
-        .td.numeric 1
-        .td.numeric 2
-        .td.numeric 3
-    - @mot_ms.each do |mot_m|
-      %li.tr
-        .td
-          = mot_m.first_name
-          %strong= mot_m.last_name
-        .td= mot_m.motm_firsts.length
-        .td= mot_m.motm_seconds.length
-        .td= mot_m.motm_thirds.length
+- if revs.matches.include? @match
+  .row
+    .medium-6.medium-centered.columns
+  %ul.table
+    - if @mot_ms.empty?
+      .li.thead
+        .tr
+          .td Man of the Match Standings
+        %li.tr
+          .td No votes cast yet
+    - else
+      .thead
+        %li.tr
+          .td Player
+          .td.numeric 1
+          .td.numeric 2
+          .td.numeric 3
+      - @mot_ms.each do |mot_m|
+        %li.tr
+          .td
+            = mot_m.first_name
+            %strong= mot_m.last_name
+          .td= mot_m.motm_firsts.length
+          .td= mot_m.motm_seconds.length
+          .td= mot_m.motm_thirds.length
