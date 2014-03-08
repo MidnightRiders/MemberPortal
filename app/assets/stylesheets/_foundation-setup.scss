@@ -28,5 +28,8 @@ $topbar-link-weight: 700;
 $topbar-link-bg-hover: $maroon;
 $topbar-dropdown-label-bg: $secondary-color;
 $topbar-dropdown-label-color: #fff;
+$topbar-menu-link-color-toggled: #fff;
+// $topbar-dropdown-bg: darken($silver,25%);
+// $topbar-dropdown-link-bg: darken($silver,15%);
 
 @import 'foundation';

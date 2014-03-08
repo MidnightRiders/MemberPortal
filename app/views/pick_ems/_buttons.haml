@@ -1,7 +1,8 @@
+- long ||= false
 .pick-em.row.collapse.button-group.secondary-border.border-all{ class: match.home_team.abbrv.downcase }
   .small-4.columns.home
-    = pick_em_link(match,:home)
+    = pick_em_link(match,:home, long: long)
   .small-4.columns.draw
-    = pick_em_link(match, :draw)
+    = pick_em_link(match, :draw, long: long)
   .small-4.columns.away
-    = pick_em_link(match, :away)
+    = pick_em_link(match, :away, long: long)

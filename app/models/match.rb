@@ -17,11 +17,28 @@ class Match < ActiveRecord::Base
     end
   end
 
+  def result
+    if home_goals.nil? || away_goals.nil?
+      nil
+    else
+      if home_goals > away_goals
+        :home
+      elsif away_goals > home_goals
+        :away
+      else
+        :draw
+      end
+    end
+  end
+
   def voteable?
     kickoff && Time.now > kickoff + 45.minutes
   end
   def in_future?
     kickoff && kickoff > Time.now
+  end
+  def in_past?
+    !in_future?
   end
 
 end

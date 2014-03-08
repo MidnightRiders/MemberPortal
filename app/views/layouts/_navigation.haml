@@ -3,6 +3,8 @@
     %ul.title-area
       %li.name
         %h1= link_to 'Midnight Riders', root_path
+      %li.toggle-topbar.menu-icon
+        %a{ href: '#' } Menu
 
     %section.top-bar-section
       %ul.left
@@ -76,10 +78,10 @@
                 %li= link_to 'Clubs', clubs_path
                 - if can? :view, :players
                   %li= link_to 'Players', players_path
-          %li
+          %li.has-form
             = button_to destroy_user_session_path, method: :delete, class: 'button secondary' do
               %i.fa.fa-power-off.fa-fw
               Sign Out
         - else
-          %li= link_to 'Sign Up', new_user_registration_path
+          -# %li= link_to 'Sign Up', new_user_registration_path
           %li= link_to 'Sign In', new_user_session_path

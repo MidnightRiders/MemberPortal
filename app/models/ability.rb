@@ -40,6 +40,7 @@ class Ability
         can :view, [User, Club, Match]
         can :index, [Club, Match]
         can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
+        can :manage, user
       end
     else
       can :create, User, roles: { id: [ 4, 5 ] }

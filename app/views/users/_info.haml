@@ -21,11 +21,14 @@
       %label Address
     .medium-8.large-10.columns
       %p
-        = user.address.gsub(/\n/,'<br>').html_safe
-        %br
-        #{user.city},
-        = user.state
-        = user.postal_code
+        - if user.address
+          = user.address.gsub(/\n/,'<br>').html_safe
+          %br
+          #{user.city},
+          = user.state
+          = user.postal_code
+        - else
+          %em Not provided
   - if user.phone
     .row
       .medium-4.large-2.columns

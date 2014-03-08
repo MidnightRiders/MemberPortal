@@ -29,17 +29,21 @@ class User < ActiveRecord::Base
   end
 
   def pick_for(match)
-    m = match.pick_ems.find_by(user_id: id)
+    match.pick_ems.find_by(user_id: id) || PickEm.new
+  end
+
+  def pick_result(match)
+    m = pick_for(match)
     m.nil? ? nil : m.result
   end
 
   def self.import(file, roles = [])
     allowed_attributes = [:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username]
-    spreadsheet = Roo::Spreadsheet.open(file.path.to_s)
+    spreadsheet = Roo::Spreadsheet.open(file.path.to_s,extension: 'csv')
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      user = find_by(username: row['username'], first_name: row['first_name'], last_name: row['last_name']) || new
+      user = find_or_initialize_by(username: row['username'])
       user.attributes = row.to_hash.select { |x| allowed_attributes.include? :"#{x}"  }
       user.roles = roles
       user.roles << Role.find_by(name: row['membership_type']) if row['membership_type']

@@ -6,19 +6,18 @@
     = yield(:header)
   .medium-4.columns.text-right.next-game
     %h5 Next Game:
-    %h3
-      - if @m = revs.next_match
+    - if @next_revs_match
+      %h3
         %small
-          = @m.kickoff.strftime('%A')
+          = @next_revs_match.kickoff.strftime('%A')
           –
-        = @m.kickoff.strftime('%_m.%-d | %l:%M%P')
-        %small
-          %br
-          - if @m.home_team == revs
-            = @m.away_team.name
-          - else
-            = @m.home_team.name
-          |
-          = @m.location
-      -else
-        None Scheduled
+        = @next_revs_match.kickoff.strftime('%_m.%-d | %l:%M%P')
+      %h5.subheader
+        - if @next_revs_match.home_team == revs
+          = @next_revs_match.away_team.name
+        - else
+          = @next_revs_match.home_team.name
+        |
+        = @next_revs_match.location
+    - else
+      %h3 None Scheduled

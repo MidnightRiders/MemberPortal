@@ -18,9 +18,12 @@ MidnightRiders::Application.routes.draw do
 
   devise_for :users
   resources :users do
-    collection { post :import }
+    collection do
+      post :import
+    end
   end
-  get 'home', to: 'users#home'
+
+  get 'home', to: 'users#home', as: :user_home
 
   get 'games', to: 'static_pages#games'
 

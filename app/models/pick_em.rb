@@ -8,6 +8,16 @@ class PickEm < ActiveRecord::Base
 
   validate :voteable, message: 'is no longer open for voting.'
 
+  def correct?
+    (match && result) && match.kickoff.past? && result == RESULTS[match.result]
+  end
+  def incorrect?
+    (match && result) && match.kickoff.past? && result != RESULTS[match.result]
+  end
+  def wrong?
+    incorrect?
+  end
+
   private
     def voteable
       match.kickoff > Time.now

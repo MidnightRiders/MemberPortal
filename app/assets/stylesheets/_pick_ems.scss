@@ -16,13 +16,6 @@
     &.secondary {
       background-color: $secondary-color;
       color: #fff;
-      &:hover {
-        background-color: darken($secondary-color,15%);
-      }
-    }
-    &:hover {
-      background-size: 100% 100%;
-      @include text-shadow(0 1px 2px rgba(0,0,0,.4));
     }
     &.picked {
       font-weight: 700 !important;
@@ -31,10 +24,8 @@
       line-height: 3.125em;
       min-width: 2em;
       @include text-shadow(0 2px 2px rgba(0,0,0,.6));
+      @include box-shadow(0 0 .7em #fff inset);
       @include background(linear-gradient(top,$success-color,darken($success-color,5%)));
-      &:hover {
-        background-color: lighten($success-color,10%) !important;
-      }
       &.correct, &.wrong {
         &:before {
           display: block;
@@ -63,6 +54,22 @@
       line-height: 4em;
       &.picked {
         line-height: 2.5em;
+      }
+    }
+  }
+  a.choice {
+    &:hover {
+      background-size: 100% 100%;
+      @include text-shadow(0 1px 2px rgba(0,0,0,.4));
+    }
+    &.secondary {
+      &:hover {
+        background-color: darken($secondary-color,15%);
+      }
+    }
+    &.picked {
+      &:hover {
+        background-color: lighten($success-color,10%) !important;
       }
     }
   }

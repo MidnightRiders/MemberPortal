@@ -24,38 +24,13 @@
 .table
   .tr
     .thd
-    .thd Home team
     .thd
       = icon 'certificate'
       Pick ’Em
-    .thd Away team
+    .thd Match
     .thd Kickoff
     .thd.text-center Score
     .thd.text-center Games
 
-  - @matches.each do |match|
-    .tr{ class: ('highlight' if revs.matches.include? match )}
-      .td
-        = link_to match, title: 'Show' do
-          = icon('eye','',class:'fa-fw')
-        - if can? :edit, match
-          = link_to edit_match_path(match), title: 'Edit' do
-            = icon('pencil','',class:'fa-fw')
-        - if can? :destroy, match
-          = link_to match, method: :delete, data: { :confirm => 'Are you sure?' }, title: 'Destroy' do
-            = icon('trash-o','',class:'fa-fw')
-      .td{ class: ('highlight' if match.home_team == revs)}
-        %strong= link_to match.home_team.name, match.home_team, class: 'primary ' + match.home_team.abbrv.downcase
-      .td
-        = render partial: 'pick_ems/buttons', locals: { match: match } if match.in_future?
-      .td{ class: ('highlight' if match.away_team == revs)}
-        %strong= link_to match.away_team.name, match.away_team, class: 'primary ' + match.away_team.abbrv.downcase
-      .td.text-center
-        = match.kickoff.strftime('%_m.%-d %l:%M%P')
-      .td.text-center
-        = match.score
-      .td.text-right
-        .button-group
-          - if revs.matches.include? match
-            = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(match), class: 'button tiny secondary') if match.voteable?
-            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(match), class: 'button tiny secondary') if match.in_future?
+  = render partial: 'match', collection: @matches
+
