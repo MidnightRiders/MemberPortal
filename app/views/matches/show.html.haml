@@ -50,7 +50,7 @@
     .medium-6.medium-centered.columns
       %h3 Man of the Match Standings
       %ul.table
-        - if @mot_ms.empty?
+        - if @motm_players.empty?
           %li.tr
             .td No votes cast yet
         - else
@@ -63,7 +63,7 @@
               .thd.numeric 3
           - place = 0
           - last = nil
-          - @mot_ms.each do |mot_m|
+          - @motm_players.each do |mot_m|
             %li.tr
               .td.numeric= last == mot_m.mot_m_total ? '' : (place += 1)
               .td

@@ -13,7 +13,7 @@ class MatchesController < ApplicationController
   # GET /matches/1
   # GET /matches/1.json
   def show
-    @mot_ms = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total && x.mot_m_total > 0 }.sort_by(&:mot_m_total)
+    @motm_players = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total && x.mot_m_total > 0 }.sort_by(&:mot_m_total).reverse
   end
 
   def import
