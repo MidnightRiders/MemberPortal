@@ -2,12 +2,12 @@ class Match < ActiveRecord::Base
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
 
-  default_scope includes(:home_team,:away_team).order('kickoff ASC')
+  default_scope includes(:home_team,:away_team)
   scope :completed, -> {
-    includes(:home_team, :away_team).where('home_goals != ? AND away_goals != ?', nil, nil).order('kickoff ASC')
+    includes(:home_team, :away_team).where('home_goals != ? AND away_goals != ?', nil, nil)
   }
   scope :upcoming, -> {
-    includes(:home_team, :away_team).where('kickoff <= ?', Time.now).order('kickoff ASC')
+    includes(:home_team, :away_team).where('kickoff <= ?', Time.now)
   }
 
   has_many :mot_ms
@@ -54,7 +54,7 @@ class Match < ActiveRecord::Base
   end
 
   def next
-    Match.where('kickoff > ?', kickoff).order('kickoff ASC').first
+    Match.where('kickoff >= ? AND home_team_id != ?', kickoff, home_team_id).order('kickoff ASC').first
   end
   def previous
     Match.where('kickoff < ?', kickoff).order('kickoff DESC').first

@@ -1,7 +1,7 @@
 .row
   .small-6.medium-3.large-2.columns
     - if @match.previous
-      = link_to @match.previous, class: "button tiny expand primary-bg #{@match.next.home_team.abbrv.downcase}" do
+      = link_to @match.previous, class: "button tiny expand primary-bg #{@match.previous.home_team.abbrv.downcase}" do
         = icon 'arrow-left'
         = @match.previous.home_team.abbrv
         v
