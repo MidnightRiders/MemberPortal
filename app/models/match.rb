@@ -54,7 +54,7 @@ class Match < ActiveRecord::Base
   end
 
   def next
-    Match.where('kickoff >= ? AND home_team_id != ?', kickoff, home_team_id).order('kickoff ASC').first
+    Match.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| x.home_team_id != home_team_id && !(x.kickoff <= kickoff && x.id < id) }.first
   end
   def previous
     Match.where('kickoff < ?', kickoff).order('kickoff DESC').first
