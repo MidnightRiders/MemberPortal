@@ -9,11 +9,11 @@
           .thd
           .thd User
           .thd Score
-      - count = ((params[:rev_guess_p]||1).to_i-1) * 25 + 1
+      - count = ((params[:rev_guess_p]||1).to_i-1) * 25
       - last = nil
       - @rev_guess_standings.each_with_index do |u,i|
         %li.tr
-          .td.text-center= last != u.rev_guess_score ? count + i : ''
+          .td.text-center= last != u.rev_guess_score ? count += 1 : ''
           .td= link_to u.username, u
           .td.numeric= u.rev_guess_score
           - last = u.rev_guess_score
@@ -28,11 +28,11 @@
           .td
           .td User
           .td Score
-      - count = ((params[:pick_em_p]||1).to_i-1) * 25 + 1
+      - count = ((params[:pick_em_p]||1).to_i-1) * 25
       - last = nil
       - @pick_em_standings.each_with_index do |u,i|
         %li.tr
-          .td.text-center= last != u.pick_em_score ? count + i : ''
+          .td.text-center= last != u.pick_em_score ? count += 1 : ''
           .td= link_to u.username, u
           .td.numeric= u.pick_em_score
           - last = u.pick_em_score
