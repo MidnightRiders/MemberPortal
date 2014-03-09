@@ -9,7 +9,7 @@
           .thd.text-center Position
           .thd User
           .thd Score
-      - count = ((params[:rev_guess_p]||1)-1) * 25 + 1
+      - count = ((params[:rev_guess_p]||1).to_i-1) * 25 + 1
       - last = nil
       - @rev_guess_standings.each_with_index do |u,i|
         %li.tr
@@ -17,6 +17,9 @@
           .td= u.username
           .td.numeric= u.rev_guess_score
           - last = u.rev_guess_score
+    .row
+      .small-12.columns
+        = will_paginate(@rev_guess_standings, param_name: 'rev_guess_p')
   .medium-6.columns
     %h2 Pick ’Em Standings
     %ul.table
@@ -25,7 +28,7 @@
           .td.text-center Position
           .td User
           .td Score
-      - count = ((params[:pick_em_p]||1)-1) * 25 + 1
+      - count = ((params[:pick_em_p]||1).to_i-1) * 25 + 1
       - last = nil
       - @pick_em_standings.each_with_index do |u,i|
         %li.tr
@@ -33,3 +36,6 @@
           .td= u.username
           .td.numeric= u.pick_em_score
           - last = u.pick_em_score
+    .row
+      .small-12.columns.text-right
+        = will_paginate(@pick_em_standings, param_name: 'pick_em_p')
