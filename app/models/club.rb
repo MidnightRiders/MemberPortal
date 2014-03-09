@@ -25,6 +25,13 @@ class Club < ActiveRecord::Base
     (home_matches + away_matches).sort_by(&:kickoff)
   end
 
+  def previous_matches(n=1,time=Time.now)
+    home_matches.where('kickoff <= ?',time) + away_matches.where('kickoff <= ?',time)
+  end
+  def next_matches(n=1,time=Time.now)
+    home_matches.where('kickoff > ?',time) + away_matches.where('kickoff > ?',time)
+  end
+
   def next_match(x = 1)
     ms = matches.sort_by(&:kickoff).reject{|x| x.kickoff < Time.now }
     if x == 1

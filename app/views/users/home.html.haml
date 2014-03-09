@@ -31,23 +31,24 @@
             = (home ? "vs #{m.away_team.name}" : "at #{m.home_team.name}")
             %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
           .td.no-pad.small-4.columns.text-right
-            = render(partial: 'pick_ems/buttons', locals: { match: m }) if m.in_future?
+            = render(partial: 'pick_ems/buttons', locals: { match: m })
           .td.text-right.small-3.columns
             = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(m), class: 'button tiny secondary expand') if m.in_future?
     %h3 Other Games
     .table
       .thead
         .tr
-          .td Match / time
           .td.text-center
             = icon 'certificate'
             Pick ’Em
+          .td Match / time
       - @matches.each do |m|
         .tr
-          .td.small-7.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
-            %span.primary.solid{class: m.home_team.abbrv.downcase}= m.home_team.abbrv
-            vs
-            %span.primary.solid{class: m.away_team.abbrv.downcase}= m.away_team.abbrv
-            %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
-          .td.small-5.columns.text-right
-            = render(partial: 'pick_ems/buttons', locals: { match: m }) if m.in_future?
+          .td.small-6.columns.text-right
+            = render(partial: 'pick_ems/buttons', locals: { match: m })
+          .td.small-6.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
+            %p
+              = link_to m.kickoff.strftime('%_m.%-d %l:%M%P'), m
+              %small
+                at
+                = m.location

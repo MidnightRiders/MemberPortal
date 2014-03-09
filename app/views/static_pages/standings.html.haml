@@ -1,0 +1,35 @@
+- content_for :title, 'Standings'
+
+.row
+  .medium-6.columns
+    %h2 RevGuess Standings
+    %ul.table
+      .thead
+        %li.tr
+          .thd.text-center Position
+          .thd User
+          .thd Score
+      - count = ((params[:rev_guess_p]||1)-1) * 25 + 1
+      - last = nil
+      - @rev_guess_standings.each_with_index do |u,i|
+        %li.tr
+          .td.text-center= last != u.rev_guess_score ? count + i : ''
+          .td= u.username
+          .td.numeric= u.rev_guess_score
+          - last = u.rev_guess_score
+  .medium-6.columns
+    %h2 Pick ’Em Standings
+    %ul.table
+      .thead
+        %li.tr
+          .td.text-center Position
+          .td User
+          .td Score
+      - count = ((params[:pick_em_p]||1)-1) * 25 + 1
+      - last = nil
+      - @pick_em_standings.each_with_index do |u,i|
+        %li.tr
+          .td.text-center= last != u.pick_em_score ? count + i : ''
+          .td= u.username
+          .td.numeric= u.pick_em_score
+          - last = u.pick_em_score

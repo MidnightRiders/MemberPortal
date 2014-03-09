@@ -41,7 +41,7 @@ class User < ActiveRecord::Base
   end
 
   def pick_em_score
-    pick_ems.select{|p| p.correct? }.length
+    pick_ems ? pick_ems.select{|p| p.correct? }.length : 0
   end
 
   def rev_guess_score

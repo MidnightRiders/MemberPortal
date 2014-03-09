@@ -16,8 +16,9 @@ class UsersController < ApplicationController
 
   # GET /home
   def home
-    @matches = Club.includes(:home_matches).all.map(&:next_match).reject{|x| x.nil? }.sort_by{|x| x.kickoff }
-    @matches.reject!{|x| @matches.select{|y| y.id==x.id}.length > 1}
+    revs = Club.includes(:home_matches,:away_matches).find_by(abbrv: 'NE')
+    @revs_matches = revs.previous_matches + revs.next_matches(2)
+    @matches = Match.where('kickoff >= ? AND kickoff <= ?', Date.today.beginning_of_week, Date.today.beginning_of_week + 7.days)
   end
 
   def edit

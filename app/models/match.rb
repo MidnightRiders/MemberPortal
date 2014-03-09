@@ -59,5 +59,21 @@ class Match < ActiveRecord::Base
   def previous
     Match.where('kickoff < ?', kickoff).order('kickoff DESC').first
   end
+  def self.previous(n=1)
+    ms = where('kickoff < ?', Time.now).order('kickoff DESC')
+    if n==1
+      ms.first
+    else
+      ms.first(n)
+    end
+  end
+  def self.next(n=1)
+    ms = where('kickoff >= ?', Time.now).order('kickoff DESC')
+    if n==1
+      ms.first
+    else
+      ms.first(n)
+    end
+  end
 
 end
