@@ -17,6 +17,6 @@ class StaticPagesController < ApplicationController
     require 'will_paginate/array'
     @users = User.includes(:pick_ems,:rev_guesses).order('username ASC, last_name ASC, first_name ASC')
     @pick_em_standings = @users.sort_by(&:pick_em_score).reverse.paginate(page: params[:pick_em_p], per_page: 25)
-    @rev_guess_standings = @users.sort_by(&:rev_guess_score).reverse.paginate(page: params[:rev_guess_p], per_page: 25)
+    @rev_guess_standings = @users.select{|x| !x.rev_guess_score.nil? }.sort_by(&:rev_guess_score).reverse.paginate(page: params[:rev_guess_p], per_page: 25)
   end
 end
