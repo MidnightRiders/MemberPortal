@@ -14,7 +14,7 @@
       - @rev_guess_standings.each_with_index do |u,i|
         %li.tr
           .td.text-center= last != u.rev_guess_score ? count + i : ''
-          .td= u.username
+          .td= link_to u.username, u
           .td.numeric= u.rev_guess_score
           - last = u.rev_guess_score
     .row
@@ -33,7 +33,7 @@
       - @pick_em_standings.each_with_index do |u,i|
         %li.tr
           .td.text-center= last != u.pick_em_score ? count + i : ''
-          .td= u.username
+          .td= link_to u.username, u
           .td.numeric= u.pick_em_score
           - last = u.pick_em_score
     .row

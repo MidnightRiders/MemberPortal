@@ -17,7 +17,7 @@
         = icon 'arrow-right'
 .row.collapse
   .small-12.medium-5.large-5.columns
-    %h2.primary-bg.secondary-border.border-bottom.thick{ class: @match.home_team.abbrv.downcase }
+    %h2.primary-bg.secondary-border.border-bottom.thick.text-right{ class: @match.home_team.abbrv.downcase }
       = @match.home_team.name
   .small-12.medium-2.columns.text-center
     %h2= @match.score
@@ -25,13 +25,12 @@
     %h2.primary-bg.secondary-border.border-bottom.thick{ class: @match.away_team.abbrv.downcase }
       = @match.away_team.name
 .row
-  .small-12.medium-6.columns
+  .small-12.medium-8.columns
     %h3.subheader
-      %strong Kickoff:
-      = @match.kickoff.strftime('')
+      = @match.kickoff.strftime('%A, %_m.%-d.%Y at %l:%M%P %Z')
       at
       = @match.location
-  .small-12.medium-6.columns.right.text-right
+  .small-12.medium-4.columns.right.text-right
     - if @match.kickoff.future?
       = link_to rev_guess_path_for(@match), class: 'button tiny' do
         = icon 'question'
@@ -49,25 +48,43 @@
 - if revs.matches.include? @match
   .row
     .medium-6.medium-centered.columns
-  %ul.table
-    - if @mot_ms.empty?
-      .li.thead
-        .tr
-          .td Man of the Match Standings
-        %li.tr
-          .td No votes cast yet
-    - else
-      .thead
-        %li.tr
-          .td Player
-          .td.numeric 1
-          .td.numeric 2
-          .td.numeric 3
-      - @mot_ms.each do |mot_m|
-        %li.tr
-          .td
-            = mot_m.first_name
-            %strong= mot_m.last_name
-          .td= mot_m.motm_firsts.length
-          .td= mot_m.motm_seconds.length
-          .td= mot_m.motm_thirds.length
+      %h3 Man of the Match Standings
+      %ul.table
+        - if @mot_ms.empty?
+          %li.tr
+            .td No votes cast yet
+        - else
+          .thead
+            %li.tr
+              .thd
+              .thd Player
+              .thd.numeric 1
+              .thd.numeric 2
+              .thd.numeric 3
+          - place = 0
+          - last = nil
+          - @mot_ms.each do |mot_m|
+            %li.tr
+              .td.numeric= last == mot_m.mot_m_total ? '' : (place += 1)
+              .td
+                = mot_m.first_name
+                %strong= mot_m.last_name
+              .td= mot_m.motm_firsts.length
+              .td= mot_m.motm_seconds.length
+              .td= mot_m.motm_thirds.length
+      %h3 RevGuesses
+      %ul.table
+        .thead
+          %li.tr
+            .thd User
+            .thd Score
+            .thd Comment
+        - @match.rev_guesses.sort_by{|r| r.user.username}.each do |r|
+          %li.tr
+            .td= link_to r.user.username, r.user
+            .td.text-center
+              %strong
+                = r.home_goals
+                \–
+                = r.away_goals
+            .td= r.comment

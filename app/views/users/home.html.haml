@@ -15,16 +15,7 @@
           .td.text-center
             = icon 'star'
             Games
-      - if revs.last_match
-        - m = revs.last_match
-        - home = m.home_team == revs
-        .tr{ class: ( 'highlight' if home )}
-          .td.ne.border-left{ class: (home ? 'secondary-border' : 'primary-border') }
-            = (home ? "vs #{m.away_team.name}" : "at #{m.home_team.name}")
-            %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
-          .td.text-right
-            = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(m), class: 'button tiny secondary') if m.voteable?
-      - revs.next_match(3).each do |m|
+      - @revs_matches.each do |m|
         - home = m.home_team == revs
         .tr{ class: ('highlight' if home)}
           .td.ne.border-left.small-5.columns{ class: (home ? 'secondary-border' : 'primary-border') }
@@ -33,7 +24,8 @@
           .td.no-pad.small-4.columns.text-right
             = render(partial: 'pick_ems/buttons', locals: { match: m })
           .td.text-right.small-3.columns
-            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(m), class: 'button tiny secondary expand') if m.in_future?
+            = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(m), class: 'button tiny secondary expand') if m.voteable?
+            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(m), class: 'button tiny secondary expand') if m.kickoff.future?
     %h3 Other Games
     .table
       .thead
