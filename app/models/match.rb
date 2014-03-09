@@ -53,6 +53,10 @@ class Match < ActiveRecord::Base
     !in_future?
   end
 
+  def teams
+    [ home_team, away_team ]
+  end
+
   def next
     Match.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| x.home_team_id != home_team_id && !(x.kickoff <= kickoff && x.id < id) }.first
   end

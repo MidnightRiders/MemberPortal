@@ -1,5 +1,5 @@
 - long ||= false
-.tr{ class: ('highlight' if revs.matches.include? match )}
+.tr{ class: ('highlight' if match.teams.include? revs )}
   .td
     = render partial: 'pick_ems/buttons', locals: { match: match }
   .td{ class: ('highlight' if match.away_team == revs)}
@@ -19,6 +19,6 @@
     = match.score
   .td.text-right
     .button-group
-      - if revs.matches.include? match
-        = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(match), class: 'button tiny secondary') if match.voteable?
-        = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(match), class: 'button tiny secondary') if match.in_future?
+      - if match.teams.include? revs
+        = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(match), class: 'button tiny secondary expand') if match.voteable?
+        = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(match), class: 'button tiny secondary expand') if match.in_future?
