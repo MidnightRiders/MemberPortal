@@ -47,30 +47,36 @@
       @include text-shadow(0 2px 2px rgba(0,0,0,.6));
       @include box-shadow(0 0 .7em #fff inset);
       @include background(linear-gradient(top,$success-color,darken($success-color,5%)));
-      &.correct, &.wrong {
-        &:before {
-          display: block;
-          font-family: FontAwesome;
-          width: 100%;
-          height: 100%;
-          text-align: center;
-          position: absolute;
-          overflow: hidden;
-          font-size: 2em;
-        }
+    }
+    &.correct, &.wrong, &.actual {
+      &:before {
+        display: block;
+        font-family: FontAwesome;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        position: absolute;
+        overflow: hidden;
+        font-size: 2em;
       }
-      &.correct:before {
-        opacity: .3;
-        content: $fa-var-certificate;
-        text-shadow: 0 0 6px #fff;
-      }
-      &.wrong:before {
-        content: $fa-var-times;
-        color: $alert-color;
-        margin-top: -1px;
-        opacity: .6;
-        @include text-shadow(none);
-      }
+    }
+    &.correct:before {
+      opacity: .4;
+      content: $fa-var-check-circle;
+    }
+    &.wrong:before {
+      content: $fa-var-times;
+      color: $alert-color;
+      margin-top: -1px;
+      opacity: .6;
+      @include text-shadow(none);
+    }
+    &.actual:before {
+      color: #fff;
+      opacity: .4;
+      content: $fa-var-circle-o;
+      text-shadow: none;
+      font-size: 3.2em;
     }
     @media #{$medium-up} {
       line-height: 4em;

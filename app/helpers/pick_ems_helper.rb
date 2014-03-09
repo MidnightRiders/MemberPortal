@@ -14,9 +14,18 @@ module PickEmsHelper
     else
       ['primary-bg', team.abbrv.downcase]
     end
-    html_classes << 'correct' if user.pick_for(match).try(:correct?)
-    html_classes << 'wrong' if user.pick_for(match).try(:wrong?)
-    html_classes << 'picked' if user.pick_result(match) == PickEm::RESULTS[vote]
+    if match.complete? && match.result == vote
+      if user.pick_for(match).try(:correct?)
+        html_classes << 'correct'
+      elsif match.result == vote
+        html_classes << 'actual'
+      end
+    end
+    if user.pick_result(match) == PickEm::RESULTS[vote]
+      html_classes << 'picked'
+      html_classes << 'wrong' if user.pick_for(match).try(:wrong?)
+    end
+
     content = if long
       team ? team.name : 'Draw'
     else
