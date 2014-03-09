@@ -6,7 +6,7 @@
     %ul.table
       .thead
         %li.tr
-          .thd.text-center Position
+          .thd
           .thd User
           .thd Score
       - count = ((params[:rev_guess_p]||1).to_i-1) * 25 + 1
@@ -25,7 +25,7 @@
     %ul.table
       .thead
         %li.tr
-          .td.text-center Position
+          .td
           .td User
           .td Score
       - count = ((params[:pick_em_p]||1).to_i-1) * 25 + 1
