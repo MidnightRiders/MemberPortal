@@ -19,7 +19,7 @@
     .large-4.columns
       = f.label :kickoff
     .large-8.columns
-      = f.text_field :kickoff, type: 'datetime'
+      = f.text_field :kickoff, type: 'datetime', value: f.object.kickoff
   .row
     .large-4.columns
       = f.label :location
