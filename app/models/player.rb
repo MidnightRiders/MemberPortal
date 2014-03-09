@@ -27,8 +27,12 @@ class Player < ActiveRecord::Base
   has_many :motm_seconds, class_name: 'MotM', foreign_key: 'second_id'
   has_many :motm_thirds, class_name: 'MotM', foreign_key: 'third_id'
 
-  def mot_m_total
-    (motm_firsts.length * 3) + (motm_seconds.length * 2) + (motm_thirds.length * 1)
+  def mot_m_total(match_id = nil)
+    if match_id
+      (motm_firsts.where(match_id: match_id).length * 3) + (motm_seconds.where(match_id: match_id).length * 2) + (motm_thirds.where(match_id: match_id).length * 1)
+    else
+      (motm_firsts.length * 3) + (motm_seconds.length * 2) + (motm_thirds.length * 1)
+    end
   end
 
   def <=> (other)
