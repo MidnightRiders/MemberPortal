@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   end
 
   def rev_guess_score
-    rev_guesses.sum(&:score)
+    rev_guesses.inject{|sum,x| sum + (x.score.nil? ? x.score : 0) }
   end
 
   def self.import(file, roles = [])
