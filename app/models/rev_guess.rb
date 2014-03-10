@@ -13,9 +13,9 @@ class RevGuess < ActiveRecord::Base
       sum += 1 if away_goals == match.away_goals
       sum += 1 if (home_goals - away_goals) == (match.home_goals - match.away_goals)
       sum
+    else
+      nil
     end
-  else
-    nil
   end
 
   def result

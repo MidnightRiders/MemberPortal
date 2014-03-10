@@ -80,6 +80,8 @@ ActiveRecord::Schema.define(version: 20140307045250) do
     t.integer  "number",     limit: 2
   end
 
+  add_index "players", ["club_id"], name: "index_players_on_club_id", using: :btree
+
   create_table "rev_guesses", force: true do |t|
     t.integer  "match_id"
     t.integer  "user_id"
@@ -101,12 +103,6 @@ ActiveRecord::Schema.define(version: 20140307045250) do
   end
 
   add_index "roles", ["name"], name: "index_roles_on_name", unique: true, using: :btree
-
-  create_table "stylesheets", force: true do |t|
-    t.text     "contents"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "user_roles", force: true do |t|
     t.integer  "user_id"

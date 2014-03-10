@@ -2,7 +2,9 @@ class Match < ActiveRecord::Base
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
 
-  default_scope includes(:home_team,:away_team)
+  default_scope {
+    includes(:home_team,:away_team)
+  }
   scope :completed, -> {
     includes(:home_team, :away_team).where('home_goals != ? AND away_goals != ?', nil, nil)
   }

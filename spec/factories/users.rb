@@ -2,7 +2,6 @@
 
 FactoryGirl.define do
   factory :user do
-    type_id 1
     first_name 'Matt'
     last_name 'Reis'
     username 'mattreis'
@@ -14,5 +13,23 @@ FactoryGirl.define do
     email 'test@test.com'
     member_since 2010
     password 'Password1$'
+    after :create do |u|
+      u.roles << create(:role)
+    end
+    trait :admin do
+      after :create do |u|
+        u.roles << create(:admin_role)
+      end
+    end
+    trait :executive_board do
+      after :create do |u|
+        u.roles << create(:executive_board_role)
+      end
+    end
+    trait :at_large_board do
+      after :create do |u|
+        u.roles << create(:at_large_board_role)
+      end
+    end
   end
 end

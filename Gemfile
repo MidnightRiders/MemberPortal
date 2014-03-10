@@ -40,10 +40,10 @@ group :development, :test do
   # Testing
   gem 'rspec-rails'
   gem 'factory_girl_rails'
-
+  gem 'pry-rails'
 end
 
-gem 'pry-rails', group: :development
+gem 'database_cleaner', group: :test
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
