@@ -5,11 +5,11 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @role = params[:role] || nil
-    @users = User.includes(:roles)
-    if @roles
-      @users = @users.where(roles: { name: @role})
+    if @role
+      @users = User,includes(:roles).order('last_name ASC, first_name ASC').paginate(where: { roles: { name: @role} }, page: params[:p], per_page: 10)
+    else
+      @users = User.includes(:roles).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 10)
     end
-    @users.order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 10)
   end
 
   # GET /users/1
@@ -19,7 +19,6 @@ class UsersController < ApplicationController
 
   # GET /home
   def home
-    revs = Club.includes(:home_matches,:away_matches).find_by(abbrv: 'NE')
     @revs_matches = revs.previous_matches + revs.next_matches(2)
     @matches = Match.where('kickoff >= ? AND kickoff <= ?', Date.today.beginning_of_week, Date.today.beginning_of_week + 7.days).order('kickoff ASC')
   end

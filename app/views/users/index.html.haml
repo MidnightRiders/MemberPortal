@@ -36,16 +36,18 @@
 %ul.table.members
   .thead
     %li.tr
+      .thd
       .thd Member
-      .thd.numeric Phone
       .thd Email
       .thd.numeric Member since
-      .thd Roles
       .thd.actions
 
   .tbody
     - @users.each do |user|
       %li.tr
+        .td.text-center
+          - user.roles.each do |r|
+            = content_tag(:i,'',class: 'fa fa-fw fa-' + r.name, title: r.name.titleize)
         .td
           = link_to user do
             %h5
@@ -53,10 +55,8 @@
               ,
               = user.first_name
             %h5.subheader @#{user.username}
-        .td.numeric= number_to_phone(user.phone,delimiter: '.')
         .td= link_to user.email, "mailto: #{user.email}"
         .td.numeric= user.member_since
-        .td= user.list_roles
         .td.text-right
           -#= link_to 'Show', user
           = link_to edit_user_path(user), class: 'button tiny', title: 'Edit' do

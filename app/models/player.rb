@@ -21,6 +21,7 @@ class Player < ActiveRecord::Base
   }
   validates :first_name, :last_name, :position, :number, :club, presence: true
   validates :position, inclusion: POSITIONS.keys
+  validates :club, associated: true
 
   belongs_to :club
   has_many :motm_firsts, class_name: 'MotM', foreign_key: 'first_id'

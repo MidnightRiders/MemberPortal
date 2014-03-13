@@ -1,5 +1,6 @@
 require 'spec_helper'
 
 describe PickEm do
-  pending "add some examples to (or delete) #{__FILE__}"
+  pending 'does not allow multiples from a user on a match'
+  pending 'does not allow votes after kickoff'
 end

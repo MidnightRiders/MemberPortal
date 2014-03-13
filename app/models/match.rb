@@ -6,10 +6,10 @@ class Match < ActiveRecord::Base
     includes(:home_team,:away_team)
   }
   scope :completed, -> {
-    includes(:home_team, :away_team).where('home_goals != ? AND away_goals != ?', nil, nil)
+    where('home_goals != ? AND away_goals != ?', nil, nil)
   }
   scope :upcoming, -> {
-    includes(:home_team, :away_team).where('kickoff <= ?', Time.now)
+    where('kickoff > ?', Time.now)
   }
 
   has_many :mot_ms
@@ -74,7 +74,7 @@ class Match < ActiveRecord::Base
     end
   end
   def self.next(n=1)
-    ms = where('kickoff >= ?', Time.now).order('kickoff DESC')
+    ms = upcoming.order('kickoff DESC')
     if n==1
       ms.first
     else

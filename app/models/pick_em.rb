@@ -20,4 +20,7 @@ class PickEm < ActiveRecord::Base
   def voteable
     match.kickoff.future?
   end
+
+  # TODO: Implement "pick goalscorers" method (and corresponding models)
+
 end

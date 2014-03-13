@@ -53,6 +53,8 @@ class Club < ActiveRecord::Base
     secondary_color == 'ffffff' ? accent_color : secondary_color
   end
 
+  # TODO: Implement "record" (W-L-D) method
+
   %w(primary secondary accent).each do |x|
     define_method("#{x}_color=") do |val|
       write_attribute("#{x}_color", val.to_i(16))

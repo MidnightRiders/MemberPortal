@@ -3,6 +3,8 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'capybara/rails'
+require 'cancan/matchers'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -15,7 +17,7 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
-  config.include ControllerHelpers, type: :controller
+  config.include Devise::TestHelpers, type: :view
   config.extend ControllerMacros, type: :controller
 
   config.include Rails.application.routes.url_helpers

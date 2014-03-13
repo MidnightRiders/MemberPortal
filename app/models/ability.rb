@@ -37,10 +37,9 @@ class Ability
         can :create, User, role_id: [ 2,3,4,5]
         can :read, :all
       else
-        can :read, [User, Club, Match]
-        cannot :index, User
-        can :index, [Club, Match]
-        cannot :index, Club
+        can :show, [User, Club, Match]
+        can :index, Match
+        cannot :index, [ Club, Player, User ]
         can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
         can :manage, user
       end

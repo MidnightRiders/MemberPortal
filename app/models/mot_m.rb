@@ -4,6 +4,7 @@ class MotM < ActiveRecord::Base
 
   validate :different_picks, message: 'must be different players'
   validate :voteable?, message: 'cannot be voted on yet'
+  validates_uniqueness_of :match_id, scope: :user_id, message: 'has already been voted on by this user.'
 
   belongs_to :user
   belongs_to :match
