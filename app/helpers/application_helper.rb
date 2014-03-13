@@ -1,5 +1,5 @@
 module ApplicationHelper
   def revs
-    Club.find_by(abbrv: 'NE')
+    Club.includes(:home_matches,:away_matches).find_by(abbrv: 'NE')
   end
 end

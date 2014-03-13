@@ -2,10 +2,6 @@ require 'spec_helper'
 
 describe UsersController do
 
-  def valid_attributes
-    FactoryGirl.attributes_for(:user,:admin)
-  end
-
   describe '#index blocks unauthorized access' do
     it 'for signed-out users' do
       get :index
@@ -42,19 +38,22 @@ describe UsersController do
   end
 
   describe '#show' do
+    let(:user) { FactoryGirl.create :user }
     it 'will reject signed-out users' do
-      u = FactoryGirl.create :user
-      get :show, id: u.to_param
+      get :show, id: user.to_param
       response.should redirect_to root_path
     end
     it 'will not reject signed-in users' do
-      u = FactoryGirl.create :user
-      sign_in u
-      get :show, id: u.to_param
+      sign_in user
+      get :show, id: user
       response.should be_success
-      assigns(:user).should eq u
+      assigns(:user).should eq user
     end
-
+    it 'will show address info in JSON to owner' do
+      sign_in user
+      get :show, id: user, format: :json
+      binding.pry
+    end
   end
 
 end

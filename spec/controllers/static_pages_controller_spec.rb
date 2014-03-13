@@ -23,4 +23,20 @@ describe StaticPagesController do
     end
   end
 
+  describe 'GET "standings"' do
+    context 'signed in' do
+      it 'should show' do
+        sign_in FactoryGirl.create(:user)
+        get 'standings'
+        response.should be_success
+      end
+    end
+    context 'signed out' do
+      it 'should redirect' do
+        get 'standings'
+        response.should redirect_to(root_path)
+      end
+    end
+  end
+
 end

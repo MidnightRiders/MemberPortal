@@ -1,4 +1,7 @@
 class StaticPagesController < ApplicationController
+
+  before_filter(only: :standings) { raise CanCan::AccessDenied.new('Cannot view standings.', :standings) unless user_signed_in? }
+
   def home
     redirect_to user_home_path if user_signed_in?
   end

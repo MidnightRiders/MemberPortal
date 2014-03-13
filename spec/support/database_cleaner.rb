@@ -3,6 +3,7 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
     Rails.application.load_seed
+    Warden.test_mode!
   end
 
   config.before(:each) do
@@ -19,6 +20,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     DatabaseCleaner.clean
+    Warden.test_reset!
   end
 
 end
