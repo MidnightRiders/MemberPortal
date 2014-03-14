@@ -1,33 +1,58 @@
 - content_for :title, 'Member Portal | Home'
 
 .row
-  .large-4.columns
+  .medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
-  .large-8.columns
+  .medium-6.columns
+    %h2 Messages and Events
+
+    %article
+      %h4 Philadelphia Viewing Parties
+      %p
+        Riders will be at #{link_to 'the Banshee', 'https://www.facebook.com/events/1479824622239264/', target: '_blank'} and #{link_to 'Parlor Sports', 'https://www.facebook.com/events/487254491396552/?ref=25', target: '_blank'} in the Boston area, as well as #{link_to 'Boston Billiards Club', 'https://www.facebook.com/events/440445999422510/', target: '_blank'} in Nashua, NH, and the Grey Hound in Worcester, MA. Come out and support local soccer as we watch the Revs put Houston in the past with a hopefully resounding victory.
+    %article
+      %h4 Revs Pub Tour
+      %p Join us at Clery’s in Boston this weekend as the Revs continue their #{link_to 'Pub Tour', 'https://www.facebook.com/events/606366596114016/', target: '_blank' }. Revs in attendance will include Teal Bunbury, Patrick Mullins, Steve Neumann and A.J. Soares. In addition there will be some cool giveaways from the team.
+
+.row
+  .large-6.columns
     %h2.club.ne Revs Games
     .table
       .thead
         .tr
-          .td Opponent / time
           .td.text-center
             = icon 'certificate'
             Pick ’Em
+          .td Opponent / time
           .td.text-center
             = icon 'star'
             Games
       - @revs_matches.each do |m|
         - home = m.home_team == revs
         .tr{ class: ('highlight' if home)}
-          .td.ne.border-left.small-5.columns{ class: (home ? 'secondary-border' : 'primary-border') }
-            = link_to m do
-              = (home ? "vs #{m.away_team.name}" : "at #{m.home_team.name}")
-              %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
-          .td.no-pad.small-4.columns.text-right
+          .td.small-5.columns.text-right
             = render(partial: 'pick_ems/buttons', locals: { match: m })
+          .td.ne.border-left.small-4.columns{ class: (home ? 'secondary-border' : 'primary-border') }
+            = link_to m do
+              - if home
+                %strong v #{m.away_team.abbrv}
+              - else
+                @ #{m.home_team.abbrv}
+              - if m.complete?
+                = surround '(', ')' do
+                  = home ? (m.result == :home ? 'W' : (m.result == :draw ? 'D' : 'L')) : (m.result == :away ? 'W' : (m.result == :draw ? 'D' : 'L'))
+                  \:
+                  = home ? m.score : m.score.reverse
+              %small
+                %br
+                = succeed ',' do
+                  = m.kickoff.strftime('%_m.%-d %l:%M%P')
+                = m.location
           .td.text-right.small-3.columns
             = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(m), class: 'button tiny secondary expand') if m.voteable?
             = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(m), class: 'button tiny secondary expand') if m.kickoff.future?
-    %h3 Other Games
+  .large-6.columns
+    %h2.primary.ne Elsewhere this Week
     .table
       .thead
         .tr
@@ -40,8 +65,15 @@
           .td.small-6.columns.text-right
             = render(partial: 'pick_ems/buttons', locals: { match: m })
           .td.small-6.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
-            %p
-              = link_to m.kickoff.strftime('%_m.%-d %l:%M%P'), m
+            = link_to m do
+              = m.home_team.abbrv
+              v
+              = m.away_team.abbrv
+              - if m.complete?
+                = surround '(', ')' do
+                  = m.score
               %small
-                at
+                %br
+                = succeed ',' do
+                  = m.kickoff.strftime('%_m.%-d %l:%M%P')
                 = m.location
