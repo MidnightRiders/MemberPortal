@@ -3,16 +3,18 @@
     %h1
       = user.first_name
       %strong=  user.last_name
-      %small @#{user.username}
+      %small
+        @#{user.username}
+        - if can? :edit, user
+          \(
+          = link_to 'edit', edit_user_path(user)
+          \)
     %h3.subheader
       %b Member since
       = user.member_since || "at least #{user.created_at.year}"
   .medium-4.columns.text-right
-    - if can? :edit, user
-      = link_to edit_user_path(user), class: 'button tiny', title: 'Edit' do
-        = icon 'pencil', '', class: 'fa-lg fa-fw'
-    - if can? :destroy, user
-      = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => 'Are you sure?' }, title: 'Destroy' do
+    - if can? :destroy, User
+      = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => "Are you sure you wish to destroy @#{user.username}?" }, title: 'Destroy' do
         = icon 'trash-o', '', class: 'fa-lg fa-fw'
 .row
   .small-6.columns
