@@ -1,7 +1,7 @@
 @font-face {
   font-family: Mayflower;
-  src: url("http://www.midnightriders.com/fonts/Mayflower.eot"); /* EOT file for IE */
-  src: local(Mayflower), url("http://www.midnightriders.com/fonts/Mayflower.ttf") format('opentype');
+  src: url('//www.midnightriders.com/fonts/Mayflower.eot'); /* EOT file for IE */
+  src: local('Mayflower'), url('//www.midnightriders.com/fonts/Mayflower.ttf') format('opentype');
 }
 
 html {
@@ -37,4 +37,8 @@ p.hint {
   &:hover span {
     display: inline;
   }
+}
+
+main {
+  display: block;
 }
