@@ -55,6 +55,10 @@
               - if current_user.role?('admin') || current_user.role?('executive_board')
                 %li
                   %label Admin
+                %li
+                  = link_to mot_ms_path do
+                    = icon 'list-ol'
+                    MotY Rankings
 
           %li
             = link_to edit_user_registration_path(current_user) do

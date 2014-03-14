@@ -4,8 +4,11 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rails'
+require 'capybara/poltergeist'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
+Capybara.javascript_driver = :poltergeist
+Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -21,6 +24,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :view
   config.extend ControllerMacros, type: :controller
   config.include Warden::Test::Helpers
+  config.include Capybara::DSL
 
   config.include Rails.application.routes.url_helpers
 

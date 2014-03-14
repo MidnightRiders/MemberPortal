@@ -34,17 +34,20 @@ class Ability
       elsif user.role? 'executive_board'
         can :manage, [ User, Club, Match, Player, RevGuess ]
         cannot :destroy, [ Club, Player ]
-        can :create, User, role_id: [ 2,3,4,5]
+        can :create, User
         can :read, :all
+        can :index, MotM
       else
         can :show, [User, Club, Match]
         can :index, Match
-        cannot :index, [ Club, Player, User ]
         can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
+        cannot :index, [ Club, Player, User, MotM ]
         can :manage, user
       end
     else
-      can :create, User, roles: { id: [ 4, 5 ] }
+      cannot :index, :all
+      cannot :manage, :all
+      can :create, :Registration
     end
   end
 end

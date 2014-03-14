@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
 
   private
     def set_next_revs_match
-      revs = Club.includes(:home_matches,:away_matches).find_by(abbrv: 'NE')
-      @next_revs_match = revs.next_match
+      @revs = Club.includes(:home_matches,:away_matches).find_by(abbrv: 'NE')
+      @next_revs_match = @revs.try(:next_match)
     end
 end

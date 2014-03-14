@@ -7,6 +7,7 @@ describe User do
     context 'for admin user' do
       let(:user) { FactoryGirl.create(:user,:admin) }
       it{ should be_able_to(:manage,[Match,User,Player,Club])}
+      it{ should be_able_to(:create,User) }
     end
     context 'for normal user' do
       let(:user) { FactoryGirl.create(:user) }
@@ -18,7 +19,7 @@ describe User do
       it{ should_not be_able_to(:index,[Player,Club,User]) }
     end
     context 'for no user' do
-      it{ should be_able_to(:create,User) }
+      it{ should be_able_to(:create,:Registration) }
       it{ should_not be_able_to(:view,FactoryGirl.create(:user)) }
       it{ should_not be_able_to(:index,[Match,User,Player,Club]) }
     end
