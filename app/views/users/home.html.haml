@@ -19,8 +19,9 @@
         - home = m.home_team == revs
         .tr{ class: ('highlight' if home)}
           .td.ne.border-left.small-5.columns{ class: (home ? 'secondary-border' : 'primary-border') }
-            = (home ? "vs #{m.away_team.name}" : "at #{m.home_team.name}")
-            %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
+            = link_to m do
+              = (home ? "vs #{m.away_team.name}" : "at #{m.home_team.name}")
+              %small= m.kickoff.strftime('%_m.%-d %l:%M%P')
           .td.no-pad.small-4.columns.text-right
             = render(partial: 'pick_ems/buttons', locals: { match: m })
           .td.text-right.small-3.columns
