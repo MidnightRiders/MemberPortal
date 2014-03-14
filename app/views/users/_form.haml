@@ -36,6 +36,15 @@
     .large-8.columns
       .row
         .medium-4.columns
+          = f.label :first_name, 'Name', class: 'inline'
+        .medium-8.columns
+          .row
+            .small-6.columns
+              = f.text_field :first_name, autocorrect: 'off', placeholder: 'First Name'
+            .small-6.columns
+              = f.text_field :last_name, autocorrect: 'off', placeholder: 'Last Name'
+      .row
+        .medium-4.columns
           = f.label :member_since, class: 'inline'
         .medium-8.columns
           = f.number_field :member_since
