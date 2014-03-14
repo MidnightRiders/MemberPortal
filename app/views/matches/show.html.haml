@@ -57,17 +57,17 @@
       .table.pick-em-results
         .tr
           - if home_picks > 0
-            .td.primary-bg.text-center{ class: @match.home_team.abbrv.downcase, style: "width:#{(home_picks/picks) * 100}%" }
+            .td.primary-bg.text-center{ class: @match.home_team.abbrv.downcase, style: "width:#{(home_picks.to_f/picks) * 100}%" }
               = @match.home_team.abbrv
               %small
                 (#{home_picks}/#{picks})
           - if draw_picks > 0
-            .td.text-center{ style: "width: #{(draw_picks/picks) * 100}%" }
+            .td.text-center{ style: "width: #{(draw_picks.to_f/picks) * 100}%" }
               D
               %small
                 (#{draw_picks}/#{picks})
           - if away_picks > 0
-            .td.primary-bg.text-center{ class: @match.away_team.abbrv.downcase, style: "width: #{(away_picks/picks) * 100}%" }
+            .td.primary-bg.text-center{ class: @match.away_team.abbrv.downcase, style: "width: #{(away_picks.to_f/picks) * 100}%" }
               = @match.away_team.abbrv
               %small
                 (#{away_picks}/#{picks})
