@@ -45,9 +45,37 @@
         = icon 'pencil'
         Edit
 
-- if @match.teams.include?(revs)
-  .row
-    .medium-6.medium-centered.columns
+
+.row
+  .medium-8.large-6.medium-centered.columns
+    %h2 Pick ’Ems
+    - picks = @match.pick_ems.count
+    - home_picks = @match.pick_ems.where(result: PickEm::RESULTS[:home]).count
+    - draw_picks = @match.pick_ems.where(result: PickEm::RESULTS[:draw]).count
+    - away_picks = @match.pick_ems.where(result: PickEm::RESULTS[:away]).count
+    - if picks > 0
+      .table.pick-em-results
+        .tr
+          - if home_picks > 0
+            .td.primary-bg.text-center{ class: @match.home_team.abbrv.downcase, style: "width:#{(home_picks/picks) * 100}%" }
+              = @match.home_team.abbrv
+              %small
+                (#{home_picks}/#{picks})
+          - if draw_picks > 0
+            .td.text-center{ style: "width: #{(draw_picks/picks) * 100}%" }
+              D
+              %small
+                (#{draw_picks}/#{picks})
+          - if away_picks > 0
+            .td.primary-bg.text-center{ class: @match.away_team.abbrv.downcase, style: "width: #{(away_picks/picks) * 100}%" }
+              = @match.away_team.abbrv
+              %small
+                (#{away_picks}/#{picks})
+    - else
+      %h4 No picks yet
+
+
+    - if @match.teams.include?(revs)
       %h3 Man of the Match Standings
       %ul.table
         - if @motm_players.empty?
@@ -88,5 +116,3 @@
                 \–
                 = r.away_goals
             .td= r.comment
-- else
-  -# TODO: Show breakdown of Pick Em values

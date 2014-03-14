@@ -60,10 +60,10 @@ class Match < ActiveRecord::Base
   end
 
   def next
-    Match.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| x.home_team_id != home_team_id && !(x.kickoff <= kickoff && x.id < id) }.first
+    Match.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
   end
   def previous
-    Match.where('kickoff < ?', kickoff).order('kickoff DESC').first
+    Match.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
   end
   def self.previous(n=1)
     ms = where('kickoff < ?', Time.now).order('kickoff DESC')
