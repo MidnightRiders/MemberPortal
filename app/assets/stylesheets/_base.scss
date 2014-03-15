@@ -47,3 +47,15 @@ main {
     }
   }
 }
+
+.alert-box {
+  background-color: mix(#fff,$revs-navy,95%);
+  border-color: mix(#fff,$revs-navy,75%);
+  color: $revs-navy;
+  :first-child, :first-child :first-child {
+    margin-top: 0;
+  }
+  :last-child, :last-child :last-child {
+    margin-bottom: 0;
+  }
+}
