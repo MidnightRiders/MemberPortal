@@ -8,7 +8,8 @@ class Club < ActiveRecord::Base
                     ftp_servers: [{
                         host: 'ftp.midnightriders.com',
                         user: 'midnigi3',
-                        password: 'V9NP+rs96FRcZ-S'
+                        password: 'V9NP+rs96FRcZ-S',
+                        passive: true
                     }],
                     styles: {
                         thumb: '100x100>',
