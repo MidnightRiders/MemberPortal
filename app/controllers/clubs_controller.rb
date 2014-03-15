@@ -4,7 +4,7 @@ class ClubsController < ApplicationController
   # GET /clubs
   # GET /clubs.json
   def index
-    @clubs = Club.all
+    @clubs = Club.order('name ASC')
   end
 
   # GET /clubs/1
