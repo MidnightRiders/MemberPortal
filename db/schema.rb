@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140307045250) do
+ActiveRecord::Schema.define(version: 20140315173249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,10 @@ ActiveRecord::Schema.define(version: 20140307045250) do
     t.string   "abbrv"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "crest_file_name"
+    t.string   "crest_content_type"
+    t.integer  "crest_file_size"
+    t.datetime "crest_updated_at"
   end
 
   add_index "clubs", ["conference"], name: "index_clubs_on_conference", using: :btree
