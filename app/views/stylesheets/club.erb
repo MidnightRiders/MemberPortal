@@ -1,49 +1,61 @@
 <%- @clubs.each do |club| -%>
-.club.<%=club.abbrv.downcase%> {
+<% abbrv = club.abbrv.downcase %>
+.club.<%=abbrv%> {
     background-color: #<%=club.primary_color%>;
     border-right-color: #<%=club.secondary_color%>;
     border-left-color: #<%=club.accent_color%>;
 }
-.club.<%=club.abbrv.downcase%>, .club.<%=club.abbrv.downcase%> * {
-    color: #<%=get_contrast_yiq(club.primary_color)%>;
+  .club.<%=abbrv%>, .club.<%=abbrv%> * {
+      color: #<%=get_contrast_yiq(club.primary_color)%>;
+  }
+  .club.<%=abbrv%>.light {
+      border-bottom: 2px solid #<%=club.secondary_color%>;
+  }
+    .club.<%=abbrv%>.light, .club.<%=abbrv%>.light * {
+        color: #<%=club.primary_color%>;
+    }
+<%- if club.crest.blank? %>
+.crest.<%=abbrv%>, .pre-crest.<%=abbrv%>:before { display: none; }
+<%- else %>
+.crest.<%=abbrv%>, .pre-crest.<%=abbrv%>:before {
+  background-image: url('//midnightriders.com<%=club.crest.url(:standard)%>');
 }
-.club.<%=club.abbrv.downcase%>.light {
-    border-bottom: 2px solid #<%=club.secondary_color%>;
-}
-.club.<%=club.abbrv.downcase%>.light, .club.<%=club.abbrv.downcase%>.light * {
+  .crest.<%=abbrv%>.small, .pre-crest.<%=abbrv%>.small:before {
+    background-image: url('//midnightriders.com<%=club.crest.url(:thumb)%>');
+  }
+<%- end %>
+        
+.primary.<%=abbrv%> {
     color: #<%=club.primary_color%>;
 }
-.primary.<%=club.abbrv.downcase%> {
-    color: #<%=club.primary_color%>;
-}
-.primary.solid.<%=club.abbrv.downcase%> {
-    background-color: #<%=club.primary_color%>;
-    color: #<%=get_contrast_yiq(club.primary_color)%>;
-    margin: -.3em .4em;
-    padding: .3em;
-    border-radius: 3px;
-}
-.primary-bg.<%=club.abbrv.downcase%>, .td.primary-bg.<%=club.abbrv.downcase%>, .tr.primary-bg.<%=club.abbrv.downcase%> {
+  .primary.solid.<%=abbrv%> {
+      background-color: #<%=club.primary_color%>;
+      color: #<%=get_contrast_yiq(club.primary_color)%>;
+      margin: -.3em .4em;
+      padding: .3em;
+      border-radius: 3px;
+  }
+.primary-bg.<%=abbrv%>, .td.primary-bg.<%=abbrv%>, .tr.primary-bg.<%=abbrv%> {
     background-color: #<%=club.primary_color%>;
     color: #<%=get_contrast_yiq(club.primary_color)%>;
 }
-.primary-bg.<%=club.abbrv.downcase%> small {
+.primary-bg.<%=abbrv%> small {
     color: #<%=get_contrast_yiq(club.primary_color)%>;
 }
-.button.primary-bg.<%=club.abbrv.downcase%>:hover, a.choice.primary-bg.<%=club.abbrv.downcase%>:hover {
+.button.primary-bg.<%=abbrv%>:hover, a.choice.primary-bg.<%=abbrv%>:hover {
     background-color: #<%=darken(club.primary_color, 0.75)%>;
 }
-.primary-border.<%=club.abbrv.downcase%> {
+.primary-border.<%=abbrv%> {
     border-color: #<%=club.primary_color%>;
 }
-.secondary.<%=club.abbrv.downcase%> {
+.secondary.<%=abbrv%> {
     color: #<%=club.secondary_color%>;
 }
-.secondary-bg.<%=club.abbrv.downcase%>, .td.secondary-bg.<%=club.abbrv.downcase%>, .tr.secondary-bg.<%=club.abbrv.downcase%> {
+.secondary-bg.<%=abbrv%>, .td.secondary-bg.<%=abbrv%>, .tr.secondary-bg.<%=abbrv%> {
     background-color: #<%=club.dark_compliment%>;
     color: #<%=get_contrast_yiq(club.dark_compliment)%>;
 }
-.secondary-border.<%=club.abbrv.downcase%> {
+.secondary-border.<%=abbrv%> {
     border-color: #<%=club.dark_compliment%>;
 }
 <%- end %>

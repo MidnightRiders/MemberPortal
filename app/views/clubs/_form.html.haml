@@ -1,4 +1,4 @@
-= form_for @club do |f|
+= form_for @club, html: { multipart: true } do |f|
   - if @club.errors.any?
     #error_explanation
       %h2= "#{pluralize(@club.errors.count, "error")} prohibited this club from being saved:"
@@ -13,9 +13,14 @@
       = f.text_field :name
   .row
     .large-4.columns
-      = f.label :conference
+      = f.label :conference, class: 'inline'
     .large-8.columns
       = f.select :conference, options_for_select(Club::CONFERENCES.map{|x| [x.titleize,x]}, f.object.conference)
+  .row
+    .large-4.columns
+      = f.label :crest, class: 'inline'
+    .large-8.columns
+      = f.file_field :crest
   .row
     .large-4.columns
       = f.label :primary_color
