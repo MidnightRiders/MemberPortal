@@ -16,3 +16,9 @@ only screen and (min-resolution: 120dpi)");
 @mixin text-stroke($width,$color) {
   @include text-shadow(-$width 0 0 $color, $width 0 0 $color, 0 -$width 0 $color, 0 $width 0 $color);
 }
+
+@mixin text-hide {
+  overflow: hidden;
+  white-space: nowrap;
+  text-indent: 200%;
+}

@@ -26,17 +26,6 @@ class Club < ActiveRecord::Base
 
   has_many :players
 
-  def name
-    if abbrv=='NE'
-      '&star; '.html_safe + super
-    else
-      super
-    end
-  end
-  def plain_name
-    name
-  end
-
   def matches
     (home_matches + away_matches).sort_by(&:kickoff)
   end
