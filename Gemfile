@@ -23,6 +23,9 @@ gem 'icalendar'
 
 gem 'will_paginate'
 
+gem 'paperclip'
+gem 'paperclip-storage-ftp'
+
 # Users/auth
 gem 'devise'
 gem 'cancan'

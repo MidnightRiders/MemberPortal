@@ -12,3 +12,8 @@ form {
     margin-bottom: $header-bottom-margin;
   }
 }
+.file-input label.inline {
+  margin-left: .5em;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
