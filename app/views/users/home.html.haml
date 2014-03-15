@@ -1,11 +1,24 @@
 - content_for :title, 'Member Portal | Home'
 
 .row
-  .medium-6.columns
+  %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
-  .medium-6.columns
-    %h2 Messages and Events
-
+  %section.medium-6.columns
+    .alert-box
+      %h3 Upcoming Events
+      - if @events.empty?
+        %h3.subheader No upcoming events
+      - else
+        %ul
+          - @events['data'].each do |event|
+            %li
+              = link_to event['name'], "https://www.facebook.com/events/#{event['id']}", target: '_blank'
+              - if (t = event['start_time'].to_datetime) < Time.now + 1.day
+                %small{title: t.strftime('%_m.%-d.%Y %l:%M%P')}
+                  in
+                  = distance_of_time_in_words_to_now(t)
+              - else
+                %small= t.strftime('%_m.%-d.%Y %l:%M%P')
     %article
       %h4 Philadelphia Viewing Parties
       %p
@@ -14,7 +27,9 @@
       %h4 Revs Pub Tour
       %p Join us at Clery’s in Boston this Tuesday, March 18th, as the Revs continue their #{link_to 'Pub Tour', 'https://www.facebook.com/events/606366596114016/', target: '_blank' }. Revs in attendance will include Teal Bunbury, Patrick Mullins, Steve Neumann and A.J. Soares. In addition there will be some cool giveaways from the team.
 
-.row
+
+
+%section.row
   .large-6.columns
     %h2.club.ne
       Revs Games
