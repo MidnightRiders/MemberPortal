@@ -10,46 +10,49 @@
       %ul.left
         %li.has-dropdown
           %a
-            = icon 'external-link-square'
+            = icon 'external-link-square fa-fw'
             Sites
           %ul.dropdown
             %li
               = link_to 'http://MidnightRiders.com', target: '_blank' do
+                = icon 'link fa-fw'
                 Website
                 %small= icon 'external-link'
             %li
               = link_to 'http://facebook.com/MidnightRiders', target: '_blank' do
+                = icon 'facebook fa-fw'
                 Facebook
                 %small= icon 'external-link'
             %li
               = link_to 'http://twitter.com/MidnightRiders', target: '_blank' do
+                = icon 'twitter fa-fw'
                 Twitter
                 %small= icon 'external-link'
           - if user_signed_in?
             %li
               = link_to user_home_url do
-                = icon 'home'
+                = icon 'home fa-fw'
                 Home
       %ul.right
         - if user_signed_in?
           %li
             = link_to matches_url do
-              = icon 'list'
+              = icon 'list fa-fw'
               Matches
           %li.has-dropdown
             = link_to games_path do
-              = icon 'star'
+              = icon 'star fa-fw'
               Games
             %ul.dropdown
               %li
                 = link_to standings_path do
-                  = icon 'list-alt'
+                  = icon 'list-alt fa-fw'
                   Standings
               %li
                 %label External
               %li
                 = link_to 'http://fantasy.mlssoccer.com/my-leagues/173/join/?autojoin-code=978-173', target: '_blank' do
-                  %i.fa.fa-users.fa-fw
+                  = icon 'users fa-fw'
                   Fantasy
                   %small= icon 'external-link'
               - if current_user.role?('admin') || current_user.role?('executive_board')
@@ -57,22 +60,32 @@
                   %label Admin
                 %li
                   = link_to mot_ms_path do
-                    = icon 'list-ol'
+                    = icon 'list-ol fa-fw'
                     MotY Rankings
 
           %li
             = link_to edit_user_registration_path(current_user) do
-              = icon 'user'
+              = icon 'user fa-fw'
               My Account
           - if current_user.role?('admin') || current_user.role?('executive_board')
             %li.has-dropdown
-              %a Administrative
+              %a{ title: 'Admin' }
+                = icon 'bolt fa-fw'
               %ul.dropdown
                 - if can? :view, :users
-                  %li= link_to 'Users', users_path
-                %li= link_to 'Clubs', clubs_path
+                  %li
+                    = link_to users_path do
+                      = icon 'users fa-fw'
+                      Users
+                %li
+                  = link_to clubs_path do
+                    = icon 'shield fa-fw'
+                    Clubs
                 - if can? :view, :players
-                  %li= link_to 'Players', players_path
+                  %li
+                    = link_to players_path do
+                      = icon 'list fa-fw'
+                      Players
           %li.has-form
             = button_to destroy_user_session_path, method: :delete, class: 'button secondary' do
               %i.fa.fa-power-off.fa-fw

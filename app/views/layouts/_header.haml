@@ -10,17 +10,18 @@
   .medium-4.columns.text-right.next-game
     %h5 Next Game:
     - if @next_revs_match
-      %h3
-        %small
-          = @next_revs_match.kickoff.strftime('%A')
-          –
-        = @next_revs_match.kickoff.strftime('%_m.%-d | %l:%M%P')
-      %h5.subheader
-        - if @next_revs_match.home_team == revs
-          = @next_revs_match.away_team.name
-        - else
-          = @next_revs_match.home_team.name
-        |
-        = @next_revs_match.location
+      = link_to @next_revs_match do
+        %h3
+          %small
+            = @next_revs_match.kickoff.strftime('%A')
+            –
+          = @next_revs_match.kickoff.strftime('%_m.%-d | %l:%M%P')
+        %h5.subheader
+          - if @next_revs_match.home_team == revs
+            = @next_revs_match.away_team.name
+          - else
+            = @next_revs_match.home_team.name
+          |
+          = @next_revs_match.location
     - else
       %h3 None Scheduled

@@ -2,6 +2,17 @@ header.page-header {
   padding-top: rem-calc(10);
   h1 {
     margin-bottom: 0;
+    &:before {
+      display: block;
+      content: '\00A0';
+      width: 12%;
+      height: 0;
+      padding: 12% 0 0;
+      background: transparent image-url('logo.png') no-repeat center;
+      background-size: contain;
+      float: left;
+      margin: 5px 10px 0 0;
+    }
   }
   &, * {
     color: #fff;
