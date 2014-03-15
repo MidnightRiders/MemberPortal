@@ -36,7 +36,7 @@ module PickEmsHelper
         if team.crest.blank?
           team.abbrv
         else
-          image_tag('http://midnightriders.com' + team.crest.url(:thumb), title: team.name)
+          '&nbsp;'.html_safe + image_tag('http://midnightriders.com' + team.crest.url(:thumb), title: team.name) + '&nbsp;'.html_safe
         end
       else
         'D'
