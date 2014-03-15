@@ -45,6 +45,26 @@ class Match < ActiveRecord::Base
     end
   end
 
+  def winner
+    if result == :home
+      home_team
+    elsif result == :away
+      away_team
+    else
+      nil
+    end
+  end
+
+  def loser
+    if result == :home
+      away_team
+    elsif result == :away
+      home_team
+    else
+      nil
+    end
+  end
+
   def voteable?
     kickoff && Time.now > kickoff + 45.minutes
   end

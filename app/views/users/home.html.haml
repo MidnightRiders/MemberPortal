@@ -16,7 +16,9 @@
 
 .row
   .large-6.columns
-    %h2.club.ne Revs Games
+    %h2.club.ne
+      Revs Games
+      %small (#{@revs.record})
     .table
       .thead
         .tr
@@ -43,6 +45,8 @@
                   = home ? (m.result == :home ? 'W' : (m.result == :draw ? 'D' : 'L')) : (m.result == :away ? 'W' : (m.result == :draw ? 'D' : 'L'))
                   \:
                   = home ? m.score : m.score.reverse
+              - else
+                %small (#{home ? m.home_team.record : m.away_team.record })
               %small
                 %br
                 = succeed ',' do
@@ -67,8 +71,10 @@
           .td.small-6.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
             = link_to m do
               = m.home_team.abbrv
+              %small{ title: 'W-L-D' } (#{m.away_team.record})
               v
               = m.away_team.abbrv
+              %small{ title: 'W-L-D' } (#{m.away_team.record})
               - if m.complete?
                 = surround '(', ')' do
                   = m.score

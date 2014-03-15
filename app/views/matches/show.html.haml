@@ -18,12 +18,14 @@
 .row.collapse
   .small-12.medium-5.large-5.columns
     %h2.primary-bg.secondary-border.border-bottom.thick.text-right{ class: @match.home_team.abbrv.downcase }
+      %small{ title: 'W-L-D' } (#{@match.home_team.record})
       = @match.home_team.name
   .small-12.medium-2.columns.text-center
     %h2= @match.score
   .small-12.medium-5.large-5.columns
     %h2.primary-bg.secondary-border.border-bottom.thick{ class: @match.away_team.abbrv.downcase }
       = @match.away_team.name
+      %small{ title: 'W-L-D' } (#{@match.away_team.record})
 .row
   .small-12.medium-8.columns
     %h3.subheader

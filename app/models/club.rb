@@ -53,7 +53,21 @@ class Club < ActiveRecord::Base
     secondary_color == 'ffffff' ? accent_color : secondary_color
   end
 
-  # TODO: Implement "record" (W-L-D) method
+  def wins
+    matches.select{|x| x.complete? && x.winner == self }
+  end
+
+  def losses
+    matches.select{|x| x.complete? && x.loser == self }
+  end
+
+  def draws
+    matches.select{|x| x.complete? && x.result == :draw }
+  end
+
+  def record
+    "#{wins.count}-#{losses.count}-#{draws.count}"
+  end
 
   %w(primary secondary accent).each do |x|
     define_method("#{x}_color=") do |val|

@@ -3,9 +3,12 @@
   .td
     = render partial: 'pick_ems/buttons', locals: { match: match }
   .td{ class: ('highlight' if match.away_team == revs)}
-    %strong= link_to match.home_team.name, match.home_team, class: 'primary ' + match.home_team.abbrv.downcase
-    vs
-    %strong= link_to match.away_team.name, match.away_team, class: 'primary ' + match.away_team.abbrv.downcase
+    %p
+      %strong= link_to match.home_team.name, match.home_team, class: 'primary ' + match.home_team.abbrv.downcase
+      %small{ title: 'W-L-D' } (#{match.home_team.record})
+      vs
+      %strong= link_to match.away_team.name, match.away_team, class: 'primary ' + match.away_team.abbrv.downcase
+      %small{ title: 'W-L-D' } (#{match.away_team.record})
   .td.text-center
     = link_to match, title: 'Show' do
       = match.kickoff.strftime('%_m.%-d %l:%M%P')
