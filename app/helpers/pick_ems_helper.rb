@@ -3,6 +3,7 @@ module PickEmsHelper
     opts = args.extract_options!
     user = opts[:user] || current_user
     long = opts[:long]
+    text = opts[:text]
     team = if vote == :home
       match.home_team
     elsif vote == :away
@@ -28,8 +29,18 @@ module PickEmsHelper
 
     content = if long
       team ? team.name : 'Draw'
-    else
+    elsif text
       team ? team.abbrv : 'D'
+    else
+      if team
+        if team.crest.blank?
+          team.abbrv
+        else
+          image_tag('http://midnightriders.com' + team.crest.url(:thumb), title: team.name)
+        end
+      else
+        'D'
+      end
     end
     if match.kickoff.past?
       content_tag(:div, content, class: html_classes.join(' '))
