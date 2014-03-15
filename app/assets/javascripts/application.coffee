@@ -30,6 +30,19 @@ $ ->
         'border-color': "##{darken(val)}"
         'color' : getContrastYIQ(val)
     ).trigger 'change'
+  $('input[type=file]').each ->
+    $(this).hide()
+    $this = $(this)
+    $label = $('body').find("label[for=#{$this.attr('id')}]")
+    label = if $label.length > 0 then $label.html() else 'Select File'
+    $row = $('<div class="row collapse file-input">
+      <div class="small-6 columns"><label for=' + $this.attr('id') + ' class="button small expand"><i class="fa fa-file" /> ' + label + '</label></div>
+      <div class="small-6 columns"><label for=' + $this.attr('id') + ' class="inline">No file selected</label></div>
+    </div>');
+    $row.insertAfter($this)
+    $this.on 'change', ()->
+      $row.find('label.inline').text($this.val().replace('C:\\fakepath\\','') or 'No file selected')
+
   $(document).on 'ajax:send', ->
     $('body').addClass 'wait'
   $(document).on 'ajax:complete', ->
