@@ -60,7 +60,10 @@
         .tr
           - if home_picks > 0
             .td.primary-bg.text-center{ class: @match.home_team.abbrv.downcase, style: "width:#{(home_picks.to_f/picks) * 100}%" }
-              = @match.home_team.abbrv
+              - if @match.home_team.crest.blank?
+                = @match.home_team.abbrv
+              - else
+                = image_tag('http://midnightriders.com' + @match.home_team.crest.url(:thumb), class: 'crest-img', alt: @match.home_team.abbrv)
               %small
                 (#{home_picks}/#{picks})
           - if draw_picks > 0
@@ -70,7 +73,10 @@
                 (#{draw_picks}/#{picks})
           - if away_picks > 0
             .td.primary-bg.text-center{ class: @match.away_team.abbrv.downcase, style: "width: #{(away_picks.to_f/picks) * 100}%" }
-              = @match.away_team.abbrv
+              - if @match.away_team.crest.blank?
+                = @match.away_team.abbrv
+              - else
+                = image_tag('http://midnightriders.com' + @match.away_team.crest.url(:thumb), class: 'crest-img', alt: @match.away_team.abbrv)
               %small
                 (#{away_picks}/#{picks})
     - else
