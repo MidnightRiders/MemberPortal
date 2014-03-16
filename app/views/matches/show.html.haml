@@ -1,5 +1,5 @@
 .row
-  .small-6.medium-3.large-2.columns
+  .small-4.medium-3.large-2.columns
     - if @match.previous
       = link_to @match.previous, class: "button tiny expand primary-bg #{@match.previous.home_team.abbrv.downcase}" do
         = icon 'arrow-left'
@@ -7,7 +7,11 @@
         v
         = @match.previous.away_team.abbrv
         = @match.previous.kickoff.strftime('%_m.%-d')
-  .small-6.medium-3.large-2.columns.right
+  .small-4.medium-6.large-8.columns.text-center
+    = link_to matches_path(date: @match.kickoff.to_date), class: 'button tiny' do
+      = icon 'calendar fa-fw'
+      Back
+  .small-4.medium-3.large-2.columns.right
     - if @match.next
       = link_to @match.next, class: "button tiny expand primary-bg #{@match.next.home_team.abbrv.downcase}" do
         = @match.next.home_team.abbrv
@@ -16,23 +20,23 @@
         = @match.next.kickoff.strftime('%_m.%-d')
         = icon 'arrow-right'
 .row.collapse
-  .small-12.medium-5.large-5.columns
+  .medium-5.large-5.columns
     %h2.primary-bg.secondary-border.border-bottom.thick.text-right{ class: @match.home_team.abbrv.downcase }
       %small{ title: 'W-L-D' } (#{@match.home_team.record})
       = @match.home_team.name
-  .small-12.medium-2.columns.text-center
+  .medium-2.columns.text-center
     %h2= @match.score
-  .small-12.medium-5.large-5.columns
+  .medium-5.large-5.columns
     %h2.primary-bg.secondary-border.border-bottom.thick{ class: @match.away_team.abbrv.downcase }
       = @match.away_team.name
       %small{ title: 'W-L-D' } (#{@match.away_team.record})
 .row
-  .small-12.medium-8.columns
+  .medium-8.columns
     %h3.subheader
       = @match.kickoff.strftime('%A, %_m.%-d.%Y at %l:%M%P %Z')
       at
       = @match.location
-  .small-12.medium-4.columns.right.text-right
+  .medium-4.columns.right.text-right
     - if @match.kickoff.future?
       = link_to rev_guess_path_for(@match), class: 'button tiny' do
         = icon 'question'
@@ -49,7 +53,7 @@
 
 
 .row
-  .medium-8.large-6.medium-centered.columns
+  .medium-8.medium-centered.columns
     %h2 Pick ’Ems
     - picks = @match.pick_ems.count
     - home_picks = @match.pick_ems.where(result: PickEm::RESULTS[:home]).count
@@ -107,17 +111,17 @@
                   = mot_m.first_name
                   %strong= mot_m.last_name
               .td
-                %p= mot_m.motm_firsts.length
+                %p= mot_m.motm_firsts.where(match: @match).length
               .td
-                %p= mot_m.motm_seconds.length
+                %p= mot_m.motm_seconds.where(match: @match).length
               .td
-                %p= mot_m.motm_thirds.length
+                %p= mot_m.motm_thirds.where(match: @match).length
       %h3 RevGuesses
       %ul.table
         .thead
           %li.tr
             .thd User
-            .thd Score
+            .thd.text-center Score
             .thd Comment
         - @match.rev_guesses.sort_by{|r| r.user.username}.each do |r|
           %li.tr
