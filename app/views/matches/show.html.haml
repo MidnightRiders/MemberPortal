@@ -103,11 +103,15 @@
             %li.tr
               .td.numeric= last == mot_m.mot_m_total ? '' : (place += 1)
               .td
-                = mot_m.first_name
-                %strong= mot_m.last_name
-              .td= mot_m.motm_firsts.length
-              .td= mot_m.motm_seconds.length
-              .td= mot_m.motm_thirds.length
+                %p
+                  = mot_m.first_name
+                  %strong= mot_m.last_name
+              .td
+                %p= mot_m.motm_firsts.length
+              .td
+                %p= mot_m.motm_seconds.length
+              .td
+                %p= mot_m.motm_thirds.length
       %h3 RevGuesses
       %ul.table
         .thead
@@ -118,12 +122,15 @@
         - @match.rev_guesses.sort_by{|r| r.user.username}.each do |r|
           %li.tr
             .td
-              = link_to r.user do
-                = image_tag(r.user.gravatar, class: 'gravatar', alt: 'gravatar')
-                = r.user.username
+              %p.whitespace
+                = link_to r.user do
+                  = image_tag(r.user.gravatar, class: 'gravatar', alt: 'gravatar')
+                  = r.user.username
             .td.text-center
-              %strong
-                = r.home_goals
-                \–
-                = r.away_goals
-            .td= r.comment
+              %p
+                %strong
+                  = r.home_goals
+                  \–
+                  = r.away_goals
+            .td
+              %p= r.comment

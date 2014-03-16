@@ -56,6 +56,10 @@ main {
   margin-bottom: .2em;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .alert-box {
   background-color: saturate(mix(#fff,$revs-navy,95%),25%);
   border-color: saturate(mix(#fff,$revs-navy,75%),30%);
