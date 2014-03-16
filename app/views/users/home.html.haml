@@ -5,7 +5,7 @@
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
     .alert-box
-      %h3 Upcoming Events
+      %h3 Events
       - if @events.empty?
         %h3.subheader No upcoming events
       - else
