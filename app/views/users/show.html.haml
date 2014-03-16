@@ -3,3 +3,9 @@
   %small= link_to 'Return', users_path
 
 = render partial: 'users/info', locals: { user: @user }
+
+.row
+  .medium-8.large-6.medium-centered.columns
+    = render partial: 'users/rev_guesses', locals: { user: @user } if @user.rev_guesses
+
+

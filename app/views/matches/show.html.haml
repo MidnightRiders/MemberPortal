@@ -117,7 +117,10 @@
             .thd Comment
         - @match.rev_guesses.sort_by{|r| r.user.username}.each do |r|
           %li.tr
-            .td= link_to r.user.username, r.user
+            .td
+              = link_to r.user do
+                = image_tag(r.user.gravatar, class: 'gravatar', alt: 'gravatar')
+                = r.user.username
             .td.text-center
               %strong
                 = r.home_goals

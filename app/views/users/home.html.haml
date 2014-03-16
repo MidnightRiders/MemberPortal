@@ -15,86 +15,19 @@
               = link_to event['name'], "https://www.facebook.com/events/#{event['id']}", target: '_blank'
               - if (t = event['start_time'].to_datetime) < Time.now + 1.day
                 %small{title: t.strftime('%_m.%-d.%Y %l:%M%P')}
-                  in
-                  = distance_of_time_in_words_to_now(t)
+                  = 'in ' if t > Time.now
+                  = distance_of_time_in_words_to_now(t, include_seconds: true)
+                  = ' ago' if t < Time.now
               - else
                 %small= t.strftime('%_m.%-d.%Y %l:%M%P')
-    %article
-      %h4 Philadelphia Viewing Parties
-      %p
-        Riders will be at #{link_to 'the Banshee', 'https://www.facebook.com/events/1479824622239264/', target: '_blank'} and #{link_to 'Parlor Sports', 'https://www.facebook.com/events/487254491396552/?ref=25', target: '_blank'} in the Boston area, as well as #{link_to 'Boston Billiards Club', 'https://www.facebook.com/events/440445999422510/', target: '_blank'} in Nashua, NH, and the Grey Hound in Worcester, MA. Come out and support local soccer as we watch the Revs put Houston in the past with a hopefully resounding victory at PPL Park.
-    %article
-      %h4 Revs Pub Tour
-      %p Join us at Clery’s in Boston this Tuesday, March 18th, as the Revs continue their #{link_to 'Pub Tour', 'https://www.facebook.com/events/606366596114016/', target: '_blank' }. Revs in attendance will include Teal Bunbury, Patrick Mullins, Steve Neumann and A.J. Soares. In addition there will be some cool giveaways from the team.
+    = render partial: 'static_pages/notices'
 
 
 
 %section.row
   .large-6.columns
-    %h2.club.ne
-      Revs Games
-      %small (#{@revs.record})
-    .table
-      .thead
-        .tr
-          .td.text-center
-            = icon 'certificate'
-            Pick ’Em
-          .td Opponent / time
-          .td.text-center
-            = icon 'star'
-            Games
-      - @revs_matches.each do |m|
-        - home = m.home_team == revs
-        .tr{ class: ('highlight' if home)}
-          .td.small-5.columns.text-right
-            = render(partial: 'pick_ems/buttons', locals: { match: m })
-          .td.ne.border-left.small-4.columns{ class: (home ? 'secondary-border' : 'primary-border') }
-            = link_to m do
-              - if home
-                %strong v #{m.away_team.abbrv}
-              - else
-                @ #{m.home_team.abbrv}
-              - if m.complete?
-                = surround '(', ')' do
-                  = home ? (m.result == :home ? 'W' : (m.result == :draw ? 'D' : 'L')) : (m.result == :away ? 'W' : (m.result == :draw ? 'D' : 'L'))
-                  \:
-                  = home ? m.score : m.score.reverse
-              - else
-                %small (#{home ? m.home_team.record : m.away_team.record })
-              %small
-                %br
-                = succeed ',' do
-                  = m.kickoff.strftime('%_m.%-d %l:%M%P')
-                = m.location
-          .td.text-right.small-3.columns
-            = link_to(content_tag(:i,'',class: 'fa fa-list-ol fa-fw') + content_tag(:span,' MotM'), mot_m_path_for(m), class: 'button tiny secondary expand') if m.voteable?
-            = link_to(content_tag(:i,'',class: 'fa fa-question fa-fw') + content_tag(:span,' RevGuess'), rev_guess_path_for(m), class: 'button tiny secondary expand') if m.kickoff.future?
+    = render partial: 'clubs/rev_games', locals: { revs: @revs, revs_matches: @revs_matches }
+    = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses
   .large-6.columns
     %h2.primary.ne Elsewhere this Week
-    .table
-      .thead
-        .tr
-          .td.text-center
-            = icon 'certificate'
-            Pick ’Em
-          .td Match / time
-      - @matches.each do |m|
-        .tr
-          .td.small-6.columns.text-right
-            = render(partial: 'pick_ems/buttons', locals: { match: m })
-          .td.small-6.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
-            = link_to m do
-              = m.home_team.abbrv
-              %small{ title: 'W-L-D' } (#{m.away_team.record})
-              v
-              = m.away_team.abbrv
-              %small{ title: 'W-L-D' } (#{m.away_team.record})
-              - if m.complete?
-                = surround '(', ')' do
-                  = m.score
-              %small
-                %br
-                = succeed ',' do
-                  = m.kickoff.strftime('%_m.%-d %l:%M%P')
-                = m.location
+    = render partial: 'matches/small', locals: { matches: @matches }

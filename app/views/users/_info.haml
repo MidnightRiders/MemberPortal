@@ -1,6 +1,7 @@
 .row
   .medium-8.columns
     %h1
+      = image_tag(user.gravatar, class: 'gravatar', alt: 'gravatar')
       = user.first_name
       %strong=  user.last_name
       %small

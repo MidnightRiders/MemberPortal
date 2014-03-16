@@ -53,6 +53,12 @@
       = f.label :abbrv
     .large-8.columns
       = f.text_field :abbrv
-  .actions
-    = f.button :submit, class: 'button' do
-      Save
+  .row.actions
+    .small-12.columns.text-right
+      = f.button :submit, class: 'button' do
+        - if f.object.new_record?
+          = icon 'check fa-fw'
+          Create
+        - else
+          = icon 'save fa-fw'
+          Save
