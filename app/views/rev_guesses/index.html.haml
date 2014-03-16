@@ -23,16 +23,16 @@
       .td.text-right
         - if can? :edit, rev_guess
           = link_to edit_match_rev_guess_path(@match,rev_guess), class: 'button tiny' do
-            = icon 'pencil'
+            = icon 'pencil fa-fw'
             Edit
         - if can? :destroy, rev_guess
           = link_to [@match,rev_guess], :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button alert tiny' do
-            = icon 'trash-o'
+            = icon 'trash-o fa-fw'
             Destroy
 
 .row
   .small-12.columns.text-right
     - if !rev_guess_for(@match)
       = link_to new_match_rev_guess_path(@match), class: 'button' do
-        = icon 'certificate'
+        = icon 'certificate fa-fw'
         New RevGuess

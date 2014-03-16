@@ -6,9 +6,9 @@ class UsersController < ApplicationController
   def index
     @role = params[:role] || nil
     if @role
-      @users = User.includes(:roles).where(roles: { name: @role }).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 10)
+      @users = User.includes(:roles).where(roles: { name: @role }).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     else
-      @users = User.includes(:roles).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 10)
+      @users = User.includes(:roles).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     end
   end
 

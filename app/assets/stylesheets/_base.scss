@@ -48,10 +48,18 @@ main {
   }
 }
 
+.gravatar {
+  display: inline-block;
+  @include radius($global-rounded);
+  height: 1.1em;
+  line-height: 0;
+  margin-bottom: .2em;
+}
+
 .alert-box {
-  background-color: mix(#fff,$revs-navy,95%);
-  border-color: mix(#fff,$revs-navy,75%);
-  color: $revs-navy;
+  background-color: saturate(mix(#fff,$revs-navy,95%),25%);
+  border-color: saturate(mix(#fff,$revs-navy,75%),30%);
+  color: $navy;
   :first-child, :first-child :first-child {
     margin-top: 0;
   }

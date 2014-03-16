@@ -48,6 +48,10 @@ class User < ActiveRecord::Base
     rev_guesses.inject(0){|sum,x| sum+(x.score.nil? ? 0 : x.score)}
   end
 
+  def gravatar
+    '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase) + '?d=mm'
+  end
+
   def self.import(file, roles = [])
     allowed_attributes = [:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username]
     spreadsheet = Roo::Spreadsheet.open(file.path.to_s,extension: 'csv')

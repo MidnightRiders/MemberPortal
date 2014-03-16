@@ -32,7 +32,7 @@ class Club < ActiveRecord::Base
   end
 
   def previous_matches(n=1,time=Time.now)
-    matches.select{|x| x.kickoff < time}.first(n)
+    matches.reverse.select{|x| x.kickoff < time}.first(n)
   end
   def next_matches(n=1,time=Time.now)
     matches.select{|x| x.kickoff >= time}.first(n)
