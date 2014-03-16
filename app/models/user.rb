@@ -49,7 +49,7 @@ class User < ActiveRecord::Base
   end
 
   def gravatar
-    '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase) + '?d=mm'
+    '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.gsub(/\+.+@/,'@')) + '?d=mm'
   end
 
   def self.import(file, roles = [])
