@@ -122,7 +122,7 @@
         - @match.rev_guesses.sort_by{|r| r.user.username}.each do |r|
           %li.tr
             .td
-              %p.whitespace
+              %p.nowrap
                 = link_to r.user do
                   = image_tag(r.user.gravatar, class: 'gravatar', alt: 'gravatar')
                   = r.user.username
