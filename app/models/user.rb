@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+
+  default_scope { includes(:roles) }
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
@@ -19,7 +22,7 @@ class User < ActiveRecord::Base
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone ]
 
   def role?(r)
-    self.roles.find_by(name: r)
+    roles.map(&:name).include? r
   end
 
   def list_roles(verbose: false)
@@ -32,7 +35,7 @@ class User < ActiveRecord::Base
   end
 
   def pick_for(match)
-    match.pick_ems.find_by(user_id: id) || PickEm.new
+    pick_ems.select{|x| x.match_id == match.id }.try(:first) || PickEm.new
   end
 
   def pick_result(match)

@@ -1,4 +1,6 @@
 class PickEm < ActiveRecord::Base
+  default_scope { includes(:match) }
+
   RESULTS = { home: 1, draw: 0, away: -1 }
   belongs_to :match
   belongs_to :user
@@ -9,7 +11,11 @@ class PickEm < ActiveRecord::Base
   validate :voteable, message: 'is no longer open for voting.'
 
   def correct?
-    (match && result) && match.kickoff.past? && !match.result.nil? && result == RESULTS[match.result]
+    (match_id &&
+        result) &&
+        match.kickoff.past? &&
+        !match.result.nil? &&
+        result == RESULTS[match.result]
   end
   def incorrect?
     (match && result) && match.kickoff.past? && !match.result.nil? && result != RESULTS[match.result]

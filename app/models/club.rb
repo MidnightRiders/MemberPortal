@@ -72,7 +72,7 @@ class Club < ActiveRecord::Base
   end
 
   def record
-    "#{wins.count}-#{losses.count}-#{draws.count}"
+    "#{wins.length}-#{losses.length}-#{draws.length}"
   end
 
   %w(primary secondary accent).each do |x|
