@@ -55,10 +55,10 @@
 .row
   .medium-8.medium-centered.columns
     %h2 Pick ’Ems
-    - picks = @match.pick_ems.count
-    - home_picks = @match.pick_ems.where(result: PickEm::RESULTS[:home]).count
-    - draw_picks = @match.pick_ems.where(result: PickEm::RESULTS[:draw]).count
-    - away_picks = @match.pick_ems.where(result: PickEm::RESULTS[:away]).count
+    - picks = @match.pick_ems.length
+    - home_picks = @match.pick_ems.select{|x| x.result == PickEm::RESULTS[:home]}.length
+    - draw_picks = @match.pick_ems.select{|x| x.result == PickEm::RESULTS[:draw]}.length
+    - away_picks = @match.pick_ems.select{|x| x.result == PickEm::RESULTS[:away]}.length
     - if picks > 0
       .table.pick-em-results
         .tr

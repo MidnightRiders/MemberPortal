@@ -49,6 +49,7 @@ group :development, :test do
   gem 'fivemat'
   gem 'poltergeist'
   gem 'launchy'
+  gem 'active_record_query_trace'
 end
 
 gem 'database_cleaner', group: :test
