@@ -18,19 +18,24 @@
     - if can? :destroy, User
       = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => "Are you sure you wish to destroy @#{user.username}?" }, title: 'Destroy' do
         = icon 'trash-o', '', class: 'fa-lg fa-fw'
-.row
-  .small-6.columns
-    %h4.subheader
-      RevGuess Score:
-    %p.text-center
-      = user.rev_guess_score
-      %small (#{user.rev_guesses.select{|r| r.match.complete? }.length} games)
-  .small-6.columns
-    %h4.subheader
-      Pick ’Em Score:
-    %p.text-center
-      = user.pick_em_score
-      %small (#{user.pick_ems.select{|r| r.match.complete? }.length} games)
+
+.table
+  .thead
+    .tr
+      .thd.text-center
+        %h4 RevGuess Score:
+      .thd.text-center
+        %h4 Pick ’Em Score:
+  .tbody
+    .tr
+      .td.text-center
+        %p
+          = user.rev_guess_score
+          %small (#{user.rev_guesses.select{|r| r.match.complete? }.length} games)
+      .td.text-center
+        %p
+          = user.pick_em_score
+          %small (#{user.pick_ems.select{|r| r.match.complete? }.length} games)
 
 %hr
 
