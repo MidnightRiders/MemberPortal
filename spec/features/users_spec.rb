@@ -7,7 +7,7 @@ feature 'User roles and security' do
   context 'no user logged in' do
     it 'should redirect root' do
       visit user_path(user)
-      current_path.should eq root_path
+      current_path.should eq new_user_session_path
     end
 
   end

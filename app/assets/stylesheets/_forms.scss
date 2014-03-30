@@ -17,3 +17,12 @@ form {
   overflow-x: hidden;
   white-space: nowrap;
 }
+.actions {
+  text-align: right;
+  a:link, a:visited {
+    padding: {
+      left: rem-calc(5);
+      right: rem-calc(5);
+    }
+  }
+}

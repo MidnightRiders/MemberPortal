@@ -5,7 +5,7 @@ describe StaticPagesController do
   describe 'GET "home"' do
     it 'returns http success' do
       get 'home'
-      response.should be_success
+      response.should redirect_to new_user_session_path
     end
   end
 
