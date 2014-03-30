@@ -12,5 +12,7 @@
       = f.label :password_confirmation, 'Confirm new password', class: 'inline'
     .large-8.columns
       = f.password_field :password_confirmation
-  .row.text-right
-    .small-12.columns= f.submit 'Change my password', class: 'button'
+  .row.actions
+    .small-12.columns
+      = f.button :submit, class: 'button' do
+        Change my password

@@ -6,5 +6,8 @@
       = f.label :email, class: 'inline'
     .large-8.columns
       = f.email_field :email, :autofocus => true
-  .row.text-right
-    .small-12.columns= f.submit 'Send me reset password instructions', class: 'button'
+  .row.actions
+    .small-12.columns
+      = f.button :submit, class: 'button' do
+        =icon('envelope fa-fw')
+        Send me reset password instructions
