@@ -6,6 +6,7 @@ class RevGuess < ActiveRecord::Base
 
   validates :user, :match, :home_goals, :away_goals, presence: true
   validates_uniqueness_of :match_id, scope: :user_id, message: 'has already been voted on by this user.'
+  validates :is_revs_match, message: 'is not a Revolution match'
 
   def score
     if match.complete?
@@ -33,4 +34,9 @@ class RevGuess < ActiveRecord::Base
       end
     end
   end
+
+  private
+    def is_revs_match
+      match.teams.include? Club.find_by(abbrv: 'NE')
+    end
 end
