@@ -1,4 +1,4 @@
-class FacebookApi
+module FacebookApi
 
   def self.events
     if !@updated_at || @updated_at < Time.now - 15.minutes
