@@ -14,6 +14,13 @@
       margin-right: .3em;
     }
   }
+  @media #{$small-only} {
+    .title-area .name h1 {
+      overflow: visible;
+      white-space: nowrap;
+      font-size: .8em;
+    }
+  }
   @media #{$medium-up} {
     .title-area {
       height: 0;
