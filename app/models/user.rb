@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
 
   default_scope { includes(:roles) }
 
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable, #:registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :user_roles, dependent: :destroy
