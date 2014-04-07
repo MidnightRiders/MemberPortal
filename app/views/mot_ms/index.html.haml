@@ -15,6 +15,7 @@
             .thd.numeric 1
             .thd.numeric 2
             .thd.numeric 3
+            .thd.numeric Points
         - place = 0
         - last = nil
         - @mot_ms.each do |mot_m|
@@ -27,6 +28,7 @@
             .td= mot_m.motm_firsts.length
             .td= mot_m.motm_seconds.length
             .td= mot_m.motm_thirds.length
+            .td= mot_m.mot_m_total || 0
 
 -#
   .row.actions
