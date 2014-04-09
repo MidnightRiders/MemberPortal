@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   # GET /home
   def home
-    @events = FacebookApi.events
+    @events = FacebookApi.events['data'].try(:select){|x| x['start_time'] >= Time.now - 1.week }
     @matches = Match.where('kickoff >= ? AND kickoff <= ?', Date.today.beginning_of_week, Date.today.beginning_of_week + 7.days).order('kickoff ASC').select{|x| !x.teams.include? @revs }
     @revs_matches = @revs.previous_matches + @revs.next_matches(2)
   end
