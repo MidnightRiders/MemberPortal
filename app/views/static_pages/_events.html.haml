@@ -1,0 +1,16 @@
+.alert-box.events
+  %h3 Events
+  - if events.blank?
+    %h3.subheader No upcoming events
+  - else
+    %ul.events
+      - events.sort_by{|x| x['start_time']}.each do |event|
+        %li{ class: "#{'past' if event['start_time'] < Time.now }"}
+          = link_to event['name'], "https://www.facebook.com/events/#{event['id']}", target: '_blank'
+          - if (t = event['start_time'].to_datetime) < Time.now + 1.day
+            %small{title: t.strftime('%_m.%-d.%Y %l:%M%P')}
+              = 'in ' if t > Time.now
+              = distance_of_time_in_words_to_now(t, include_seconds: true)
+              = ' ago' if t < Time.now
+          - else
+            %small= t.strftime('%_m.%-d.%Y %l:%M%P')
