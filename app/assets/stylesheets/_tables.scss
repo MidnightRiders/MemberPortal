@@ -33,6 +33,8 @@
         font-weight: $table-head-font-weight;
         color: $table-head-font-color;
         text-align: $default-float;
+        &.numeric {
+          text-align: right; }
       }
     }
   }
