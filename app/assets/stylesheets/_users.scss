@@ -1,0 +1,30 @@
+.events {
+  ul.events {
+    list-style: none;
+    margin: {
+      left: 0;
+      right: 0;
+    }
+    padding: 0;
+    li {
+      padding: rem-calc(5 10);
+      height: rem-calc(35);
+      line-height: rem-calc(25);
+      font-weight: bold;
+      &:nth-child(2n-1) {
+        background-color: rgba(255,255,255,.75);
+      }
+      &.past {
+        font-size: .85em;
+        opacity: .9;
+        font-weight: 300;
+        a:link, a:visited {
+          color: desaturate($navy,35%);
+        }
+        + li:not(.past) {
+          border-top: 1px dashed transparentize($maroon,.75);
+        }
+      }
+    }
+  }
+}

@@ -1,32 +1,33 @@
 class BlogRss
 
-  def articles
-    if @last_retrieved < Time.now - 15.minutes
+  def self.articles
+    if @last_retrieved && @last_retrieved < Time.now - 15.minutes
       @articles = get_articles
     else
       @articles ||= get_articles
     end
   end
 
-  def initialize(*args)
-    options = args.extract_options!
-    @url = options[:url]
-    super()
-    @articles = get_articles
+  def self.url
+    raise('No URL has been assigned. This is the Generic Blog class!')
   end
 
   protected
-    def get_articles
-      binding.pry
-      uri = URI(@url)
+    def self.get_articles
+      uri = URI(url)
       begin
         rss = Net::HTTP.get(uri)
         rss = Hash.from_xml(rss)['rss']['channel']['item']
       rescue SocketError => e
-        flash[:error] = e
+        puts 'RidersBlog error:'
+        puts e
         rss = []
       end
       @last_retrieved = Time.now
-      rss
+      if rss.empty?
+        @articles || []
+      else
+        rss
+      end
     end
 end
