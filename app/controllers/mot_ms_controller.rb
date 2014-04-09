@@ -5,7 +5,7 @@ class MotMsController < ApplicationController
   # GET /mot_ms
   # GET /mot_ms.json
   def index
-    @mot_ms = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }.sort_by(&:mot_m_total).reverse
+    @mot_m_places = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }.sort_by(&:last_name).group_by(&:mot_m_total).sort_by(&:first).reverse
   end
 
   # GET /mot_ms/1
