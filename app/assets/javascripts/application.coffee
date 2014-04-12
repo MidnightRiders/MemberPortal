@@ -15,10 +15,11 @@
 #= require foundation
 #= require hex_functions
 #= require pick_em
-#= require_tree .
+#= require_self
 
 $ ->
   $(document).foundation()
+  $.ajaxSettings.dataType = 'json'
 
   $(':input[name*=_color]').on('change', ->
       $this = $(this)

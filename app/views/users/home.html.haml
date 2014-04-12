@@ -1,5 +1,7 @@
 - content_for :title, 'Member Portal | Home'
 
+= render partial: 'users/update_prompt'
+
 .row
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }

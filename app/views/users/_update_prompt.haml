@@ -1,0 +1,10 @@
+- if current_user.member_since.blank?
+  - content_for :foot do
+    = javascript_include_tag 'popup_form'
+  .alert-box.popup-form{ data: { alert: true } }
+    .row
+      .medium-6.columns
+        = label_tag 'user[member_since]', class: 'inline' do
+          %strong #{current_user.first_name}, when did you first become a Rider?
+      .medium-6.columns
+        = select_tag 'user[member_since]', options_for_select(1995..Date.today.year, (current_user.member_since)), prompt: '—', data: { remote: true, url: user_path(current_user), method: :patch }
