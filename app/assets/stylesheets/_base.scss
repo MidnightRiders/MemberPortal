@@ -64,10 +64,41 @@ main {
   background-color: saturate(mix(#fff,$revs-navy,95%),25%);
   border-color: saturate(mix(#fff,$revs-navy,75%),30%);
   color: $navy;
+  &, * {
+    @include transition(color .5s, background-color .5s, border-color .5s);
+  }
   :first-child, :first-child :first-child {
     margin-top: 0;
   }
   :last-child, :last-child :last-child {
     margin-bottom: 0;
+  }
+  &.success, &.secondary {
+    h1, h2, h3, h4, h5, h6 {
+      color: #fff;
+    }
+  }
+  &.success, &.alert {
+    &:before {
+      display: inline-block;
+      font-family: FontAwesome;
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      width: (18em / 14);
+      text-align: center;
+    }
+  }
+  &.success {
+    &:before {
+      content: $fa-var-check-circle;
+    }
+  }
+  &.alert {
+    &:before {
+      content: $fa-var-exclamation-triangle;
+    }
   }
 }
