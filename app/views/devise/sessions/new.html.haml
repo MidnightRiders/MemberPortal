@@ -1,4 +1,11 @@
-%h2 Sign in
+.row
+  .medium-4.columns
+    %h2 Sign in
+  .medium-8.columns.text-right
+    %h5.subheader
+      Haven’t received your login information?
+      = succeed '.' do
+        = link_to 'Email us', 'mailto:webczar@midnightriders.com?subject=Member%20Portal%20Access'
 = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
   .row
     .medium-4.columns
@@ -7,7 +14,10 @@
       = f.text_field :username, autofocus: true, autocapitalize: 'off', autocorrect: 'off'
   .row
     .medium-4.columns
-      = f.label :password, class: 'inline'
+      = f.label :password, class: 'inline' do
+        = resource.class.human_attribute_name(:password)
+        %br
+        %small= link_to 'Forgot your password?', new_password_path(resource_name)
     .medium-8.columns
       = f.password_field :password
   - if devise_mapping.rememberable?
@@ -17,6 +27,6 @@
         = f.label :remember_me
   .row.actions
     .small-12.columns
-      = link_to 'Forgot your password?', new_password_path(resource_name)
       = f.button :submit, class: 'button' do
         Sign in
+        = icon 'arrow-right fa-fw'
