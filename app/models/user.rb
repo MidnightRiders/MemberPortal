@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
   validates :member_since, numericality: { less_than_or_equal_to: Date.today.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
 
-  has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone ]
+  has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
 
   def role?(r)
     roles.map(&:name).include? r
