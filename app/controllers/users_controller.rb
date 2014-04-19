@@ -5,10 +5,11 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @role = params[:role] || nil
+    @users = @users.text_search(params[:search])
     if @role
-      @users = User.includes(:roles).where(roles: { name: @role }).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
+      @users = @users.where(roles: { name: @role }).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     else
-      @users = User.includes(:roles).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
+      @users = @users.order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     end
   end
 
