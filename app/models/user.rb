@@ -95,4 +95,12 @@ class User < ActiveRecord::Base
     username
   end
 
+  def self.text_search(query)
+    if query.present?
+      where 'username ilike :q or first_name ilike :q or last_name ilike :q or email ilike :q', q: "%#{query}%"
+    else
+      scoped
+    end
+  end
+
 end
