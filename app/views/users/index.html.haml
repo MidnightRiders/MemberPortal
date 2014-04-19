@@ -13,6 +13,7 @@
               Import
   .small-6.medium-4.columns.text-right
     = form_tag users_path, method: :get do
+      = hidden_field_tag :role, params[:role] if params[:role]
       .row.collapse
         .small-8.columns
           = text_field_tag :search, params[:search]
