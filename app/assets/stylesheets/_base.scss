@@ -48,6 +48,18 @@ main {
   }
 }
 
+select {
+  &.year, &.month, &.day {
+    float: left;
+  }
+  &.year {
+    width: 40%;
+  }
+  &.month, &.day {
+    width: 30%;
+  }
+}
+
 .gravatar {
   display: inline-block;
   @include radius($global-rounded);
