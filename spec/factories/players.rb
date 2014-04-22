@@ -4,7 +4,7 @@ FactoryGirl.define do
   factory :player do
     first_name { Faker::Name.first_name }
     last_name { Faker::Name.last_name }
-    club_id { Club.all.sample.id }
+    club_id { Club.all.sample.try(:id) || FactoryGirl.create(:club).id }
     position { Player::POSITIONS.to_a.sample[0] }
     number { (Random.rand * 98).to_i + 1 }
   end

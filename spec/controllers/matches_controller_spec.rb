@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe MatchesController do
 
-  describe "GET index" do
+  pending 'GET index' do
     it "assigns all matches as @matches" do
       match = Match.create! valid_attributes
       get :index, {}, valid_session
@@ -10,7 +10,7 @@ describe MatchesController do
     end
   end
 
-  describe "GET show" do
+  pending 'GET show' do
     it "assigns the requested match as @match" do
       match = Match.create! valid_attributes
       get :show, {:id => match.to_param}, valid_session
@@ -18,14 +18,14 @@ describe MatchesController do
     end
   end
 
-  describe "GET new" do
+  pending 'GET new' do
     it "assigns a new match as @match" do
       get :new, {}, valid_session
       assigns(:match).should be_a_new(Match)
     end
   end
 
-  describe "GET edit" do
+  pending 'GET edit' do
     it "assigns the requested match as @match" do
       match = Match.create! valid_attributes
       get :edit, {:id => match.to_param}, valid_session
@@ -33,8 +33,8 @@ describe MatchesController do
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
+  pending 'POST create' do
+    pending 'with valid params' do
       it "creates a new Match" do
         expect {
           post :create, {:match => valid_attributes}, valid_session
@@ -53,7 +53,7 @@ describe MatchesController do
       end
     end
 
-    describe "with invalid params" do
+    pending 'with invalid params' do
       it "assigns a newly created but unsaved match as @match" do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
@@ -70,8 +70,8 @@ describe MatchesController do
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
+  pending 'PUT update' do
+    pending 'with valid params' do
       it "updates the requested match" do
         match = Match.create! valid_attributes
         # Assuming there are no other matches in the database, this
@@ -95,7 +95,7 @@ describe MatchesController do
       end
     end
 
-    describe "with invalid params" do
+    pending 'with invalid params' do
       it "assigns the match as @match" do
         match = Match.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
@@ -114,7 +114,7 @@ describe MatchesController do
     end
   end
 
-  describe "DELETE destroy" do
+  pending 'DELETE destroy' do
     it "destroys the requested match" do
       match = Match.create! valid_attributes
       expect {
