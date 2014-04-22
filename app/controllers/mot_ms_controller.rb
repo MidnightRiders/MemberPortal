@@ -5,7 +5,12 @@ class MotMsController < ApplicationController
   # GET /mot_ms
   # GET /mot_ms.json
   def index
-    @mot_m_places = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }.sort_by(&:last_name).group_by(&:mot_m_total).sort_by(&:first).reverse
+    @months = Match.where('kickoff <= ?', Time.now).group_by{|x| x.kickoff.beginning_of_month }.sort.map(&:first)
+    @mstart = params[:date].try(:to_datetime) || Date.today.beginning_of_month
+    month_matches = @revs.matches.where(kickoff: (@mstart...@mstart.end_of_month))
+    @mot_ms   = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }.sort_by(&:last_name)
+    @mot_m_mo = @mot_ms.select{|x| x.mot_m_total(month_matches.map(&:id)) > 0 }.group_by{|x| x.mot_m_total(month_matches.map(&:id)) }.sort_by(&:first).reverse
+    @mot_m_yr = @mot_ms.group_by(&:mot_m_total).sort_by(&:first).reverse
   end
 
   # GET /mot_ms/1

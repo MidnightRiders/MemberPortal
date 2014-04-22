@@ -21,6 +21,9 @@ $ ->
   $(document).foundation()
   $.ajaxSettings.dataType = 'json'
 
+  $(document).on 'change', ':input[data-autosubmit]', ->
+    parent.location = $(this).data().autosubmit.replace('YYYY-MM-DD',$(this).val())
+
   $(':input[name*=_color]').on('change', ->
       $this = $(this)
       val = $this.val() || 'efefef'
