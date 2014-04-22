@@ -28,7 +28,7 @@ class Club < ActiveRecord::Base
   has_many :players
 
   def matches
-    (home_matches + away_matches).sort_by(&:kickoff)
+    Match.where('home_team_id = :id OR away_team_id = :id', id: id).order('kickoff ASC')
   end
 
   def previous_matches(n=1,time=Time.now)
