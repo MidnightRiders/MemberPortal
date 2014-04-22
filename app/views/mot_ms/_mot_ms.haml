@@ -25,11 +25,11 @@
               = mot_m.first_name
               %strong= mot_m.last_name
           - if match_ids
+            .td.numeric= mot_m.motm_firsts.where(match_id: match_ids).size
+            .td.numeric= mot_m.motm_seconds.where(match_id: match_ids).size
+            .td.numeric= mot_m.motm_thirds.where(match_id: match_ids).size
+          - else
             .td.numeric= mot_m.motm_firsts.size
             .td.numeric= mot_m.motm_seconds.size
             .td.numeric= mot_m.motm_thirds.size
-          - else
-            .td.numeric= mot_m.motm_firsts.where(match_id: match_ids).size
-            .td.numeric= mot_m.motm_seconds.where(match_id: match_ids).size
-            .td.numeric= mot_m.motm_seconds.where(match_id: match_ids).size
           .td.numeric= ms[0]
