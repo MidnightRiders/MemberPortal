@@ -8,7 +8,7 @@
           Standings for #{@mstart.strftime('%B')}
       .medium-4.columns.text-right
         = select_tag(:date, options_for_select(@months.map{|x| [x.strftime('%B %Y'),x.to_date] }, @mstart.to_date), data: { autosubmit: mot_ms_path(date: 'YYYY-MM-DD') })
-    = render 'mot_ms', mot_ms: @mot_m_mo
+    = render 'mot_ms', mot_ms: @mot_m_mo, match_ids: @match_ids
     %h2 Year-Long Standings
     = render 'mot_ms', mot_ms: @mot_m_yr
 

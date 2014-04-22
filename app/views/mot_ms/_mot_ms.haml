@@ -1,3 +1,4 @@
+- match_ids ||= false
 %ul.table
   - if mot_ms.empty?
     %li.tr
@@ -23,7 +24,12 @@
             = link_to mot_m do
               = mot_m.first_name
               %strong= mot_m.last_name
-          .td.numeric= mot_m.motm_firsts.length
-          .td.numeric= mot_m.motm_seconds.length
-          .td.numeric= mot_m.motm_thirds.length
-          .td.numeric= mot_m.mot_m_total || 0
+          - if match_ids
+            .td.numeric= mot_m.motm_firsts.size
+            .td.numeric= mot_m.motm_seconds.size
+            .td.numeric= mot_m.motm_thirds.size
+          - else
+            .td.numeric= mot_m.motm_firsts.where(match_id: match_ids).size
+            .td.numeric= mot_m.motm_seconds.where(match_id: match_ids).size
+            .td.numeric= mot_m.motm_seconds.where(match_id: match_ids).size
+          .td.numeric= ms[0]
