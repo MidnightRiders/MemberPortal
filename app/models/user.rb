@@ -99,7 +99,7 @@ class User < ActiveRecord::Base
     if query.present?
       where 'username ilike :q or first_name ilike :q or last_name ilike :q or email ilike :q', q: "%#{query}%"
     else
-      scoped
+      all
     end
   end
 
