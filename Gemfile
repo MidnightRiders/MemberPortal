@@ -42,8 +42,10 @@ end
 group :development, :test do
   # Testing
   gem 'rspec-rails'
+  gem 'spring-commands-rspec'
   gem 'factory_girl_rails'
   gem 'pry-rails'
+  gem 'pry-nav'
   gem 'capybara'
   gem 'faker'
   gem 'fivemat'
