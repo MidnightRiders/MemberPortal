@@ -21,6 +21,8 @@ gem 'roo' # For imports
 gem 'iconv'
 gem 'icalendar'
 
+gem 'date_time_attribute'
+
 gem 'will_paginate'
 
 gem 'paperclip'
