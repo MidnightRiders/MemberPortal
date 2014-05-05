@@ -19,7 +19,11 @@
     .large-4.columns
       = f.label :kickoff
     .large-8.columns
-      = f.text_field :kickoff, type: 'datetime', value: f.object.kickoff
+      .row
+        .small-6.columns
+          = f.text_field :kickoff_date, value: f.object.kickoff.try(:to_date), type: 'date'
+        .small-6.columns
+          = f.text_field :kickoff_time, value: f.object.kickoff.try(:strftime, '%H:%M'), type: 'time'
   .row
     .large-4.columns
       = f.label :location
@@ -28,12 +32,12 @@
   .row
     .large-8.columns.right
       .row
-        .medium-6.columns
+        .small-6.columns
           = f.label :home_goals
-          = f.number_field :home_goals
-        .medium-6.columns
+          = f.number_field :home_goals, pattern: '[0-9]', min: 0, max: 50
+        .small-6.columns
           = f.label :away_goals
-          = f.number_field :away_goals
+          = f.number_field :away_goals, pattern: '[0-9]', min: 0, max: 50
   .row.actions
     .small-12.columns.text-right
       = f.button :submit, class: 'button' do

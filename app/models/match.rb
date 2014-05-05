@@ -17,7 +17,12 @@ class Match < ActiveRecord::Base
   has_many :pick_ems
 
   validates :home_team, :away_team, :kickoff, :location, presence: true
+  validates :home_goals, :away_goals, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :home_goals, presence: { if: -> { !away_goals.blank? } }
+  validates :away_goals, presence: { if: -> { !home_goals.blank? } }
   validates :uid, uniqueness: { case_sensitive: true, allow_blank: true }
+
+  date_time_attribute :kickoff
 
   def score
     if complete?
