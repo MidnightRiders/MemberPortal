@@ -34,10 +34,10 @@
       .row
         .small-6.columns
           = f.label :home_goals
-          = f.number_field :home_goals, pattern: '[0-9]', min: 0, max: 50
+          = f.number_field :home_goals, pattern: '\d*', min: 0, max: 50
         .small-6.columns
           = f.label :away_goals
-          = f.number_field :away_goals, pattern: '[0-9]', min: 0, max: 50
+          = f.number_field :away_goals, pattern: '\d*', min: 0, max: 50
   .row.actions
     .small-12.columns.text-right
       = f.button :submit, class: 'button' do
