@@ -7,7 +7,7 @@
         %em Beta
     = content_tag(:h2, yield(:title), class: 'subheader') if content_for?(:title)
     = yield(:header)
-  .medium-4.columns.text-right.next-game
+  .medium-4.columns.text-right.next-game.show-for-medium-up
     %h5 Next Game:
     - if @next_revs_match
       = link_to @next_revs_match do
