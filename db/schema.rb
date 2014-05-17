@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140315173249) do
+ActiveRecord::Schema.define(version: 20140517155243) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "hstore"
 
   create_table "clubs", force: true do |t|
     t.string   "name"
@@ -49,6 +50,17 @@ ActiveRecord::Schema.define(version: 20140315173249) do
   add_index "matches", ["home_team_id", "away_team_id"], name: "index_matches_on_home_team_id_and_away_team_id", using: :btree
   add_index "matches", ["home_team_id"], name: "index_matches_on_home_team_id", using: :btree
   add_index "matches", ["uid"], name: "index_matches_on_uid", using: :btree
+
+  create_table "memberships", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "year"
+    t.hstore   "info"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "memberships", ["info"], name: "index_memberships_on_info", using: :gist
+  add_index "memberships", ["user_id"], name: "index_memberships_on_user_id", using: :btree
 
   create_table "mot_ms", force: true do |t|
     t.integer  "user_id"
