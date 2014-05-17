@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
   has_many :user_roles, dependent: :destroy
   has_many :roles, through: :user_roles
+  has_many :memberships
 
   has_many :mot_ms
   has_many :rev_guesses
@@ -23,6 +24,10 @@ class User < ActiveRecord::Base
 
   def role?(r)
     roles.map(&:name).include? r
+  end
+
+  def current_member?
+    !memberships.find_by(year: Date.today.year).nil?
   end
 
   def list_roles(verbose: false)
