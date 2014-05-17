@@ -15,6 +15,7 @@ FactoryGirl.define do
     password { Faker::Lorem.characters(Random.rand*12 + 8) }
     after :create do |u|
       u.roles << Role.find_or_create_by(name: %w(individual family).sample)
+      u.memberships << FactoryGirl.create(:membership, user_id: u.id)
     end
     trait :admin do
       after :create do |u|
@@ -30,6 +31,9 @@ FactoryGirl.define do
       after :create do |u|
         u.roles << Role.find_or_create_by(name: 'at_large_board')
       end
+    end
+    trait :no_membership do |u|
+      u.memberships = []
     end
   end
 end
