@@ -48,6 +48,19 @@
           = f.label :member_since, class: 'inline'
         .medium-8.columns
           = f.number_field :member_since
+      .row
+        .medium-4.columns
+          = label_tag :roles
+        .medium-8.columns
+          - if can? :edit, Membership, user_id: user.id
+            .row.collapse
+              .small-10.columns
+                = text_field_tag :roles, user.roles.list, disabled: true
+              .small-2.columns
+                = link_to edit_user_membership_path(user, user.memberships.last), class: 'postfix small secondary' do
+                  = icon 'pencil fa-fw'
+          - else
+            = text_field_tag :roles, user.roles.list, disabled: true
       = render partial: 'devise/shared/roles_selection', locals: { user: user, params: params }
   .row
     .large-4.columns

@@ -19,6 +19,20 @@
       = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => "Are you sure you wish to destroy @#{user.username}?" }, title: 'Destroy' do
         = icon 'trash-o', '', class: 'fa-lg fa-fw'
 
+%hr
+%h4
+  - if can? :create, Membership, user_id: user.id
+    = link_to new_user_membership_path(user), class: 'button tiny right', title: 'Create Membership' do
+      = icon 'plus fa-fw'
+  Membership history:
+%ul
+  - user.memberships.each do |membership|
+    %li
+      = membership.year
+      –
+      = membership.roles.list
+      = link_to 'Edit', edit_user_membership_path(user,membership) if can? :edit, membership
+
 .table
   .thead
     .tr
@@ -69,4 +83,4 @@
       .medium-4.large-2.columns
         %label Roles:
       .medium-8.large-10.columns
-        %p= user.list_roles
+        %p= user.roles.list

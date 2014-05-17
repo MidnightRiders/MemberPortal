@@ -72,6 +72,11 @@ select {
   white-space: nowrap;
 }
 
+select[multiple], select[size] {
+  background-image: none;
+  height: auto;
+}
+
 .alert-box {
   background-color: saturate(mix(#fff,$revs-navy,95%),25%);
   border-color: saturate(mix(#fff,$revs-navy,75%),30%);
