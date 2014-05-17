@@ -1,0 +1,19 @@
+= form_for [@user,@membership] do |f|
+  .row
+    .large-4.columns
+      %h3
+        = @membership.new_record? ? 'New' : 'Edit'
+        Membership
+    .large-8.columns
+      = f.hidden_field :info, value: { override: current_user.id }
+      .row
+        .medium-4.columns
+          = f.label :year, class: 'inline'
+        .medium-8.columns
+          = f.select :year, options_for_select((Date.today.year..Date.today.year+1))
+      .row
+        .medium-4.columns
+          = f.label :role_ids, 'Role(s)', class: 'inline'
+        .medium-8.columns
+          = f.select :role_ids, Role.all.map{|r| [r.name.titleize,r.id]}, {}, multiple: true, size: 5
+      = f.submit class: 'button right'

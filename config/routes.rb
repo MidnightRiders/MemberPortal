@@ -22,6 +22,7 @@ MidnightRiders::Application.routes.draw do
     collection do
       post :import
     end
+    resources :memberships
   end
 
   get 'home', to: 'users#home', as: :user_home

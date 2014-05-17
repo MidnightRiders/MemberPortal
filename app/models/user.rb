@@ -2,13 +2,12 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
 
-  default_scope { includes(:roles) }
+  default_scope { includes(:memberships) }
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :memberships
-  has_many :roles, through: :memberships
 
   has_many :mot_ms
   has_many :rev_guesses
@@ -21,12 +20,20 @@ class User < ActiveRecord::Base
 
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
 
+  def roles
+    current_membership.roles
+  end
+
   def role?(r)
     roles.map(&:name).include? r
   end
 
+  def current_membership
+    memberships.find_by(year: Date.today.year)
+  end
+
   def current_member?
-    !memberships.find_by(year: Date.today.year).nil?
+    !current_membership.nil?
   end
 
   def pick_for(match)
