@@ -35,39 +35,40 @@
                 Home
       %ul.right
         - if user_signed_in?
-          %li
-            = link_to matches_url do
-              = icon 'list fa-fw'
-              Matches
-          %li.has-dropdown
-            = link_to games_path do
-              = icon 'star fa-fw'
-              Games
-            %ul.dropdown
-              %li
-                = link_to standings_path do
-                  = icon 'list-alt fa-fw'
-                  Standings
-              %li
-                %label External
-              %li
-                = link_to 'http://fantasy.mlssoccer.com/my-leagues/173/join/?autojoin-code=978-173', target: '_blank' do
-                  = icon 'users fa-fw'
-                  Fantasy
-                  %small= icon 'external-link'
-              - if current_user.role?('admin') || current_user.role?('executive_board')
+          - if current_user.current_member?
+            %li
+              = link_to matches_url do
+                = icon 'list fa-fw'
+                Matches
+            %li.has-dropdown
+              = link_to games_path do
+                = icon 'star fa-fw'
+                Games
+              %ul.dropdown
                 %li
-                  %label Admin
+                  = link_to standings_path do
+                    = icon 'list-alt fa-fw'
+                    Standings
                 %li
-                  = link_to mot_ms_path do
-                    = icon 'list-ol fa-fw'
-                    MotY Rankings
+                  %label External
+                %li
+                  = link_to 'http://fantasy.mlssoccer.com/my-leagues/173/join/?autojoin-code=978-173', target: '_blank' do
+                    = icon 'users fa-fw'
+                    Fantasy
+                    %small= icon 'external-link'
+                - if current_user.role?('admin') || current_user.role?('executive_board')
+                  %li
+                    %label Admin
+                  %li
+                    = link_to mot_ms_path do
+                      = icon 'list-ol fa-fw'
+                      MotY Rankings
 
           %li
             = link_to edit_user_registration_path(current_user) do
               = icon 'user fa-fw'
               My Account
-          - if current_user.role?('admin') || current_user.role?('executive_board')
+          - if current_user.current_member? && (current_user.role?('admin') || current_user.role?('executive_board'))
             %li.has-dropdown
               %a{ title: 'Admin' }
                 = icon 'bolt fa-fw'

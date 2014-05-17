@@ -2,6 +2,8 @@
 
 = render partial: 'users/update_prompt'
 
+= render 'register_now' unless current_user.current_member?
+
 .row
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
@@ -10,11 +12,12 @@
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 
 
+- if current_user.current_member?
+  %section.row
+    .large-6.columns
+      = render partial: 'clubs/rev_games', locals: { revs: @revs, revs_matches: @revs_matches }
+      = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses
+    .large-6.columns
+      %h2.primary.ne Elsewhere this Week
+      = render partial: 'matches/small', locals: { matches: @matches }
 
-%section.row
-  .large-6.columns
-    = render partial: 'clubs/rev_games', locals: { revs: @revs, revs_matches: @revs_matches }
-    = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses
-  .large-6.columns
-    %h2.primary.ne Elsewhere this Week
-    = render partial: 'matches/small', locals: { matches: @matches }
