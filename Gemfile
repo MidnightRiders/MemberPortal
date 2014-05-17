@@ -31,7 +31,7 @@ gem 'paperclip-storage-ftp'
 
 # Users/auth
 gem 'devise'
-gem 'cancan'
+gem 'cancancan'
 gem 'paper_trail'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
