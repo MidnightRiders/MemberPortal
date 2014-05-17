@@ -7,9 +7,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :user_roles, dependent: :destroy
-  has_many :roles, through: :user_roles
   has_many :memberships
+  has_many :roles, through: :memberships
 
   has_many :mot_ms
   has_many :rev_guesses
@@ -28,15 +27,6 @@ class User < ActiveRecord::Base
 
   def current_member?
     !memberships.find_by(year: Date.today.year).nil?
-  end
-
-  def list_roles(verbose: false)
-    rs = self.roles.map{|r| r.name.titleize }
-    if verbose
-      rs.to_sentence
-    else
-      rs.join(', ')
-    end
   end
 
   def pick_for(match)
