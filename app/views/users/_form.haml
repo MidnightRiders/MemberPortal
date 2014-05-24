@@ -50,18 +50,20 @@
           = f.number_field :member_since
       .row
         .medium-4.columns
-          = label_tag :roles
+          = label_tag :roles, 'Current Membership', class: 'inline'
         .medium-8.columns
           - if can? :edit, Membership, user_id: user.id
             .row.collapse
               .small-10.columns
-                = text_field_tag :roles, user.roles.list, disabled: true
+                = text_field_tag :roles, "#{user.current_membership.try(:year)} – #{user.roles.try(:list)}", disabled: true
               .small-2.columns
-                = link_to edit_user_membership_path(user, user.memberships.last), class: 'postfix small secondary' do
+                = link_to (f.object.new_record? ? '#' : edit_user_membership_path(user, user.memberships.last)), class: 'postfix small secondary edit-membership' do
                   = icon 'pencil fa-fw'
+            .row.hide#edit-membership
+              = f.fields_for :membership, @membership do |ff|
+                = render 'memberships/fields', f: ff, disabled: true
           - else
             = text_field_tag :roles, user.roles.list, disabled: true
-      = render partial: 'devise/shared/roles_selection', locals: { user: user, params: params }
   .row
     .large-4.columns
       %h3 Contact Information
