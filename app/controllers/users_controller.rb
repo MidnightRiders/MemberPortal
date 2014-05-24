@@ -30,6 +30,7 @@ class UsersController < ApplicationController
     if current_user == @user && cannot?(:manage, User)
       redirect_to edit_user_registration_path(@user)
     end
+    @membership = @user.current_membership
   end
 
   def update
@@ -47,6 +48,7 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
+    @membership = @user.memberships.new(year: Date.today.year)
   end
 
   def create

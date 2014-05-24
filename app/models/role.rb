@@ -1,8 +1,7 @@
 class Role < ActiveRecord::Base
-  has_many :user_roles, dependent: :destroy
-  has_many :users, through: :user_roles
   has_many :membership_roles, dependent: :destroy
   has_many :memberships, through: :membership_roles
+  has_many :users, through: :memberships
   validates :name, uniqueness: true
 
   def self.list(verbose=false)

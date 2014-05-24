@@ -1,5 +1,5 @@
 class MembershipsController < ApplicationController
-  before_action :get_membership, except: [ :index, :new ]
+  load_and_authorize_resource
   before_action :get_user
 
   def index
