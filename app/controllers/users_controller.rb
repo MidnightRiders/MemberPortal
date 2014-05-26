@@ -21,8 +21,8 @@ class UsersController < ApplicationController
   # GET /home
   def home
     @articles = RidersBlog.articles.sort_by{|x| x['pubDate'].to_date }.last(2).reverse
-    @events = FacebookApi.events['data'].try(:select){|x| x['start_time'] >= Time.now - 1.week }
-    @matches = Match.where('kickoff >= ? AND kickoff <= ?', Date.today.beginning_of_week, Date.today.beginning_of_week + 7.days).order('kickoff ASC').select{|x| !x.teams.include? revs }
+    @events = FacebookApi.events['data'].try(:select){|x| x['start_time'] >= Time.current - 1.week }
+    @matches = Match.where('kickoff >= ? AND kickoff <= ?', Date.current.beginning_of_week, Date.current.beginning_of_week + 7.days).order('kickoff ASC').select{|x| !x.teams.include? revs }
     @revs_matches = revs.previous_matches + revs.next_matches(2)
   end
 
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @membership = @user.memberships.new(year: Date.today.year)
+    @membership = @user.memberships.new(year: Date.current.year)
   end
 
   def create
