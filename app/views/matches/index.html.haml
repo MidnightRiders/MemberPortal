@@ -1,11 +1,11 @@
 - content_for :title, 'Match listings for the week of' + @start_date.strftime('%_m.%-d.%Y')
 
 .row.actions
-  .medium-6.columns
+  .medium-6.columns.text-left
     = link_to matches_path(date: @start_date - 7.days), class: 'button secondary small' do
       = icon 'arrow-circle-o-left fa-fw'
       Previous Week
-    - if @start_date != Date.today.beginning_of_week
+    - unless @start_date == Time.current.beginning_of_week
       = link_to matches_path, class: 'button small' do
         = icon 'calendar-o fa-fw'
         This Week

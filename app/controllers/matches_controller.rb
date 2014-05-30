@@ -5,8 +5,7 @@ class MatchesController < ApplicationController
   # GET /matches
   # GET /matches.json
   def index
-    @start_date = params[:date] ? params[:date].in_time_zone(Time.zone) : Date.current
-    @start_date = @start_date.beginning_of_week.to_time
+    @start_date = params[:date] ? params[:date].in_time_zone(Time.zone) : Time.current
     @matches = Match.includes(:pick_ems).where('kickoff BETWEEN :start_date AND :end_date', start_date: @start_date, end_date: @start_date + 7.days).order('kickoff ASC')
   end
 
