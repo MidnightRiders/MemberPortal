@@ -8,11 +8,14 @@
     padding: 0;
     li {
       padding: rem-calc(5 10);
-      height: rem-calc(35);
       line-height: rem-calc(25);
       font-weight: bold;
       &:nth-child(2n-1) {
         background-color: rgba(255,255,255,.75);
+      }
+      time {
+        @extend small;
+        display: inline-block;
       }
       &.past {
         font-size: .85em;
