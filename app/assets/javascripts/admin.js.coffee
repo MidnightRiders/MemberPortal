@@ -1,0 +1,2 @@
+#= require_tree ./admin
+#= require_self

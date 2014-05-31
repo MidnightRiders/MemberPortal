@@ -1,0 +1,11 @@
+- disabled ||= false
+.row
+  .medium-4.columns
+    = f.label :year, class: 'inline'
+  .medium-8.columns
+    = f.select :year, options_for_select((Date.today.year..Date.today.year+1)), {}, disabled: disabled
+.row
+  .medium-4.columns
+    = f.label :role_ids, 'Role(s)', class: 'inline'
+  .medium-8.columns
+    = f.select :role_ids, Role.all.map{|r| [r.name.titleize,r.id]}, {}, multiple: true, size: 5, disabled: disabled
