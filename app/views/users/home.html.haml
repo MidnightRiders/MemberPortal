@@ -14,8 +14,9 @@
 
 - if current_user.current_member?
   %section.row
-    .large-6.columns
-      %ul.matches
-        = render partial: 'matches/match', collection: @revs_matches, locals: { highlight: false }
+    .medium-6.columns
+      %ul.matches.small
+        = render partial: 'matches/match', collection: @revs_matches, locals: { small: true }
+    .medium-6.columns
       = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses
 

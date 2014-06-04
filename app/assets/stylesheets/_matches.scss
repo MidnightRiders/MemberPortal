@@ -67,40 +67,42 @@ ul.matches {
     display: none;
   }
   @media #{$medium-up} {
-    width: 100%;
-    max-width: 720px;
-    margin-left: auto;
-    margin-right: auto;
-    li {
+    &:not(.small) {
       width: 100%;
-      @include clearfix;
-      > time, > .score, > .pick-em, > .button, > .location {
-        display: block;
-        float: left;
-        vertical-align: middle;
-      }
-      time, .score {
-        width: 30%;
-        padding: rem-calc(10);
-        font-size: rem-calc(24);
-      }
-      .score {
-        text-align: center;
-      }
-      > .pick-em {
-        width: 40%;
-      }
-      > .location {
-        width: 60%;
-        padding: rem-calc(0 10);
-        margin-top: rem-calc(-35);
-      }
-      > .button {
-        width: 40%;
-        float: right;
-      }
-      &.highlight .location {
-        margin-top: 0;
+      max-width: 720px;
+      margin-left: auto;
+      margin-right: auto;
+      li {
+        width: 100%;
+        @include clearfix;
+        > time, > .score, > .pick-em, > .button, > .location {
+          display: block;
+          float: left;
+          vertical-align: middle;
+        }
+        time, .score {
+          width: 30%;
+          padding: rem-calc(10);
+          font-size: rem-calc(24);
+        }
+        .score {
+          text-align: center;
+        }
+        > .pick-em {
+          width: 40%;
+        }
+        > .location {
+          width: 60%;
+          padding: rem-calc(0 10);
+          margin-top: rem-calc(-35);
+        }
+        > .button {
+          width: 40%;
+          float: right;
+        }
+        &.highlight .location {
+          margin-top: 0;
+        }
       }
     }
   }
