@@ -21,17 +21,6 @@
         = icon 'calendar fa-fw'
         New Match
 
-.table
-  .tr
-    .thd
-      = icon 'certificate'
-      Pick ’Em
-    .thd Match
-    .thd Kickoff
-    .thd.text-center Score
-    .thd.text-center
-      = icon 'star'
-      Games
-
+%ul.matches
   = render partial: 'match', collection: @matches
 

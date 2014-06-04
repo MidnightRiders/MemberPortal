@@ -21,6 +21,7 @@ gem 'font-awesome-sass'
 gem 'roo' # For imports
 gem 'iconv'
 gem 'icalendar'
+gem 'draper'
 
 gem 'date_time_attribute'
 
