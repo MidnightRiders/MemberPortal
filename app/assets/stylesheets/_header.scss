@@ -32,7 +32,7 @@ header.page-header {
     }
     padding-bottom: 10px;
   }
-  //h1 a:link, h1 a:visited {
-  //  color: $header-font-color;
-  //}
+  @media #{$small-only} {
+    display: none;
+  }
 }

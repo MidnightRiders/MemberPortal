@@ -1,4 +1,11 @@
 .events {
+  padding: rem-calc(5 0);
+  h3 {
+    margin: rem-calc(0 5);
+    @media #{$medium-up} {
+      margin: rem-calc(0 10);
+    }
+  }
   ul.events {
     list-style: none;
     margin: {
@@ -7,9 +14,13 @@
     }
     padding: 0;
     li {
-      padding: rem-calc(5 10);
-      line-height: rem-calc(25);
       font-weight: bold;
+      padding: rem-calc(5);
+      line-height: rem-calc(18);
+      @media #{$medium-up} {
+        padding: rem-calc(5 10);
+        line-height: rem-calc(25);
+      }
       &:nth-child(2n-1) {
         background-color: rgba(255,255,255,.75);
       }
