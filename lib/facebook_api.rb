@@ -24,24 +24,12 @@ module FacebookApi
 
     def self.get_auth_token
       uri = URI('https://graph.facebook.com/oauth/access_token?client_id=560921750673121&client_secret=920dfdce9d33e5f0b2ff46d9a3ea343a&grant_type=client_credentials')
-      begin
-        token = Net::HTTP.get(uri)
-      rescue SocketError => e
-        flash[:error] = e
-        token = false
-      end
-      token
+      Net::HTTP.get(uri)
     end
 
     def self.get_events
       uri = URI("https://graph.facebook.com/MidnightRiders/events?#{URI.encode(self.auth_token)}")
-      begin
-        response = Net::HTTP.get(uri)
-      rescue SocketError => e
-        flash[:error] = e
-        []
-      else
-        JSON.parse(response)
-      end
+      response = Net::HTTP.get(uri)
+      JSON.parse(response)
     end
 end
