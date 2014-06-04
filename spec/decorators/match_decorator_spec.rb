@@ -1,4 +1,5 @@
 require 'spec_helper'
 
-pending MatchDecorator do
+describe MatchDecorator do
+  pending 'Match Decorator specs'
 end
