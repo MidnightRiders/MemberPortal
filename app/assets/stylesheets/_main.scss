@@ -1,5 +1,5 @@
-main.row {
-  margin: rem-calc(10 5);
+main > .row {
+  margin: 0;
   padding: rem-calc(10 0);
   background: #fff;
   border: 1px solid $silver;

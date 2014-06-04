@@ -16,7 +16,7 @@ body {
   height: auto;
   min-height: 100%;
   position: relative;
-  padding-bottom: 4rem;
+  padding-bottom: 4rem + rem-calc(10);
   background: $maroon image-url('bg.png') repeat center;
   &.wait {
     &, * {
@@ -41,10 +41,17 @@ p.hint {
 
 main {
   display: block;
+  padding: rem-calc(10 5);
   h1, h2, h3, h4, h5, h6 {
     small {
       font-family: 'Lato', sans-serif;
     }
+  }
+}
+
+@media #{$small-only} {
+  hr {
+    margin: rem-calc(5 0)
   }
 }
 

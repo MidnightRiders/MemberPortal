@@ -26,3 +26,10 @@ form {
     }
   }
 }
+
+@media #{$small-only} {
+  label.inline:not(.inline-small) {
+    margin: 0;
+    padding: 0;
+  }
+}

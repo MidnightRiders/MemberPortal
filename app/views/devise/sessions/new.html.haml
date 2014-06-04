@@ -1,11 +1,11 @@
 .row
   .medium-4.columns
     %h2 Sign in
-  .medium-8.columns.text-right
-    %h5.subheader
+  .medium-8.columns.text-right.small-only-text-left
+    %h4.subheader
       Haven’t received your login information?
       = succeed '.' do
-        = link_to 'Email us', 'mailto:webczar@midnightriders.com?subject=Member%20Portal%20Access'
+        = link_to 'Email&nbsp;us'.html_safe, 'mailto:webczar@midnightriders.com?subject=Member%20Portal%20Access'
 = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
   .row
     .medium-4.columns
