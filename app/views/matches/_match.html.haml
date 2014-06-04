@@ -1,7 +1,6 @@
-- long ||= false
 - match = match.decorate
-- highlight = true unless highlight == false
-%li.match{ class: "#{'pending' unless match.complete?} #{'highlight' if match.teams.include?(revs) && highlight}"}
+- small ||= false
+%li.match{ class: "#{'pending' unless match.complete?} #{'highlight' if match.teams.include?(revs) && !small }"}
   %time{ datetime: match.kickoff.xmlschema }
     = link_to match do
       = match.kickoff.strftime('%_m.%-d %l:%M%P')
