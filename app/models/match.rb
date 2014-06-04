@@ -71,10 +71,10 @@ class Match < ActiveRecord::Base
   end
 
   def voteable?
-    kickoff && Time.now > kickoff + 45.minutes
+    kickoff && (kickoff + 45.minutes).past?
   end
   def in_future?
-    kickoff && kickoff > Time.now
+    kickoff.try(:future?)
   end
   def in_past?
     !in_future?

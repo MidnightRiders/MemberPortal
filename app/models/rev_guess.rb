@@ -21,6 +21,10 @@ class RevGuess < ActiveRecord::Base
     end
   end
 
+  def predicted_score
+    "#{home_goals} – #{away_goals}" unless (home_goals.nil? || away_goals.nil?)
+  end
+
   def result
     if home_goals.nil? || away_goals.nil?
       nil

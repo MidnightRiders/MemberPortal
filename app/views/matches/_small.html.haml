@@ -6,9 +6,10 @@
         Pick ’Em
       .td Match / time
   - matches.each do |m|
+    - m = m.decorate
     .tr
       .td.small-6.columns.text-right
-        = render(partial: 'pick_ems/buttons', locals: { match: m })
+        = m.pick_em_buttons
       .td.small-6.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
         = link_to m do
           = m.home_team.abbrv

@@ -1,13 +1,13 @@
 - count ||= 100
 %h2 RevGuesses
-%ul.table
+%ul.table.rev-guesses
   .thead
     %li.tr
       .td Match
       .td.text-center RevGuess
       .td.text-center Score
       .td.text-center Points
-      .td Comment
+      .td.comment Comment
   .tbody
     - user.rev_guesses.sort_by{|x| x.match.kickoff }.last(count).each do |m|
       %li.tr
@@ -27,7 +27,7 @@
           %p= m.match.score
         .td.text-center
           %p= m.score
-        .td
+        .td.comment
           %p= m.comment
   .tfoot
     %li.tr
@@ -35,4 +35,4 @@
       .td
       .td
       .td.text-center= user.rev_guess_score
-      .td
+      .td.comment
