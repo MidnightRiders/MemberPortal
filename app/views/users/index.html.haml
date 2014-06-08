@@ -57,7 +57,7 @@
     - @users.each do |user|
       %li.tr
         .td.text-center
-          - user.roles.each do |r|
+          - user.current_roles.each do |r|
             = content_tag(:i,'',class: 'fa fa-fw fa-' + r.name, title: r.name.titleize)
         .td
           = link_to user do
