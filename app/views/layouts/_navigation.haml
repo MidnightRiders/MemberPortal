@@ -56,6 +56,10 @@
                     = icon 'users fa-fw'
                     Fantasy
                     %small= icon 'external-link'
+                %li
+                  = link_to 'http://bracket.mlssoccer.com/og_objects/wcbracket/groups/107?join_key=eqwfoi310asdofijwe&action=join', target: '_blank' do
+                    = icon 'globe fa-fw'
+                    World Cup Bracket
                 - if current_user.role?('admin') || current_user.role?('executive_board')
                   %li
                     %label Admin
