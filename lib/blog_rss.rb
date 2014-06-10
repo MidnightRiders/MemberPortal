@@ -23,7 +23,7 @@ class BlogRss
         Rails.logger.info e
       rescue => e
         Rails.logger.info 'RidersBlog error:'
-        Rails.log e
+        Rails.logger.info e
       rescue Exception => e
         Rails.logger.info 'RidersBlog error:'
         Rails.logger.info e
