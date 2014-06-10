@@ -17,16 +17,12 @@ class BlogRss
       uri = URI(url)
       begin
         rss = Net::HTTP.get(uri)
-        rss = Hash.from_xml(rss)['rss']['channel']['item']
-      rescue SocketError => e
-        Rails.logger.info 'RidersBlog error:'
-        Rails.logger.info e
+        rss_parsed = Hash.from_xml(rss)
+        rss = rss_parsed['rss']['channel']['item'] if rss_parsed
       rescue => e
-        Rails.logger.info 'RidersBlog error:'
+        Rails.logger.info 'Blog error for ' + self.url
         Rails.logger.info e
-      rescue Exception => e
-        Rails.logger.info 'RidersBlog error:'
-        Rails.logger.info e
+        Rails.logger.info rss
       end
       rss ||= []
       @last_retrieved = Time.now
