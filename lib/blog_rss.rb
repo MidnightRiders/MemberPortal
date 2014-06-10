@@ -19,10 +19,16 @@ class BlogRss
         rss = Net::HTTP.get(uri)
         rss = Hash.from_xml(rss)['rss']['channel']['item']
       rescue SocketError => e
-        puts 'RidersBlog error:'
-        puts e
-        rss = []
+        Rails.logger.info 'RidersBlog error:'
+        Rails.logger.info e
+      rescue => e
+        Rails.logger.info 'RidersBlog error:'
+        Rails.log e
+      rescue Exception => e
+        Rails.logger.info 'RidersBlog error:'
+        Rails.logger.info e
       end
+      rss ||= []
       @last_retrieved = Time.now
       if rss.empty?
         @articles || []
