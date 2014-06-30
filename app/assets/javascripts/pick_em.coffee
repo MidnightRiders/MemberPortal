@@ -7,5 +7,5 @@ $ ->
     else if xhr.errors
       errors = '  - '
       errors += v.join('\n  - ') for k, v of xhr.errors
-      error = "The following error#{if Object.keys(xhr.errors).length > 0 then 's' else ''} occurred:\n#{errors}"
+      error = "The following error#{if Object.keys(xhr.errors).length > 1 then 's' else ''} occurred:\n#{errors}"
       alert(error)
