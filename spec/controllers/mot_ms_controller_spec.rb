@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MotMsController do
-  let(:match) { FactoryGirl.create(:match) }
+  let(:match) { FactoryGirl.create(:match, kickoff: Time.now - 2.hours) }
 
   context 'when signed out' do
     it 'rejects #index' do
