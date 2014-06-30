@@ -2,7 +2,7 @@ class MatchDecorator < Draper::Decorator
   delegate_all
 
   def pick_em_buttons(*args)
-    h.content_tag :div, class: 'pick-em-buttons secondary-border border-all'+[model.home_team.abbrv.downcase, (model.kickoff.future? ? '' : 'closed')].join(' '), title: model.kickoff.future? ? 'Pick ’Em' : 'Voting Closed' do
+    h.content_tag :div, class: "pick-em-buttons secondary-border border-all #{model.home_team.abbrv.downcase} #{'closed' unless model.kickoff.future?}", title: model.kickoff.future? ? 'Pick ’Em' : 'Voting Closed' do
       h.concat h.content_tag :div, pick_em_button(:home, *args), class: 'home'
       h.concat h.content_tag :div, pick_em_button(:draw, *args), class: 'draw'
       h.concat h.content_tag :div, pick_em_button(:away, *args), class: 'away'
@@ -13,40 +13,26 @@ class MatchDecorator < Draper::Decorator
     opts = args.extract_options!
     user = opts[:user] || h.current_user
     text = opts[:text]
-    team = if pick == :home
-             model.home_team
-           elsif pick == :away
-             model.away_team
-           end
-    html_classes = ['choice', pick == :draw ? ['secondary'] : ['primary-bg', team.abbrv.downcase]].flatten
+    team = model.try("#{pick}_team".to_sym)
+
+    html_classes = ['choice', pick == :draw ? ['secondary'] : ['primary-bg', team.abbrv.downcase]]
     if model.complete? && model.result == pick
-      if user.pick_for(model).try(:correct?)
-        html_classes << 'correct'
-      elsif model.result == pick
-        html_classes << 'actual'
-      end
+      html_classes << user.pick_for(model).try(:correct?) ? 'correct' : 'actual'
     end
     if user.pick_result(model) == PickEm::RESULTS[pick]
       html_classes << 'picked'
       html_classes << 'wrong' if user.pick_for(model).try(:wrong?)
     end
 
-    content = if text
-                team ? team.abbrv : 'D'
-              else
-                if team
-                  if team.crest.blank?
-                    team.abbrv
-                  else
-                    h.image_tag('http://midnightriders.com' + team.crest.url(:thumb), title: team.name)
-                  end
-                else
-                  'D'
-                end
-              end
-    if model.kickoff.past?
-      h.content_tag(:div, content, class: html_classes.join(' '))
+    content = if team
+      (text || team.crest.blank?) ? team.abbrv : h.image_tag('http://midnightriders.com' + team.crest.url(:thumb), title: team.name)
     else
+      'D'
+    end
+
+    # if model.kickoff.past?
+    #   h.content_tag(:div, content, class: html_classes.join(' '))
+    # else
       h.link_to(
         content,
         h.vote_match_pick_ems_path(model),
@@ -61,9 +47,9 @@ class MatchDecorator < Draper::Decorator
             }
           }.to_param
         },
-        class: html_classes.join(' ')
+        class: html_classes
       )
-    end
+    # end
   end
 
   def pick_em_sub
