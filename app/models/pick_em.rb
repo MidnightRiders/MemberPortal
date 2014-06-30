@@ -8,7 +8,7 @@ class PickEm < ActiveRecord::Base
   validates_uniqueness_of :match_id, scope: :user_id, message: 'has already been voted on by this user.'
   validates :result, inclusion: RESULTS.values
 
-  validate :voteable, message: 'is no longer open for voting.'
+  validate :voteable?
 
   def correct?
     (match_id &&
@@ -23,8 +23,8 @@ class PickEm < ActiveRecord::Base
   def wrong?
     incorrect?
   end
-  def voteable
-    match.kickoff.future?
+  def voteable?
+    errors.add(:base, 'Cannot vote on past matches') unless match.kickoff.future?
   end
 
   # TODO: Implement "pick goalscorers" method (and corresponding models)
