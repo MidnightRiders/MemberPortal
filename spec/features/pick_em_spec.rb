@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature 'Pick ’Em' do
   let(:user) { FactoryGirl.create(:user) }
-  let!(:match) { FactoryGirl.create(:match, kickoff: Time.now + 2.hours) }
+  let!(:match) { FactoryGirl.create(:match, kickoff: '19:00 today'.to_time) }
   before :each do
     login_as user
     visit matches_path
@@ -26,13 +26,13 @@ feature 'Pick ’Em' do
 
   scenario 'user correctly picks home team' do
     match = FactoryGirl.create(:match,:past,:home_win)
-    match.pick_ems.create(user: user, result: PickEm::RESULTS[:home])
+    match.pick_ems.create(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
     visit matches_path(date: match.kickoff.to_date)
     page.should have_css('.choice.correct', text: match.home_team.abbrv)
   end
   scenario 'user wrongly picks home team' do
     match = FactoryGirl.create(:match,:past,:away_win)
-    match.pick_ems.create(user: user, result: PickEm::RESULTS[:home])
+    match.pick_ems.build(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
     visit matches_path(date: match.kickoff.to_date)
     page.should have_css('.choice.wrong', text: match.home_team.abbrv)
     page.should have_css('.choice.actual', text: match.away_team.abbrv)
