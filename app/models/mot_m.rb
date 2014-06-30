@@ -2,8 +2,8 @@ class MotM < ActiveRecord::Base
   validates :user, :match, :first, associated: true, presence: true
   validates :second, :third, associated: true, allow_nil: true
 
-  validate :different_picks, message: 'must be different players'
-  validate :voteable?, message: 'cannot be voted on yet'
+  validate :different_picks
+  validate :voteable?
   validates_uniqueness_of :match_id, scope: :user_id, message: 'has already been voted on by this user.'
 
   belongs_to :user
@@ -14,11 +14,11 @@ class MotM < ActiveRecord::Base
 
   private
     def different_picks
-      picks = [first_id, second_id, third_id].reject(&:blank?)
-      !picks.detect{|e| picks.count(e) > 1 }
+      errors.add(:second,'must be different player') if first_id == second_id
+      errors.add(:third,'must be different player') if second_id == third_id || first_id == third_id
     end
 
     def voteable?
-      match.voteable?
+      errors.add(:base, 'Cannot vote for matches in future.') unless match.voteable?
     end
 end
