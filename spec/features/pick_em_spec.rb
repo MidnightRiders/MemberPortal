@@ -2,10 +2,10 @@ require 'spec_helper'
 
 feature 'Pick ’Em' do
   let(:user) { FactoryGirl.create(:user) }
-  let!(:match) { FactoryGirl.create(:match, kickoff: '19:00 today'.to_time) }
+  let!(:match) { FactoryGirl.create(:match, kickoff: Time.now + 2.hours) }
   before :each do
     login_as user
-    visit matches_path
+    visit matches_path(date: match.kickoff.to_date)
   end
 
   scenario 'user picks home team', js: true do
