@@ -17,7 +17,7 @@ class MatchDecorator < Draper::Decorator
 
     html_classes = ['choice', pick == :draw ? ['secondary'] : ['primary-bg', team.abbrv.downcase]]
     if model.complete? && model.result == pick
-      html_classes << user.pick_for(model).try(:correct?) ? 'correct' : 'actual'
+      html_classes << (user.pick_for(model).try(:correct?) ? 'correct' : 'actual')
     end
     if user.pick_result(model) == PickEm::RESULTS[pick]
       html_classes << 'picked'
