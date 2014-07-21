@@ -38,20 +38,10 @@
   .row
     .small-6.columns
       - if lastmatch = revs.last_match
-        = link_to mot_m_path_for(lastmatch), class: 'button tiny secondary expand' do
-          = icon 'list-ol fa-fw'
-          MOTM:
-          = lastmatch.home_team == revs ? 'v' : '@'
-          = (lastmatch.teams - [revs])[0].abbrv
-          = icon 'check fa-fw' if current_user.mot_ms.find_by(match_id: lastmatch.id)
+        = lastmatch.decorate.mot_m_button('tiny secondary expand', true)
     .small-6.columns
       - if nextmatch = revs.next_match
-        = link_to rev_guess_path_for(nextmatch), class: 'button tiny secondary expand' do
-          = icon 'question fa-fw'
-          RevGuess:
-          = nextmatch.home_team == revs ? 'v' : '@'
-          = (nextmatch.teams - [revs])[0].abbrv
-          = ": #{rev_guess_for(nextmatch)[1].predicted_score}" if rev_guess_for(nextmatch)
+        = nextmatch.decorate.rev_guess_button('tiny secondary expand', true)
 
 .table
   .thead

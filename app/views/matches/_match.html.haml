@@ -16,5 +16,5 @@
   .location
     = match.location
   - if match.teams.include? revs
-    = link_to(icon('list-ol fa-fw') + ' MotM', mot_m_path_for(match), class: 'button small secondary expand') if match.voteable?
-    = link_to(icon('question fa-fw') + ' RevGuess' + (": #{rev_guess_for(match)[1].predicted_score}" if rev_guess_for(match)), rev_guess_path_for(match), class: 'button small secondary expand') if match.in_future?
+    = match.rev_guess_button('small expand') if match.in_future?
+    = match.mot_m_button('small expand') if match.voteable?
