@@ -43,7 +43,10 @@ class PlayersController < ApplicationController
     respond_to do |format|
       if @player.update(player_params)
         format.html { redirect_to @player, notice: 'Player was successfully updated.' }
-        format.json { head :no_content }
+        format.json {
+          @players = Player.all
+          render json: { html: render_to_string(action: 'index', layout: false, formats: [:html]) }
+        }
       else
         format.html { render action: 'edit' }
         format.json { render json: @player.errors, status: :unprocessable_entity }
