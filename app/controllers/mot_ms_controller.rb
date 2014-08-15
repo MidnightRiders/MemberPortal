@@ -1,6 +1,7 @@
 class MotMsController < ApplicationController
   load_and_authorize_resource
   before_filter :set_match, except: [ :index ]
+  before_filter :check_eligible, only: [ :new, :edit, :create, :update ]
 
   # GET /mot_ms
   # GET /mot_ms.json
@@ -77,7 +78,10 @@ class MotMsController < ApplicationController
       @match = Match.find(params[:match_id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def check_eligible
+      redirect_to matches_path(date: @match.kickoff.to_date), flash: { notice: 'Cannot submit Man of the Match for that match.' } unless @match.voteable?
+    end
+
     def mot_m_params
       params.require(:mot_m).permit(:user_id, :match_id, :first_id, :second_id, :third_id)
     end

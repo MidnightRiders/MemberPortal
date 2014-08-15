@@ -71,7 +71,10 @@ class Match < ActiveRecord::Base
   end
 
   def voteable?
-    kickoff && (kickoff + 45.minutes).past?
+    kickoff &&
+      (kickoff + 45.minutes).past? &&
+      teams.map(&:abbrv).include?('NE') &&
+      kickoff >= 2.weeks.ago
   end
   def in_future?
     kickoff.try(:future?)
