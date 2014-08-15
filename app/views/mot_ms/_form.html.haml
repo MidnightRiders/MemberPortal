@@ -13,17 +13,17 @@
     .medium-4.columns
       = f.label :first_id
     .medium-8.columns
-      = f.select :first_id, options_for_select(Player.all.sort_by(&:last_name).map{|x| ["#{x.last_name}, #{x.first_name} – #{x.position} (#{x.number})", x.id]}, f.object.first_id)
+      = f.select :first_id, options_for_select(Player.active.sort_by(&:last_name).map{|x| ["#{x.last_name}, #{x.first_name} – #{x.position} (#{x.number})", x.id]}, f.object.first_id)
   .row
     .medium-4.columns
       = f.label :second_id
     .medium-8.columns
-      = f.select :second_id, options_for_select(Player.all.sort_by(&:last_name).map{|x| ["#{x.last_name}, #{x.first_name} – #{x.position} (#{x.number})", x.id]}, f.object.second_id), include_blank: '–'
+      = f.select :second_id, options_for_select(Player.active.sort_by(&:last_name).map{|x| ["#{x.last_name}, #{x.first_name} – #{x.position} (#{x.number})", x.id]}, f.object.second_id), include_blank: '–'
   .row
     .medium-4.columns
       = f.label :third_id
     .medium-8.columns
-      = f.select :third_id, options_for_select(Player.all.sort_by(&:last_name).map{|x| ["#{x.last_name}, #{x.first_name} – #{x.position} (#{x.number})", x.id]}, f.object.third_id), include_blank: '–'
+      = f.select :third_id, options_for_select(Player.active.sort_by(&:last_name).map{|x| ["#{x.last_name}, #{x.first_name} – #{x.position} (#{x.number})", x.id]}, f.object.third_id), include_blank: '–'
   .actions.text-right
     = f.button :submit do
       = f.object.new_record? ? 'Vote' : 'Update'

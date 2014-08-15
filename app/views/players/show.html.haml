@@ -1,11 +1,9 @@
 %p#notice= notice
 
 %p
-  %b First name:
   = @player.first_name
-%p
-  %b Last name:
-  = @player.last_name
+  %b= @player.last_name
+  = content_tag(:small, 'Inactive') unless @player.active?
 %p
   %b Club:
   = @player.club_id
