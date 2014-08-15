@@ -1,4 +1,8 @@
 class Player < ActiveRecord::Base
+
+  scope :active, -> { where(active: true) }
+  scope :inactive, -> { where(active: false) }
+
   POSITIONS = {
       'GK' => 1,
       'D'  => 2,
@@ -26,6 +30,10 @@ class Player < ActiveRecord::Base
   has_many :motm_firsts, class_name: 'MotM', foreign_key: 'first_id'
   has_many :motm_seconds, class_name: 'MotM', foreign_key: 'second_id'
   has_many :motm_thirds, class_name: 'MotM', foreign_key: 'third_id'
+
+  def inactive?
+    !active?
+  end
 
   def mot_m_total(match_id = nil)
     if match_id

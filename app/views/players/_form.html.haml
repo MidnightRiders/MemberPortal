@@ -21,6 +21,10 @@
       = f.label :position
     .medium-8.columns
       = f.select :position, options_for_select(Player::POSITIONS.map{|k,v| [k, k] },f.object.position)
+  .row
+    .small-12.columns
+      = f.check_box :active
+      = f.label :active
   .row.actions
     .small-12.columns
       = f.button :submit do
