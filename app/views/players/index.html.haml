@@ -9,6 +9,7 @@
 
 .table
   .tr
+    .thd
     .thd.numeric #
     .thd Name
     .thd.text-center Club
@@ -19,6 +20,7 @@
     = render 'row', player: player
   - unless @players.inactive.empty?
     .tr
+      .td
       .td
       .td
         %h3 Inactive

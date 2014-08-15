@@ -1,5 +1,10 @@
 .tr
-  .td.numeric= player.number
+  .td.text-center
+    - if can? :edit, player
+      = link_to player, class: (player.active? ? 'alert' : 'success'), data: { remote: true, method: :patch, params: { player: { active: player.inactive? } }.to_param }, title: (player.active? ? 'Deactivate' : 'Activate') do
+        %i.fa.fa-fw{ class: "fa-thumbs-#{ player.active? ? 'down' : 'up' }" }
+  .td.numeric
+    = player.number
   .td
     = link_to player do
       = player.first_name
