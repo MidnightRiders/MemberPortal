@@ -38,7 +38,7 @@ class UsersController < ApplicationController
       if @user.update(user_params)
         flash.now[:success] = 'Thank you for updating your information!'
         format.html { redirect_to @user }
-        format.json { render json: { json: flash, html: render_to_string(partial: 'layouts/notifications', formats: [:html], locals: { flash: flash }) } }
+        format.json { render json: { json: flash, flash: render_to_string(partial: 'layouts/notifications', formats: [:html], locals: { flash: flash }) } }
       else
         format.html { render action: 'edit' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
