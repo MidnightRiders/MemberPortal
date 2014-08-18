@@ -15,19 +15,70 @@
           %ul.dropdown
             %li
               = link_to 'http://MidnightRiders.com', target: '_blank' do
+                %small.right= icon 'external-link'
                 = icon 'link fa-fw'
-                Website
-                %small= icon 'external-link'
+                Riders Website
             %li
-              = link_to 'http://facebook.com/MidnightRiders', target: '_blank' do
+              = link_to 'http://midnightriders.com/shop', target: '_blank' do
+                %small.right= icon 'external-link'
+                = icon 'shopping-cart fa-fw'
+                Shop
+            %li
+              %label Social
+            %li.has-dropdown
+              %a
                 = icon 'facebook fa-fw'
                 Facebook
-                %small= icon 'external-link'
+              %ul.dropdown
+                %li
+                  = link_to 'https://www.facebook.com/groups/419730744829118/', target: '_blank' do
+                    = icon 'external-link fa-fw'
+                    Facebook Group
+                %li
+                  = link_to 'https://facebook.com/MidnightRiders', target: '_blank' do
+                    = icon 'external-link fa-fw'
+                    Facebook Page
             %li
               = link_to 'http://twitter.com/MidnightRiders', target: '_blank' do
+                %small.right= icon 'external-link'
                 = icon 'twitter fa-fw'
                 Twitter
+            %li
+              %label Other
+            %li
+              = link_to 'http://revolutionsoccer.net', target: '_blank' do
+                = icon 'bookmark fa-fw'
+                Revolution Website
                 %small= icon 'external-link'
+            %li.has-dropdown
+              %a
+                = icon 'beer fa-fw'
+                Partner Pubs
+              %ul.dropdown
+                %li
+                  = link_to 'http://bansheeboston.com', target: '_blank' do
+                    = icon 'external-link fa-fw'
+                    The Banshee
+                    %small Dorchester, MA
+                %li
+                  = link_to 'http://parlorsportsbar.com', target: '_blank' do
+                    = icon 'external-link fa-fw'
+                    Parlor Sports
+                    %small Somerville, MA
+            %li.has-dropdown
+              %a
+                = icon 'reddit fa-fw'
+                Reddit
+              %ul.dropdown
+                %li
+                  = link_to 'http://reddit.com/r/newenglandrevolution', target: '_blank' do
+                    = icon 'external-link fa-fw'
+                    Revolution Subreddit
+                %li
+                  = link_to 'http://reddit.com/r/mls', target: '_blank' do
+                    = icon 'external-link fa-fw'
+                    MLS Subreddit
+
           - if user_signed_in?
             %li
               = link_to user_home_url do
@@ -47,16 +98,21 @@
               %ul.dropdown
                 %li
                   = link_to standings_path do
-                    = icon 'list-alt fa-fw'
+                    = icon 'trophy fa-fw'
                     Standings
-                %li
-                  %label External
                 %li
                   = link_to 'http://fantasy.mlssoccer.com/my-leagues/173/join/?autojoin-code=978-173', target: '_blank' do
                     = icon 'users fa-fw'
-                    Fantasy
+                    MLS Fantasy
                     %small= icon 'external-link'
                 %li
+                  %label Other Fantasy
+                %li
+                  = link_to 'http://fantasy.premierleague.com/my-leagues/194763/join/?autojoin-code=797105-194763', target: '_blank' do
+                    = icon 'users fa-fw'
+                    EPL Fantasy
+                    %small= icon 'external-link'
+                -#%li
                   = link_to 'http://bracket.mlssoccer.com/og_objects/wcbracket/groups/107?join_key=eqwfoi310asdofijwe&action=join', target: '_blank' do
                     = icon 'globe fa-fw'
                     World Cup Bracket
