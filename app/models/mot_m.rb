@@ -15,8 +15,8 @@ class MotM < ActiveRecord::Base
 
   private
     def different_picks
-      errors.add(:second,'must be different player') if first_id == second_id
-      errors.add(:third,'must be different player') if second_id == third_id || first_id == third_id
+      errors.add(:second,'must be different player') if second_id && (first_id == second_id)
+      errors.add(:third,'must be different player') if third_id && (second_id == third_id || first_id == third_id)
     end
 
     def active_players

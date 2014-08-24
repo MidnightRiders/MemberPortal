@@ -26,6 +26,7 @@ class MotMsController < ApplicationController
 
   # GET /mot_ms/new
   def new
+    redirect_to edit_match_mot_m_url(@match,@mot_m) if @mot_m = @match.mot_ms.find_by(user_id: @current_user)
     @mot_m = @match.mot_ms.new
   end
 
