@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature 'Pick ’Em' do
   let(:user) { FactoryGirl.create(:user) }
-  let!(:match) { FactoryGirl.create(:match, kickoff: Time.now + 2.hours) }
+  let!(:match) { FactoryGirl.create(:match, kickoff: Time.current + 2.hours) }
   before :each do
     login_as user
     visit matches_path(date: match.kickoff.to_date)
