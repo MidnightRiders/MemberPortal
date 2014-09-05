@@ -8,8 +8,8 @@
 
 require 'csv'
 
-%w(admin executive_board at_large_board individual family).each do |type|
-  Role.find_or_create_by(name: type)
+%w(admin executive_board at_large_board individual family).each do |name|
+  Role.find_or_create_by(name: name)
 end
 
 def create_or_update x, y
@@ -19,6 +19,8 @@ def create_or_update x, y
     if x.save
       if new
         '  Created.'
+      elsif  x.changed.empty?
+        '  No changes.'
       else
         '  Updated: ' + x.changed.keys.join(', ')
       end
