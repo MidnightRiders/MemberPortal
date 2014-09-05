@@ -1,3 +1,22 @@
+# == Schema Information
+#
+# Table name: clubs
+#
+#  id                 :integer          not null, primary key
+#  name               :string(255)
+#  conference         :string(255)
+#  primary_color      :integer
+#  secondary_color    :integer
+#  accent_color       :integer
+#  abbrv              :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  crest_file_name    :string(255)
+#  crest_content_type :string(255)
+#  crest_file_size    :integer
+#  crest_updated_at   :datetime
+#
+
 class Club < ActiveRecord::Base
   CONFERENCES = %w(east west)
 
@@ -27,54 +46,52 @@ class Club < ActiveRecord::Base
 
   has_many :players
 
+  # Returns *Array* of +Matches+ involving the club.
   def matches
     Match.where('home_team_id = :id OR away_team_id = :id', id: id).order('kickoff ASC')
   end
 
+  # Returns +Match+ or *Array* of +Matches+, depending on +n+, before +time+ (defaults to now).
   def previous_matches(n=1,time=Time.now)
     matches.reverse.select{|x| x.kickoff < time}.first(n)
   end
+
+  # Returns +Match+ or *Array* of +Matches+, depending on +n+, after +time+ (defaults to now).
   def next_matches(n=1,time=Time.now)
     matches.select{|x| x.kickoff >= time}.first(n)
   end
 
-  def next_match(x = 1)
-    ms = matches.sort_by(&:kickoff).reject{|x| x.kickoff < Time.now }
-    if x == 1
-      ms.first
-    else
-      ms.first(x)
-    end
-  end
-  def last_match(x = 1)
-    ms = matches.sort_by(&:kickoff).reject{|x| x.kickoff > Time.now }.last(x)
-    if x == 1
-      ms.last
-    else
-      ms.last(x)
-    end
+  # Alias for <tt>next_matches(1)</tt>
+  def next_match
+    next_matches(1)
   end
 
-  def dark_compliment
-    secondary_color == 'ffffff' ? accent_color : secondary_color
+  # Alias for <tt>previous_matches(1)</tt>
+  def last_match
+    previous_matches(1)
   end
 
+  # Returns *Array* of +Matches+ that the club has won.
   def wins
-    matches.select{|x| x.complete? && x.winner == self }
+    matches.select{|x| x.winner == self }
   end
 
+  # Returns *Array* of +Matches+ that the club has lost.
   def losses
-    matches.select{|x| x.complete? && x.loser == self }
+    matches.select{|x| x.loser == self }
   end
 
+  # Returns *Array* of +Matches+ that the club has drawn.
   def draws
-    matches.select{|x| x.complete? && x.result == :draw }
+    matches.select{|x| x.result == :draw }
   end
 
+  # Returns *String* in format of "W-L-D".
   def record
-    "#{wins.length}-#{losses.length}-#{draws.length}"
+    "#{wins.size}-#{losses.size}-#{draws.size}"
   end
 
+  # Sets color methods which return *String*s.
   %w(primary secondary accent).each do |x|
     define_method("#{x}_color=") do |val|
       write_attribute("#{x}_color", val.to_i(16))
@@ -82,5 +99,10 @@ class Club < ActiveRecord::Base
     define_method("#{x}_color") do
       read_attribute("#{x}_color").to_s(16).rjust(6,'0') unless read_attribute("#{x}_color").nil?
     end
+  end
+
+  # Returns *String*. Color method that falls back to +accent_color+ if +secondary_color+ is white.
+  def dark_compliment
+    secondary_color == 'ffffff' ? accent_color : secondary_color
   end
 end

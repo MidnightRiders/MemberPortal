@@ -1,3 +1,17 @@
+# == Schema Information
+#
+# Table name: rev_guesses
+#
+#  id         :integer          not null, primary key
+#  match_id   :integer
+#  user_id    :integer
+#  home_goals :integer
+#  away_goals :integer
+#  comment    :string(255)
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 require 'spec_helper'
 
 describe RevGuess do
