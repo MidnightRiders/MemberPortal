@@ -1,3 +1,31 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  last_name              :string(255)
+#  first_name             :string(255)
+#  address                :string(255)
+#  city                   :string(255)
+#  state                  :string(255)
+#  postal_code            :string(255)
+#  phone                  :integer
+#  email                  :string(255)      default(""), not null
+#  username               :string(255)      default(""), not null
+#  member_since           :integer
+#  created_at             :datetime
+#  updated_at             :datetime
+#  encrypted_password     :string(255)      default(""), not null
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#
+
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -49,18 +77,24 @@ class User < ActiveRecord::Base
     m.nil? ? nil : m.result
   end
 
+  # Returns *Integer*. Number of correct +PickEms+.
   def pick_em_score
-    pick_ems ? pick_ems.select{|p| p.correct? }.length : 0
+    pick_ems.select{|p| p.correct? }.length
   end
 
+  # Returns *Integer*. Sum of +RevGuess+ scores.
   def rev_guess_score
     rev_guesses.inject(0){|sum,x| sum+(x.score.nil? ? 0 : x.score)}
   end
 
+  # Returns *String*. URL for Gravatar based on email.
   def gravatar
     '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.gsub(/\+.+@/,'@')) + '?d=mm'
   end
 
+  #- TODO: Clean the shit out of this import. Stabilize it.
+
+  # User import script. Needs work.
   def self.import(file, roles = [])
     allowed_attributes = [:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username]
     spreadsheet = Roo::Spreadsheet.open(file.path.to_s,extension: 'csv')
@@ -99,15 +133,18 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Converts the phone to *Integer* for storage.
   def phone= value
     value.gsub!(/\D/,'') if value.is_a? String
     super(value)
   end
 
+  # Used in generating readable URLs.
   def to_param
     username
   end
 
+  # Quick semi-full-text search for Users.
   def self.text_search(query)
     if query.present?
       where 'username ilike :q or first_name ilike :q or last_name ilike :q or email ilike :q', q: "%#{query}%"

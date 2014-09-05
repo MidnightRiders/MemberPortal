@@ -1,3 +1,19 @@
+# == Schema Information
+#
+# Table name: matches
+#
+#  id           :integer          not null, primary key
+#  home_team_id :integer
+#  away_team_id :integer
+#  kickoff      :datetime
+#  location     :string(255)
+#  home_goals   :integer
+#  away_goals   :integer
+#  created_at   :datetime
+#  updated_at   :datetime
+#  uid          :string(255)
+#
+
 class Match < ActiveRecord::Base
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
@@ -24,6 +40,7 @@ class Match < ActiveRecord::Base
 
   date_time_attribute :kickoff
 
+  # Returns *String*: 'home – away' or '–' if not +complete?+.
   def score
     if complete?
       "#{home_goals || 0} – #{away_goals || 0}"
@@ -32,14 +49,14 @@ class Match < ActiveRecord::Base
     end
   end
 
+  # Returns *Boolean*. Determined by presence of home and away goals.
   def complete?
-    !home_goals.blank? && !away_goals.blank?
+    home_goals.present? && away_goals.present?
   end
 
+  # Returns *Symbol* or +nil+: +:home+, +:away+, or +:draw+
   def result
-    if home_goals.nil? || away_goals.nil?
-      nil
-    else
+    if complete?
       if home_goals > away_goals
         :home
       elsif away_goals > home_goals
@@ -50,49 +67,65 @@ class Match < ActiveRecord::Base
     end
   end
 
+  # Returns +Club+ or +nil+. Winning team if present.
   def winner
     if result == :home
       home_team
     elsif result == :away
       away_team
-    else
-      nil
     end
   end
 
+  # Returns +Club+ or +nil+. Losing team if present.
   def loser
     if result == :home
       away_team
     elsif result == :away
       home_team
-    else
-      nil
     end
   end
 
+  #- TODO: Break this up to separate tests, and clarify distinction with <tt>PickEm.voteable?</tt>
+
+  # Returns *Boolean*.
+  # Tests if +kickoff+ was 45 minutes in the past, teams
+  # include New England (used for +MotM+ and +RevGuess+), and
+  # the game is less than two weeks old (can't choose +MotM+ for
+  # old matches).
   def voteable?
     kickoff &&
       (kickoff + 45.minutes).past? &&
       teams.map(&:abbrv).include?('NE') &&
       kickoff >= 2.weeks.ago
   end
+
+  # Returns *Boolean*. Shortcut to test if +kickoff+ is in the future, if it exists.
   def in_future?
     kickoff.try(:future?)
   end
+
+  # Returns *Boolean*. Not <tt>in_future?</tt>.
   def in_past?
     !in_future?
   end
 
+  # Returns *Array* with both teams: <tt>[ home_team, away_team ]</tt>
   def teams
     [ home_team, away_team ]
   end
 
+  # Returns +Match+. Retrieves match immediately after the given match.
   def next
     Match.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
   end
+
+  # Returns +Match+. Retrieves match immediately before the given match.
   def previous
     Match.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
   end
+
+  # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
+  # Retrieves previous +n+ matches from <tt>Time.now</tt>.
   def self.previous(n=1)
     ms = where('kickoff < ?', Time.now).order('kickoff DESC')
     if n==1
@@ -101,6 +134,9 @@ class Match < ActiveRecord::Base
       ms.first(n)
     end
   end
+
+  # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
+  # Retrieves next +n+ matches from <tt>Time.now</tt>.
   def self.next(n=1)
     ms = upcoming.order('kickoff DESC')
     if n==1
