@@ -14,7 +14,7 @@
 
 FactoryGirl.define do
   factory :mot_m do
-    match_id { (Match.where('kickoff BETWEEN [?,?]', Time.now - 2.weeks, Time.now - 2.hours).order('kickoff ASC').last || FactoryGirl.create(:match, kickoff: Time.now - 2.hours)).id }
+    match_id { (Match.where(kickoff: Time.now - 2.weeks..Time.now - 2.hours).order('kickoff ASC').last || FactoryGirl.create(:match, kickoff: Time.now - 2.hours)).id }
     user_id { (User.first || FactoryGirl.create(:user)).id }
     first_id { (Player.all.sample || FactoryGirl.create(:player)).id }
     second_id { (Player.where('id != ?', first_id).sample || FactoryGirl.create(:player)).id }

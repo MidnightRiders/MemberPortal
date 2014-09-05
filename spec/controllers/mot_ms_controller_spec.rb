@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MotMsController do
-  let(:match) { FactoryGirl.create(:match, kickoff: Time.now - 2.hours) }
+  let(:match) { FactoryGirl.create(:match, kickoff: Time.current - 2.hours, home_team: Club.find_by(abbrv: 'NE')) }
 
   context 'when signed out' do
     it 'rejects #index' do
@@ -20,8 +20,8 @@ describe MotMsController do
       get :edit, id: FactoryGirl.create(:mot_m, match_id: match.id), match_id: match
       response.should redirect_to root_path
     end
-    it 'accepts #update' do
-      motm = FactoryGirl.create(:mot_m)
+    it 'rejects #update' do
+      motm = FactoryGirl.create(:mot_m, match_id: match.id)
       new_motm = Player.where('id NOT IN (?)', [ motm.first.id, motm.second.id, motm.third.id]).sample || FactoryGirl.create(:player)
       expect{
         patch :update, id: motm, mot_m: { first_id: new_motm.id }, match_id: motm.match
@@ -49,8 +49,13 @@ describe MotMsController do
       FactoryGirl.create(:mot_m,user_id: user.id, match_id: match.id)
       expect{ post :create, mot_m: FactoryGirl.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match }.not_to change(MotM, :count)
     end
+    it 'rejects #create for non-Revs matches' do
+      match.home_team = Club.where('abbrv NOT IN (?)', [ 'NE', match.away_team.abbrv ]).first
+      FactoryGirl.create(:mot_m,user_id: user.id, match_id: match.id)
+      expect{ post :create, mot_m: FactoryGirl.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match }.not_to change(MotM, :count)
+    end
     it 'allows #edit' do
-      mot_m = FactoryGirl.create(:mot_m)
+      mot_m = FactoryGirl.create(:mot_m, match_id: match.id, user_id: user.id)
       get :edit, id: mot_m, match_id: mot_m.match
       assigns(:mot_m).should eq mot_m
     end
