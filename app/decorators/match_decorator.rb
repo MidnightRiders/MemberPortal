@@ -3,14 +3,14 @@ class MatchDecorator < Draper::Decorator
 
   def rev_guess_button(size='tiny', opponent = false)
     h.link_to h.rev_guess_path_for(model), class: "button secondary #{size}" do
-      opp = opponent ? (model.home_team == revs ? ' v ' : ' @ ')+  (model.teams - [revs])[0].abbrv : ''
+      opp = opponent ? (model.home_team == h.revs ? ' v ' : ' @ ')+  (model.teams - [h.revs])[0].abbrv : ''
       h.icon('question fa-fw') + ' RevGuess' + opp + (": #{h.rev_guess_for(model)[1]}" if h.rev_guess_for(model))
     end
   end
 
   def mot_m_button(size='tiny', opponent = false)
     h.link_to h.mot_m_path_for(model), class: "button secondary #{size}" do
-      opp = opponent ? (model.home_team == revs ? ' v ' : ' @ ') +  (model.teams - [revs])[0].abbrv : ''
+      opp = opponent ? (model.home_team == h.revs ? ' v ' : ' @ ') +  (model.teams - [h.revs])[0].abbrv : ''
       h.icon('list-ol fa-fw') + ' MotM' + opp + (h.icon('check fa-fw') if h.mot_m_for(model))
     end
   end
@@ -79,11 +79,8 @@ class MatchDecorator < Draper::Decorator
   end
 
   private
-    def revs
-      Club.find_by(abbrv: 'NE')
-    end
 
     def opponent
-      (model.home_team == revs ? 'v ' : '@ ')+  (model.teams - [revs])[0].abbrv
+      (model.home_team == h.revs ? 'v ' : '@ ')+  (model.teams - [h.revs])[0].abbrv
     end
 end
