@@ -26,7 +26,7 @@ class PickEm < ActiveRecord::Base
 
   # Returns *Boolean*. Determines whether the +PickEm+ matches the +Match+'s +result+.
   def correct?
-    match && match.result.present? && result == RESULTS[match.result]
+    match.try(:complete?) && result == RESULTS[match.result]
   end
 
   # Returns *Boolean*. Verifies that the +result+ and +PickEm+ can be compared, and returns
