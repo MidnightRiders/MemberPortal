@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.0.0'
+ruby '2.1.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.3'
+gem 'rails'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
@@ -45,7 +45,7 @@ end
 
 group :development, :test do
   # Testing
-  gem 'rspec-rails'
+  gem 'rspec-rails', '< 3'
   gem 'spring-commands-rspec'
   gem 'factory_girl_rails'
   gem 'pry-rails'
