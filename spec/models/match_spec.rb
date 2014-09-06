@@ -17,7 +17,7 @@
 require 'spec_helper'
 
 describe Match do
-  pending 'does not accept empty attributes'
-  pending 'returns score'
-  pending ''
+  skip 'does not accept empty attributes'
+  skip 'returns score'
+  skip ''
 end
