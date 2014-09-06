@@ -32,7 +32,7 @@
 
 .row
   .small-12.columns.text-right
-    - if !rev_guess_for(@match)
+    - unless rev_guess_for(@match)
       = link_to new_match_rev_guess_path(@match), class: 'button' do
         = icon 'certificate fa-fw'
         New RevGuess
