@@ -1,6 +1,10 @@
+# Decorator methods for +Match+ model.
 class MatchDecorator < Draper::Decorator
   delegate_all
 
+  # Returns <tt>a.button.secondary</tt> for +RevGuess+ for given match.
+  # +size+ defaults to 'tiny'. If +opponent+ is true, the button includes match
+  # opponent information.
   def rev_guess_button(size='tiny', opponent = false)
     h.link_to h.rev_guess_path_for(model), class: "button secondary #{size}" do
       opp = opponent ? (model.home_team == h.revs ? ' v ' : ' @ ')+  (model.teams - [h.revs])[0].abbrv : ''
@@ -8,6 +12,9 @@ class MatchDecorator < Draper::Decorator
     end
   end
 
+  # Returns <tt>a.button.secondary</tt> for +MotM+ for given match.
+  # +size+ defaults to 'tiny'. If +opponent+ is true, the button includes match
+  # opponent information.
   def mot_m_button(size='tiny', opponent = false)
     h.link_to h.mot_m_path_for(model), class: "button secondary #{size}" do
       opp = opponent ? (model.home_team == h.revs ? ' v ' : ' @ ') +  (model.teams - [h.revs])[0].abbrv : ''
@@ -15,6 +22,7 @@ class MatchDecorator < Draper::Decorator
     end
   end
 
+  # Returns formatted set of links for +PickEm+.
   def pick_em_buttons(*args)
     h.content_tag :div, class: "pick-em-buttons secondary-border border-all #{model.home_team.abbrv.downcase} #{'closed' unless model.kickoff.future?}", title: model.kickoff.future? ? 'Pick ’Em' : 'Voting Closed' do
       h.concat h.content_tag :div, pick_em_button(:home, *args), class: 'home'
@@ -23,6 +31,10 @@ class MatchDecorator < Draper::Decorator
     end
   end
 
+  # Returns individual +PickEm+ links.
+  # === options:
+  #   +:user+ defaults to current_user. Not sure when it wouldn't be that.
+  #  There used to be more options.
   def pick_em_button(pick, *args)
     opts = args.extract_options!
     user = opts[:user] || h.current_user
@@ -62,6 +74,8 @@ class MatchDecorator < Draper::Decorator
     end
   end
 
+  # Returns formatted info that goes below the PickEm buttons - team records and optional
+  # admin controls.
   def pick_em_sub
     h.content_tag :div, class: 'row collapse pick-em-sub' do
       h.concat h.content_tag :div, model.home_team.decorate.formatted_record(true), class: 'small-4 columns text-center'
@@ -71,6 +85,7 @@ class MatchDecorator < Draper::Decorator
   end
 
 
+  # Returns buttons for editing/deleting a match
   def admin_controls
     h.capture do
       h.concat h.link_to(h.icon('pencil fa-fw'), h.edit_match_path(model), title: 'Edit') if h.can? :edit, model
@@ -80,6 +95,7 @@ class MatchDecorator < Draper::Decorator
 
   private
 
+    # Determines opponent and returns 'v' or '@' depending on home/away status.
     def opponent
       (model.home_team == h.revs ? 'v ' : '@ ')+  (model.teams - [h.revs])[0].abbrv
     end

@@ -1,3 +1,4 @@
+# Controller for +Club+ model.
 class ClubsController < ApplicationController
   load_and_authorize_resource
 

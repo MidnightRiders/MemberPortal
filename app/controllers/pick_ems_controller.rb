@@ -1,3 +1,4 @@
+# Controller for +PickEm+ model.
 class PickEmsController < ApplicationController
   load_and_authorize_resource
   before_action :set_match
@@ -8,6 +9,8 @@ class PickEmsController < ApplicationController
     @pick_ems = PickEm.all
   end
 
+  # POST /matches/:match_id/pickem/vote
+  # Updates or creates +PickEm+ for match from given user.
   def vote
     p = params[:pick_em]
     @pick_em = PickEm.find_or_initialize_by(user_id: p[:user_id], match_id: p[:match_id])
@@ -79,6 +82,8 @@ class PickEmsController < ApplicationController
   end
 
   private
+
+    # Sets +@match+ based on route's +:match_id+.
     def set_match
       @match = Match.find(params[:match_id])
     end

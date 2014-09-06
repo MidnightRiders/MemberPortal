@@ -18,7 +18,7 @@ class Player < ActiveRecord::Base
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }
 
-  # Sorts by position, back-to-front.
+  # Player positions sorted back-to-front for +sort+ comparison
   POSITIONS = {
       'GK' => 1,
       'D'  => 2,

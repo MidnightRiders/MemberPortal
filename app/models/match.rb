@@ -25,7 +25,7 @@ class Match < ActiveRecord::Base
     where('home_goals != ? AND away_goals != ?', nil, nil)
   }
   scope :upcoming, -> {
-    where('kickoff > ?', Time.now)
+    where('kickoff > ?', Time.current)
   }
 
   has_many :mot_ms
@@ -85,7 +85,7 @@ class Match < ActiveRecord::Base
     end
   end
 
-  #- TODO: Break this up to separate tests, and clarify distinction with <tt>PickEm.voteable?</tt>
+  # TODO: Break this up to separate tests, and clarify distinction with <tt>PickEm.voteable?</tt>
 
   # Returns *Boolean*.
   # Tests if +kickoff+ was 45 minutes in the past, teams
@@ -125,9 +125,9 @@ class Match < ActiveRecord::Base
   end
 
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
-  # Retrieves previous +n+ matches from <tt>Time.now</tt>.
+  # Retrieves previous +n+ matches from <tt>Time.current</tt>.
   def self.previous(n=1)
-    ms = where('kickoff < ?', Time.now).order('kickoff DESC')
+    ms = where('kickoff < ?', Time.current).order('kickoff DESC')
     if n==1
       ms.first
     else
@@ -136,7 +136,7 @@ class Match < ActiveRecord::Base
   end
 
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
-  # Retrieves next +n+ matches from <tt>Time.now</tt>.
+  # Retrieves next +n+ matches from <tt>Time.current</tt>.
   def self.next(n=1)
     ms = upcoming.order('kickoff DESC')
     if n==1

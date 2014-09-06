@@ -1,3 +1,4 @@
+# Allows login_as to work properly with specs that use +:js+.
 class ActiveRecord::Base
   mattr_accessor :shared_connection
   @@shared_connection = nil

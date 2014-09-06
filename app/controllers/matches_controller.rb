@@ -1,3 +1,4 @@
+# Controller for +Match+ model.
 class MatchesController < ApplicationController
   load_and_authorize_resource
   require 'net/http'
@@ -15,6 +16,9 @@ class MatchesController < ApplicationController
     @motm_players = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total(@match.id) && x.mot_m_total(@match.id) > 0 }.sort_by{|x| x.mot_m_total(@match.id)}.reverse if @match.teams.include? revs
   end
 
+  # TODO: Allow updated URLs and/or alternate sources
+
+  # Imports matches from MLS Calendar.
   def import
     url = URI('https://r.e-c.al/ecal-sub/53187c3d7f4b3faf25000047/MLS+Calendar.ics')
     begin
@@ -94,6 +98,7 @@ class MatchesController < ApplicationController
   end
 
   private
+
     # Use callbacks to share common setup or constraints between actions.
     def set_match
       @match = Match.find(params[:id])

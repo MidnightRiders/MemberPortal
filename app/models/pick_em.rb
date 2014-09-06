@@ -13,7 +13,9 @@
 class PickEm < ActiveRecord::Base
   default_scope { includes(:match) }
 
+  # Possible PickEm/Match results and their corresponding integer values.
   RESULTS = { home: 1, draw: 0, away: -1 }
+
   belongs_to :match
   belongs_to :user
   validates :match, :user, presence: true
@@ -40,7 +42,7 @@ class PickEm < ActiveRecord::Base
   # TODO: Implement "pick goalscorers" method (and corresponding models)
 
   private
-    #- TODO: Clarify usage in comparison to <tt>Match.voteable?</tt>
+    # TODO: Clarify usage in comparison to <tt>Match.voteable?</tt>
 
     # Validates that the match can be voted on, because the match is in the future
     def voteable?

@@ -18,6 +18,9 @@
 #
 
 class Club < ActiveRecord::Base
+
+  # Only two conferences right now. No need for database records, so
+  # they're stored in this constant.
   CONFERENCES = %w(east west)
 
   has_attached_file :crest,
@@ -52,13 +55,15 @@ class Club < ActiveRecord::Base
   end
 
   # Returns +Match+ or *Array* of +Matches+, depending on +n+, before +time+ (defaults to now).
-  def previous_matches(n=1,time=Time.now)
-    matches.reverse.select{|x| x.kickoff < time}.first(n)
+  def previous_matches(n=1,time=Time.current)
+    ms = matches.reverse.select{|x| x.kickoff < time}.first(n)
+    n == 1 ? ms.first : ms.first(n)
   end
 
   # Returns +Match+ or *Array* of +Matches+, depending on +n+, after +time+ (defaults to now).
-  def next_matches(n=1,time=Time.now)
-    matches.select{|x| x.kickoff >= time}.first(n)
+  def next_matches(n=1,time=Time.current)
+    ms = matches.select{|x| x.kickoff >= time}
+    n == 1 ? ms.first : ms.first(n)
   end
 
   # Alias for <tt>next_matches(1)</tt>

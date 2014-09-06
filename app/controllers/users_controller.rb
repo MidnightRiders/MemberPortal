@@ -1,3 +1,4 @@
+# Controller for +User+ model.
 class UsersController < ApplicationController
   load_and_authorize_resource find_by: :username
 
@@ -22,10 +23,10 @@ class UsersController < ApplicationController
   def home
     @articles = RidersBlog.articles.sort_by{|x| x['pubDate'].to_date }.last(2).reverse
     @events = FacebookApi.events['data'].try(:select){|x| x['start_time'] >= Time.current - 1.week }
-    @matches = Match.where('kickoff >= ? AND kickoff <= ?', Date.current.beginning_of_week, Date.current.beginning_of_week + 7.days).order('kickoff ASC').select{|x| !x.teams.include? revs }
-    @revs_matches = revs.previous_matches + revs.next_matches(2)
+    @revs_matches = [ revs.last_match, revs.next_matches(2) ].flatten
   end
 
+  # GET /users/1/edit
   def edit
     if current_user == @user && cannot?(:manage, User)
       redirect_to edit_user_registration_path(@user)
@@ -33,6 +34,8 @@ class UsersController < ApplicationController
     @membership = @user.current_membership
   end
 
+  # PATCH/PUT /users/1
+  # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
       if @user.update(user_params)
@@ -46,11 +49,14 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/new
   def new
     @user = User.new
     @membership = @user.memberships.new(year: Date.current.year)
   end
 
+  # POST /users
+  # POST /users.json
   def create
 
     u = user_params
@@ -70,6 +76,8 @@ class UsersController < ApplicationController
     end
   end
 
+  # POST /users/import
+  # Accepts +:file+ to import new +Users+.
   def import
     if params[:file]
       User.import(params[:file])

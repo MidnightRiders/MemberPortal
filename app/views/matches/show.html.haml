@@ -42,7 +42,7 @@
         = link_to rev_guess_path_for(@match), class: 'button tiny' do
           = icon 'question'
           RevGuess
-      - elsif @match.kickoff + 45.minutes < Time.now && @match.teams.include?(revs)
+      - elsif @match.kickoff + 45.minutes < Time.current && @match.teams.include?(revs)
         = link_to mot_m_path_for(@match), class: 'button tiny' do
           = icon 'list-ol'
           = (mot_m_for(@match) ? 'Change' : 'Cast')
