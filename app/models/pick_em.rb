@@ -31,7 +31,7 @@ class PickEm < ActiveRecord::Base
 
   # Returns *Boolean*. Verifies that the +result+ and +PickEm+ can be compared, and returns
   def incorrect?
-    match && match.kickoff.past? && !correct?
+    match.try(:complete?) && !correct?
   end
 
   # Returns *Boolean*. Alias for <tt>incorrect?</tt>.
