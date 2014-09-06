@@ -2,24 +2,31 @@
 
 .row.actions
   .medium-6.columns.text-left
-    = link_to matches_path(date: @start_date.to_date - 7.days), class: 'button secondary small' do
-      = icon 'arrow-circle-o-left fa-fw'
-      Previous Week
-    - unless @start_date == Time.current.beginning_of_week
-      = link_to matches_path, class: 'button small' do
-        = icon 'calendar-o fa-fw'
-        This Week
-    = link_to matches_path(date: @start_date.to_date + 7.days), class: 'button secondary small' do
-      Next Week
-      = icon 'arrow-circle-o-right fa-fw'
+    %ul.button-group
+      %li
+        = link_to matches_path(date: @start_date.to_date - 7.days), class: 'button secondary small' do
+          = icon 'arrow-circle-o-left fa-fw'
+          Previous Week
+      - unless @start_date == Time.current.beginning_of_week
+        %li
+          = link_to matches_path, class: 'button small' do
+            = icon 'calendar-o fa-fw'
+            This Week
+      %li
+        = link_to matches_path(date: @start_date.to_date + 7.days), class: 'button secondary small' do
+          Next Week
+          = icon 'arrow-circle-o-right fa-fw'
   .medium-6.columns.text-right
     - if can? :manage, Match
-      = link_to import_matches_path, class: 'button secondary small' do
-        = icon 'cloud-download fa-fw'
-        Import/Update Matches
-      = link_to new_match_path, class: 'button small' do
-        = icon 'calendar fa-fw'
-        New Match
+      %ul.button-group.right
+        %li
+          = link_to import_matches_path, class: 'button secondary small' do
+            = icon 'cloud-download fa-fw'
+            Import/Update Matches
+        %li
+          = link_to new_match_path, class: 'button small' do
+            = icon 'calendar fa-fw'
+            New Match
 
 %ul.matches
   = render partial: 'match', collection: @matches
