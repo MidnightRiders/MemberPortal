@@ -54,6 +54,35 @@
   </div>
 
   
+<div class="nav-section">
+  <h3>Table of Contents</h3>
+
+  <ul class="link-list" role="directory">
+    <li><a href="#label-Midnight+Riders+Member+Portal">Midnight Riders Member Portal</a>
+    <li><a href="#label-Models">Models</a>
+    <li><a href="#label-Ability">Ability</a>
+    <li><a href="#label-Club">Club</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-Match">Match</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-Membership">Membership</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-MembershipRole">MembershipRole</a>
+    <li><a href="#label-MotM">MotM</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-PickEm">PickEm</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-Player">Player</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-RevGuess">RevGuess</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-Role">Role</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+    <li><a href="#label-User">User</a>
+    <li><a href="#label-Attributes%3A">Attributes:</a>
+  </ul>
+</div>
+
 
   <div id="project-metadata">
     <div id="fileindex-section" class="nav-section">
@@ -71,34 +100,203 @@
 
 <main role="main" aria-label="Page README.rdoc">
 
-<h2 id="label-README"><a href="README_rdoc.html">README</a><span><a href="#label-README">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h1 id="label-Midnight+Riders+Member+Portal">Midnight Riders Member Portal<span><a href="#label-Midnight+Riders+Member+Portal">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
 
-<p>This <a href="README_rdoc.html">README</a> would normally document whatever
-steps are necessary to get the application up and running.</p>
+<p>The Midnight Riders Member Portal is a membership database for current
+Riders. It allows Riders to update and manage their information, and play
+the games that used to be housed elsewhere, attached to their Rider
+identity. In development, there&#39;s PayPal integration so that Riders can
+renew memberships and this database can be used as the Database of Record
+for riders information and communications, instead of Google Drive.</p>
+<hr>
 
-<p>Things you may want to cover:</p>
-<ul><li>
-<p>Ruby version</p>
-</li><li>
-<p>System dependencies</p>
-</li><li>
-<p>Configuration</p>
-</li><li>
-<p>Database creation</p>
-</li><li>
-<p>Database initialization</p>
-</li><li>
-<p>How to run the test suite</p>
-</li><li>
-<p>Services (job queues, cache servers, search engines, etc.)</p>
-</li><li>
-<p>Deployment instructions</p>
-</li><li>
-<p>…</p>
-</li></ul>
+<h2 id="label-Models">Models<span><a href="#label-Models">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
 
-<p>Please feel free to use a different markup language if you do not plan to
-run <code>rake doc:app</code>.</p>
+<h3 id="label-Ability"><a href="Ability.html">Ability</a><span><a href="#label-Ability">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Setup for <a
+href="https://github.com/CanCanCommunity/cancancan">CanCanCan</a>,
+<code>Role</code>-based permissions.</p>
+
+<h3 id="label-Club"><a href="Club.html">Club</a><span><a href="#label-Club">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>The model for clubs or teams. Has many <code>Matches</code>,
+<code>Players</code>. Has <code>home_matches</code> and
+<code>away_matches</code> which are both incarnations of
+<code>Match</code>. The <code>.matches</code> method returns all
+<code>Matches</code> that include the club as either home or away.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                     :integer          not null, primary key
+name                   :string(255)
+conference             :string(255)
+primary_color          :integer
+secondary_color        :integer
+accent_color           :integer
+abbrv                  :string(255)
+created_at             :datetime
+updated_at             :datetime
+crest_file_name        :string(255)
+crest_content_type     :string(255)
+crest_file_size        :integer
+crest_updated_at       :datetime</pre>
+
+<h3 id="label-Match"><a href="Match.html">Match</a><span><a href="#label-Match">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>The model for matches or games. Has many <code>MotMs</code>,
+<code>RevGuesses</code>, <code>PickEms</code>. Has a
+<code>home_team</code>, and an <code>away_team</code>. Both are
+<code>Club</code> instances. Same model, same table. <code>uid</code> is
+pulled from the calendar import (see +matches_controller#import+).</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                      :integer          not null, primary key
+home_team_id            :integer
+away_team_id            :integer
+kickoff                 :datetime
+location                :string(255)
+home_goals              :integer
+away_goals              :integer
+created_at              :datetime
+updated_at              :datetime
+uid                     :string(255)</pre>
+
+<h3 id="label-Membership"><a href="Membership.html">Membership</a><span><a href="#label-Membership">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p><strong>Under development.</strong> One <code>Membership</code> per
+<code>User</code>, per year.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                      :integer          not null, primary key
+user_id                 :integer
+year                    :integer
+info                    :hstore
+created_at              :datetime
+updated_at              :datetime</pre>
+
+<h3 id="label-MembershipRole"><a href="MembershipRole.html">MembershipRole</a><span><a href="#label-MembershipRole">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Connector table/model between <code>Membership</code> and
+<code>Role</code>.</p>
+
+<pre># Membership
+has_many :membership_roles
+has_many :roles, through:: :membership_roles
+
+# Role
+has_many :membership_roles
+has_many :memberships, through:: :membership_roles</pre>
+
+<h3 id="label-MotM"><a href="MotM.html">MotM</a><span><a href="#label-MotM">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Man of the <a href="Match.html">Match</a> model. Up to three picks - no
+duplicates, only <code>Players</code> who are <code>active?</code>. Only
+voteable between 45 minutes and two weeks after kickoff.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                     :integer          not null, primary key
+user_id                :integer
+match_id               :integer
+first_id               :integer
+second_id              :integer
+third_id               :integer
+created_at             :datetime
+updated_at             :datetime</pre>
+
+<h3 id="label-PickEm"><a href="PickEm.html">PickEm</a><span><a href="#label-PickEm">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Pick &#39;Em model. Users can pick either team, or a draw, for every
+<code>Match</code>. One point for correct picks. Only voteable up until
+kickoff, of course. One pick per user per match.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                     :integer          not null, primary key
+match_id               :integer
+user_id                :integer
+result                 :integer
+created_at             :datetime
+updated_at             :datetime</pre>
+
+<h3 id="label-Player"><a href="Player.html">Player</a><span><a href="#label-Player">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Just what it says. Belongs to <code>Club</code>.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                     :integer          not null, primary key
+first_name             :string(255)
+last_name              :string(255)
+club_id                :integer
+position               :string(255)
+created_at             :datetime
+updated_at             :datetime
+number                 :integer
+active                 :boolean          default(TRUE)</pre>
+
+<h3 id="label-RevGuess"><a href="RevGuess.html">RevGuess</a><span><a href="#label-RevGuess">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p>Score predictions for Revs games. One per user per <code>Match</code>.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                     :integer          not null, primary key
+match_id               :integer
+user_id                :integer
+home_goals             :integer
+away_goals             :integer
+comment                :string(255)
+created_at             :datetime
+updated_at             :datetime</pre>
+
+<h3 id="label-Role"><a href="Role.html">Role</a><span><a href="#label-Role">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p><a href="User.html">User</a> roles, connected to Users by Memberships
+(through <a href="MembershipRole.html">MembershipRole</a> joiner model).
+Roles things like Admin, Executive Board, etc, but are also <a
+href="Membership.html">Membership</a> types – they serve the same purpose,
+and they both expire with the <a href="Membership.html">Membership</a>.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                     :integer          not null, primary key
+name                   :string(255)
+created_at             :datetime
+updated_at             :datetime</pre>
+
+<h3 id="label-User"><a href="User.html">User</a><span><a href="#label-User">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
+
+<p><a href="https://github.com/plataformatec/devise">Devise-based</a> model
+for users.</p>
+
+<h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+
+<pre>id                     :integer          not null, primary key
+last_name              :string(255)
+first_name             :string(255)
+address                :string(255)
+city                   :string(255)
+state                  :string(255)
+postal_code            :string(255)
+phone                  :integer
+email                  :string(255)      default(&quot;&quot;), not null
+username               :string(255)      default(&quot;&quot;), not null
+member_since           :integer
+created_at             :datetime
+updated_at             :datetime
+encrypted_password     :string(255)      default(&quot;&quot;), not null
+reset_password_token   :string(255)
+reset_password_sent_at :datetime
+remember_created_at    :datetime
+sign_in_count          :integer          default(0), not null
+current_sign_in_at     :datetime
+last_sign_in_at        :datetime
+current_sign_in_ip     :string(255)
+last_sign_in_ip        :string(255)</pre>
 </main>
 
 
