@@ -20,7 +20,7 @@ class Membership < ActiveRecord::Base
 
   accepts_nested_attributes_for :roles
 
-  default_scope -> { includes(:roles) }
+  default_scope -> { includes(:roles).order('year ASC') }
 
   validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }
 

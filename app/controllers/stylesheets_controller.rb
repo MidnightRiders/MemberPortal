@@ -1,4 +1,7 @@
+# Creates stylesheets based on information in the database.
 class StylesheetsController < ApplicationController
+
+  # Creates stylesheet based on +Club+ records.
   def club
     @clubs = Club.all
     respond_to do |format|

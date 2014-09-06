@@ -1,3 +1,4 @@
+# Defines user abilities and permissions.
 class Ability
   include CanCan::Ability
 

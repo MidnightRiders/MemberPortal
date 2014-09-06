@@ -1,5 +1,7 @@
+# Module to interact with Facebook's Graph API
 module FacebookApi
 
+  # Returns *Array*. Events from the Riders Page.
   def self.events
     if !@updated_at || @updated_at < Time.now - 15.minutes
       @events = self.get_events
@@ -13,20 +15,25 @@ module FacebookApi
     @events ||= self.get_events
   end
 
+  # Sets and stores auth_token from API
   def self.auth_token
     @auth_token ||= self.get_auth_token
   end
+
+  # Sets auth_token
   def self.refresh_auth_token
     @auth_token = self.get_auth_token
   end
 
   protected
 
+    # Retrieves auth_token from API
     def self.get_auth_token
       uri = URI('https://graph.facebook.com/oauth/access_token?client_id=560921750673121&client_secret=***REMOVED***&grant_type=client_credentials')
       Net::HTTP.get(uri)
     end
 
+    # Retrieves events from API
     def self.get_events
       uri = URI("https://graph.facebook.com/MidnightRiders/events?#{URI.encode(self.auth_token)}")
       response = Net::HTTP.get(uri)

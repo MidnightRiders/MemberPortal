@@ -42,7 +42,7 @@ class MotM < ActiveRecord::Base
       errors.add(:third, 'must be an active player') if third && third.inactive?
     end
 
-    #- TODO: Clarify error message.
+    # TODO: Clarify error message.
 
     # Validates that the +Match+ is <tt>voteable?</tt>.
     def voteable?

@@ -1,2 +1,11 @@
-%h1 StaticPages#contact
-%p Find me in app/views/static_pages/contact.html.haml
+%h1 Contact
+
+%ul.button-group
+  %li
+    = mail_to 'info@midnightriders.com', class: 'button' do
+      = icon 'envelope fa-fw'
+      General Inquiries
+  %li
+    = mail_to 'webczar@midnightriders.com', class: 'button secondary' do
+      = icon 'at fa-fw'
+      Member Portal and Web Inquiries

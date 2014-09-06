@@ -52,29 +52,34 @@ class User < ActiveRecord::Base
 
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
 
+  # Returns +Roles+ from current +Membership+
   def current_roles
     current_membership.try(:roles)
   end
 
+  # Returns *Boolean*. Determines whether the user has a given role.
   def role?(r)
     roles.map(&:name).include? r
   end
 
+  # Returns +Membership+ for current year.
   def current_membership
     memberships.find_by(year: Date.today.year)
   end
 
+  # Returns *Boolean*. Determines whether user has a current membership.
   def current_member?
     !current_membership.nil?
   end
 
+  # Returns +PickEm+ for given +match+, or new +PickEm+.
   def pick_for(match)
     pick_ems.select{|x| x.match_id == match.id }.try(:first) || PickEm.new
   end
 
+  # Returns *String*. Either picked result, or +nil+.
   def pick_result(match)
-    m = pick_for(match)
-    m.nil? ? nil : m.result
+    pick_for(match).try(:result)
   end
 
   # Returns *Integer*. Number of correct +PickEms+.
@@ -92,7 +97,7 @@ class User < ActiveRecord::Base
     '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.gsub(/\+.+@/,'@')) + '?d=mm'
   end
 
-  #- TODO: Clean the shit out of this import. Stabilize it.
+  # TODO: Clean the shit out of this import. Stabilize it.
 
   # User import script. Needs work.
   def self.import(file, roles = [])

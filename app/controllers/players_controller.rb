@@ -1,3 +1,4 @@
+# Controller for +Player+ model.
 class PlayersController < ApplicationController
   load_and_authorize_resource
 

@@ -1,21 +1,26 @@
+# Controller for static pages – home, faq, contact. Only visible
 class StaticPagesController < ApplicationController
 
   before_filter(only: :standings) { raise CanCan::AccessDenied.new('Cannot view standings.', :standings) unless user_signed_in? }
 
+  # Root path. Shows sign_in if not signed in, user_home if signed in
   def home
     redirect_to user_signed_in? ? user_home_path : new_user_session_path
   end
 
+  # TODO: Fill out FAQ
+
+  # Frequently Asked Questions
   def faq
   end
 
+  # TODO: Fill out Contact
+
+  # Basic contact information
   def contact
   end
 
-  def games
-
-  end
-
+  # Shows standings for Pick 'Em and RevGuess.
   def standings
     require 'will_paginate/array'
     @users = User.includes(:pick_ems,:rev_guesses).order('username ASC, last_name ASC, first_name ASC')

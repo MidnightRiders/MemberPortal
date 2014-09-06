@@ -1,3 +1,4 @@
+# Controller for Man of the Match model, +MotM+.
 class MotMsController < ApplicationController
   load_and_authorize_resource
   before_filter :set_match, except: [ :index ]
@@ -75,14 +76,17 @@ class MotMsController < ApplicationController
   end
 
   private
+    # Set +@match+ based on route's +:match_id+.
     def set_match
       @match = Match.find(params[:match_id])
     end
 
+    # Redirects to matches path for that week if the match is not voteable
     def check_eligible
       redirect_to matches_path(date: @match.kickoff.to_date), flash: { notice: 'Cannot submit Man of the Match for that match.' } unless @match.voteable?
     end
 
+    # Strong params for +MotM+.
     def mot_m_params
       params.require(:mot_m).permit(:user_id, :match_id, :first_id, :second_id, :third_id)
     end

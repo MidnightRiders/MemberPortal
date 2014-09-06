@@ -1,4 +1,7 @@
+# Controller for Devise Registrations.
 class RegistrationsController < Devise::RegistrationsController
+
+  # Supercedes Devise +update+ method to allow editing of other users if admin.
   def update
     account_update_params = devise_parameter_sanitizer.sanitize(:account_update)
 
