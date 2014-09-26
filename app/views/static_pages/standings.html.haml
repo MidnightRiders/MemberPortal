@@ -40,7 +40,11 @@
             = link_to u do
               = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
               = u.username
-          .td.numeric= u.pick_em_score
+          .td.numeric
+            = u.pick_em_score
+            %small
+              \/
+              = u.pick_ems.select{ |p| p.match.complete? }.size
           - last = u.pick_em_score
     .row
       .small-12.columns.text-right
