@@ -40,10 +40,12 @@ class MatchDecorator < Draper::Decorator
     user = opts[:user] || h.current_user
     team = model.send("#{pick}_team") if pick.in? [:home, :away]
     html_classes = ['choice', pick == :draw ? ['secondary'] : ['primary-bg', team.abbrv.downcase]].flatten
+    user_pick = user.pick_for(model)
+    html_classes << user_pick.try(:correct?) ? 'correct' : 'actual' if model.result == pick
     html_classes << (user.pick_for(model).try(:correct?) ? 'correct' : 'actual') if model.complete? && model.result == pick
     if user.pick_result(model) == PickEm::RESULTS[pick]
       html_classes << 'picked'
-      html_classes << 'wrong' if user.pick_for(model).try(:wrong?)
+      html_classes << 'wrong' if user_pick.try(:incorrect?)
     end
 
     content = if team

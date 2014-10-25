@@ -18,11 +18,11 @@ class Match < ActiveRecord::Base
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
 
-  default_scope {
+  scope :with_clubs, -> {
     includes(:home_team,:away_team)
   }
   scope :completed, -> {
-    where('home_goals != ? AND away_goals != ?', nil, nil)
+    where.not(home_goals: nil, away_goals: nil)
   }
   scope :upcoming, -> {
     where('kickoff > ?', Time.current)
@@ -37,6 +37,8 @@ class Match < ActiveRecord::Base
   validates :home_goals, presence: { if: -> { !away_goals.blank? } }
   validates :away_goals, presence: { if: -> { !home_goals.blank? } }
   validates :uid, uniqueness: { case_sensitive: true, allow_blank: true }
+
+  after_save :update_games, if: -> { complete? }
 
   date_time_attribute :kickoff
 
@@ -116,12 +118,12 @@ class Match < ActiveRecord::Base
 
   # Returns +Match+. Retrieves match immediately after the given match.
   def next
-    Match.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
+    Match.with_clubs.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
   end
 
   # Returns +Match+. Retrieves match immediately before the given match.
   def previous
-    Match.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
+    Match.with_clubs.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
   end
 
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
@@ -143,6 +145,24 @@ class Match < ActiveRecord::Base
       ms.first
     else
       ms.first(n)
+    end
+  end
+
+  # Updates the picking games on save so that they don't have to pull in +Match+ data
+  # any and every time they need to evaluate scores
+  def update_games
+    unless rev_guesses.empty?
+      rev_guesses.each do |rg|
+        sum = 0
+        sum += 2 if rg.result == result
+        sum += 1 if rg.home_goals == home_goals
+        sum += 1 if rg.away_goals == away_goals
+        sum += 1 if (rg.home_goals - rg.away_goals) == (home_goals - away_goals)
+        rg.update_attribute(:score, sum)
+      end
+    end
+    pick_ems.each do |p|
+      p.update_attribute(:correct, p.result == PickEm::RESULTS[result])
     end
   end
 

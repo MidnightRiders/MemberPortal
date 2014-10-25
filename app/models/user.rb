@@ -82,16 +82,6 @@ class User < ActiveRecord::Base
     pick_for(match).try(:result)
   end
 
-  # Returns *Integer*. Number of correct +PickEms+.
-  def pick_em_score
-    pick_ems.select{|p| p.correct? }.length
-  end
-
-  # Returns *Integer*. Sum of +RevGuess+ scores.
-  def rev_guess_score
-    rev_guesses.inject(0){|sum,x| sum+(x.score.nil? ? 0 : x.score)}
-  end
-
   # Returns *String*. URL for Gravatar based on email.
   def gravatar
     '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.gsub(/\+.+@/,'@')) + '?d=mm'

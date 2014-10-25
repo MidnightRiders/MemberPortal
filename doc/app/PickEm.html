@@ -73,7 +73,7 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-correct-3F">#correct?</a>
+    <li ><a href="#method-c-score">::score</a>
     
     <li ><a href="#method-i-incorrect-3F">#incorrect?</a>
     
@@ -132,16 +132,16 @@ updated_at :datetime</pre>
     
 
     
-     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
        <header>
-         <h3>Public Instance Methods</h3>
+         <h3>Public Class Methods</h3>
        </header>
 
     
-      <div id="method-i-correct-3F" class="method-detail ">
+      <div id="method-c-score" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">correct?</span><span
+          <span class="method-name">score</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -151,17 +151,15 @@ updated_at :datetime</pre>
 
         <div class="method-description">
           
-          <p>Returns <strong>Boolean</strong>. Determines whether the
-<code>PickEm</code> matches the <code>Match</code>&#39;s
-<code>result</code>.</p>
+          <p>Returns <strong>Integer</strong></p>
           
           
 
           
-          <div class="method-source-code" id="correct-3F-source">
-            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 28</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">correct?</span>
-  <span class="ruby-identifier">match</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">result</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-constant">RESULTS</span>[<span class="ruby-identifier">match</span>.<span class="ruby-identifier">result</span>]
+          <div class="method-source-code" id="score-source">
+            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 38</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">score</span>
+  <span class="ruby-identifier">where</span>(<span class="ruby-identifier">correct</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>).<span class="ruby-identifier">size</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -171,6 +169,14 @@ updated_at :datetime</pre>
 
         
       </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
 
     
       <div id="method-i-incorrect-3F" class="method-detail ">
@@ -193,9 +199,9 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="incorrect-3F-source">
-            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 33</span>
+            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">incorrect?</span>
-  <span class="ruby-identifier">match</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">kickoff</span>.<span class="ruby-identifier">past?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">correct?</span>
+  <span class="ruby-identifier">correct</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -226,7 +232,7 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="wrong-3F-source">
-            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 38</span>
+            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wrong?</span>
   <span class="ruby-identifier">incorrect?</span>
 <span class="ruby-keyword">end</span></pre>

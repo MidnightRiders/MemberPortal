@@ -73,13 +73,13 @@
 
   <ul class="link-list" role="directory">
     
+    <li ><a href="#method-c-score">::score</a>
+    
     <li ><a href="#method-i-is_revs_match">#is_revs_match</a>
     
     <li ><a href="#method-i-predicted_score">#predicted_score</a>
     
     <li ><a href="#method-i-result">#result</a>
-    
-    <li ><a href="#method-i-score">#score</a>
     
     <li ><a href="#method-i-to_s">#to_s</a>
     
@@ -124,6 +124,47 @@ updated_at :datetime</pre>
     
 
     
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-score" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">score</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns <strong>Integer</strong></p>
+          
+          
+
+          
+          <div class="method-source-code" id="score-source">
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">score</span>
+  <span class="ruby-identifier">sum</span>(<span class="ruby-value">:score</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
        <header>
          <h3>Public Instance Methods</h3>
@@ -149,7 +190,7 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="is_revs_match-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 62</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 55</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_revs_match</span>
   <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:match_id</span>, <span class="ruby-string">&#39;is not a Revolution match&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">teams</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:abbrv</span>).<span class="ruby-identifier">include?</span> <span class="ruby-string">&#39;NE&#39;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -183,7 +224,7 @@ Away&#39;.</p>
 
           
           <div class="method-source-code" id="predicted_score-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 44</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">predicted_score</span>
   <span class="ruby-node">&quot;#{home_goals} – #{away_goals}&quot;</span> <span class="ruby-keyword">unless</span> (<span class="ruby-identifier">home_goals</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">away_goals</span>.<span class="ruby-identifier">nil?</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -217,7 +258,7 @@ Away&#39;.</p>
 
           
           <div class="method-source-code" id="result-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 49</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">result</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">home_goals</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">away_goals</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">home_goals</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">away_goals</span>
@@ -227,47 +268,6 @@ Away&#39;.</p>
     <span class="ruby-keyword">else</span>
       <span class="ruby-value">:draw</span>
     <span class="ruby-keyword">end</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-score" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">score</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Returns <strong>Integer</strong>, or <code>nil</code> if the
-<code>Match</code> is not complete.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="score-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 26</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">score</span>
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">complete?</span>
-    <span class="ruby-identifier">sum</span> = <span class="ruby-value">0</span>
-    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">2</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">result</span>
-    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">home_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">home_goals</span>
-    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">away_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">away_goals</span>
-    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">away_goals</span>) <span class="ruby-operator">==</span> (<span class="ruby-identifier">match</span>.<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">away_goals</span>)
-    <span class="ruby-identifier">sum</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -300,7 +300,7 @@ Otherwise string is empty.</p>
 
           
           <div class="method-source-code" id="to_s-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 39</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>
   <span class="ruby-identifier">predicted_score</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>
 <span class="ruby-keyword">end</span></pre>

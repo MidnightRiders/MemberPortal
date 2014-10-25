@@ -54,11 +54,11 @@
     .tr
       .td.text-center
         %p
-          = user.rev_guess_score
+          = user.rev_guesses.score
           %small (#{user.rev_guesses.select{|r| r.match.complete? }.length} games)
       .td.text-center
         %p
-          = user.pick_em_score
+          = user.pick_ems.score
           %small (#{user.pick_ems.select{|r| r.match.complete? }.length} games)
 
 %hr

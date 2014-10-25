@@ -87,13 +87,9 @@
     
     <li class="calls-super" ><a href="#method-i-phone-3D">#phone=</a>
     
-    <li ><a href="#method-i-pick_em_score">#pick_em_score</a>
-    
     <li ><a href="#method-i-pick_for">#pick_for</a>
     
     <li ><a href="#method-i-pick_result">#pick_result</a>
-    
-    <li ><a href="#method-i-rev_guess_score">#rev_guess_score</a>
     
     <li ><a href="#method-i-role-3F">#role?</a>
     
@@ -179,7 +175,7 @@ last_sign_in_ip        :string(255)</pre>
 
           
           <div class="method-source-code" id="import-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 103</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 93</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">import</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">roles</span> = [])
   <span class="ruby-identifier">allowed_attributes</span> = [<span class="ruby-value">:last_name</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:address</span>, <span class="ruby-value">:city</span>, <span class="ruby-value">:state</span>, <span class="ruby-value">:postal_code</span>, <span class="ruby-value">:phone</span>, <span class="ruby-value">:email</span>, <span class="ruby-value">:member_since</span>, <span class="ruby-value">:username</span>]
   <span class="ruby-identifier">spreadsheet</span> = <span class="ruby-constant">Roo</span><span class="ruby-operator">::</span><span class="ruby-constant">Spreadsheet</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>.<span class="ruby-identifier">path</span>.<span class="ruby-identifier">to_s</span>,<span class="ruby-identifier">extension</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;csv&#39;</span>)
@@ -246,7 +242,7 @@ last_sign_in_ip        :string(255)</pre>
 
           
           <div class="method-source-code" id="text_search-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 153</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 143</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">text_search</span>(<span class="ruby-identifier">query</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">query</span>.<span class="ruby-identifier">present?</span>
     <span class="ruby-identifier">where</span> <span class="ruby-string">&#39;username ilike :q or first_name ilike :q or last_name ilike :q or email ilike :q&#39;</span>, <span class="ruby-identifier">q</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;%#{query}%&quot;</span>
@@ -391,7 +387,7 @@ membership.</p>
 
           
           <div class="method-source-code" id="gravatar-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 96</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 86</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">gravatar</span>
   <span class="ruby-string">&#39;//gravatar.com/avatar/&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-constant">MD5</span>.<span class="ruby-identifier">hexdigest</span>(<span class="ruby-identifier">email</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\+.+@/</span>,<span class="ruby-string">&#39;@&#39;</span>)) <span class="ruby-operator">+</span> <span class="ruby-string">&#39;?d=mm&#39;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -429,43 +425,10 @@ membership.</p>
 
           
           <div class="method-source-code" id="phone-3D-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 142</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 132</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">phone=</span> <span class="ruby-identifier">value</span>
   <span class="ruby-identifier">value</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/\D/</span>,<span class="ruby-string">&#39;&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>
   <span class="ruby-keyword">super</span>(<span class="ruby-identifier">value</span>)
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-pick_em_score" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">pick_em_score</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Returns <strong>Integer</strong>. Number of correct <code>PickEms</code>.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="pick_em_score-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 86</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">pick_em_score</span>
-  <span class="ruby-identifier">pick_ems</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">p</span>.<span class="ruby-identifier">correct?</span> }.<span class="ruby-identifier">length</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -544,39 +507,6 @@ membership.</p>
       </div>
 
     
-      <div id="method-i-rev_guess_score" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">rev_guess_score</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Returns <strong>Integer</strong>. Sum of <code>RevGuess</code> scores.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="rev_guess_score-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 91</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">rev_guess_score</span>
-  <span class="ruby-identifier">rev_guesses</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">sum</span>,<span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">sum</span><span class="ruby-operator">+</span>(<span class="ruby-identifier">x</span>.<span class="ruby-identifier">score</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">?</span> <span class="ruby-value">0</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">score</span>)}
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
       <div id="method-i-role-3F" class="method-detail ">
         
         <div class="method-heading">
@@ -630,7 +560,7 @@ role.</p>
 
           
           <div class="method-source-code" id="to_param-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 148</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 138</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">to_param</span>
   <span class="ruby-identifier">username</span>
 <span class="ruby-keyword">end</span></pre>

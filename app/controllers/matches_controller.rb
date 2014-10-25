@@ -7,7 +7,7 @@ class MatchesController < ApplicationController
   # GET /matches.json
   def index
     @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
-    @matches = Match.includes(:pick_ems).where('kickoff BETWEEN :start_date AND :end_date', start_date: @start_date, end_date: @start_date + 7.days).order('kickoff ASC')
+    @matches = Match.with_clubs.includes(:pick_ems).where('kickoff BETWEEN :start_date AND :end_date', start_date: @start_date, end_date: @start_date + 7.days).order('kickoff ASC')
   end
 
   # GET /matches/1
@@ -101,7 +101,7 @@ class MatchesController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_match
-      @match = Match.find(params[:id])
+      @match = Match.with_clubs.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

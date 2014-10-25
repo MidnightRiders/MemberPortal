@@ -8,26 +8,26 @@
         %li.tr
           .thd
           .thd User
-          .thd Score
-          .thd %
+          .thd.text-right Score
+          .thd.text-right %
       - count = ((params[:rev_guess_p]||1).to_i-1) * 25
       - last = nil
       - @rev_guess_standings.each_with_index do |u,i|
-        - completed_rev_guesses = u.rev_guesses.select{|rg| rg.match.complete? }.size
+        - completed_rev_guesses = u.rev_guesses.where.not(score: nil).size
         %li.tr
-          .td.text-center= last != u.rev_guess_score ? count += 1 : ''
+          .td.text-center= last != u.rev_guesses.score ? count += 1 : ''
           .td
             = link_to u do
               = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
               = u.username
           .td.numeric
-            = u.rev_guess_score
+            = u.rev_guesses.score
             %small
               \/
               = completed_rev_guesses * 5
           .td.numeric
-            #{u.rev_guess_score.to_f / (completed_rev_guesses == 0 ? 1 : completed_rev_guesses * 5.0) * 100.0}%
-          - last = u.rev_guess_score
+            #{(u.rev_guesses.score.to_f / (completed_rev_guesses == 0 ? 1 : completed_rev_guesses.to_f * 5) * 100).round(2)}%
+          - last = u.rev_guesses.score
     .row
       .small-12.columns
         = will_paginate(@rev_guess_standings, param_name: 'rev_guess_p')
@@ -38,26 +38,26 @@
         %li.tr
           .td
           .td User
-          .td Score
-          .td %
+          .td.text-right Score
+          .td.text-right %
       - count = ((params[:pick_em_p]||1).to_i-1) * 25
       - last = nil
       - @pick_em_standings.each_with_index do |u,i|
-        - completed_pick_ems = u.pick_ems.select{ |p| p.match.complete? }.size
+        - completed_pick_ems = u.pick_ems.where.not(correct: nil).size
         %li.tr
-          .td.text-center= last != u.pick_em_score ? count += 1 : ''
+          .td.text-center= last != u.pick_ems.score ? count += 1 : ''
           .td
             = link_to u do
               = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
               = u.username
           .td.numeric
-            = u.pick_em_score
+            = u.pick_ems.score
             %small
               \/
               = completed_pick_ems
           .td.numeric
-            #{u.pick_em_score.to_f / (completed_pick_ems == 0 ? 1 : completed_pick_ems).to_f * 100.0}%
-          - last = u.pick_em_score
+            #{(u.pick_ems.score.to_f / (completed_pick_ems == 0 ? 1 : completed_pick_ems).to_f * 100).round(2)}%
+          - last = u.pick_ems.score
     .row
       .small-12.columns.text-right
         = will_paginate(@pick_em_standings, param_name: 'pick_em_p')
