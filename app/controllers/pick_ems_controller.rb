@@ -85,7 +85,7 @@ class PickEmsController < ApplicationController
 
     # Sets +@match+ based on route's +:match_id+.
     def set_match
-      @match = Match.find(params[:match_id])
+      @match = Match.with_clubs.find(params[:match_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

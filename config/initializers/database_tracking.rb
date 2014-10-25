@@ -1,3 +1,3 @@
 if Rails.env.test? || Rails.env.development?
-  ActiveRecordQueryTrace.enabled
+  ActiveRecordQueryTrace.enabled = true
 end

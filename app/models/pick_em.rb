@@ -24,19 +24,19 @@ class PickEm < ActiveRecord::Base
 
   validate :voteable?
 
-  # Returns *Boolean*. Determines whether the +PickEm+ matches the +Match+'s +result+.
-  def correct?
-    match.try(:complete?) && result == RESULTS[match.result]
-  end
-
-  # Returns *Boolean*. Verifies that the +result+ and +PickEm+ can be compared, and returns
+  # Returns *Boolean*. Verifies that the +correct+ exists and is +false+
   def incorrect?
-    match.try(:complete?) && !correct?
+    correct == false
   end
 
   # Returns *Boolean*. Alias for <tt>incorrect?</tt>.
   def wrong?
     incorrect?
+  end
+
+  # Returns *Integer*
+  def self.score
+    where(correct: true).size
   end
 
   # TODO: Implement "pick goalscorers" method (and corresponding models)

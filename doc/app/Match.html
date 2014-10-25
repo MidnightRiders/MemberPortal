@@ -95,6 +95,8 @@
     
     <li ><a href="#method-i-teams">#teams</a>
     
+    <li ><a href="#method-i-update_games">#update_games</a>
+    
     <li ><a href="#method-i-voteable-3F">#voteable?</a>
     
     <li ><a href="#method-i-winner">#winner</a>
@@ -169,7 +171,7 @@ uid          :string(255)</pre>
 
           
           <div class="method-source-code" id="next-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 140</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 142</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-keyword">next</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>)
   <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">upcoming</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff DESC&#39;</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span><span class="ruby-operator">==</span><span class="ruby-value">1</span>
@@ -209,7 +211,7 @@ uid          :string(255)</pre>
 
           
           <div class="method-source-code" id="previous-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 129</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 131</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">previous</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>)
   <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt; ?&#39;</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff DESC&#39;</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span><span class="ruby-operator">==</span><span class="ruby-value">1</span>
@@ -256,7 +258,7 @@ goals.</p>
 
           
           <div class="method-source-code" id="complete-3F-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 53</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 55</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">complete?</span>
   <span class="ruby-identifier">home_goals</span>.<span class="ruby-identifier">present?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">away_goals</span>.<span class="ruby-identifier">present?</span>
 <span class="ruby-keyword">end</span></pre>
@@ -290,7 +292,7 @@ is in the future, if it exists.</p>
 
           
           <div class="method-source-code" id="in_future-3F-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 103</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 105</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">in_future?</span>
   <span class="ruby-identifier">kickoff</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:future?</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -323,7 +325,7 @@ is in the future, if it exists.</p>
 
           
           <div class="method-source-code" id="in_past-3F-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 108</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 110</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">in_past?</span>
   <span class="ruby-operator">!</span><span class="ruby-identifier">in_future?</span>
 <span class="ruby-keyword">end</span></pre>
@@ -356,7 +358,7 @@ is in the future, if it exists.</p>
 
           
           <div class="method-source-code" id="loser-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 80</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">loser</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-value">:home</span>
     <span class="ruby-identifier">away_team</span>
@@ -394,7 +396,7 @@ match.</p>
 
           
           <div class="method-source-code" id="next-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 118</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 120</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">next</span>
   <span class="ruby-constant">Match</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &gt;= ?&#39;</span>, <span class="ruby-identifier">kickoff</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff ASC, id ASC&#39;</span>).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">x</span>.<span class="ruby-identifier">home_team_id</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">away_team_id</span>] <span class="ruby-operator">!=</span> [<span class="ruby-identifier">home_team_id</span>,<span class="ruby-identifier">away_team_id</span>] <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">x</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">id</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">kickoff</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">kickoff</span>) }.<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
@@ -428,7 +430,7 @@ match.</p>
 
           
           <div class="method-source-code" id="previous-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 123</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 125</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">previous</span>
   <span class="ruby-constant">Match</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt;= ?&#39;</span>, <span class="ruby-identifier">kickoff</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff DESC, id DESC&#39;</span>).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">x</span>.<span class="ruby-identifier">home_team_id</span>,<span class="ruby-identifier">x</span>.<span class="ruby-identifier">away_team_id</span>] <span class="ruby-operator">!=</span> [<span class="ruby-identifier">home_team_id</span>,<span class="ruby-identifier">away_team_id</span>] <span class="ruby-operator">&amp;&amp;</span> (<span class="ruby-identifier">x</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">id</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">kickoff</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">kickoff</span>) }.<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
@@ -462,7 +464,7 @@ match.</p>
 
           
           <div class="method-source-code" id="result-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 58</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 60</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">result</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">complete?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">home_goals</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">away_goals</span>
@@ -504,7 +506,7 @@ not <code>complete?</code>.</p>
 
           
           <div class="method-source-code" id="score-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 44</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 46</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">score</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">complete?</span>
     <span class="ruby-node">&quot;#{home_goals || 0} – #{away_goals || 0}&quot;</span>
@@ -542,9 +544,55 @@ away_team ]</code></p>
 
           
           <div class="method-source-code" id="teams-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 113</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 115</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">teams</span>
   [ <span class="ruby-identifier">home_team</span>, <span class="ruby-identifier">away_team</span> ]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update_games" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update_games</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Updates the picking games on save so that they don&#39;t have to pull in
+<code>Match</code> data any and every time they need to evaluate scores</p>
+          
+          
+
+          
+          <div class="method-source-code" id="update_games-source">
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 153</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update_games</span>
+  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">rev_guesses</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-identifier">rev_guesses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rg</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">sum</span> = <span class="ruby-value">0</span>
+      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">2</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">result</span>
+      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">home_goals</span>
+      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">away_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">away_goals</span>
+      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">rg</span>.<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">away_goals</span>) <span class="ruby-operator">==</span> (<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">away_goals</span>)
+      <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:score</span>, <span class="ruby-identifier">sum</span>)
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">pick_ems</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">p</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:correct</span>, <span class="ruby-identifier">p</span>.<span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-constant">PickEm</span><span class="ruby-operator">::</span><span class="ruby-constant">RESULTS</span>[<span class="ruby-identifier">result</span>])
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -578,7 +626,7 @@ and <code>RevGuess</code>), and the game is less than two weeks old
 
           
           <div class="method-source-code" id="voteable-3F-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 95</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 97</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">voteable?</span>
   <span class="ruby-identifier">kickoff</span> <span class="ruby-operator">&amp;&amp;</span>
     (<span class="ruby-identifier">kickoff</span> <span class="ruby-operator">+</span> <span class="ruby-value">45</span>.<span class="ruby-identifier">minutes</span>).<span class="ruby-identifier">past?</span> <span class="ruby-operator">&amp;&amp;</span>
@@ -614,7 +662,7 @@ and <code>RevGuess</code>), and the game is less than two weeks old
 
           
           <div class="method-source-code" id="winner-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 71</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 73</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">winner</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-value">:home</span>
     <span class="ruby-identifier">home_team</span>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140815210109) do
+ActiveRecord::Schema.define(version: 20141025185412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,7 @@ ActiveRecord::Schema.define(version: 20140815210109) do
     t.integer  "result",     limit: 2
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "correct"
   end
 
   add_index "pick_ems", ["match_id", "user_id"], name: "index_pick_ems_on_match_id_and_user_id", unique: true, using: :btree
@@ -117,6 +118,7 @@ ActiveRecord::Schema.define(version: 20140815210109) do
     t.string   "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "score"
   end
 
   add_index "rev_guesses", ["match_id", "user_id"], name: "index_rev_guesses_on_match_id_and_user_id", unique: true, using: :btree

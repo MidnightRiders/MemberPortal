@@ -27,12 +27,14 @@ feature 'Pick ’Em' do
   scenario 'user correctly picks home team' do
     match = FactoryGirl.create(:match,:past,:home_win)
     match.pick_ems.create(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
+    match.update_games
     visit matches_path(date: match.kickoff.to_date)
     page.should have_css('.choice.correct', text: match.home_team.abbrv)
   end
   scenario 'user wrongly picks home team' do
     match = FactoryGirl.create(:match,:past,:away_win)
     match.pick_ems.build(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
+    match.update_games
     visit matches_path(date: match.kickoff.to_date)
     page.should have_css('.choice.wrong', text: match.home_team.abbrv)
     page.should have_css('.choice.actual', text: match.away_team.abbrv)

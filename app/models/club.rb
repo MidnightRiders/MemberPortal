@@ -51,7 +51,7 @@ class Club < ActiveRecord::Base
 
   # Returns *Array* of +Matches+ involving the club.
   def matches
-    Match.where('home_team_id = :id OR away_team_id = :id', id: id).order('kickoff ASC')
+    Match.with_clubs.where('home_team_id = :id OR away_team_id = :id', id: id).order('kickoff ASC')
   end
 
   # Returns +Match+ or *Array* of +Matches+, depending on +n+, before +time+ (defaults to now).
