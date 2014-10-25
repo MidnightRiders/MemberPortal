@@ -9,16 +9,24 @@
           .thd
           .thd User
           .thd Score
+          .thd %
       - count = ((params[:rev_guess_p]||1).to_i-1) * 25
       - last = nil
       - @rev_guess_standings.each_with_index do |u,i|
+        - completed_rev_guesses = u.rev_guesses.select{|rg| rg.match.complete? }.size
         %li.tr
           .td.text-center= last != u.rev_guess_score ? count += 1 : ''
           .td
             = link_to u do
               = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
               = u.username
-          .td.numeric= u.rev_guess_score
+          .td.numeric
+            = u.rev_guess_score
+            %small
+              \/
+              = completed_rev_guesses * 5
+          .td.numeric
+            #{u.rev_guess_score.to_f / (completed_rev_guesses == 0 ? 1 : completed_rev_guesses * 5.0) * 100.0}%
           - last = u.rev_guess_score
     .row
       .small-12.columns
@@ -31,9 +39,11 @@
           .td
           .td User
           .td Score
+          .td %
       - count = ((params[:pick_em_p]||1).to_i-1) * 25
       - last = nil
       - @pick_em_standings.each_with_index do |u,i|
+        - completed_pick_ems = u.pick_ems.select{ |p| p.match.complete? }.size
         %li.tr
           .td.text-center= last != u.pick_em_score ? count += 1 : ''
           .td
@@ -44,7 +54,9 @@
             = u.pick_em_score
             %small
               \/
-              = u.pick_ems.select{ |p| p.match.complete? }.size
+              = completed_pick_ems
+          .td.numeric
+            #{u.pick_em_score.to_f / (completed_pick_ems == 0 ? 1 : completed_pick_ems).to_f * 100.0}%
           - last = u.pick_em_score
     .row
       .small-12.columns.text-right
