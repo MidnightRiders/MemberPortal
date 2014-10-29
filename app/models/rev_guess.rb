@@ -8,6 +8,7 @@
 #  home_goals :integer
 #  away_goals :integer
 #  comment    :string(255)
+#  score      :integer
 #  created_at :datetime
 #  updated_at :datetime
 #

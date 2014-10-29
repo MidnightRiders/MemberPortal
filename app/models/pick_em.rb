@@ -6,6 +6,7 @@
 #  match_id   :integer
 #  user_id    :integer
 #  result     :integer
+#  correct    :boolean
 #  created_at :datetime
 #  updated_at :datetime
 #
