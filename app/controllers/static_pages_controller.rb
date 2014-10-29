@@ -22,8 +22,7 @@ class StaticPagesController < ApplicationController
 
   # Shows standings for Pick 'Em and RevGuess.
   def standings
-    require 'will_paginate/array'
-    @pick_em_standings = User.includes(:pick_ems).where.not(pick_ems: { correct: nil }).sort_by{|u| u.pick_ems.score }.reverse.paginate(page: params[:pick_em_p], per_page: 25)
-    @rev_guess_standings = User.includes(:rev_guesses).where.not(rev_guesses: { score: nil }).sort_by{|u| u.rev_guesses.score }.reverse.paginate(page: params[:rev_guess_p], per_page: 25)
+    @rev_guess_standings = User.rev_guess_scores.where('(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) > 0').order('rev_guesses_score DESC, rev_guesses_count ASC, username ASC').paginate(page: params[:rev_guess_p], per_page: 25)
+    @pick_em_standings = User.pick_em_scores.where('(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) > 0').order('correct_pick_ems DESC, total_pick_ems ASC, username ASC').paginate(page: params[:pick_em_p], per_page: 25)
   end
 end

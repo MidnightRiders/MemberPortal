@@ -32,6 +32,26 @@ class User < ActiveRecord::Base
 
   default_scope { includes(:memberships, :roles) }
 
+  scope :scores, -> {
+    unscoped.select('*',
+      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct) AS correct_pick_ems',
+      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) AS total_pick_ems',
+      '(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_score',
+      '(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_count' )
+  }
+
+  scope :rev_guess_scores, -> {
+    unscoped.select('*',
+      '(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_score',
+      '(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_count' )
+  }
+
+  scope :pick_em_scores, -> {
+    unscoped.select('*',
+      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct) AS correct_pick_ems',
+      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) AS total_pick_ems' )
+  }
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
