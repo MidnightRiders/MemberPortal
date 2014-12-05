@@ -1,3 +1,14 @@
+.alert-box
+  %h3
+    = icon 'exclamation-triangle fa-fw'
+    Returning Soon
+  %p
+    The Member Portal is currently under development, with improvements in the works for the 2015 season.
+    Upon completion of these changes, new members will be emailed their credentials. If you do not currently have
+    credentials, don’t worry: you should still have access to any and all important resources, such as the
+    #{ link_to 'shop', 'http://midnightriders.com/shop' }, #{ link_to 'boards', 'http://midnightriders.com/boards' } (username
+    and password are separate from Member Portal credentials), and the #{ link_to 'Facebook group', 'https://www.facebook.com/groups/419730744829118/' }.
+    In addition, watch your inbox for email updates.
 .row
   .medium-4.columns
     %h2 Sign in
@@ -6,15 +17,6 @@
       Haven’t received your login information?
       = succeed '.' do
         = link_to 'Email&nbsp;us'.html_safe, 'mailto:webczar@midnightriders.com?subject=Member%20Portal%20Access'
-.alert-box
-  %h3 Returning Soon
-  %p
-    The Member Portal is currently under development, with improvements in the works for the 2015 season.
-    Upon completion of these changes, new members will be emailed their credentials. If you do not currently have
-    credentials, don’t worry: you should still have access to any and all important resources, such as the
-    #{ link_to 'shop', 'http://midnightriders.com/shop' }, #{ link_to 'boards', 'http://midnightriders.com/boards' } (username
-    and password are separate from Member Portal credentials), and the #{ link_to 'Facebook group', 'https://www.facebook.com/groups/419730744829118/' }.
-    In addition, watch your inbox for email updates.
 = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
   .row
     .medium-4.columns
