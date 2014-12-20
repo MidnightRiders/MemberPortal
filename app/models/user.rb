@@ -104,7 +104,7 @@ class User < ActiveRecord::Base
 
   # Returns *String*. URL for Gravatar based on email.
   def gravatar
-    '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.gsub(/\+.+@/,'@')) + '?d=mm'
+    '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/,'@')) + '?d=mm'
   end
 
   # TODO: Clean the shit out of this import. Stabilize it.
