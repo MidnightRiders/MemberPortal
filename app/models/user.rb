@@ -84,7 +84,7 @@ class User < ActiveRecord::Base
 
   # Returns +Membership+ for current year.
   def current_membership
-    memberships.find_by(year: Date.today.year)
+    memberships.where(year: (Date.today.year..Date.today.year + 1)).order('year ASC').first
   end
 
   # Returns *Boolean*. Determines whether user has a current membership.
