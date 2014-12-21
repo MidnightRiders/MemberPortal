@@ -3,9 +3,14 @@
   .medium-4.columns
     = f.label :year, class: 'inline'
   .medium-8.columns
-    = f.select :year, options_for_select((Date.today.year..Date.today.year+1)), {}, disabled: disabled
+    - years = [Date.today.year, Date.today.year + 1]
+    - years.unshift f.object.year unless f.object.new_record? || f.object.year.in?(years)
+    = f.select :year, years, {}, disabled: disabled
+    = errors_for(f.object, :year)
 .row
   .medium-4.columns
-    = f.label :role_ids, 'Role(s)', class: 'inline'
+    = f.label :roles, 'Role(s)', class: 'inline'
   .medium-8.columns
-    = f.select :role_ids, Role.all.map{|r| [r.name.titleize,r.id]}, {}, multiple: true, size: 5, disabled: disabled
+    - memberships = can?(:manage, User) ? Membership::ROLES.sort.map{|r| [r.titleize,r]} : [['Individual', 'individual'], ['Family', 'family']]
+    = f.select :roles, memberships, {}, multiple: true, size: 5, disabled: disabled
+    = errors_for(f.object, :roles)

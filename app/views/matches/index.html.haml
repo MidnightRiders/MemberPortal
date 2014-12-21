@@ -28,6 +28,10 @@
             = icon 'calendar fa-fw'
             New Match
 
-%ul.matches
-  = render @matches
+- if @matches.present?
+  %ul.matches
+    = render @matches
+- else
+  .alert-box
+    %h2.text-center No matches scheduled this week
 

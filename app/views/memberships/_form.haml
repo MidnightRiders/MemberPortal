@@ -5,6 +5,11 @@
         = @membership.new_record? ? 'New' : 'Edit'
         Membership
     .large-8.columns
-      = f.hidden_field :info, value: f.object.info || { override: current_user.id }
+      = f.fields_for :info do |info_fields|
+        - if f.object.info
+          - f.object.info.try(:each) do |key, value|
+            = info_fields.hidden_field key, value: value
+        - else
+          = info_fields.hidden_field :override, value: current_user.id
       = render 'fields', f: f
       = f.submit class: 'button right'

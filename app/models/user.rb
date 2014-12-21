@@ -30,7 +30,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
 
-  default_scope { includes(:memberships, :roles) }
+  default_scope { includes(:memberships) }
 
   scope :scores, -> {
     unscoped.select('*',
@@ -52,12 +52,20 @@ class User < ActiveRecord::Base
       '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) AS total_pick_ems' )
   }
 
+  # Get all current members, or members for specified year
+  scope :members, ->(year = (Date.today.year..Date.today.year+1)) {
+    where(memberships: { year: year })
+  }
+
+  # Get non-members
+  scope :non_members, -> (year = (Date.today.year..Date.today.year+1)) {
+    where.not(id: joins(:memberships).members(year).select('id'))
+  }
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :memberships
-  has_many :membership_roles, through: :memberships
-  has_many :roles, through: :membership_roles
 
   has_many :mot_ms
   has_many :rev_guesses
@@ -79,7 +87,7 @@ class User < ActiveRecord::Base
 
   # Returns *Boolean*. Determines whether the user has a given role.
   def role?(r)
-    roles.map(&:name).include? r
+    current_roles.include? r
   end
 
   # Returns +Membership+ for current year.
@@ -89,7 +97,7 @@ class User < ActiveRecord::Base
 
   # Returns *Boolean*. Determines whether user has a current membership.
   def current_member?
-    !current_membership.nil?
+    current_membership.present?
   end
 
   # Returns +PickEm+ for given +match+, or new +PickEm+.

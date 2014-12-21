@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141025185412) do
+ActiveRecord::Schema.define(version: 20141220141534) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20141025185412) do
     t.hstore   "info"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.json     "roles"
   end
 
   add_index "memberships", ["info"], name: "index_memberships_on_info", using: :gist

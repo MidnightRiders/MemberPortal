@@ -2,9 +2,7 @@
 %html
   %head
     %title= content_for?(:title) ? "Midnight Riders | #{content_for(:title)}" : 'Midnight Riders'
-    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato:300,700'
-    = stylesheet_link_tag 'application', media: 'all'
-    = stylesheet_link_tag stylesheets_club_path
+    = stylesheet_link_tag '//fonts.googleapis.com/css?family=Lato:300,700', 'application', stylesheets_club_path, media: 'all'
     %meta{ charset: 'utf-8' }
     = favicon_link_tag 'icons/apple-touch-icon-precomposed-57x57.png',   rel: 'apple-touch-icon-precomposed', type: 'image/png'
     = favicon_link_tag 'icons/apple-touch-icon-precomposed-72x72.png',   rel: 'apple-touch-icon-precomposed', sizes: '72x72', type: 'image/png'
