@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141220141534) do
+ActiveRecord::Schema.define(version: 20141221052325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,16 +50,6 @@ ActiveRecord::Schema.define(version: 20141220141534) do
   add_index "matches", ["home_team_id", "away_team_id"], name: "index_matches_on_home_team_id_and_away_team_id", using: :btree
   add_index "matches", ["home_team_id"], name: "index_matches_on_home_team_id", using: :btree
   add_index "matches", ["uid"], name: "index_matches_on_uid", using: :btree
-
-  create_table "membership_roles", force: true do |t|
-    t.integer  "membership_id"
-    t.integer  "role_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "membership_roles", ["membership_id", "role_id"], name: "index_membership_roles_on_membership_id_and_role_id", using: :btree
-  add_index "membership_roles", ["membership_id"], name: "index_membership_roles_on_membership_id", using: :btree
 
   create_table "memberships", force: true do |t|
     t.integer  "user_id"
@@ -126,13 +116,11 @@ ActiveRecord::Schema.define(version: 20141220141534) do
   add_index "rev_guesses", ["match_id"], name: "index_rev_guesses_on_match_id", using: :btree
   add_index "rev_guesses", ["user_id"], name: "index_rev_guesses_on_user_id", using: :btree
 
-  create_table "roles", force: true do |t|
-    t.string   "name"
+  create_table "stylesheets", force: true do |t|
+    t.text     "contents"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "roles", ["name"], name: "index_roles_on_name", unique: true, using: :btree
 
   create_table "users", force: true do |t|
     t.string   "last_name"

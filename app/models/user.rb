@@ -80,7 +80,7 @@ class User < ActiveRecord::Base
 
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
 
-  # Returns +Roles+ from current +Membership+
+  # Returns +roles+ from current +Membership+
   def current_roles
     current_membership.try(:roles)
   end
@@ -147,7 +147,7 @@ class User < ActiveRecord::Base
       if user.save
         user.memberships << Membership.create(year: Time.current.year)
         user.current_membership.roles = roles
-        user.current_membership.roles << Role.find_by(name: row['membership_type']) if row['membership_type']
+        user.current_membership.roles << row['membership_type'] if row['membership_type']
         UserMailer.new_user_creation_email(user,pass).deliver #if pass
       else
         puts "  Could not save user #{row['first_name']} #{row['last_name']}:"
