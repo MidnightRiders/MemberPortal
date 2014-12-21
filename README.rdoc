@@ -68,17 +68,6 @@ the calendar import (see +matches_controller#import+).
     created_at              :datetime
     updated_at              :datetime
 
-=== MembershipRole
-
-Connector table/model between +Membership+ and +Role+.
-
-    # Membership
-    has_many :membership_roles
-    has_many :roles, through:: :membership_roles
-
-    # Role
-    has_many :membership_roles
-    has_many :memberships, through:: :membership_roles
 
 === MotM
 
@@ -140,12 +129,6 @@ Score predictions for Revs games. One per user per +Match+.
     comment                :string(255)
     created_at             :datetime
     updated_at             :datetime
-
-=== Role
-
-User roles, connected to Users by Memberships (through MembershipRole joiner model).
-Roles things like Admin, Executive Board, etc, but are also Membership types – they serve
-the same purpose, and they both expire with the Membership.
 
 ===== Attributes:
 

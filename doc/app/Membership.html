@@ -67,7 +67,19 @@
 
     
     
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
     
+    <li ><a href="#method-i-available_roles">#available_roles</a>
+    
+    <li ><a href="#method-i-list_roles">#list_roles</a>
+    
+  </ul>
+</div>
+
   </div>
 </nav>
 
@@ -79,8 +91,7 @@
   <section class="description">
     
 <p>Model belonging to <code>User</code> containing membership information for
-a given year. Has many <code>Roles</code> that describe the
-<code>User</code>&#39;s abilities within that scope.</p>
+a given year.</p>
 
 <h2 id="class-Membership-label-Schema+Information">Schema Information<span><a href="#class-Membership-label-Schema+Information">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
 
@@ -104,10 +115,114 @@ updated_at :datetime</pre>
     
 
     
-
+    <section class="constants-list">
+      <header>
+        <h3>Constants</h3>
+      </header>
+      <dl>
+      
+        <dt id="PRIVILEGED_ROLES">PRIVILEGED_ROLES
+        
+        <dd>
+        
+      
+        <dt id="ROLES">ROLES
+        
+        <dd>
+        
+      
+      </dl>
+    </section>
     
 
     
+
+    
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-available_roles" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">available_roles</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="available_roles-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 41</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">available_roles</span>
+  <span class="ruby-identifier">ability</span> = <span class="ruby-constant">Ability</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">user</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">ability</span>.<span class="ruby-identifier">can?</span> <span class="ruby-value">:manage</span>, <span class="ruby-constant">User</span>
+    <span class="ruby-constant">ROLES</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-constant">ROLES</span> <span class="ruby-operator">-</span> <span class="ruby-constant">PRIVILEGED_ROLES</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-list_roles" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">list_roles</span><span
+            class="method-args">(verbose=false)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns <strong>String</strong>. Lists all roles, comma-separated or in
+plain english if <code>verbose</code> is true.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="list_roles-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 32</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">list_roles</span>(<span class="ruby-identifier">verbose</span>=<span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">rs</span> = <span class="ruby-identifier">roles</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:titleize</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">verbose</span>
+    <span class="ruby-identifier">rs</span>.<span class="ruby-identifier">to_sentence</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">rs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;, &#39;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
   </section>
 </main>
 

@@ -40,7 +40,6 @@
       <li><a href="README_rdoc.html#label-Attributes%3A">Attributes:</a>
       <li><a href="README_rdoc.html#label-Membership">Membership</a>
       <li><a href="README_rdoc.html#label-Attributes%3A">Attributes:</a>
-      <li><a href="README_rdoc.html#label-MembershipRole">MembershipRole</a>
       <li><a href="README_rdoc.html#label-MotM">MotM</a>
       <li><a href="README_rdoc.html#label-Attributes%3A">Attributes:</a>
       <li><a href="README_rdoc.html#label-PickEm">PickEm</a>
@@ -49,7 +48,6 @@
       <li><a href="README_rdoc.html#label-Attributes%3A">Attributes:</a>
       <li><a href="README_rdoc.html#label-RevGuess">RevGuess</a>
       <li><a href="README_rdoc.html#label-Attributes%3A">Attributes:</a>
-      <li><a href="README_rdoc.html#label-Role">Role</a>
       <li><a href="README_rdoc.html#label-Attributes%3A">Attributes:</a>
       <li><a href="README_rdoc.html#label-User">User</a>
       <li><a href="README_rdoc.html#label-Attributes%3A">Attributes:</a>
@@ -118,13 +116,6 @@
     </ul>
   </li>
   <li class="class">
-    <a href="MembershipRole.html">MembershipRole</a>
-
-    <ul>
-      <li><a href="MembershipRole.html#label-Schema+Information">Schema Information</a>
-    </ul>
-  </li>
-  <li class="class">
     <a href="MembershipsController.html">MembershipsController</a>
   </li>
   <li class="module">
@@ -187,13 +178,6 @@
   </li>
   <li class="class">
     <a href="RidersBlog.html">RidersBlog</a>
-  </li>
-  <li class="class">
-    <a href="Role.html">Role</a>
-
-    <ul>
-      <li><a href="Role.html#label-Schema+Information">Schema Information</a>
-    </ul>
   </li>
   <li class="class">
     <a href="StaticPagesController.html">StaticPagesController</a>
@@ -264,11 +248,6 @@
     <span class="container">User</span>
 
   <li class="method">
-    <a href="Role.html#method-c-list">::list</a>
-    &mdash;
-    <span class="container">Role</span>
-
-  <li class="method">
     <a href="Ability.html#method-c-new">::new</a>
     &mdash;
     <span class="container">Ability</span>
@@ -324,6 +303,11 @@
     <span class="container">MatchDecorator</span>
 
   <li class="method">
+    <a href="Membership.html#method-i-available_roles">#available_roles</a>
+    &mdash;
+    <span class="container">Membership</span>
+
+  <li class="method">
     <a href="StylesheetsController.html#method-i-club">#club</a>
     &mdash;
     <span class="container">StylesheetsController</span>
@@ -344,14 +328,9 @@
     <span class="container">StaticPagesController</span>
 
   <li class="method">
-    <a href="MotMsController.html#method-i-create">#create</a>
+    <a href="RevGuessesController.html#method-i-create">#create</a>
     &mdash;
-    <span class="container">MotMsController</span>
-
-  <li class="method">
-    <a href="MembershipsController.html#method-i-create">#create</a>
-    &mdash;
-    <span class="container">MembershipsController</span>
+    <span class="container">RevGuessesController</span>
 
   <li class="method">
     <a href="MatchesController.html#method-i-create">#create</a>
@@ -359,14 +338,19 @@
     <span class="container">MatchesController</span>
 
   <li class="method">
-    <a href="ClubsController.html#method-i-create">#create</a>
+    <a href="MembershipsController.html#method-i-create">#create</a>
     &mdash;
-    <span class="container">ClubsController</span>
+    <span class="container">MembershipsController</span>
 
   <li class="method">
-    <a href="RevGuessesController.html#method-i-create">#create</a>
+    <a href="MotMsController.html#method-i-create">#create</a>
     &mdash;
-    <span class="container">RevGuessesController</span>
+    <span class="container">MotMsController</span>
+
+  <li class="method">
+    <a href="UsersController.html#method-i-create">#create</a>
+    &mdash;
+    <span class="container">UsersController</span>
 
   <li class="method">
     <a href="PlayersController.html#method-i-create">#create</a>
@@ -374,9 +358,9 @@
     <span class="container">PlayersController</span>
 
   <li class="method">
-    <a href="UsersController.html#method-i-create">#create</a>
+    <a href="ClubsController.html#method-i-create">#create</a>
     &mdash;
-    <span class="container">UsersController</span>
+    <span class="container">ClubsController</span>
 
   <li class="method">
     <a href="User.html#method-i-current_member-3F">#current_member?</a>
@@ -404,9 +388,14 @@
     <span class="container">ClubsHelper</span>
 
   <li class="method">
-    <a href="RevGuessesController.html#method-i-destroy">#destroy</a>
+    <a href="PickEmsController.html#method-i-destroy">#destroy</a>
     &mdash;
-    <span class="container">RevGuessesController</span>
+    <span class="container">PickEmsController</span>
+
+  <li class="method">
+    <a href="ClubsController.html#method-i-destroy">#destroy</a>
+    &mdash;
+    <span class="container">ClubsController</span>
 
   <li class="method">
     <a href="MotMsController.html#method-i-destroy">#destroy</a>
@@ -419,19 +408,9 @@
     <span class="container">MatchesController</span>
 
   <li class="method">
-    <a href="PlayersController.html#method-i-destroy">#destroy</a>
+    <a href="RevGuessesController.html#method-i-destroy">#destroy</a>
     &mdash;
-    <span class="container">PlayersController</span>
-
-  <li class="method">
-    <a href="ClubsController.html#method-i-destroy">#destroy</a>
-    &mdash;
-    <span class="container">ClubsController</span>
-
-  <li class="method">
-    <a href="PickEmsController.html#method-i-destroy">#destroy</a>
-    &mdash;
-    <span class="container">PickEmsController</span>
+    <span class="container">RevGuessesController</span>
 
   <li class="method">
     <a href="MembershipsController.html#method-i-destroy">#destroy</a>
@@ -439,14 +418,14 @@
     <span class="container">MembershipsController</span>
 
   <li class="method">
+    <a href="PlayersController.html#method-i-destroy">#destroy</a>
+    &mdash;
+    <span class="container">PlayersController</span>
+
+  <li class="method">
     <a href="Club.html#method-i-draws">#draws</a>
     &mdash;
     <span class="container">Club</span>
-
-  <li class="method">
-    <a href="ClubsController.html#method-i-edit">#edit</a>
-    &mdash;
-    <span class="container">ClubsController</span>
 
   <li class="method">
     <a href="MembershipsController.html#method-i-edit">#edit</a>
@@ -454,9 +433,9 @@
     <span class="container">MembershipsController</span>
 
   <li class="method">
-    <a href="MotMsController.html#method-i-edit">#edit</a>
+    <a href="MatchesController.html#method-i-edit">#edit</a>
     &mdash;
-    <span class="container">MotMsController</span>
+    <span class="container">MatchesController</span>
 
   <li class="method">
     <a href="RevGuessesController.html#method-i-edit">#edit</a>
@@ -464,9 +443,9 @@
     <span class="container">RevGuessesController</span>
 
   <li class="method">
-    <a href="UsersController.html#method-i-edit">#edit</a>
+    <a href="MotMsController.html#method-i-edit">#edit</a>
     &mdash;
-    <span class="container">UsersController</span>
+    <span class="container">MotMsController</span>
 
   <li class="method">
     <a href="PlayersController.html#method-i-edit">#edit</a>
@@ -474,9 +453,19 @@
     <span class="container">PlayersController</span>
 
   <li class="method">
-    <a href="MatchesController.html#method-i-edit">#edit</a>
+    <a href="UsersController.html#method-i-edit">#edit</a>
     &mdash;
-    <span class="container">MatchesController</span>
+    <span class="container">UsersController</span>
+
+  <li class="method">
+    <a href="ClubsController.html#method-i-edit">#edit</a>
+    &mdash;
+    <span class="container">ClubsController</span>
+
+  <li class="method">
+    <a href="ApplicationHelper.html#method-i-errors_for">#errors_for</a>
+    &mdash;
+    <span class="container">ApplicationHelper</span>
 
   <li class="method">
     <a href="StaticPagesController.html#method-i-faq">#faq</a>
@@ -549,9 +538,9 @@
     <span class="container">PickEm</span>
 
   <li class="method">
-    <a href="MatchesController.html#method-i-index">#index</a>
+    <a href="RevGuessesController.html#method-i-index">#index</a>
     &mdash;
-    <span class="container">MatchesController</span>
+    <span class="container">RevGuessesController</span>
 
   <li class="method">
     <a href="ClubsController.html#method-i-index">#index</a>
@@ -564,24 +553,24 @@
     <span class="container">PickEmsController</span>
 
   <li class="method">
+    <a href="UsersController.html#method-i-index">#index</a>
+    &mdash;
+    <span class="container">UsersController</span>
+
+  <li class="method">
     <a href="PlayersController.html#method-i-index">#index</a>
     &mdash;
     <span class="container">PlayersController</span>
 
   <li class="method">
-    <a href="RevGuessesController.html#method-i-index">#index</a>
+    <a href="MatchesController.html#method-i-index">#index</a>
     &mdash;
-    <span class="container">RevGuessesController</span>
+    <span class="container">MatchesController</span>
 
   <li class="method">
     <a href="MotMsController.html#method-i-index">#index</a>
     &mdash;
     <span class="container">MotMsController</span>
-
-  <li class="method">
-    <a href="UsersController.html#method-i-index">#index</a>
-    &mdash;
-    <span class="container">UsersController</span>
 
   <li class="method">
     <a href="RevGuess.html#method-i-is_revs_match">#is_revs_match</a>
@@ -592,6 +581,11 @@
     <a href="Club.html#method-i-last_match">#last_match</a>
     &mdash;
     <span class="container">Club</span>
+
+  <li class="method">
+    <a href="Membership.html#method-i-list_roles">#list_roles</a>
+    &mdash;
+    <span class="container">Membership</span>
 
   <li class="method">
     <a href="Match.html#method-i-loser">#loser</a>
@@ -629,9 +623,9 @@
     <span class="container">Player</span>
 
   <li class="method">
-    <a href="MembershipsController.html#method-i-new">#new</a>
+    <a href="UsersController.html#method-i-new">#new</a>
     &mdash;
-    <span class="container">MembershipsController</span>
+    <span class="container">UsersController</span>
 
   <li class="method">
     <a href="MotMsController.html#method-i-new">#new</a>
@@ -639,19 +633,9 @@
     <span class="container">MotMsController</span>
 
   <li class="method">
-    <a href="ClubsController.html#method-i-new">#new</a>
+    <a href="MembershipsController.html#method-i-new">#new</a>
     &mdash;
-    <span class="container">ClubsController</span>
-
-  <li class="method">
-    <a href="PlayersController.html#method-i-new">#new</a>
-    &mdash;
-    <span class="container">PlayersController</span>
-
-  <li class="method">
-    <a href="UsersController.html#method-i-new">#new</a>
-    &mdash;
-    <span class="container">UsersController</span>
+    <span class="container">MembershipsController</span>
 
   <li class="method">
     <a href="MatchesController.html#method-i-new">#new</a>
@@ -662,6 +646,16 @@
     <a href="RevGuessesController.html#method-i-new">#new</a>
     &mdash;
     <span class="container">RevGuessesController</span>
+
+  <li class="method">
+    <a href="ClubsController.html#method-i-new">#new</a>
+    &mdash;
+    <span class="container">ClubsController</span>
+
+  <li class="method">
+    <a href="PlayersController.html#method-i-new">#new</a>
+    &mdash;
+    <span class="container">PlayersController</span>
 
   <li class="method">
     <a href="UserMailer.html#method-i-new_user_creation_email">#new_user_creation_email</a>
@@ -779,14 +773,14 @@
     <span class="container">Match</span>
 
   <li class="method">
+    <a href="PlayersController.html#method-i-show">#show</a>
+    &mdash;
+    <span class="container">PlayersController</span>
+
+  <li class="method">
     <a href="ClubsController.html#method-i-show">#show</a>
     &mdash;
     <span class="container">ClubsController</span>
-
-  <li class="method">
-    <a href="RevGuessesController.html#method-i-show">#show</a>
-    &mdash;
-    <span class="container">RevGuessesController</span>
 
   <li class="method">
     <a href="UsersController.html#method-i-show">#show</a>
@@ -794,14 +788,14 @@
     <span class="container">UsersController</span>
 
   <li class="method">
+    <a href="RevGuessesController.html#method-i-show">#show</a>
+    &mdash;
+    <span class="container">RevGuessesController</span>
+
+  <li class="method">
     <a href="MembershipsController.html#method-i-show">#show</a>
     &mdash;
     <span class="container">MembershipsController</span>
-
-  <li class="method">
-    <a href="PlayersController.html#method-i-show">#show</a>
-    &mdash;
-    <span class="container">PlayersController</span>
 
   <li class="method">
     <a href="MatchesController.html#method-i-show">#show</a>
@@ -829,29 +823,14 @@
     <span class="container">RevGuess</span>
 
   <li class="method">
-    <a href="ClubsController.html#method-i-update">#update</a>
-    &mdash;
-    <span class="container">ClubsController</span>
-
-  <li class="method">
     <a href="MatchesController.html#method-i-update">#update</a>
     &mdash;
     <span class="container">MatchesController</span>
 
   <li class="method">
-    <a href="MembershipsController.html#method-i-update">#update</a>
+    <a href="RegistrationsController.html#method-i-update">#update</a>
     &mdash;
-    <span class="container">MembershipsController</span>
-
-  <li class="method">
-    <a href="UsersController.html#method-i-update">#update</a>
-    &mdash;
-    <span class="container">UsersController</span>
-
-  <li class="method">
-    <a href="RevGuessesController.html#method-i-update">#update</a>
-    &mdash;
-    <span class="container">RevGuessesController</span>
+    <span class="container">RegistrationsController</span>
 
   <li class="method">
     <a href="MotMsController.html#method-i-update">#update</a>
@@ -859,14 +838,29 @@
     <span class="container">MotMsController</span>
 
   <li class="method">
+    <a href="RevGuessesController.html#method-i-update">#update</a>
+    &mdash;
+    <span class="container">RevGuessesController</span>
+
+  <li class="method">
+    <a href="UsersController.html#method-i-update">#update</a>
+    &mdash;
+    <span class="container">UsersController</span>
+
+  <li class="method">
     <a href="PlayersController.html#method-i-update">#update</a>
     &mdash;
     <span class="container">PlayersController</span>
 
   <li class="method">
-    <a href="RegistrationsController.html#method-i-update">#update</a>
+    <a href="MembershipsController.html#method-i-update">#update</a>
     &mdash;
-    <span class="container">RegistrationsController</span>
+    <span class="container">MembershipsController</span>
+
+  <li class="method">
+    <a href="ClubsController.html#method-i-update">#update</a>
+    &mdash;
+    <span class="container">ClubsController</span>
 
   <li class="method">
     <a href="Match.html#method-i-update_games">#update_games</a>

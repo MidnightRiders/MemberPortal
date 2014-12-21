@@ -100,6 +100,7 @@
 match_id   :integer
 user_id    :integer
 result     :integer
+correct    :boolean
 created_at :datetime
 updated_at :datetime</pre>
 
@@ -157,7 +158,7 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="score-source">
-            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 38</span>
+            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 39</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">score</span>
   <span class="ruby-identifier">where</span>(<span class="ruby-identifier">correct</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>).<span class="ruby-identifier">size</span>
 <span class="ruby-keyword">end</span></pre>
@@ -192,14 +193,14 @@ updated_at :datetime</pre>
 
         <div class="method-description">
           
-          <p>Returns <strong>Boolean</strong>. Verifies that the <code>result</code> and
-<code>PickEm</code> can be compared, and returns</p>
+          <p>Returns <strong>Boolean</strong>. Verifies that the <code>correct</code>
+exists and is <code>false</code></p>
           
           
 
           
           <div class="method-source-code" id="incorrect-3F-source">
-            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 28</span>
+            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">incorrect?</span>
   <span class="ruby-identifier">correct</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">false</span>
 <span class="ruby-keyword">end</span></pre>
@@ -232,7 +233,7 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="wrong-3F-source">
-            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 33</span>
+            <pre><span class="ruby-comment"># File app/models/pick_em.rb, line 34</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wrong?</span>
   <span class="ruby-identifier">incorrect?</span>
 <span class="ruby-keyword">end</span></pre>
