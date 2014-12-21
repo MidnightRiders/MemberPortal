@@ -22,7 +22,7 @@ instead of Google Drive.
 
 ### Ability
 
-Setup for [CanCanCan](https://github.com/CanCanCommunity/cancancan), `Role`-based permissions.
+Setup for [CanCanCan](https://github.com/CanCanCommunity/cancancan), `Permission`-based permissions.
 
 ### Club
 
@@ -75,7 +75,8 @@ the calendar import (see `matches_controller#import`).
     user_id                 :integer
     year                    :integer
     info                    :hstore
-    roles                   :json
+    privileges              :json
+    type                    :string
     created_at              :datetime
     updated_at              :datetime
 

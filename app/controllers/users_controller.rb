@@ -5,10 +5,10 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @role = params[:role] || nil
+    @privilege = params[:privilege] || nil
     @users = @users.text_search(params[:search])
-    if @role
-      @users = @users.joins(:memberships).where('memberships.roles::jsonb ?| array[:roles]', roles: [@role].flatten).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
+    if @privilege
+      @users = @users.joins(:memberships).where('memberships.privileges::jsonb ?| array[:privileges]', privileges: [@privilege].flatten).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     else
       @users = @users.order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     end
@@ -28,7 +28,7 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    if current_user == @user && cannot?(:manage, User)
+    unless current_user.privilege?('admin') || current_user.privilege?('executive_board')
       redirect_to edit_user_registration_path(@user)
     end
     @membership = @user.current_membership
@@ -91,6 +91,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username, { role_ids: [] })
+      params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username, memberships: [ :year, :type, :privileges ])
     end
 end

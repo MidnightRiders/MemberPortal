@@ -12,7 +12,7 @@ instead of Google Drive.
 
 === Ability
 
-Setup for CanCanCan[https://github.com/CanCanCommunity/cancancan], +Role+-based permissions.
+Setup for CanCanCan[https://github.com/CanCanCommunity/cancancan], +Permission+-based permissions.
 
 === Club
 

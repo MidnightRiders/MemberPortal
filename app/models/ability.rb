@@ -31,9 +31,10 @@ class Ability
     if user
       can :home, [User]
       if user.current_member?
-        if user.role? 'admin'
+        if user.privilege? 'admin'
           can :manage, :all
-        elsif user.role? 'executive_board'
+          can :grant_privileges, Membership
+        elsif user.privilege? 'executive_board'
           can :manage, [ User, Membership, Club, Match, Player, RevGuess ]
           cannot :destroy, [ Club, Player ]
           can :create, [ User, Membership ]
@@ -43,9 +44,19 @@ class Ability
           can :show, [User, Club, Match]
           can :index, Match
           can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
-          cannot :index, [ Club, Membership, Player, User, MotM ]
           can :manage, user
-          can :manage, Membership, user_id: user.id
+          if user.current_membership.is_a? Family
+            can :manage, Family, user_id: user.id
+            can :manage, Relative, family_id: user.current_membership.id
+            can :manage, User, memberships: { family_id: user.current_membership.id }
+            cannot :index, [ User, Relative, Family ]
+          elsif user.current_membership.is_a? Relative
+            can :manage, Relative, user_id: user.id
+          else
+            can :manage, Individual, user_id: user.id
+          end
+          cannot :index, [ Club, Membership, Player, User, MotM, Relative, Family ]
+          cannot :grant_privileges, Membership
         end
       end
     else

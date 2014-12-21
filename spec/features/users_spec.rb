@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature 'User roles and security' do
+feature 'User privileges and security' do
 
   subject(:user) { FactoryGirl.create(:user) }
 

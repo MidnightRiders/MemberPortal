@@ -3,14 +3,28 @@
   .medium-4.columns
     = f.label :year, class: 'inline'
   .medium-8.columns
-    - years = [Date.today.year, Date.today.year + 1]
-    - years.unshift f.object.year unless f.object.new_record? || f.object.year.in?(years)
-    = f.select :year, years, {}, disabled: disabled
-    = errors_for(f.object, :year)
-.row
-  .medium-4.columns
-    = f.label :roles, 'Role(s)', class: 'inline'
-  .medium-8.columns
-    - memberships = can?(:manage, User) ? Membership::ROLES.sort.map{|r| [r.titleize,r]} : [['Individual', 'individual'], ['Family', 'family']]
-    = f.select :roles, memberships, {}, multiple: true, size: 5, disabled: disabled
-    = errors_for(f.object, :roles)
+    - if can? :manage, User
+      = f.select :year, (1994..Date.current.year + (Date.current.month > 9 ? 1 : 0)), {}, disabled: disabled
+      = errors_for(f.object, :year)
+    - else
+      = f.hidden_field :year
+      .inline= f.object.year
+
+- if f.object.family_id
+  = f.hidden_field :type, 'Relative'
+  = f.hidden_field :family_id
+- else
+  .row
+    .medium-4.columns
+      = f.label :type, class: 'inline'
+    .medium-8.columns
+      = f.select :type, %w( Individual Family ), {}, disabled: disabled
+      = errors_for(f.object, :type)
+
+- if can? :grant_privileges, Membership
+  .row
+    .medium-4.columns
+      = f.label :privileges, 'Privileges', class: 'inline'
+    .medium-8.columns
+      = f.select :privileges, Membership::PRIVILEGES.sort.map{|r| [r.titleize,r]}, {}, multiple: true, size: 3, disabled: disabled
+      = errors_for(f.object, :privileges)
