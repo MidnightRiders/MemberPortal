@@ -1,5 +1,4 @@
 # Model belonging to +User+ containing membership information for a given year.
-# Has many +Roles+ that describe the +User+'s abilities within that scope.
 #
 # == Schema Information
 #
