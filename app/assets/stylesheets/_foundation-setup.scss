@@ -14,7 +14,7 @@ $h1-font-size: rem-calc(32);
 $h2-font-size: rem-calc(28);
 $h3-font-size: rem-calc(24);
 $h4-font-size: rem-calc(20);
-$h5-font-size: $base-font-size;
+//$h5-font-size: $body-font-size;
 
 $paragraph-margin-bottom: rem-calc(14);
 
@@ -38,3 +38,7 @@ $table-head-padding: rem-calc(6);
 $table-row-padding: rem-calc(6);
 
 @import 'foundation';
+
+.field_with_errors {
+  @extend .error;
+}
