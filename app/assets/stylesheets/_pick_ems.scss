@@ -56,7 +56,7 @@
         z-index: 5;
         top: 50%;
         left: 50%;
-        translate: -50%, -50%;
+        transform: translate(-50%, -50%);
       }
     }
     &.correct:before {
@@ -82,7 +82,7 @@
       top: 50%;
       left: 50%;
       height: 1.75em;
-      translate: -50%,-50%;
+      transform: translate(-50%,-50%);
       transition: height .25s;
     }
     @media #{$medium-up} {
