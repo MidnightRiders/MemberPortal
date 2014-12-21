@@ -106,6 +106,7 @@ user_id    :integer
 home_goals :integer
 away_goals :integer
 comment    :string(255)
+score      :integer
 created_at :datetime
 updated_at :datetime</pre>
 
@@ -149,7 +150,7 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="score-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 50</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">score</span>
   <span class="ruby-identifier">sum</span>(<span class="ruby-value">:score</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -190,7 +191,7 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="is_revs_match-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 55</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 56</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_revs_match</span>
   <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:match_id</span>, <span class="ruby-string">&#39;is not a Revolution match&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">teams</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:abbrv</span>).<span class="ruby-identifier">include?</span> <span class="ruby-string">&#39;NE&#39;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -224,7 +225,7 @@ Away&#39;.</p>
 
           
           <div class="method-source-code" id="predicted_score-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 32</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">predicted_score</span>
   <span class="ruby-node">&quot;#{home_goals} – #{away_goals}&quot;</span> <span class="ruby-keyword">unless</span> (<span class="ruby-identifier">home_goals</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">away_goals</span>.<span class="ruby-identifier">nil?</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -258,7 +259,7 @@ Away&#39;.</p>
 
           
           <div class="method-source-code" id="result-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 37</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">result</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">home_goals</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">away_goals</span>.<span class="ruby-identifier">nil?</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">home_goals</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">away_goals</span>
@@ -300,7 +301,7 @@ Otherwise string is empty.</p>
 
           
           <div class="method-source-code" id="to_s-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 27</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">to_s</span>
   <span class="ruby-identifier">predicted_score</span> <span class="ruby-operator">||</span> <span class="ruby-string">&#39;&#39;</span>
 <span class="ruby-keyword">end</span></pre>

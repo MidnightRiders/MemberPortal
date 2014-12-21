@@ -175,7 +175,7 @@ last_sign_in_ip        :string(255)</pre>
 
           
           <div class="method-source-code" id="import-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 93</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 121</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">import</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">roles</span> = [])
   <span class="ruby-identifier">allowed_attributes</span> = [<span class="ruby-value">:last_name</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:address</span>, <span class="ruby-value">:city</span>, <span class="ruby-value">:state</span>, <span class="ruby-value">:postal_code</span>, <span class="ruby-value">:phone</span>, <span class="ruby-value">:email</span>, <span class="ruby-value">:member_since</span>, <span class="ruby-value">:username</span>]
   <span class="ruby-identifier">spreadsheet</span> = <span class="ruby-constant">Roo</span><span class="ruby-operator">::</span><span class="ruby-constant">Spreadsheet</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>.<span class="ruby-identifier">path</span>.<span class="ruby-identifier">to_s</span>,<span class="ruby-identifier">extension</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;csv&#39;</span>)
@@ -205,7 +205,7 @@ last_sign_in_ip        :string(255)</pre>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">save</span>
       <span class="ruby-identifier">user</span>.<span class="ruby-identifier">memberships</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>)
       <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">roles</span> = <span class="ruby-identifier">roles</span>
-      <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">roles</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Role</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">row</span>[<span class="ruby-string">&#39;membership_type&#39;</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">row</span>[<span class="ruby-string">&#39;membership_type&#39;</span>]
+      <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">roles</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">row</span>[<span class="ruby-string">&#39;membership_type&#39;</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">row</span>[<span class="ruby-string">&#39;membership_type&#39;</span>]
       <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">new_user_creation_email</span>(<span class="ruby-identifier">user</span>,<span class="ruby-identifier">pass</span>).<span class="ruby-identifier">deliver</span> <span class="ruby-comment">#if pass</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;  Could not save user #{row[&#39;first_name&#39;]} #{row[&#39;last_name&#39;]}:&quot;</span>
@@ -242,7 +242,7 @@ last_sign_in_ip        :string(255)</pre>
 
           
           <div class="method-source-code" id="text_search-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 143</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 171</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">text_search</span>(<span class="ruby-identifier">query</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">query</span>.<span class="ruby-identifier">present?</span>
     <span class="ruby-identifier">where</span> <span class="ruby-string">&#39;username ilike :q or first_name ilike :q or last_name ilike :q or email ilike :q&#39;</span>, <span class="ruby-identifier">q</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;%#{query}%&quot;</span>
@@ -288,9 +288,9 @@ membership.</p>
 
           
           <div class="method-source-code" id="current_member-3F-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 71</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 99</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">current_member?</span>
-  <span class="ruby-operator">!</span><span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">present?</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -321,9 +321,9 @@ membership.</p>
 
           
           <div class="method-source-code" id="current_membership-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 66</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 94</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">current_membership</span>
-  <span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>.<span class="ruby-identifier">year</span>)
+  <span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> (<span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>.<span class="ruby-identifier">year</span><span class="ruby-operator">..</span><span class="ruby-constant">Date</span>.<span class="ruby-identifier">today</span>.<span class="ruby-identifier">year</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>)).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;year ASC&#39;</span>).<span class="ruby-identifier">first</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -348,13 +348,13 @@ membership.</p>
 
         <div class="method-description">
           
-          <p>Returns <code>Roles</code> from current <code>Membership</code></p>
+          <p>Returns <code>roles</code> from current <code>Membership</code></p>
           
           
 
           
           <div class="method-source-code" id="current_roles-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 56</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 84</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">current_roles</span>
   <span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:roles</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -387,9 +387,9 @@ membership.</p>
 
           
           <div class="method-source-code" id="gravatar-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 86</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 114</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">gravatar</span>
-  <span class="ruby-string">&#39;//gravatar.com/avatar/&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-constant">MD5</span>.<span class="ruby-identifier">hexdigest</span>(<span class="ruby-identifier">email</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\+.+@/</span>,<span class="ruby-string">&#39;@&#39;</span>)) <span class="ruby-operator">+</span> <span class="ruby-string">&#39;?d=mm&#39;</span>
+  <span class="ruby-string">&#39;//gravatar.com/avatar/&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-constant">MD5</span>.<span class="ruby-identifier">hexdigest</span>(<span class="ruby-identifier">email</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/\+.+@/</span>,<span class="ruby-string">&#39;@&#39;</span>)) <span class="ruby-operator">+</span> <span class="ruby-string">&#39;?d=mm&#39;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -425,7 +425,7 @@ membership.</p>
 
           
           <div class="method-source-code" id="phone-3D-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 132</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 160</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">phone=</span> <span class="ruby-identifier">value</span>
   <span class="ruby-identifier">value</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp">/\D/</span>,<span class="ruby-string">&#39;&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">value</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">String</span>
   <span class="ruby-keyword">super</span>(<span class="ruby-identifier">value</span>)
@@ -460,7 +460,7 @@ membership.</p>
 
           
           <div class="method-source-code" id="pick_for-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 76</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 104</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">pick_for</span>(<span class="ruby-identifier">match</span>)
   <span class="ruby-identifier">pick_ems</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">match_id</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">id</span> }.<span class="ruby-identifier">try</span>(<span class="ruby-value">:first</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">PickEm</span>.<span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
@@ -493,7 +493,7 @@ membership.</p>
 
           
           <div class="method-source-code" id="pick_result-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 81</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 109</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">pick_result</span>(<span class="ruby-identifier">match</span>)
   <span class="ruby-identifier">pick_for</span>(<span class="ruby-identifier">match</span>).<span class="ruby-identifier">try</span>(<span class="ruby-value">:result</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -527,9 +527,9 @@ role.</p>
 
           
           <div class="method-source-code" id="role-3F-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 61</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">role?</span>(<span class="ruby-identifier">r</span>)
-  <span class="ruby-identifier">roles</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:name</span>).<span class="ruby-identifier">include?</span> <span class="ruby-identifier">r</span>
+  <span class="ruby-identifier">current_roles</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">r</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -560,7 +560,7 @@ role.</p>
 
           
           <div class="method-source-code" id="to_param-source">
-            <pre><span class="ruby-comment"># File app/models/user.rb, line 138</span>
+            <pre><span class="ruby-comment"># File app/models/user.rb, line 166</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">to_param</span>
   <span class="ruby-identifier">username</span>
 <span class="ruby-keyword">end</span></pre>

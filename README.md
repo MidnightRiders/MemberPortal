@@ -14,12 +14,10 @@ instead of Google Drive.
 [`Club`](#markdown-header-club)
 [`Match`](#markdown-header-match)
 [`Membership`](#markdown-header-membership)
-[`MembershipRole`](#markdown-header-membershiprole)
 [`MotM`](#markdown-header-motm)
 [`PickEm`](#markdown-header-pickem)
 [`Player`](#markdown-header-player)
 [`RevGuess`](#markdown-header-revguess)
-[`Role`](#markdown-header-role)
 [`User`](#markdown-header-user)
 
 ### Ability
@@ -77,21 +75,9 @@ the calendar import (see `matches_controller#import`).
     user_id                 :integer
     year                    :integer
     info                    :hstore
+    roles                   :json
     created_at              :datetime
     updated_at              :datetime
-
-### MembershipRole
-
-Connector table/model between `Membership` and `Role`.
- 
-    :::ruby
-    # Membership
-    has_many :membership_roles
-    has_many :roles, through: :membership_roles
-    
-    # Role
-    has_many :membership_roles
-    has_many :memberships, through: :membership_roles
 
 ### MotM
 
@@ -151,19 +137,6 @@ Score predictions for Revs games. One per user per `Match`.
     home_goals             :integer
     away_goals             :integer
     comment                :string(255)
-    created_at             :datetime
-    updated_at             :datetime
-
-### Role
-
-User roles, connected to Users by Memberships (through MembershipRole joiner model).
-Roles things like Admin, Executive Board, etc, but are also Membership types – they serve
-the same purpose, and they both expire with the Membership.
-
-**Attributes:**
-
-    id                     :integer          not null, primary key
-    name                   :string(255)
     created_at             :datetime
     updated_at             :datetime
 

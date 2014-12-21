@@ -316,7 +316,7 @@ lost.</p>
           <div class="method-source-code" id="matches-source">
             <pre><span class="ruby-comment"># File app/models/club.rb, line 53</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">matches</span>
-  <span class="ruby-constant">Match</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;home_team_id = :id OR away_team_id = :id&#39;</span>, <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff ASC&#39;</span>)
+  <span class="ruby-constant">Match</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;home_team_id = :id OR away_team_id = :id&#39;</span>, <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff ASC&#39;</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           

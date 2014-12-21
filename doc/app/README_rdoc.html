@@ -67,7 +67,6 @@
     <li><a href="#label-Attributes%3A">Attributes:</a>
     <li><a href="#label-Membership">Membership</a>
     <li><a href="#label-Attributes%3A">Attributes:</a>
-    <li><a href="#label-MembershipRole">MembershipRole</a>
     <li><a href="#label-MotM">MotM</a>
     <li><a href="#label-Attributes%3A">Attributes:</a>
     <li><a href="#label-PickEm">PickEm</a>
@@ -76,7 +75,6 @@
     <li><a href="#label-Attributes%3A">Attributes:</a>
     <li><a href="#label-RevGuess">RevGuess</a>
     <li><a href="#label-Attributes%3A">Attributes:</a>
-    <li><a href="#label-Role">Role</a>
     <li><a href="#label-Attributes%3A">Attributes:</a>
     <li><a href="#label-User">User</a>
     <li><a href="#label-Attributes%3A">Attributes:</a>
@@ -177,19 +175,6 @@ info                    :hstore
 created_at              :datetime
 updated_at              :datetime</pre>
 
-<h3 id="label-MembershipRole"><a href="MembershipRole.html">MembershipRole</a><span><a href="#label-MembershipRole">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
-
-<p>Connector table/model between <code>Membership</code> and
-<code>Role</code>.</p>
-
-<pre># Membership
-has_many :membership_roles
-has_many :roles, through:: :membership_roles
-
-# Role
-has_many :membership_roles
-has_many :memberships, through:: :membership_roles</pre>
-
 <h3 id="label-MotM"><a href="MotM.html">MotM</a><span><a href="#label-MotM">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
 
 <p>Man of the <a href="Match.html">Match</a> model. Up to three picks - no
@@ -252,14 +237,6 @@ away_goals             :integer
 comment                :string(255)
 created_at             :datetime
 updated_at             :datetime</pre>
-
-<h3 id="label-Role"><a href="Role.html">Role</a><span><a href="#label-Role">&para;</a> <a href="#documentation">&uarr;</a></span></h3>
-
-<p><a href="User.html">User</a> roles, connected to Users by Memberships
-(through <a href="MembershipRole.html">MembershipRole</a> joiner model).
-Roles things like Admin, Executive Board, etc, but are also <a
-href="Membership.html">Membership</a> types – they serve the same purpose,
-and they both expire with the <a href="Membership.html">Membership</a>.</p>
 
 <h5 id="label-Attributes%3A">Attributes:<span><a href="#label-Attributes%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
 

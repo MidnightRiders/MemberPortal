@@ -142,13 +142,14 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 30</span>
+            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
+  <span class="ruby-comment"># binding.pry</span>
   <span class="ruby-ivar">@membership</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">membership_params</span>)
 
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@membership</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@membership</span>, <span class="ruby-identifier">notice</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Membership was successfully created.&#39;</span> }
+      <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">redirect_to</span> <span class="ruby-ivar">@user</span>, <span class="ruby-identifier">notice</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Membership was successfully created.&#39;</span> }
       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;show&#39;</span>, <span class="ruby-identifier">status</span><span class="ruby-operator">:</span> <span class="ruby-value">:created</span>, <span class="ruby-identifier">location</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@membership</span> }
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">action</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;new&#39;</span> }
@@ -186,7 +187,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 60</span>
+            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@membership</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -223,7 +224,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 25</span>
+            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 27</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -290,7 +291,9 @@
           <div class="method-source-code" id="new-source">
             <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
-  <span class="ruby-ivar">@membership</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">roles</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:roles</span>)
+  <span class="ruby-identifier">year</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">month</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>
+  <span class="ruby-ivar">@membership</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-identifier">year</span>, <span class="ruby-identifier">roles</span><span class="ruby-operator">:</span> <span class="ruby-identifier">roles</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -354,7 +357,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 46</span>
+            <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 49</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@membership</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">club_params</span>)
