@@ -58,7 +58,7 @@
       %li.tr
         .td.text-center
           - user.current_roles.each do |r|
-            = content_tag(:i,'',class: 'fa fa-fw fa-' + r.name, title: r.name.titleize)
+            = content_tag(:i,'',class: 'fa fa-fw fa-' + r, title: r.titleize)
         .td
           = link_to user do
             %h5

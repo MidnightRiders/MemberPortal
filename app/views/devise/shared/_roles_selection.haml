@@ -3,8 +3,8 @@
     = label_tag :roles, can?(:manage, User) ? 'Roles' : 'Membership Type'
   .large-8.columns
     .row
-      - Role.all.each_with_index do |role,i|
-        - if (current_user && current_user.role?('admin')) || role.id.in?([4,5])
+      - Membership::ROLES.each do |role|
+        - if (current_user && current_user.role?('admin')) || role.in?(['individual', 'family'])
           .medium-6.columns.left
-            = check_box_tag 'user[role_ids][]', role.id, @user.role?(role.name) || (params[:user] && params[:user][:role_ids].include?(role.id.to_s)), name: 'user[role_ids][]', id: "user_role_ids_#{role.id}"
-            = label_tag "user_role_ids_#{role.id}", role.name.titleize
+            = check_box_tag 'user[memberships][][]', role.id, @user.role?(role) || (params[:user] && params[:user][:role_ids].include?(role.id.to_s)), name: 'user[role_ids][]', id: "user_role_ids_#{role.id}"
+            = label_tag "user_role_ids_#{role.id}", role.titleize

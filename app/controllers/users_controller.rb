@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     @role = params[:role] || nil
     @users = @users.text_search(params[:search])
     if @role
-      @users = @users.where(roles: { name: @role }).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
+      @users = @users.joins(:memberships).where('memberships.roles::jsonb ?| array[:roles]', roles: [@role].flatten).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     else
       @users = @users.order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
     end

@@ -18,7 +18,9 @@ class MembershipsController < ApplicationController
 
   # GET /users/:user_id/memberships/new
   def new
-    @membership = @user.memberships.new
+    roles = @user.memberships.last.try(:roles)
+    year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
+    @membership = @user.memberships.new(year: year, roles: roles)
   end
 
   # GET /users/:user_id/memberships/1/edit
@@ -28,11 +30,12 @@ class MembershipsController < ApplicationController
   # POST /users/:user_id/memberships
   # POST /users/:user_id/memberships.json
   def create
+    # binding.pry
     @membership = @user.memberships.new(membership_params)
 
     respond_to do |format|
       if @membership.save
-        format.html { redirect_to @membership, notice: 'Membership was successfully created.' }
+        format.html { redirect_to @user, notice: 'Membership was successfully created.' }
         format.json { render action: 'show', status: :created, location: @membership }
       else
         format.html { render action: 'new' }
@@ -79,6 +82,6 @@ class MembershipsController < ApplicationController
 
     # Strong params for +Membership+
     def membership_params
-      params.require(:membership).permit(:user_id, :year, :info)
+      params.require(:membership).permit(:user_id, :year, info: [:override], roles: [])
     end
 end

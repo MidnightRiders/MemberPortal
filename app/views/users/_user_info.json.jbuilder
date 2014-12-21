@@ -3,5 +3,5 @@ if can? :manage, user
 else
     json.extract! user, :id, :username, :first_name, :last_name, :member_since, :created_at, :updated_at
 end
-json.current_roles user.current_roles.map(&:name)
+json.current_roles user.current_roles
 json.url user_url(user)
