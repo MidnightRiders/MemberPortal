@@ -12,7 +12,7 @@
 %p
   = link_to 'Get started', new_user_session_url
   now.
-- if @user.role? 'family'
+- if @user.privilege? 'family'
   %p
     You are registered as having a
     %strong family

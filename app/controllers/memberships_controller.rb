@@ -18,9 +18,9 @@ class MembershipsController < ApplicationController
 
   # GET /users/:user_id/memberships/new
   def new
-    roles = @user.memberships.last.try(:roles)
+    privileges = @user.memberships.last.try(:privileges)
     year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
-    @membership = @user.memberships.new(year: year, roles: roles)
+    @membership = @user.memberships.new(year: year, privileges: privileges)
   end
 
   # GET /users/:user_id/memberships/1/edit
@@ -82,6 +82,6 @@ class MembershipsController < ApplicationController
 
     # Strong params for +Membership+
     def membership_params
-      params.require(:membership).permit(:user_id, :year, info: [:override], roles: [])
+      params.require(:membership).permit(:user_id, :year, info: [:override], privileges: [])
     end
 end

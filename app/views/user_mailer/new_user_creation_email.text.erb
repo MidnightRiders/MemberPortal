@@ -10,7 +10,7 @@ To get started, go to the link below and log in with the username <%=@user.usern
 
 Get started now: [ <%= root_url %> ]
 
-<%- if @user.role? 'family' %>
+<%- if @user.privilege? 'family' %>
 You are registered as having a family membership. Currently, the primary accountholder is the only one with Member Portal access. In the near future, we will be adding sub-account functionality so that your whole family may (if you choose) log in and participate in games, etc. Stay tuned.
 <%- end %>
 

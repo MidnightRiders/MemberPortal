@@ -8,57 +8,55 @@
 #  user_id    :integer
 #  year       :integer
 #  info       :hstore
+#  privileges :json
+#  type       :string
 #  created_at :datetime
 #  updated_at :datetime
 #
 
 class Membership < ActiveRecord::Base
-  store_accessor :roles
-  ROLES = %w( admin executive_board at_large_board individual family )
-  PRIVILEGED_ROLES = %w( admin executive_board at_large_board )
+  store_accessor :privileges
+  TYPES = %w( Individual Family Relative )
+  PRIVILEGES = %w( admin executive_board at_large_board )
 
   belongs_to :user
 
   default_scope -> { order('year ASC') }
 
-  before_validation :remove_blank_roles
+  before_validation :remove_blank_privileges
 
-  validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }
-  validates :roles, presence: true
-  validate :roles_are_accepted
+  validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }, uniqueness: { scope: :user_id }
+  validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
+  validate :accepted_privileges
 
-
-  # Returns *String*. Lists all roles, comma-separated or in plain english if +verbose+ is true.
-  def list_roles(verbose=false)
-    rs = roles.map(&:titleize)
-    if verbose
-      rs.to_sentence
+  # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
+  def list_privileges(verbose=false)
+    ps = privileges.map(&:titleize)
+    if privileges.empty?
+      'None'
+    elsif verbose
+      ps.to_sentence
     else
-      rs.join(', ')
+      ps.join(', ')
     end
   end
 
-  def available_roles
-    ability = Ability.new(user)
-    if ability.can? :manage, User
-      ROLES
-    else
-      ROLES - PRIVILEGED_ROLES
-    end
+  def privileges
+    read_attribute(:privileges) || []
   end
 
   private
 
-    def remove_blank_roles
-      roles.reject!(&:blank?)
+    def remove_blank_privileges
+      privileges.try(:reject!, &:blank?)
     end
 
-    def roles_are_accepted
-      unaccepted_roles = (roles-available_roles)
-      errors.add(:roles, "does not accept #{unaccepted_roles.map(&:titleize).to_sentence}") if unaccepted_roles.present?
+    def accepted_privileges
+      errors.add(:privileges, 'include unaccepted values') if privileges && (privileges-PRIVILEGES).present?
     end
 
-    def able_to_change_roles
-      errors.add(:roles, 'cannot be changed in this way by this user') if (roles-available_roles).present?
+    def able_to_change_privileges
+      ability = Ability.new(user)
+      errors.add(:privileges, 'cannot be changed in this way by this user') if privileges.changed? and ability.cannot?(:grant_privileges, Membership)
     end
 end

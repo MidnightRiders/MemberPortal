@@ -13,7 +13,7 @@
               Import
   .small-6.medium-4.columns.text-right
     = form_tag users_path, method: :get do
-      = hidden_field_tag :role, params[:role] if params[:role]
+      = hidden_field_tag :privilege, params[:privilege] if params[:privilege]
       .row.collapse
         .small-8.columns
           = text_field_tag :search, params[:search]
@@ -29,19 +29,19 @@
 
 .row
   .medium-3.columns
-    = link_to users_path, class: "button small expand #{'success' unless @role}" do
+    = link_to users_path, class: "button small expand #{'success' unless @privilege}" do
       = icon 'users'
       All Users
   .medium-3.columns
-    = link_to users_path(role: 'admin'), class: "button small expand #{'success' if @role == 'admin'}" do
+    = link_to users_path(privilege: 'admin'), class: "button small expand #{'success' if @privilege == 'admin'}" do
       = icon 'bolt'
       Admins
   .medium-3.columns
-    = link_to users_path(role: 'executive_board'), class: "button small expand #{'success' if @role == 'executive_board'}" do
+    = link_to users_path(privilege: 'executive_board'), class: "button small expand #{'success' if @privilege == 'executive_board'}" do
       = icon 'suitcase'
       Executive Board
   .medium-3.columns
-    = link_to users_path(role: [ 'executive_board', 'at_large_board' ]), class: "button small expand #{'success' if @role == ['executive_board','at_large_board']}" do
+    = link_to users_path(privilege: [ 'executive_board', 'at_large_board' ]), class: "button small expand #{'success' if @privilege == ['executive_board','at_large_board']}" do
       = icon 'sitemap'
       Boards
 %ul.table.members
@@ -57,7 +57,7 @@
     - @users.each do |user|
       %li.tr
         .td.text-center
-          - user.current_roles.each do |r|
+          - user.current_privileges.each do |r|
             = content_tag(:i,'',class: 'fa fa-fw fa-' + r, title: r.titleize)
         .td
           = link_to user do

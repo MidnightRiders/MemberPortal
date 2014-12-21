@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141221052325) do
+ActiveRecord::Schema.define(version: 20141221154030) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,7 +57,9 @@ ActiveRecord::Schema.define(version: 20141221052325) do
     t.hstore   "info"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.json     "roles"
+    t.json     "privileges"
+    t.string   "type"
+    t.integer  "family_id"
   end
 
   add_index "memberships", ["info"], name: "index_memberships_on_info", using: :gist
@@ -115,12 +117,6 @@ ActiveRecord::Schema.define(version: 20141221052325) do
   add_index "rev_guesses", ["match_id", "user_id"], name: "index_rev_guesses_on_match_id_and_user_id", unique: true, using: :btree
   add_index "rev_guesses", ["match_id"], name: "index_rev_guesses_on_match_id", using: :btree
   add_index "rev_guesses", ["user_id"], name: "index_rev_guesses_on_user_id", using: :btree
-
-  create_table "stylesheets", force: true do |t|
-    t.text     "contents"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "users", force: true do |t|
     t.string   "last_name"

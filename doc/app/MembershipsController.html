@@ -291,9 +291,9 @@
           <div class="method-source-code" id="new-source">
             <pre><span class="ruby-comment"># File app/controllers/memberships_controller.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
-  <span class="ruby-identifier">roles</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:roles</span>)
+  <span class="ruby-identifier">privileges</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:privileges</span>)
   <span class="ruby-identifier">year</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">month</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span> <span class="ruby-operator">:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>
-  <span class="ruby-ivar">@membership</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-identifier">year</span>, <span class="ruby-identifier">roles</span><span class="ruby-operator">:</span> <span class="ruby-identifier">roles</span>)
+  <span class="ruby-ivar">@membership</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-identifier">year</span>, <span class="ruby-identifier">privileges</span><span class="ruby-operator">:</span> <span class="ruby-identifier">privileges</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           

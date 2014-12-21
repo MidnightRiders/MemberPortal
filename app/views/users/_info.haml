@@ -30,7 +30,7 @@
     %li
       = membership.year
       –
-      = membership.list_roles
+      = membership.list_privileges
       = link_to 'Edit', edit_user_membership_path(user,membership) if can? :edit, membership
 
 %hr
@@ -88,9 +88,9 @@
       %label Email:
     .medium-8.large-10.columns
       %p= link_to user.email, "mailto#{user.email}"
-  - if user.role? 'admin'
+  - if can? :grant_privileges, Membership
     .row
       .medium-4.large-2.columns
-        %label Roles:
+        %label Privileges:
       .medium-8.large-10.columns
-        %p= user.current_membership.list_roles
+        %p= user.current_membership.list_privileges

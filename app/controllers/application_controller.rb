@@ -20,8 +20,8 @@ class ApplicationController < ActionController::Base
   protected
     # Strong parameters for Devise.
     def configure_permitted_parameters
-      devise_parameter_sanitizer.for(:sign_up){|u| u.permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username, :password, :password_confirmation, { role_ids: [] })}
-      devise_parameter_sanitizer.for(:account_update){|u| u.permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username, :password, :password_confirmation, :current_password, { role_ids: [] })}
+      devise_parameter_sanitizer.for(:sign_up){|u| u.permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username, :password, :password_confirmation, memberships: [ :year, :type, :privileges ])}
+      devise_parameter_sanitizer.for(:account_update){|u| u.permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username, :password, :password_confirmation, :current_password, memberships: [ :year, :type, :privilegs ])}
     end
 
   private

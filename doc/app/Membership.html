@@ -73,9 +73,9 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-available_roles">#available_roles</a>
+    <li ><a href="#method-i-list_privileges">#list_privileges</a>
     
-    <li ><a href="#method-i-list_roles">#list_roles</a>
+    <li ><a href="#method-i-privileges">#privileges</a>
     
   </ul>
 </div>
@@ -101,6 +101,8 @@ a given year.</p>
 user_id    :integer
 year       :integer
 info       :hstore
+privileges :json
+type       :string
 created_at :datetime
 updated_at :datetime</pre>
 
@@ -121,12 +123,12 @@ updated_at :datetime</pre>
       </header>
       <dl>
       
-        <dt id="PRIVILEGED_ROLES">PRIVILEGED_ROLES
+        <dt id="PRIVILEGES">PRIVILEGES
         
         <dd>
         
       
-        <dt id="ROLES">ROLES
+        <dt id="TYPES">TYPES
         
         <dd>
         
@@ -144,10 +146,51 @@ updated_at :datetime</pre>
        </header>
 
     
-      <div id="method-i-available_roles" class="method-detail ">
+      <div id="method-i-list_privileges" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">available_roles</span><span
+          <span class="method-name">list_privileges</span><span
+            class="method-args">(verbose=false)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Returns <strong>String</strong>. Lists all privileges, comma-separated or
+in plain english if <code>verbose</code> is true.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="list_privileges-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 33</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">list_privileges</span>(<span class="ruby-identifier">verbose</span>=<span class="ruby-keyword">false</span>)
+  <span class="ruby-identifier">ps</span> = <span class="ruby-identifier">privileges</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:titleize</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">privileges</span>.<span class="ruby-identifier">empty?</span>
+    <span class="ruby-string">&#39;None&#39;</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">verbose</span>
+    <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">to_sentence</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;, &#39;</span>)
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-privileges" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">privileges</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -162,54 +205,10 @@ updated_at :datetime</pre>
           
 
           
-          <div class="method-source-code" id="available_roles-source">
-            <pre><span class="ruby-comment"># File app/models/membership.rb, line 41</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">available_roles</span>
-  <span class="ruby-identifier">ability</span> = <span class="ruby-constant">Ability</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">user</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">ability</span>.<span class="ruby-identifier">can?</span> <span class="ruby-value">:manage</span>, <span class="ruby-constant">User</span>
-    <span class="ruby-constant">ROLES</span>
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-constant">ROLES</span> <span class="ruby-operator">-</span> <span class="ruby-constant">PRIVILEGED_ROLES</span>
-  <span class="ruby-keyword">end</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-list_roles" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">list_roles</span><span
-            class="method-args">(verbose=false)</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>Returns <strong>String</strong>. Lists all roles, comma-separated or in
-plain english if <code>verbose</code> is true.</p>
-          
-          
-
-          
-          <div class="method-source-code" id="list_roles-source">
-            <pre><span class="ruby-comment"># File app/models/membership.rb, line 32</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">list_roles</span>(<span class="ruby-identifier">verbose</span>=<span class="ruby-keyword">false</span>)
-  <span class="ruby-identifier">rs</span> = <span class="ruby-identifier">roles</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:titleize</span>)
-  <span class="ruby-keyword">if</span> <span class="ruby-identifier">verbose</span>
-    <span class="ruby-identifier">rs</span>.<span class="ruby-identifier">to_sentence</span>
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-identifier">rs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;, &#39;</span>)
-  <span class="ruby-keyword">end</span>
+          <div class="method-source-code" id="privileges-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 44</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">privileges</span>
+  <span class="ruby-identifier">read_attribute</span>(<span class="ruby-value">:privileges</span>) <span class="ruby-operator">||</span> []
 <span class="ruby-keyword">end</span></pre>
           </div>
           

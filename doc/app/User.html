@@ -81,7 +81,7 @@
     
     <li ><a href="#method-i-current_membership">#current_membership</a>
     
-    <li ><a href="#method-i-current_roles">#current_roles</a>
+    <li ><a href="#method-i-current_privileges">#current_privileges</a>
     
     <li ><a href="#method-i-gravatar">#gravatar</a>
     
@@ -91,7 +91,7 @@
     
     <li ><a href="#method-i-pick_result">#pick_result</a>
     
-    <li ><a href="#method-i-role-3F">#role?</a>
+    <li ><a href="#method-i-privilege-3F">#privilege?</a>
     
     <li ><a href="#method-i-to_param">#to_param</a>
     
@@ -160,7 +160,7 @@ last_sign_in_ip        :string(255)</pre>
         
         <div class="method-heading">
           <span class="method-name">import</span><span
-            class="method-args">(file, roles = [])</span>
+            class="method-args">(file, privileges = [])</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -176,7 +176,7 @@ last_sign_in_ip        :string(255)</pre>
           
           <div class="method-source-code" id="import-source">
             <pre><span class="ruby-comment"># File app/models/user.rb, line 121</span>
-<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">import</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">roles</span> = [])
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">import</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">privileges</span> = [])
   <span class="ruby-identifier">allowed_attributes</span> = [<span class="ruby-value">:last_name</span>, <span class="ruby-value">:first_name</span>, <span class="ruby-value">:last_name</span>, <span class="ruby-value">:address</span>, <span class="ruby-value">:city</span>, <span class="ruby-value">:state</span>, <span class="ruby-value">:postal_code</span>, <span class="ruby-value">:phone</span>, <span class="ruby-value">:email</span>, <span class="ruby-value">:member_since</span>, <span class="ruby-value">:username</span>]
   <span class="ruby-identifier">spreadsheet</span> = <span class="ruby-constant">Roo</span><span class="ruby-operator">::</span><span class="ruby-constant">Spreadsheet</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>.<span class="ruby-identifier">path</span>.<span class="ruby-identifier">to_s</span>,<span class="ruby-identifier">extension</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;csv&#39;</span>)
   <span class="ruby-identifier">header</span> = <span class="ruby-identifier">spreadsheet</span>.<span class="ruby-identifier">row</span>(<span class="ruby-value">1</span>)
@@ -204,8 +204,8 @@ last_sign_in_ip        :string(255)</pre>
     <span class="ruby-comment">#end</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">save</span>
       <span class="ruby-identifier">user</span>.<span class="ruby-identifier">memberships</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>)
-      <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">roles</span> = <span class="ruby-identifier">roles</span>
-      <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">roles</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">row</span>[<span class="ruby-string">&#39;membership_type&#39;</span>] <span class="ruby-keyword">if</span> <span class="ruby-identifier">row</span>[<span class="ruby-string">&#39;membership_type&#39;</span>]
+      <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">privileges</span> = <span class="ruby-identifier">privileges</span>
+      <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">type</span> = <span class="ruby-identifier">row</span>[<span class="ruby-string">&#39;membership_type&#39;</span>] <span class="ruby-operator">||</span> <span class="ruby-string">&#39;individual&#39;</span>
       <span class="ruby-constant">UserMailer</span>.<span class="ruby-identifier">new_user_creation_email</span>(<span class="ruby-identifier">user</span>,<span class="ruby-identifier">pass</span>).<span class="ruby-identifier">deliver</span> <span class="ruby-comment">#if pass</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">puts</span> <span class="ruby-node">&quot;  Could not save user #{row[&#39;first_name&#39;]} #{row[&#39;last_name&#39;]}:&quot;</span>
@@ -335,10 +335,10 @@ membership.</p>
       </div>
 
     
-      <div id="method-i-current_roles" class="method-detail ">
+      <div id="method-i-current_privileges" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">current_roles</span><span
+          <span class="method-name">current_privileges</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -348,15 +348,15 @@ membership.</p>
 
         <div class="method-description">
           
-          <p>Returns <code>roles</code> from current <code>Membership</code></p>
+          <p>Returns <code>privileges</code> from current <code>Membership</code></p>
           
           
 
           
-          <div class="method-source-code" id="current_roles-source">
+          <div class="method-source-code" id="current_privileges-source">
             <pre><span class="ruby-comment"># File app/models/user.rb, line 84</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_roles</span>
-  <span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:roles</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">current_privileges</span>
+  <span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">try</span>(<span class="ruby-value">:privileges</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -507,10 +507,10 @@ membership.</p>
       </div>
 
     
-      <div id="method-i-role-3F" class="method-detail ">
+      <div id="method-i-privilege-3F" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">role?</span><span
+          <span class="method-name">privilege?</span><span
             class="method-args">(r)</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -521,15 +521,15 @@ membership.</p>
         <div class="method-description">
           
           <p>Returns <strong>Boolean</strong>. Determines whether the user has a given
-role.</p>
+privilege.</p>
           
           
 
           
-          <div class="method-source-code" id="role-3F-source">
+          <div class="method-source-code" id="privilege-3F-source">
             <pre><span class="ruby-comment"># File app/models/user.rb, line 89</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">role?</span>(<span class="ruby-identifier">r</span>)
-  <span class="ruby-identifier">current_roles</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">r</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">privilege?</span>(<span class="ruby-identifier">r</span>)
+  <span class="ruby-identifier">current_privileges</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">r</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

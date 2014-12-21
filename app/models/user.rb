@@ -80,14 +80,14 @@ class User < ActiveRecord::Base
 
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
 
-  # Returns +roles+ from current +Membership+
-  def current_roles
-    current_membership.try(:roles)
+  # Returns +privileges+ from current +Membership+
+  def current_privileges
+    current_membership.try(:privileges)
   end
 
-  # Returns *Boolean*. Determines whether the user has a given role.
-  def role?(r)
-    current_roles.include? r
+  # Returns *Boolean*. Determines whether the user has a given privilege.
+  def privilege?(r)
+    current_privileges.include? r
   end
 
   # Returns +Membership+ for current year.
@@ -118,7 +118,7 @@ class User < ActiveRecord::Base
   # TODO: Clean the shit out of this import. Stabilize it.
 
   # User import script. Needs work.
-  def self.import(file, roles = [])
+  def self.import(file, privileges = [])
     allowed_attributes = [:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username]
     spreadsheet = Roo::Spreadsheet.open(file.path.to_s,extension: 'csv')
     header = spreadsheet.row(1)
@@ -146,8 +146,8 @@ class User < ActiveRecord::Base
       #end
       if user.save
         user.memberships << Membership.create(year: Time.current.year)
-        user.current_membership.roles = roles
-        user.current_membership.roles << row['membership_type'] if row['membership_type']
+        user.current_membership.privileges = privileges
+        user.current_membership.type = row['membership_type'] || 'individual'
         UserMailer.new_user_creation_email(user,pass).deliver #if pass
       else
         puts "  Could not save user #{row['first_name']} #{row['last_name']}:"

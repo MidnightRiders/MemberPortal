@@ -27,6 +27,10 @@ form {
   }
 }
 
+.inline {
+  @extend label.inline;
+}
+
 @media #{$small-only} {
   label.inline:not(.inline-small) {
     margin: 0;

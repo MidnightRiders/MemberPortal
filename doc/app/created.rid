@@ -1,9 +1,9 @@
-Sun, 21 Dec 2014 00:35:16 -0500
-README.rdoc	Sun, 21 Dec 2014 00:35:10 -0500
-app/controllers/application_controller.rb	Fri, 05 Sep 2014 22:55:18 -0400
+Sun, 21 Dec 2014 15:27:23 -0500
+README.rdoc	Sun, 21 Dec 2014 10:05:06 -0500
+app/controllers/application_controller.rb	Sun, 21 Dec 2014 09:55:14 -0500
 app/controllers/clubs_controller.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/controllers/matches_controller.rb	Wed, 29 Oct 2014 16:29:14 -0400
-app/controllers/memberships_controller.rb	Sat, 20 Dec 2014 23:37:00 -0500
+app/controllers/memberships_controller.rb	Sun, 21 Dec 2014 09:39:22 -0500
 app/controllers/mot_ms_controller.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/controllers/pick_ems_controller.rb	Wed, 29 Oct 2014 16:29:14 -0400
 app/controllers/players_controller.rb	Fri, 05 Sep 2014 22:55:18 -0400
@@ -11,7 +11,7 @@ app/controllers/rev_guesses_controller.rb	Wed, 29 Oct 2014 16:29:14 -0400
 app/controllers/static_pages_controller.rb	Wed, 29 Oct 2014 16:29:14 -0400
 app/controllers/stylesheets_controller.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/controllers/users/registrations_controller.rb	Fri, 05 Sep 2014 22:55:18 -0400
-app/controllers/users_controller.rb	Sat, 20 Dec 2014 12:16:57 -0500
+app/controllers/users_controller.rb	Sun, 21 Dec 2014 15:07:26 -0500
 app/decorators/club_decorator.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/decorators/match_decorator.rb	Wed, 29 Oct 2014 16:29:14 -0400
 app/helpers/application_helper.rb	Sat, 20 Dec 2014 20:26:23 -0500
@@ -27,15 +27,18 @@ app/helpers/stylesheets_helper.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/helpers/users_helper.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/mailers/devise_mailer.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/mailers/user_mailer.rb	Fri, 05 Sep 2014 22:55:18 -0400
-app/models/ability.rb	Fri, 05 Dec 2014 09:23:07 -0500
+app/models/ability.rb	Sun, 21 Dec 2014 13:29:01 -0500
 app/models/club.rb	Wed, 29 Oct 2014 16:29:14 -0400
+app/models/family.rb	Sun, 21 Dec 2014 11:03:37 -0500
+app/models/individual.rb	Sun, 21 Dec 2014 10:57:36 -0500
 app/models/match.rb	Wed, 29 Oct 2014 16:29:14 -0400
-app/models/membership.rb	Sun, 21 Dec 2014 00:27:02 -0500
+app/models/membership.rb	Sun, 21 Dec 2014 12:57:52 -0500
 app/models/mot_m.rb	Fri, 05 Sep 2014 22:55:18 -0400
 app/models/pick_em.rb	Wed, 29 Oct 2014 16:29:14 -0400
 app/models/player.rb	Fri, 05 Sep 2014 22:55:18 -0400
+app/models/relative.rb	Sun, 21 Dec 2014 11:08:21 -0500
 app/models/rev_guess.rb	Wed, 29 Oct 2014 16:29:14 -0400
-app/models/user.rb	Sun, 21 Dec 2014 00:27:02 -0500
+app/models/user.rb	Sun, 21 Dec 2014 10:01:13 -0500
 lib/blog_rss.rb	Fri, 05 Sep 2014 22:55:18 -0400
 lib/facebook_api.rb	Fri, 05 Sep 2014 22:55:18 -0400
 lib/riders_blog.rb	Fri, 05 Sep 2014 22:55:18 -0400

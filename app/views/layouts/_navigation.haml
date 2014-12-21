@@ -116,7 +116,7 @@
                   = link_to 'http://bracket.mlssoccer.com/og_objects/wcbracket/groups/107?join_key=eqwfoi310asdofijwe&action=join', target: '_blank' do
                     = icon 'globe fa-fw'
                     World Cup Bracket
-                - if current_user.role?('admin') || current_user.role?('executive_board')
+                - if current_user.privilege?('admin') || current_user.privilege?('executive_board')
                   %li
                     %label Admin
                   %li
@@ -128,7 +128,7 @@
             = link_to edit_user_registration_path(current_user) do
               = icon 'user fa-fw'
               My Account
-          - if current_user.current_member? && (current_user.role?('admin') || current_user.role?('executive_board'))
+          - if current_user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
             %li.has-dropdown
               %a{ title: 'Admin' }
                 = icon 'bolt fa-fw'

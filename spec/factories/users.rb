@@ -42,23 +42,31 @@ FactoryGirl.define do
     member_since { (Random.rand*(Date.today.year-1995)).to_i+1995 }
     password { Faker::Lorem.characters(Random.rand*12 + 8) }
     after :create do |u|
-      u.memberships << FactoryGirl.create(:membership, user_id: u.id, roles: [%w(individual family).sample])
+      u.memberships << FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample)
     end
     trait :admin do
       after :create do |u|
-        u.current_membership.update_attribute(:roles, u.current_membership.roles + ['admin'])
+        u.current_membership.update_attribute(:privileges, u.current_membership.privileges + ['admin'])
+      end
+    end
+    trait :family do
+      after :create do |u|
+        u.current_membership.update_attribute(:type, 'Family')
+      end
+    end
+    trait :relative do
+      after :create do |u|
+        u.current_membership.update_attribute(:type, 'Relative')
       end
     end
     trait :executive_board do
       after :create do |u|
-        u.current_membership.update_attribute(:roles, u.current_membership.roles + ['executive_board'])
-        u.current_membership.save
+        u.current_membership.update_attribute(:privileges, u.current_membership.privileges + ['executive_board'])
       end
     end
     trait :at_large_board do
       after :create do |u|
-        u.current_membership.update_attribute(:roles, u.current_membership.roles + ['at_large_board'])
-        u.current_membership.save
+        u.current_membership.update_attribute(:privileges, u.current_membership.privileges + ['at_large_board'])
       end
     end
     trait :no_membership do |u|
