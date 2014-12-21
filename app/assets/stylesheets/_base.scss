@@ -89,7 +89,7 @@ select[multiple], select[size] {
   border-color: saturate(mix(#fff,$revs-navy,75%),30%);
   color: $navy;
   &, * {
-    @include transition(color .5s, background-color .5s, border-color .5s);
+    transition: color .5s, background-color .5s, border-color .5s;
   }
   :first-child, :first-child :first-child {
     margin-top: 0;

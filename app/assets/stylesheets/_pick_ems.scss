@@ -25,12 +25,12 @@
     padding: rem-calc(3 6);
     margin-bottom: 0;
     text-align: center;
-    @include transition(all .5s);
+    transition: all .5s;
     background-size: 100% 150%;
     background-position: center;
     position: relative;
     @include radius(0);
-    @include background-image(linear-gradient(bottom,rgba(255,255,255,.35),rgba(255,255,255,0) 50%,rgba(0,0,0,0) 51%,rgba(0,0,0,.25)));
+    background-image: linear-gradient(bottom,rgba(255,255,255,.35),rgba(255,255,255,0) 50%,rgba(0,0,0,0) 51%,rgba(0,0,0,.25));
     &.secondary {
       background-color: $secondary-color;
       color: #fff;
@@ -42,9 +42,9 @@
       line-height: 3.125em;
       height: 3.125em;
       min-width: 2em;
-      @include text-shadow(0 2px 2px rgba(0,0,0,.6));
-      @include box-shadow(0 0 .7em #fff inset);
-      @include background(linear-gradient(top,$success-color,darken($success-color,5%)));
+      text-shadow: 0 2px 2px rgba(0,0,0,.6);
+      box-shadow: 0 0 .7em #fff inset;
+      background: linear-gradient(top,$success-color,darken($success-color,5%));
     }
     &.correct, &.wrong, &.actual {
       &:before {
@@ -56,7 +56,7 @@
         z-index: 5;
         top: 50%;
         left: 50%;
-        @include translate(-50%, -50%);
+        translate: -50%, -50%;
       }
     }
     &.correct:before {
@@ -68,7 +68,7 @@
       color: $alert-color;
       margin-top: -1px;
       opacity: .7;
-      @include text-shadow(none);
+      text-shadow: none;
     }
     &.actual:before {
       color: #fff;
@@ -82,8 +82,8 @@
       top: 50%;
       left: 50%;
       height: 1.75em;
-      @include translate(-50%,-50%);
-      @include transition(height .25s);
+      translate: -50%,-50%;
+      transition: height .25s;
     }
     @media #{$medium-up} {
       line-height: 4em;
@@ -106,7 +106,7 @@
   a.choice {
     &:hover {
       background-size: 100% 100%;
-      @include text-shadow(0 1px 2px rgba(0,0,0,.4));
+      text-shadow: 0 1px 2px rgba(0,0,0,.4);
     }
     &.secondary {
       &:hover {
