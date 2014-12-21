@@ -21,7 +21,8 @@
 
 %hr
 %h4
-  - if can? :create, Membership, user_id: user.id
+  - if can? :manage, :all
+    -#- if can? :create, Membership, user_id: user.id
     = link_to new_user_membership_path(user), class: 'button tiny right', title: 'Create Membership' do
       = icon 'plus fa-fw'
   Membership history:
