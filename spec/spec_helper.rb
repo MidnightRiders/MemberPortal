@@ -28,6 +28,8 @@ RSpec.configure do |config|
 
   config.include Rails.application.routes.url_helpers
 
+  config.infer_spec_type_from_file_location!
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
