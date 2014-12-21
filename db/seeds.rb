@@ -8,10 +8,6 @@
 
 require 'csv'
 
-%w(admin executive_board at_large_board individual family).each do |name|
-  Role.find_or_create_by(name: name)
-end
-
 def create_or_update x, y
   x.attributes = y
   new = x.new_record?
