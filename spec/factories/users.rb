@@ -42,7 +42,7 @@ FactoryGirl.define do
     member_since { (Random.rand*(Date.today.year-1995)).to_i+1995 }
     password { Faker::Lorem.characters(Random.rand*12 + 8) }
     after :create do |u|
-      u.memberships << FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample)
+      FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample)
     end
     trait :admin do
       after :create do |u|
