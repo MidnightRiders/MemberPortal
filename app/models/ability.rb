@@ -43,17 +43,12 @@ class Ability
         else
           can :show, [User, Club, Match]
           can :index, Match
-          can :manage, [ MotM, RevGuess, PickEm ], user_id: user.id
-          can :manage, user
+          can :manage, [ user, user.memberships, user.mot_ms, user.rev_guesses, user.pick_ems ]
+          can :create, [ Membership, MotM, RevGuess ], user_id: user.id
+          can :vote, PickEm, user_id: user.id
           if user.current_membership.is_a? Family
-            can :manage, Family, user_id: user.id
-            can :manage, Relative, family_id: user.current_membership.id
-            can :manage, User, memberships: { family_id: user.current_membership.id }
-            cannot :index, [ User, Relative, Family ]
-          elsif user.current_membership.is_a? Relative
-            can :manage, Relative, user_id: user.id
-          else
-            can :manage, Individual, user_id: user.id
+            can :create, Relative, membership_id: user.current_membership.id
+            can :manage, [ user.current_membership.relatives, user.current_membership.relatives.map(&:user) ]
           end
           cannot :index, [ Club, Membership, Player, User, MotM, Relative, Family ]
           cannot :grant_privileges, Membership
