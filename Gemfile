@@ -35,6 +35,9 @@ gem 'devise'
 gem 'cancancan'
 gem 'paper_trail'
 
+# Payments
+gem 'stripe'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
