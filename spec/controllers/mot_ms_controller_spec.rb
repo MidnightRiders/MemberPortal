@@ -6,19 +6,19 @@ describe MotMsController do
   context 'when signed out' do
     it 'rejects #index' do
       get :index
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #new' do
       get :new, match_id: match
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #create' do
       expect{ post :create, mot_m: FactoryGirl.attributes_for(:mot_m, match_id: match.id), match_id: match }.not_to change(MotM, :count)
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #edit' do
       get :edit, id: FactoryGirl.create(:mot_m, match_id: match.id), match_id: match
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #update' do
       motm = FactoryGirl.create(:mot_m, match_id: match.id)
@@ -36,11 +36,11 @@ describe MotMsController do
     end
     it 'rejects #index' do
       get :index
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'allows #new' do
       get :new, match_id: match
-      response.should be_success
+      expect(response).to be_success
     end
     it 'allows #create' do
       expect{ post :create, mot_m: FactoryGirl.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match }.to change(MotM, :count)
@@ -57,7 +57,7 @@ describe MotMsController do
     it 'allows #edit' do
       mot_m = FactoryGirl.create(:mot_m, match_id: match.id, user_id: user.id)
       get :edit, id: mot_m, match_id: mot_m.match
-      assigns(:mot_m).should eq mot_m
+      expect(assigns(:mot_m)).to eq mot_m
     end
     it 'accepts #update' do
       motm = FactoryGirl.create(:mot_m, match_id: match.id, user_id: user.id)
@@ -72,7 +72,7 @@ describe MotMsController do
     it 'allows #index' do
       sign_in FactoryGirl.create(:user, :admin)
       get :index
-      assigns(:mot_ms).should eq Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }
+      expect(assigns(:mot_ms)).to eq Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }
     end
   end
 end

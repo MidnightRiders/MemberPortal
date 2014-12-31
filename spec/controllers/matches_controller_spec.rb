@@ -6,7 +6,7 @@ describe MatchesController do
     it 'assigns a new match as @match' do
       match = Match.create! valid_attributes
       get :index, {}, valid_session
-      assigns(:matches).should eq([match])
+      expect(assigns(:matches)).to eq([match])
     end
   end
 
@@ -14,14 +14,14 @@ describe MatchesController do
     it 'assigns a new match as @match' do
       match = Match.create! valid_attributes
       get :show, {:id => match.to_param}, valid_session
-      assigns(:match).should eq(match)
+      expect(assigns(:match)).to eq(match)
     end
   end
 
   skip 'GET new' do
     it 'assigns a new match as @match' do
       get :new, {}, valid_session
-      assigns(:match).should be_a_new(Match)
+      expect(assigns(:match)).to be_a_new(Match)
     end
   end
 
@@ -29,7 +29,7 @@ describe MatchesController do
     it 'assigns the requested match as @match' do
       match = Match.create! valid_attributes
       get :edit, {:id => match.to_param}, valid_session
-      assigns(:match).should eq(match)
+      expect(assigns(:match)).to eq(match)
     end
   end
 
@@ -43,13 +43,13 @@ describe MatchesController do
 
       it 'assigns a newly created match as @match' do
         post :create, {:match => valid_attributes}, valid_session
-        assigns(:match).should be_a(Match)
-        assigns(:match).should be_persisted
+        expect(assigns(:match)).to be_a(Match)
+        expect(assigns(:match)).to be_persisted
       end
 
       it 'redirects to the created match' do
         post :create, {:match => valid_attributes}, valid_session
-        response.should redirect_to(Match.last)
+        expect(response).to redirect_to(Match.last)
       end
     end
 
@@ -58,14 +58,14 @@ describe MatchesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
         post :create, {:match => { home_team_id:  'invalid value' }}, valid_session
-        assigns(:match).should be_a_new(Match)
+        expect(assigns(:match)).to be_a_new(Match)
       end
 
       it 're-renders the "new" template' do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
         post :create, {:match => { home_team_id:  'invalid value' }}, valid_session
-        response.should render_template("new")
+        expect(response).to render_template("new")
       end
     end
   end
@@ -78,20 +78,20 @@ describe MatchesController do
         # specifies that the Match created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Match.any_instance.should_receive(:update).with({ home_team_id:  "1" })
+        expect(Match.any_instance).to_receive(:update).with({ home_team_id:  "1" })
         put :update, {:id => match.to_param, :match => { home_team_id:  "1" }}, valid_session
       end
 
       it 'assigns the requested match as @match' do
         match = Match.create! valid_attributes
         put :update, {:id => match.to_param, :match => valid_attributes}, valid_session
-        assigns(:match).should eq(match)
+        expect(assigns(:match)).to eq(match)
       end
 
       it 'redirects to the match' do
         match = Match.create! valid_attributes
         put :update, {:id => match.to_param, :match => valid_attributes}, valid_session
-        response.should redirect_to(match)
+        expect(response).to redirect_to(match)
       end
     end
 
@@ -101,7 +101,7 @@ describe MatchesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
         put :update, {:id => match.to_param, :match => { home_team_id:  'invalid value' }}, valid_session
-        assigns(:match).should eq(match)
+        expect(assigns(:match)).to eq(match)
       end
 
       it 're-renders the "edit" template' do
@@ -109,7 +109,7 @@ describe MatchesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
         put :update, {:id => match.to_param, :match => { home_team_id:  'invalid value' }}, valid_session
-        response.should render_template("edit")
+        expect(response).to render_template("edit")
       end
     end
   end
@@ -125,7 +125,7 @@ describe MatchesController do
     it 'redirects to the matches list' do
       match = Match.create! valid_attributes
       delete :destroy, {:id => match.to_param}, valid_session
-      response.should redirect_to(matches_url)
+      expect(response).to redirect_to(matches_url)
     end
   end
 

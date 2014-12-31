@@ -55,17 +55,17 @@ describe User do
   describe 'validation' do
     subject(:user) { User.new }
     it 'should not be valid with missing fields' do
-      subject.should_not be_valid
-      subject.errors.should include(:first_name, :last_name, :username, :password)
+      expect(subject).to_not be_valid
+      expect(subject.errors).to include(:first_name, :last_name, :username, :password)
     end
     it 'should not accept an invalid member_since year' do
       user = FactoryGirl.build(:user)
       user.member_since = 1990
-      user.should_not be_valid
+      expect(user).to_not be_valid
       user.member_since = 2015
-      user.should_not be_valid
+      expect(user).to_not be_valid
       user.member_since = Date.today.year
-      user.should be_valid
+      expect(user).to be_valid
     end
   end
 end
