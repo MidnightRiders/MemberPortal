@@ -19,6 +19,7 @@
       = javascript_include_tag '//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js'
       = stylesheet_link_tag 'iealert'
     = csrf_meta_tags
+    = yield :head
   %body
     = render partial: 'layouts/header'
     = render partial: 'layouts/navigation'
@@ -31,10 +32,10 @@
     <!--[if gte IE 9 | !IE ]><!-->
     = javascript_include_tag 'application'
     = javascript_include_tag 'admin' if current_user && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
-    = content_for(:foot) if content_for? :foot
+    = yield :foot
+    = render_javascript
     <![endif]-->
     /[if lt IE 9]
-      = javascript_include_tag 'jquery'
-      = javascript_include_tag 'iealert'
+      = javascript_include_tag 'jquery', 'iealert'
       :javascript
         $(function() { $('body').iealert() })

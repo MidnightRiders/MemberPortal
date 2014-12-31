@@ -28,3 +28,33 @@
     .medium-8.columns
       = f.select :privileges, Membership::PRIVILEGES.sort.map{|r| [r.titleize,r]}, {}, multiple: true, size: 3, disabled: disabled
       = errors_for(f.object, :privileges)
+
+  .row
+    .medium-8.columns.right
+      = f.fields_for :info do |info_fields|
+        = info_fields.check_box :override, value: current_user.id, include_hidden: false, checked: f.object.info.try(:override), disabled: !f.object.info.try(:override).in?([nil, current_user.id])
+        = info_fields.label :override, 'Override Credit Card', class: 'inline'
+
+- if f.object.info.try(:stripe_card_token)
+  = f.fields_for :info do |info_fields|
+    = info_fields.hidden_field :stripe_card_token
+  .row
+    .medium-8.columns.right
+      %label.inline Credit Card has been provided
+- else
+  .row
+    .medium-4.columns
+      = label_tag 'stripe_card_number', 'Credit Card Number', class: 'inline'
+    .medium-8.columns
+      = number_field_tag nil, '', id: 'stripe_card_number'
+  .row
+    .medium-4.columns
+      = label_tag 'stripe_exp_month', 'Expiration / CVC'
+    .medium-8.columns
+      .row
+        .small-4.columns
+          = select_tag nil, options_for_select((1..12), Date.current.month), id: 'stripe_exp_month'
+        .small-4.columns
+          = select_tag nil, options_for_select((Date.current.year..Date.current.year+10), Date.current.year), id: 'stripe_exp_year'
+        .small-4.columns
+          = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC'
