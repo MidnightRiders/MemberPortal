@@ -5,23 +5,23 @@ describe PlayersController do
   shared_examples_for 'unauthorized' do
     it 'rejects #index' do
       get :index
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #show' do
       get :show, id: FactoryGirl.create(:player)
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #new' do
       get :new
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #create' do
       expect{ post :create, player: FactoryGirl.attributes_for(:player) }.not_to change(Player, :count)
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'rejects #edit' do
       get :edit, id: FactoryGirl.create(:player)
-      response.should redirect_to root_path
+      expect(response).to redirect_to root_path
     end
     it 'accepts #update' do
       p = FactoryGirl.create(:player)
@@ -47,23 +47,23 @@ describe PlayersController do
     end
     it 'accepts #index' do
       get :index
-      response.should be_success
+      expect(response).to be_success
     end
     it 'accepts #new' do
       get :new
-      response.should be_success
+      expect(response).to be_success
     end
     it 'accepts #show' do
       player = FactoryGirl.create(:player)
       get :show, id: player
-      response.should be_success
-      assigns(:player).should eq player
+      expect(response).to be_success
+      expect(assigns(:player)).to eq player
     end
     it 'accepts #edit' do
       player = FactoryGirl.create(:player)
       get :edit, id: player
-      response.should be_success
-      assigns(:player).should eq player
+      expect(response).to be_success
+      expect(assigns(:player)).to eq player
     end
     it 'accepts #create' do
       expect{ post :create, player: FactoryGirl.attributes_for(:player) }.to change(Player, :count)
