@@ -82,7 +82,7 @@ class User < ActiveRecord::Base
 
   # Returns +privileges+ from current +Membership+
   def current_privileges
-    current_membership.try(:privileges)
+    current_membership.try(:privileges) || []
   end
 
   # Returns *Boolean*. Determines whether the user has a given privilege.
