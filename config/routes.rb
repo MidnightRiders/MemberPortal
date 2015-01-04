@@ -22,8 +22,14 @@ MidnightRiders::Application.routes.draw do
     collection do
       post :import
     end
-    resources :memberships
+    resources :memberships do
+      resources :relatives, type: 'Relative'
+    end
+    resources :individuals, controller: 'memberships', type: 'Individual'
+    resources :families, controller: 'memberships', type: 'Family'
   end
+
+  match 'users/:user_id/memberships/:id/refund', to: 'memberships#refund', as: 'refund_user_membership', via: [ :put, :patch ]
 
   get 'home', to: 'users#home', as: :user_home
 

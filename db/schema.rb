@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141221154030) do
+ActiveRecord::Schema.define(version: 20150104043828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
 
   create_table "clubs", force: true do |t|
     t.string   "name"
@@ -60,6 +61,7 @@ ActiveRecord::Schema.define(version: 20141221154030) do
     t.json     "privileges"
     t.string   "type"
     t.integer  "family_id"
+    t.text     "refunded"
   end
 
   add_index "memberships", ["info"], name: "index_memberships_on_info", using: :gist
@@ -140,6 +142,7 @@ ActiveRecord::Schema.define(version: 20141221154030) do
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.string   "stripe_customer_token"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

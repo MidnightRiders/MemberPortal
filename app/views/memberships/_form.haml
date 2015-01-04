@@ -2,7 +2,7 @@
   %meta{ name: 'stripe-public-key', content: ENV['STRIPE_PUBLIC_KEY'] || Rails.application.secrets.stripe_public_key }
 - enqueue_javascript 'https://js.stripe.com/v2/'
 
-= form_for [@user, @membership] do |f|
+= form_for [@user, @membership.becomes(Membership)], html: { autocomplete: 'on' } do |f|
   .row
     .large-4.columns
       %h3

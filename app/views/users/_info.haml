@@ -26,13 +26,27 @@
     = link_to new_user_membership_path(user), class: 'button tiny right', title: 'Create Membership' do
       = icon 'plus fa-fw'
   Membership history:
-%ul
-  - user.memberships.each do |membership|
-    %li
-      = membership.year
-      –
-      = membership.list_privileges
-      = link_to 'Edit', edit_user_membership_path(user,membership) if can? :edit, membership
+%table.expand
+  %thead
+    %tr
+      %th Year
+      %th Privileges
+      - if can? :edit, Membership, user_id: user.id
+        %th Actions
+  %tbody
+    - user.memberships.reverse.each do |membership|
+      %tr{ class: ('highlight' if membership == user.current_membership)}
+        %td
+          %strong= membership.year
+        %td
+          = membership.list_privileges
+        - if can? :edit, membership
+          %td.text-right
+            = link_to edit_user_membership_path(user,membership), class: 'button tiny', title: 'Edit' do
+              = icon 'pencil'
+            - if can? :refund, membership
+              = link_to refund_user_membership_path(user, membership), method: :patch, class: 'button tiny alert', title: membership.refund_action.titleize do
+                = icon 'undo'
 
 %hr
 - if current_user==user
@@ -94,4 +108,4 @@
       .medium-4.large-2.columns
         %label Privileges:
       .medium-8.large-10.columns
-        %p= user.current_membership.list_privileges
+        %p= user.list_current_privileges

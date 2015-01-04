@@ -2,7 +2,7 @@
 
 = render partial: 'users/update_prompt'
 
-= render 'register_now' unless current_user.current_member?
+= render 'register_now', user: current_user unless current_user.current_member?
 
 .row
   %section.medium-6.columns

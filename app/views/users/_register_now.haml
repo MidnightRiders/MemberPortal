@@ -5,7 +5,7 @@
       Let’s get that sorted out right away.
       = link_to 'Sign up here', '#'
       for a Riders membership for the
-      = Date.today.year
+      = Date.current.year
       Revolution season. Until you do, you won’t be eligible to park
       in the Supporters’ Lot, come to Supporters-only events, or
       get discounts on Riders merchandise and traveling Supporter
@@ -13,7 +13,9 @@
       be able to do things like RevGuess and Pick ’Em, or even view the
       standings.
     .text-center
-      = link_to '#', class: 'button large' do
-        = icon 'pencil-square-o fa-fw'
-        Register Now
+      = link_to new_user_membership_path(user), class: 'button large' do
+        = icon 'credit-card fa-fw'
+        Buy a
+        = Date.current.year
+        Membership
 %hr

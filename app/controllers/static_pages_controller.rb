@@ -1,7 +1,7 @@
 # Controller for static pages – home, faq, contact. Only visible
 class StaticPagesController < ApplicationController
 
-  before_filter(only: :standings) { raise CanCan::AccessDenied.new('Cannot view standings.', :standings) unless user_signed_in? }
+  authorize_resource class: false, only: [:standings]
 
   # Root path. Shows sign_in if not signed in, user_home if signed in
   def home
