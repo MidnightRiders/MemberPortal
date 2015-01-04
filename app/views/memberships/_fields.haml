@@ -1,4 +1,8 @@
 - disabled ||= false
+- unless f.object.errors[:base].empty?
+  .alert-box.alert
+    - f.object.errors[:base].each do |error|
+      %p= error
 .row
   .medium-4.columns
     = f.label :year, class: 'inline'
@@ -10,16 +14,12 @@
       = f.hidden_field :year
       .inline= f.object.year
 
-- if f.object.family_id
-  = f.hidden_field :type, 'Relative'
-  = f.hidden_field :family_id
-- else
-  .row
-    .medium-4.columns
-      = f.label :type, class: 'inline'
-    .medium-8.columns
-      = f.select :type, %w( Individual Family ), {}, disabled: disabled
-      = errors_for(f.object, :type)
+.row
+  .medium-4.columns
+    = f.label :type, class: 'inline'
+  .medium-8.columns
+    = f.select :type, %w( Individual Family ), {}, disabled: disabled
+    = errors_for(f.object, :type)
 
 - if can? :grant_privileges, Membership
   .row
@@ -28,33 +28,48 @@
     .medium-8.columns
       = f.select :privileges, Membership::PRIVILEGES.sort.map{|r| [r.titleize,r]}, {}, multiple: true, size: 3, disabled: disabled
       = errors_for(f.object, :privileges)
-
   .row
     .medium-8.columns.right
       = f.fields_for :info do |info_fields|
         = info_fields.check_box :override, value: current_user.id, include_hidden: false, checked: f.object.info.try(:override), disabled: !f.object.info.try(:override).in?([nil, current_user.id])
         = info_fields.label :override, 'Override Credit Card', class: 'inline'
 
-- if f.object.info.try(:stripe_card_token)
+        = info_fields.hidden_field :recurring, value: false
+- elsif !f.object.user.current_member? && f.object.user.memberships.last.privileges.include?('admin')
+  = f.hidden_field :privileges, value: 'admin', multiple: true
+
+- if f.object.stripe_card_token || f.object.user.stripe_customer_token
   = f.fields_for :info do |info_fields|
     = info_fields.hidden_field :stripe_card_token
   .row
     .medium-8.columns.right
-      %label.inline Credit Card has been provided
-- else
-  .row
-    .medium-4.columns
-      = label_tag 'stripe_card_number', 'Credit Card Number', class: 'inline'
-    .medium-8.columns
-      = number_field_tag nil, '', id: 'stripe_card_number'
-  .row
-    .medium-4.columns
-      = label_tag 'stripe_exp_month', 'Expiration / CVC'
-    .medium-8.columns
-      .row
-        .small-4.columns
-          = select_tag nil, options_for_select((1..12), Date.current.month), id: 'stripe_exp_month'
-        .small-4.columns
-          = select_tag nil, options_for_select((Date.current.year..Date.current.year+10), Date.current.year), id: 'stripe_exp_year'
-        .small-4.columns
-          = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC'
+      %label.inline
+        Credit Card has been provided
+        - if f.object.user.stripe_customer_token
+          = link_to '(Change Card)', '#', id: 'show-credit-card-info'
+
+- unless f.object.stripe_card_token
+  #credit-card-info{ class: ('hide' if f.object.user.stripe_customer_token) }
+    .row
+      .medium-4.columns
+        = label_tag 'stripe_card_number', 'Credit Card Number', class: 'inline'
+      .medium-8.columns
+        = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
+    .row
+      .medium-4.columns
+        = label_tag 'stripe_exp_month', 'Expiration / CVC'
+      .medium-8.columns
+        .row
+          .small-4.columns
+            = select_tag nil, options_for_select((1..12), Date.current.month), id: 'stripe_exp_month', disabled: !!f.object.user.stripe_customer_token
+          .small-4.columns
+            = select_tag nil, options_for_select((Date.current.year..Date.current.year+10), Date.current.year), id: 'stripe_exp_year', disabled: !!f.object.user.stripe_customer_token
+          .small-4.columns
+            = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC', pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
+    = f.hidden_field :stripe_card_token, disabled: !!f.object.user.stripe_customer_token
+    .row
+      .medium-8.columns.right
+        = f.fields_for :info do |info_fields|
+          = info_fields.check_box :recurring, disabled: !!f.object.user.stripe_customer_token
+          = info_fields.label :recurring, 'Sign up for automatic yearly renewal'
+

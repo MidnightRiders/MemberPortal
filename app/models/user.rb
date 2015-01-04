@@ -90,6 +90,18 @@ class User < ActiveRecord::Base
     current_privileges.include? r
   end
 
+  # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
+  def list_current_privileges(verbose=false)
+    ps = current_privileges.map(&:titleize)
+    if ps.empty?
+      'None'
+    elsif verbose
+      ps.to_sentence
+    else
+      ps.join(', ')
+    end
+  end
+
   # Returns +Membership+ for current year.
   def current_membership
     memberships.where(year: (Date.today.year..Date.today.year + 1)).order('year ASC').first

@@ -105,6 +105,7 @@ select[multiple], select[size] {
   &.success, &.alert {
     &:before {
       display: inline-block;
+      float: right;
       font-family: FontAwesome;
       font-style: normal;
       font-weight: normal;

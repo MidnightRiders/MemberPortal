@@ -34,8 +34,8 @@ class MembershipsController < ApplicationController
     @membership = @user.memberships.new(membership_params)
 
     respond_to do |format|
-      if @membership.save
-        format.html { redirect_to @user, notice: 'Membership was successfully created.' }
+      if @membership.save_with_payment
+        format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
         format.json { render action: 'show', status: :created, location: @membership }
       else
         format.html { render action: 'new' }
@@ -48,11 +48,25 @@ class MembershipsController < ApplicationController
   # PATCH/PUT /users/:user_id/memberships/1.json
   def update
     respond_to do |format|
-      if @membership.update(club_params)
-        format.html { redirect_to @membership, notice: 'Club was successfully updated.' }
+      if @membership.update(membership_params)
+        format.html { redirect_to get_user_path, notice: 'Membership was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
+        format.json { render json: @membership.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /users/:user_id/memberships/1/refund
+  # PATCH/PUT /users/:user_id/memberships/1/refund.json
+  def refund
+    respond_to do |format|
+      if @membership.refund
+        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.refund_action(true)}." }
+        format.json { render json: { notice: "Membership was successfully #{@membership.refund_action(true)}."}, status: :ok }
+      else
+        format.html { render get_user_path }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -75,14 +89,14 @@ class MembershipsController < ApplicationController
       @user = User.find_by(username: params[:user_id])
     end
 
-    # Define +@membership+ based on route +:id+
-    def get_membership
-      @membership = Membership.find(params[:id])
+    # Determine where to redirect after success
+    def get_user_path
+      @user == current_user ? user_home_path : user_path(@user)
     end
 
     # Strong params for +Membership+
     def membership_params
-      params.require(:membership).permit(:user_id, :year, privileges: []).tap do |whitelisted|
+      params.require(:membership).permit(:user_id, :year, :type, :stripe_card_token, privileges: []).tap do |whitelisted|
         whitelisted[:info] = params[:membership][:info]
       end
     end
