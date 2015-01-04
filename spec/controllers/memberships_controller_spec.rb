@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe Users::MembershipsController do
+describe MembershipsController do
 
 end
