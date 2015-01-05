@@ -6,32 +6,6 @@
     = devise_error_messages!
   .row
     .large-4.columns
-      %h3 User Information
-      - if devise && devise_mapping.confirmable? && resource.pending_reconfirmation?
-        %small.hint
-          Currently waiting confirmation for:
-          = resource.unconfirmed_email
-    .large-8.columns
-      .row
-        .medium-4.columns
-          = f.label :username, class: 'inline'
-        .medium-8.columns
-          = f.text_field :username, autofocus: true, autocapitalize: 'off', autocorrect: 'off'
-      - if devise
-        .row
-          .medium-4.columns
-            = f.label :password, class: 'inline'
-          .medium-8.columns
-            = f.password_field :password, autocapitalize: 'off', autocorrect: 'off'
-            - if !f.object.new_record?
-              %small.hint (leave blank if you don't want to change it)
-        .row
-          .medium-4.columns
-            = f.label :password_confirmation, class: 'inline'
-          .medium-8.columns
-            = f.password_field :password_confirmation, autocapitalize: 'off', autocorrect: 'off'
-  .row
-    .large-4.columns
       %h3 Membership Information
     .large-8.columns
       .row
@@ -63,7 +37,35 @@
               = f.fields_for :membership, @membership || f.object.current_membership do |ff|
                 = render 'memberships/fields', f: ff, disabled: true
           - else
+            - if @membership && can? :create, Membership
+              = f.fields
             = text_field_tag :privileges, user.list_current_privileges, disabled: true
+  .row
+    .large-4.columns
+      %h3 User Information
+      - if devise && devise_mapping.confirmable? && resource.pending_reconfirmation?
+        %small.hint
+          Currently waiting confirmation for:
+          = resource.unconfirmed_email
+    .large-8.columns
+      .row
+        .medium-4.columns
+          = f.label :username, class: 'inline'
+        .medium-8.columns
+          = f.text_field :username, autofocus: true, autocapitalize: 'off', autocorrect: 'off'
+      - if devise
+        .row
+          .medium-4.columns
+            = f.label :password, class: 'inline'
+          .medium-8.columns
+            = f.password_field :password, autocapitalize: 'off', autocorrect: 'off'
+            - if !f.object.new_record?
+              %small.hint (leave blank if you don't want to change it)
+        .row
+          .medium-4.columns
+            = f.label :password_confirmation, class: 'inline'
+          .medium-8.columns
+            = f.password_field :password_confirmation, autocapitalize: 'off', autocorrect: 'off'
   .row
     .large-4.columns
       %h3 Contact Information

@@ -37,7 +37,13 @@
         = f.check_box :remember_me
         = f.label :remember_me
   .row.actions
-    .small-12.columns
-      = f.button :submit, class: 'button' do
-        Sign in
-        = icon 'arrow-right fa-fw'
+    .medium-6.large-4.columns.right
+      %ul.button-group.even-2
+        %li
+          = link_to new_user_registration_path, class: 'button secondary' do
+            = icon 'pencil'
+            Sign Up
+        %li
+          = f.button :submit, class: 'button' do
+            Sign in
+            = icon 'arrow-right fa-fw'
