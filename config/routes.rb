@@ -16,7 +16,6 @@ MidnightRiders::Application.routes.draw do
 
   resources :clubs
 
-  match 'users/sign_up', to: 'static_pages#home', via: :all
   devise_for :users
   resources :users do
     collection do
