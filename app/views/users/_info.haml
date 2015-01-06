@@ -17,7 +17,7 @@
   .medium-4.columns.text-right
     - if can? :destroy, User
       = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => "Are you sure you wish to destroy @#{user.username}?" }, title: 'Destroy' do
-        = icon 'trash-o', '', class: 'fa-lg fa-fw'
+        = icon 'trash-o fa-lg fa-fw'
 
 %hr
 %h4
@@ -35,18 +35,28 @@
         %th Actions
   %tbody
     - user.memberships.reverse.each do |membership|
+      - membership = membership.decorate
       %tr{ class: ('highlight' if membership == user.current_membership)}
         %td
           %strong= membership.year
         %td
           = membership.list_privileges
         - if can? :edit, membership
-          %td.text-right
-            = link_to edit_user_membership_path(user,membership), class: 'button tiny', title: 'Edit' do
+          %td
+            = link_to edit_user_membership_path(user,membership), class: 'button expand tiny split', title: 'Edit' do
               = icon 'pencil'
-            - if can? :refund, membership
-              = link_to refund_user_membership_path(user, membership), method: :patch, class: 'button tiny alert', title: membership.refund_action.titleize do
-                = icon 'undo'
+              Edit
+              - if can? :manage, membership
+                %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
+            - if can? :manage, membership
+              %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
+                %li
+                  = link_to 'cancel_user_membership_path(user, membership)', method: :patch, title: membership.refund_action(false, false).titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
+                    = membership.refund_action(false, false).titleize
+                - if can?(:refund, membership) && membership.stripe_charge_id.present?
+                  %li
+                    = link_to refund_user_membership_path(user, membership), method: :patch, class: 'alert', title: membership.refund_action.titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
+                      = membership.refund_action.titleize
 
 %hr
 - if current_user==user

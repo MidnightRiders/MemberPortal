@@ -63,10 +63,11 @@ class MembershipsController < ApplicationController
   def refund
     respond_to do |format|
       if @membership.refund
-        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.refund_action(true)}." }
-        format.json { render json: { notice: "Membership was successfully #{@membership.refund_action(true)}."}, status: :ok }
+        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.decorate.refund_action(true)}." }
+        format.json { render json: { notice: "Membership was successfully #{@membership.decorate.refund_action(true)}."}, status: :ok }
       else
-        format.html { render get_user_path }
+        binding.pry
+        format.html { redirect_to get_user_path }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -96,7 +97,7 @@ class MembershipsController < ApplicationController
 
     # Strong params for +Membership+
     def membership_params
-      params.require(:membership).permit(:user_id, :year, :type, :stripe_card_token, privileges: []).tap do |whitelisted|
+      params.require(:membership).permit(:user_id, :year, :type, :stripe_card_token, :subscription, privileges: []).tap do |whitelisted|
         whitelisted[:info] = params[:membership][:info]
       end
     end

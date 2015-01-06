@@ -6,7 +6,7 @@ gem 'rails'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
-gem 'activerecord-postgres-hstore'
+gem 'hstore_accessor'
 
 gem 'haml-rails'
 gem 'sass-rails'
