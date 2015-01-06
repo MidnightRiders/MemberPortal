@@ -37,7 +37,7 @@
               = f.fields_for :membership, @membership || f.object.current_membership do |ff|
                 = render 'memberships/fields', f: ff, disabled: true
           - else
-            - if @membership && can? :create, Membership
+            - if @membership && can?(:create, Membership)
               = f.fields
             = text_field_tag :privileges, user.list_current_privileges, disabled: true
   .row

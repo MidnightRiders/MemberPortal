@@ -20,6 +20,10 @@
   .medium-8.columns
     = f.select :type, %w( Individual Family ), {}, disabled: disabled
     = errors_for(f.object, :type)
+.row
+  .medium-8.columns.right
+    = f.check_box :subscription
+    = f.label :subscription, 'Sign up for automatic yearly renewal'
 
 - if can? :grant_privileges, Membership
   .row
@@ -34,13 +38,12 @@
         = info_fields.check_box :override, value: current_user.id, include_hidden: false, checked: f.object.info.try(:override), disabled: !f.object.info.try(:override).in?([nil, current_user.id])
         = info_fields.label :override, 'Override Credit Card', class: 'inline'
 
-        = info_fields.hidden_field :recurring, value: false
+  = f.hidden_field :subscription, value: 0
 - elsif !f.object.user.current_member? && f.object.user.memberships.last.privileges.include?('admin')
   = f.hidden_field :privileges, value: 'admin', multiple: true
 
 - if f.object.stripe_card_token || f.object.user.stripe_customer_token
-  = f.fields_for :info do |info_fields|
-    = info_fields.hidden_field :stripe_card_token
+  = f.hidden_field :stripe_card_token if f.object.stripe_card_token
   .row
     .medium-8.columns.right
       %label.inline
@@ -67,9 +70,4 @@
           .small-4.columns
             = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC', pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
     = f.hidden_field :stripe_card_token, disabled: !!f.object.user.stripe_customer_token
-    .row
-      .medium-8.columns.right
-        = f.fields_for :info do |info_fields|
-          = info_fields.check_box :recurring, disabled: !!f.object.user.stripe_customer_token
-          = info_fields.label :recurring, 'Sign up for automatic yearly renewal'
 

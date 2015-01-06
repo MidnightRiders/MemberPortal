@@ -10,6 +10,7 @@
 #  info       :hstore
 #  privileges :json
 #  type       :string
+#  refunded   :string
 #  created_at :datetime
 #  updated_at :datetime
 #
@@ -19,18 +20,23 @@ class Membership < ActiveRecord::Base
   TYPES = %w( Individual Family Relative )
   PRIVILEGES = %w( admin executive_board at_large_board )
 
-  attr_accessor :stripe_card_token
+  attr_accessor :stripe_card_token, :subscription
+
+  hstore_accessor :info,
+                  stripe_customer_token: :string,
+                  stripe_subscription_id: :string,
+                  stripe_charge_id: :string,
+                  override: :integer
 
   belongs_to :user
 
   default_scope -> { where(refunded: nil).order('year ASC') }
-  scope :refunded, -> { where.not(refunded: true) }
+  scope :refunds, -> { unscoped.where.not(refunded: nil).order('year ASC') }
 
   before_validation :remove_blank_privileges
 
-  validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }
+  validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
-  validate :one_active_membership_per_year
   validate :accepted_privileges
   validate :is_paid_membership
 
@@ -55,7 +61,7 @@ class Membership < ActiveRecord::Base
   end
 
   def overriding_admin
-    Membership.includes(:user).find_by(users: { id: info['override'] }, year: year).try(:user)
+    Membership.includes(:user).find_by(users: { id: override }, year: year).try(:user)
   end
 
   def overridden_memberships
@@ -93,29 +99,28 @@ class Membership < ActiveRecord::Base
 
         else
           customer = Stripe::Customer.create(customer_params.deep_merge(card: stripe_card_token, metadata: { start_year: year }))
+          user.stripe_customer_token = customer.id
         end
-        info_will_change!
-        if info['recurring'].to_i == 1
+        if subscription.to_i == 1
           subscription = customer.subscriptions.create(
-            plan: is_a?(Family) ? '2' : '1',
+              plan: type.downcase,
+              trial_end: 1.year.from_now.beginning_of_year.to_i
           )
-          info['stripe_subscription_id'] = subscription.id
-        else
-          charge = Stripe::Charge.create(
+          self.stripe_subscription_id = subscription.id
+        end
+        charge = Stripe::Charge.create(
             customer: customer.id,
             description: "Midnight Riders #{year} #{type.titleize} Membership",
             metadata: {
-              year: year,
-              type: type.titleize
+                year: year,
+                type: type.titleize
             },
             receipt_email: user.email,
             amount: is_a?(Family) ? 2091 : 1061,
             currency: 'usd',
             statement_descriptor: "MRiders #{year} #{type.to_s[0..2].titleize} Mem",
-          )
-          info['stripe_charge_id'] = charge.id
-        end
-        user.stripe_customer_token = customer.id
+        )
+        self.stripe_charge_id = charge.id
       end
       save!
     end
@@ -125,45 +130,60 @@ class Membership < ActiveRecord::Base
     false
   end
 
+  # Cancel current subscription
+  def cancel(provide_refund = false)
+    if stripe_subscription_id.present?
+      stripe_customer.subscriptions.retrieve(stripe_subscription_id).delete
+      refund if provide_refund
+    else
+      errors.add :base, 'This is not a recurring subscription.'
+    end
+  rescue Stripe::StripeError => e
+    logger.error "Stripe error while creating customer: #{e.message}"
+    errors.add :base, 'There was a problem with your credit card: ' + e.message
+    false
+  end
+
   # Refund payment if possible and destroy Membership
   def refund
-    if user.stripe_customer_token
-      if info['stripe_charge_id']
-        charge = Stripe::Charge.retrieve(info['stripe_charge_id'])
+    if stripe_customer
+      if stripe_charge_id
+        charge = Stripe::Charge.retrieve(stripe_charge_id)
         refund = charge.refunds.create
         if refund
-          update_attribute(:refunded, refund.id)
+          refunded = refund.id
         end
-      elsif info['stripe_subscription_id']
-        customer = Stripe::Subscription.retrieve(user.stripe_customer_token)
-        if customer.subscriptions.retrieve(info['stripe_subscription_id']).delete
-          update_attribute(:refunded, 'canceled')
+      elsif stripe_subscription_id
+        if stripe_customer.subscriptions.retrieve(stripe_customer_token).delete
+          refunded = 'canceled'
         end
       end
-    elsif info['override']
-      update_attribute(:refunded, 'true')
+    elsif override
+      refunded = 'true'
+    else
+      logger.error 'There is no Stripe customer'
+      errors.add :base, 'No customer token was found on the membership.'
     end
-  rescue Stripe::InvalidRequestError => e
+    binding.pry
+    errors.add :base, 'No action was successfully taken' if refunded.nil?
+    save!
+  rescue Stripe::StripeError => e
     logger.error "Stripe error while refunding customer: #{e.message}"
     errors.add :base, 'There was a problem refunding the transaction.'
     false
   end
 
-  def refund_action(past = false)
-    if info['stripe_charge_id']
-      "refund#{'ed' if past}"
-    elsif info['stripe_subscription_id']
-      "cancel#{'ed' if past}"
-    elsif info['override']
-      "mark#{'ed' if past} as refunded"
+  def stripe_customer
+    if user.stripe_customer_token
+      Stripe::Customer.retrieve(user.stripe_customer_token)
+    else
+      nil
     end
+  rescue Stripe::InvalidRequestError => e
+    logger.error "Stripe::InvalidRequestError: #{e}"
   end
 
   private
-
-    def one_active_membership_per_year
-      errors.add(:year, 'already has an active membership') if Membership.unscoped.where(year: year, user_id: user_id).where.not(refunded: nil).size > 0
-    end
 
     def remove_blank_privileges
       privileges.try(:reject!, &:blank?)

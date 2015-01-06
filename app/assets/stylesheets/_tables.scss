@@ -62,7 +62,8 @@ table,
       th,
       .thd {
         color: #fff;
-        a:link, a:visited {
+        > a:link,
+        > a:visited {
           color: #fff;
         }
       }
@@ -77,8 +78,18 @@ table,
       &.column, &.columns {
         float: none;
       }
-      button, .button, & > :last-child {
+      button,
+      .button,
+      & > :last-child {
         margin-bottom: 0;
+      }
+      button,
+      .button {
+        i.fa {
+          font-size: 1.6em;
+          margin-left: .25em;
+          margin-right: .25em;
+        }
       }
       &.no-pad {
         padding-left: 0;
