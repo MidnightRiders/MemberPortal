@@ -16,6 +16,7 @@ MidnightRiders::Application.routes.draw do
 
   resources :clubs
 
+  match 'memberships/webhooks', to: 'memberships#webhooks', via: :all
   devise_for :users
   resources :users do
     collection do
