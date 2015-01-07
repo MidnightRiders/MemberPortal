@@ -2,8 +2,9 @@
 
 # Controller for +Membership+ model.
 class MembershipsController < ApplicationController
-  load_and_authorize_resource
-  before_action :get_user
+  load_and_authorize_resource except: [ :webhooks ]
+  before_action :get_user, except: [ :webhooks ]
+  skip_before_action :verify_authenticity_token, only: [ :webhooks ]
 
   # GET /users/:user_id/memberships
   # GET /users/:user_id/memberships.json
@@ -81,6 +82,37 @@ class MembershipsController < ApplicationController
       format.html { redirect_to @user }
       format.json { head :no_content }
     end
+  end
+
+  # ALL /memberships/webhooks
+  def webhooks
+    event = Stripe::Event.retrieve(params[:id])
+    object = event.data.object
+    user  = User.find_by(stripe_customer_token: object.customer )
+    if user
+      if object.object == 'charge'
+        membership = Membership.with_stripe_charge_id(object.id)
+        if event.type == 'charge.succeeded'
+          logger.error "Membership for Stripe::Charge #{object.id} already exists." if membership
+          user.memberships.create!(
+            year: object.metadata[:year] || Date.current.year,
+            type: object.metadata[:type] || 'individual',
+            info: { stripe_charge_id: object.id }
+          )
+        elsif event.type == 'charge.refunded'
+          membership.refunded = true
+          membership.save!
+        end
+      elsif object.object == 'invoice'
+        if event.type = 'invoice.payment_successful'
+
+        end
+      end
+    else
+      logger.error "No user could be found with ID #{object.customer}\n  Event ID: #{event.id}"
+    end
+  rescue Stripe::StripeError => e
+    logger.error "StripeError encountered: #{e}"
   end
 
   private
