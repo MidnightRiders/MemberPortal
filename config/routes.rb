@@ -30,6 +30,7 @@ MidnightRiders::Application.routes.draw do
   end
 
   match 'users/:user_id/memberships/:id/refund', to: 'memberships#refund', as: 'refund_user_membership', via: [ :put, :patch ]
+  match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: 'cancel_user_membership', via: [ :put, :patch ]
 
   get 'home', to: 'users#home', as: :user_home
 

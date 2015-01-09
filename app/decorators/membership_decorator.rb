@@ -13,7 +13,7 @@ class MembershipDecorator < Draper::Decorator
   def refund_action(past = false, refund = true)
     ed = past ? 'ed' : ''
     return "cancel#{ed}" unless h.can?(:refund, model)
-    if model.stripe_subscription_id
+    if model.is_subscription?
       "cancel#{ed}#{" and refund#{ed}" if refund}"
     elsif model.stripe_charge_id
       "refund#{ed}"
@@ -24,9 +24,9 @@ class MembershipDecorator < Draper::Decorator
 
   def refund_icon(refund = true)
     h.icon('times-circle') + ' ' +
-    if model.stripe_subscription_id && refund
+    if model.is_subscription? && refund
       h.icon('credit-card') + ' ' + h.icon('calendar')
-    elsif model.stripe_subscription_id
+    elsif model.is_subscription?
       h.icon 'calendar'
     elsif model.stripe_charge_id
       h.icon 'credit-card'

@@ -36,6 +36,7 @@ class MembershipsController < ApplicationController
 
     respond_to do |format|
       if @membership.save_with_payment
+        UserMailer.new_membership_confirmation_email(@user, @membership).deliver
         format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
         format.json { render action: 'show', status: :created, location: @membership }
       else
@@ -74,6 +75,21 @@ class MembershipsController < ApplicationController
     end
   end
 
+  # PATCH/PUT /users/:user_id/memberships/1/cancel
+  # PATCH/PUT /users/:user_id/memberships/1/cancel.json
+  def cancel
+    respond_to do |format|
+      if @membership.cancel(params.fetch(:refund, true).in? [true, 'true'])
+        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.decorate.refund_action(true)}." }
+        format.json { render json: { notice: "Membership was successfully #{@membership.decorate.refund_action(true)}."}, status: :ok }
+      else
+        binding.pry
+        format.html { redirect_to get_user_path }
+        format.json { render json: @membership.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   # DELETE /users/:user_id/memberships/1
   # DELETE /users/:user_id/memberships/1.json
   def destroy
@@ -87,25 +103,30 @@ class MembershipsController < ApplicationController
   # ALL /memberships/webhooks
   def webhooks
     event = Stripe::Event.retrieve(params[:id])
+    logger.info event.type
+    logger.info event.data.object
     object = event.data.object
     user  = User.find_by(stripe_customer_token: object.customer )
     if user
+      customer = Stripe::Customer.retrieve(object.customer)
       if object.object == 'charge'
         membership = Membership.with_stripe_charge_id(object.id)
-        if event.type == 'charge.succeeded'
-          logger.error "Membership for Stripe::Charge #{object.id} already exists." if membership
-          user.memberships.create!(
-            year: object.metadata[:year] || Date.current.year,
-            type: object.metadata[:type] || 'individual',
-            info: { stripe_charge_id: object.id }
-          )
-        elsif event.type == 'charge.refunded'
+        # charge.succeeded is handled immediately - no webhook
+        if event.type == 'charge.refunded'
           membership.refunded = true
           membership.save!
         end
       elsif object.object == 'invoice'
-        if event.type = 'invoice.payment_successful'
-
+        subscription = customer.subscriptions.retrieve(object.subscription)
+        if event.type == 'invoice.payment_succeeded'
+          user.memberships.create!(
+            year: Time.at(subscription.current_period_start),
+            type: subscription.plan.id.titleize,
+            info: {
+              stripe_subscription_id: subscription.id
+            }
+          )
+          UserMailer.membership_subscription_confirmation_email(@user, @membership).deliver
         end
       end
     else

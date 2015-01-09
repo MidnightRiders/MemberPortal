@@ -21,18 +21,14 @@
 
 %hr
 %h4
-  - if can? :manage, :all
-    -#- if can? :create, Membership, user_id: user.id
-    = link_to new_user_membership_path(user), class: 'button tiny right', title: 'Create Membership' do
-      = icon 'plus fa-fw'
   Membership history:
 %table.expand
   %thead
     %tr
-      %th Year
-      %th Privileges
-      - if can? :edit, Membership, user_id: user.id
-        %th Actions
+      %th.small-4 Year
+      %th.small-4 Privileges
+      - if current_user.privilege? 'admin'
+        %th.small-4 Actions
   %tbody
     - user.memberships.reverse.each do |membership|
       - membership = membership.decorate
@@ -41,31 +37,29 @@
           %strong= membership.year
         %td
           = membership.list_privileges
-        - if can? :edit, membership
+        - if current_user.privilege? 'admin'
           %td
             = link_to edit_user_membership_path(user,membership), class: 'button expand tiny split', title: 'Edit' do
               = icon 'pencil'
               Edit
-              - if can? :manage, membership
-                %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
-            - if can? :manage, membership
-              %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
+              %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
+            %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
+              %li
+                = link_to (membership.is_subscription? ? cancel_user_membership_path(user, membership) : refund_user_membership_path(user, membership)), method: :patch, title: membership.refund_action(false, false).titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
+                  = membership.refund_action(false, false).titleize
+              - if can?(:refund, membership) && membership.stripe_charge_id.present?
                 %li
-                  = link_to 'cancel_user_membership_path(user, membership)', method: :patch, title: membership.refund_action(false, false).titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
-                    = membership.refund_action(false, false).titleize
-                - if can?(:refund, membership) && membership.stripe_charge_id.present?
-                  %li
-                    = link_to refund_user_membership_path(user, membership), method: :patch, class: 'alert', title: membership.refund_action.titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
-                      = membership.refund_action.titleize
+                  = link_to (membership.is_subscription? ? cancel_user_membership_path(user, membership) : refund_user_membership_path(user, membership)), method: :patch, class: 'alert', title: membership.refund_action.titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
+                    = membership.refund_action.titleize
 
 %hr
 - if current_user==user
   .row
     .small-6.columns
-      - if lastmatch = revs.last_match
+      - if (lastmatch = revs.last_match) && can?(:vote, MotM, match_id: lastmatch.id)
         = lastmatch.decorate.mot_m_button('tiny secondary expand', true)
     .small-6.columns
-      - if nextmatch = revs.next_match
+      - if (nextmatch = revs.next_match) && can?(:vote, RevGuess, match_id: nextmatch.id)
         = nextmatch.decorate.rev_guess_button('tiny secondary expand', true)
 
 .table

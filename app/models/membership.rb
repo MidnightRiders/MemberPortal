@@ -18,12 +18,12 @@
 class Membership < ActiveRecord::Base
   store_accessor :privileges
   TYPES = %w( Individual Family Relative )
+  COSTS = { Individual: '1061', Family: '2091' }
   PRIVILEGES = %w( admin executive_board at_large_board )
 
   attr_accessor :stripe_card_token, :subscription
 
   hstore_accessor :info,
-                  stripe_customer_token: :string,
                   stripe_subscription_id: :string,
                   stripe_charge_id: :string,
                   override: :integer
@@ -38,6 +38,7 @@ class Membership < ActiveRecord::Base
   validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
   validate :accepted_privileges
+  validate :stripe_info_is_unique?
   validate :is_paid_membership
 
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
@@ -64,8 +65,8 @@ class Membership < ActiveRecord::Base
     Membership.includes(:user).find_by(users: { id: override }, year: year).try(:user)
   end
 
-  def overridden_memberships
-    Membership.includes(:user).where("info -> 'override' = ? AND year = ?", user.id.to_s, year)
+  def is_subscription?
+    stripe_subscription_id.present?
   end
 
   # Save with Stripe payment if applicable
@@ -116,7 +117,7 @@ class Membership < ActiveRecord::Base
                 type: type.titleize
             },
             receipt_email: user.email,
-            amount: is_a?(Family) ? 2091 : 1061,
+            amount: COSTS[type.to_sym],
             currency: 'usd',
             statement_descriptor: "MRiders #{year} #{type.to_s[0..2].titleize} Mem",
         )
@@ -132,7 +133,7 @@ class Membership < ActiveRecord::Base
 
   # Cancel current subscription
   def cancel(provide_refund = false)
-    if stripe_subscription_id.present?
+    if is_subscription?
       stripe_customer.subscriptions.retrieve(stripe_subscription_id).delete
       refund if provide_refund
     else
@@ -153,7 +154,7 @@ class Membership < ActiveRecord::Base
         if refund
           refunded = refund.id
         end
-      elsif stripe_subscription_id
+      elsif is_subscription?
         if stripe_customer.subscriptions.retrieve(stripe_customer_token).delete
           refunded = 'canceled'
         end
@@ -183,6 +184,14 @@ class Membership < ActiveRecord::Base
     logger.error "Stripe::InvalidRequestError: #{e}"
   end
 
+  def info
+    if read_attribute(:info).nil?
+      {}
+    else
+      super
+    end
+  end
+
   private
 
     def remove_blank_privileges
@@ -200,7 +209,12 @@ class Membership < ActiveRecord::Base
 
     def is_paid_membership
       unless is_a?(Relative)
-        errors.add(:base, 'must be a paid membership') if info.blank? || !(stripe_card_token || user.stripe_customer_token || overriding_admin)
+        errors.add(:base, 'must be paid for') unless info[:stripe_charge_id] || info[:stripe_subscription_id] || stripe_card_token || user.stripe_customer_token || overriding_admin
       end
+    end
+
+    def stripe_info_is_unique?
+      errors.add(:info, 'contains a redundant Stripe Subscription ID') unless Membership.where.not(id: id).with_stripe_subscription_id(info[:stripe_subscription_id]).empty?
+      errors.add(:info, 'contains a redundant Stripe Charge ID') unless Membership.where.not(id: id).with_stripe_charge_id(info[:stripe_charge_id]).empty?
     end
 end

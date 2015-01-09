@@ -28,16 +28,18 @@ class Ability
   # See the wiki for details:
   # https://github.com/ryanb/cancan/wiki/Defining-Abilities
   def initialize(user)
+    alias_action :create, :read, :update, :destroy, to: :crud
+
     if user
-      can :home, [User]
-      can :create, Membership, user_id: user.id
+      can :home, [ User ]
       can :manage, user
       if user.current_member?
         can :standings, :static_page
         if user.privilege? 'admin'
           can :manage, :all
-          can :refund, Membership, year: (Date.current.year..Date.current.year + 1)
-          can :grant_privileges, Membership
+          # Implicit
+          # can :refund, Membership, year: (Date.current.year..Date.current.year + 1)
+          # can :grant_privileges, Membership
         elsif user.privilege? 'executive_board'
           can :manage, [ User, Membership, Club, Match, Player, RevGuess ]
           cannot :destroy, [ Club, Player ]
@@ -45,7 +47,7 @@ class Ability
           can :read, :all
           can :index, MotM
         else
-          can :show, [User, Club, Match]
+          can :show, [ User, Club, Match ]
           can :index, Match
           can :manage, [ user.current_membership, user.mot_ms, user.rev_guesses, user.pick_ems ]
           can :create, [ MotM, RevGuess ], user_id: user.id
@@ -59,6 +61,7 @@ class Ability
           cannot :grant_privileges, Membership
         end
       else
+        can :create, Membership, user_id: user.id
       end
     else
       cannot :index, :all
