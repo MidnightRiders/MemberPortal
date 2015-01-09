@@ -6,7 +6,7 @@
     = devise_error_messages!
   .row
     .large-4.columns
-      %h3 Membership Information
+      %h3 User Information
     .large-8.columns
       .row
         .medium-4.columns
@@ -21,28 +21,7 @@
         .medium-4.columns
           = f.label :member_since, class: 'inline'
         .medium-8.columns
-          = f.number_field :member_since
-      .row
-        .medium-4.columns
-          = label_tag :privileges, 'Current Membership', class: 'inline'
-        .medium-8.columns
-          - if can? :edit, Membership, user_id: user.id
-            .row.collapse
-              .small-10.columns
-                = text_field_tag :privileges, "#{user.current_membership.try(:year)} – #{user.list_current_privileges}", disabled: true
-              .small-2.columns
-                = link_to (f.object.new_record? ? '#' : edit_user_membership_path(user, user.memberships.last)), class: 'postfix small secondary edit-membership' do
-                  = icon 'pencil fa-fw'
-            .row.hide#edit-membership
-              = f.fields_for :membership, @membership || f.object.current_membership do |ff|
-                = render 'memberships/fields', f: ff, disabled: true
-          - else
-            - if @membership && can?(:create, Membership)
-              = f.fields
-            = text_field_tag :privileges, user.list_current_privileges, disabled: true
-  .row
-    .large-4.columns
-      %h3 User Information
+          = f.select :member_since, (1995..Date.current.year), selected: f.object.member_since || Date.current.year
       - if devise && devise_mapping.confirmable? && resource.pending_reconfirmation?
         %small.hint
           Currently waiting confirmation for:

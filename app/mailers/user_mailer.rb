@@ -14,4 +14,20 @@ class UserMailer < ActionMailer::Base
     @temp_pass = temp_pass
     mail(to: @user.email, subject: @title)
   end
+
+  # Receipt for one-time membership purchase
+  def new_membership_confirmation_email(user, membership)
+    @user = user
+    @membership = membership
+    @title = "Congratulations on your #{@membership.year} #{@membership.type} Membership!"
+    mail(to: @user.email, subject: @title)
+  end
+
+  # Receipt for one-time membership purchase
+  def membership_subscription_confirmation_email(user, membership)
+    @user = user
+    @membership = membership
+    @title = "Congratulations on your #{@membership.year} #{@membership.type} Membership!"
+    mail(to: @user.email, subject: @title)
+  end
 end
