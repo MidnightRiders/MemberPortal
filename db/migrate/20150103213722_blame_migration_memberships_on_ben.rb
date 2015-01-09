@@ -1,6 +1,6 @@
 class BlameMigrationMembershipsOnBen < ActiveRecord::Migration
   def up
-    ben = User.find_by(username: 'bensaufley')
+    ben = User.unscoped.find_by(username: 'bensaufley')
     Membership.unscoped.where(info: nil).each do |membership|
       membership.update_attribute(:info, { override: ben.id })
     end
