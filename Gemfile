@@ -57,6 +57,7 @@ group :development, :test do
   gem 'faker'
   gem 'fivemat'
   gem 'poltergeist'
+  gem 'thin'
   gem 'launchy'
   gem 'active_record_query_trace'
 end
