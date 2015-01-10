@@ -67,6 +67,13 @@ select {
   }
 }
 
+.prefix,
+.postfix {
+  small {
+    vertical-align: top;
+  }
+}
+
 .gravatar {
   display: inline-block;
   @include radius($global-rounded);
@@ -126,4 +133,8 @@ select[multiple], select[size] {
       content: $fa-var-exclamation-triangle;
     }
   }
+}
+
+.toggle-target {
+  display: none;
 }

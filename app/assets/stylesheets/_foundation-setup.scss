@@ -37,6 +37,10 @@ $topbar-menu-link-color-toggled: #fff;
 $table-head-padding: rem-calc(6);
 $table-row-padding: rem-calc(6);
 
+$input-prefix-bg: $secondary-color;
+$input-prefix-border-color: $silver;
+$input-prefix-font-color: #fff;
+
 @import 'foundation';
 
 .field_with_errors {

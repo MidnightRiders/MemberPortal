@@ -30,8 +30,8 @@ class Membership < ActiveRecord::Base
 
   belongs_to :user
 
-  default_scope -> { where(refunded: nil).order('year ASC') }
-  scope :refunds, -> { unscoped.where.not(refunded: nil).order('year ASC') }
+  default_scope -> { where(refunded: nil).order(year: :asc) }
+  scope :refunds, -> { unscoped.where.not(refunded: nil).order(year: :asc) }
 
   before_validation :remove_blank_privileges
 
@@ -51,10 +51,6 @@ class Membership < ActiveRecord::Base
     else
       ps.join(', ')
     end
-  end
-
-  def info
-    read_attribute(:info) || []
   end
 
   def privileges

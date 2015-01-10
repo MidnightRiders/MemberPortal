@@ -1,0 +1,31 @@
+- content_for :title, 'Transactions: Detailed'
+
+%h2 Transactions: Detailed
+
+= render 'transactions_nav'
+
+%table
+  %thead
+    %th.small-2 Timestamp
+    %th.small-2 Event Type
+    %th.small-2 User
+    %th.small-5 Details
+    %th.small-1 Actions
+  %tbody
+    - @transactions.each do |event|
+      - user = @users[event.data.object.object == 'customer' ? event.data.object.id : event.data.object.customer]
+      %tr{ data: { event_id: event.id } }
+        %td= Time.at(event.created).strftime('%m-%d-%Y %I:%M%P')
+        %td= event.type
+        %td
+          - if user
+            = link_to user.username, user
+          - else
+            No User:
+            = event.data.object.object == 'customer' ? event.data.object.id : event.data.object.customer
+        %td
+          %a.toggle-div{ href: '#' } View Details
+          %pre.toggle-target= event.data.object
+        %td
+.text-right
+  = will_paginate(@transactions, previous_label: 'Newer', next_label: 'Older', params: { view: 'detailed' })
