@@ -134,40 +134,53 @@ class User < ActiveRecord::Base
   # TODO: Clean the shit out of this import. Stabilize it.
 
   # User import script. Needs work.
-  def self.import(file, privileges = [])
+  def self.import(file, privileges = [], override_id)
     allowed_attributes = [:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username]
     spreadsheet = Roo::Spreadsheet.open(file.path.to_s,extension: 'csv')
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
-      original_uname = row['username']
-      i = 0
-      until User.find_by(username: row['username']).nil?
-        i += 1
-        row['username'] = "#{original_uname}#{i}"
+
+      next if row['type'] == 'Relative' # TODO: Allow Relative input
+
+      if row['email'].blank?
+        logger.error "No email for #{row['first_name']} #{row['last_name']}"
+        next
       end
-      user = User.new(username: row['username'])
-      user.attributes = row.to_hash.select { |x| allowed_attributes.include? :"#{x}"  }
-      #pass = false
-      #if user.new_record?
-      puts "Adding #{row['first_name']} #{row['last_name']}…"
-      user.password = (pass = rand(36**10).to_s(36))
-      #else
-      #  puts "Updating #{row['first_name']} #{row['last_name']}…"
-      #  if user.changed?
-      #    puts "  Changed: #{user.changes.keys.to_sentence}"
-      #  else
-      #    puts '  No changes' unless user.changed?
-      #  end
-      #end
-      if user.save
-        user.memberships << Membership.create(year: Time.current.year)
-        user.current_membership.privileges = privileges
-        user.current_membership.type = row['membership_type'] || 'individual'
-        UserMailer.new_user_creation_email(user,pass).deliver #if pass
+
+      user = User.where(email: row['email'].strip.downcase).first_or_initialize
+      if user.new_record?
+        original_uname = row['username'] = "#{row['first_name']}#{row['last_name']}".downcase.gsub(/[^a-z]/,'')
+        i = 0
+        until User.find_by(username: row['username']).nil?
+          i += 1
+          row['username'] = "#{original_uname}#{i}"
+        end
+      end
+      user.attributes = row.to_hash.select { |x| allowed_attributes.include? x.to_sym  }
+      pass = false
+      if user.new_record?
+        logger.info "Adding #{row['first_name']} #{row['last_name']}…"
+        user.password = (pass = rand(36**10).to_s(36))
       else
-        puts "  Could not save user #{row['first_name']} #{row['last_name']}:"
-        puts '  ' + user.errors.to_hash.map{|k,v| "#{k}: #{v.to_sentence}"}.join("\n  ")
+        logger.info "Updating #{row['first_name']} #{row['last_name']}…"
+        if user.changed?
+           logger.info "  Changed: #{user.changes.keys.to_sentence}"
+        else
+           logger.info '  No changes' unless user.changed?
+        end
+      end
+      if user.save!
+        m = user.memberships.where(year: Time.current.year).first_or_initialize
+        if m.new_record?
+          m.info = { override: override_id }
+          m.privileges = privileges
+          m.type = row['membership_type'].titleize || 'Individual'
+          logger.info "#{m.year} #{m.type} Membership created for #{user.first_name} #{user.last_name} (#{user.username})" if m.save!
+        end
+        UserMailer.new_user_creation_email(user,pass).deliver if pass
+      else
+        logger.error "  Could not save user #{row['first_name']} #{row['last_name']}:\n  " + user.errors.to_hash.map{|k,v| "#{k}: #{v.to_sentence}"}.join("\n  ")
       end
     end
   end
