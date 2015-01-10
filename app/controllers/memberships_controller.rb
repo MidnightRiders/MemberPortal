@@ -31,7 +31,6 @@ class MembershipsController < ApplicationController
   # POST /users/:user_id/memberships
   # POST /users/:user_id/memberships.json
   def create
-    # binding.pry
     @membership = @user.memberships.new(membership_params)
 
     respond_to do |format|
@@ -60,31 +59,16 @@ class MembershipsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /users/:user_id/memberships/1/refund
-  # PATCH/PUT /users/:user_id/memberships/1/refund.json
-  def refund
-    respond_to do |format|
-      if @membership.refund
-        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.decorate.refund_action(true)}." }
-        format.json { render json: { notice: "Membership was successfully #{@membership.decorate.refund_action(true)}."}, status: :ok }
-      else
-        binding.pry
-        format.html { redirect_to get_user_path }
-        format.json { render json: @membership.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # PATCH/PUT /users/:user_id/memberships/1/cancel
   # PATCH/PUT /users/:user_id/memberships/1/cancel.json
   def cancel
     respond_to do |format|
-      if @membership.cancel(params.fetch(:refund, true).in? [true, 'true'])
-        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.decorate.refund_action(true)}." }
-        format.json { render json: { notice: "Membership was successfully #{@membership.decorate.refund_action(true)}."}, status: :ok }
+      refund = params.fetch(:refund, false).in? [true, 'true']
+      if @membership.cancel(refund)
+        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.decorate.refund_action(true, refund)}." }
+        format.json { render json: { notice: "Membership was successfully #{@membership.decorate.refund_action(true, refund)}."}, status: :ok }
       else
-        binding.pry
-        format.html { redirect_to get_user_path }
+        format.html { redirect_to get_user_path, alert: @membership.errors.messages.map(&:last).join('\n') }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end

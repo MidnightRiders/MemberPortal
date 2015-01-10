@@ -21,12 +21,12 @@
 
 %hr
 %h4
-  Membership history:
+  Digital Membership history:
 %table.expand
   %thead
     %tr
       %th.small-4 Year
-      %th.small-4 Privileges
+      %th.small-4= current_user.leadership_or_admin? ? 'Privileges' : 'Board'
       - if can? :edit, user.current_membership
         %th.small-4 Actions
   %tbody
@@ -36,19 +36,20 @@
         %td
           %strong= membership.year
         %td
-          = membership.list_privileges
+          = membership.list_privileges(false, current_user.leadership_or_admin?)
         - if can? :edit, user.current_membership
           %td
-            = link_to edit_user_membership_path(user,membership), class: 'button expand tiny split', title: 'Edit' do
-              = icon 'pencil'
-              Edit
+            - if membership == user.current_membership
+              = link_to edit_user_membership_path(user,membership), class: "button expand tiny #{'split' if can?(:cancel_subscription, membership)}", title: 'Edit' do
+                = icon 'pencil'
+                Edit
+                - if can? :cancel_subscription, membership
+                  %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
               - if can? :cancel_subscription, membership
-                %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
-            - if can? :cancel_subscription, membership
-              %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
-                %li
-                  = link_to cancel_user_membership_path(user, membership), data: { method: :patch, confirm: 'Are you sure you wish to cancel your automatic renewal?' } do
-                    Cancel Automatic Renewal
+                %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
+                  %li
+                    = link_to cancel_user_membership_path(user, membership), data: { method: :patch, confirm: 'Are you sure you wish to cancel your automatic renewal?' } do
+                      Cancel Automatic Renewal
 
 %hr
 - if current_user==user
@@ -86,7 +87,7 @@
       %label Address:
     .medium-8.large-10.columns
       %p
-        - if user.address
+        - if user.address.present?
           = user.address.gsub(/\n/,'<br>').html_safe
           %br
           #{user.city},
@@ -104,7 +105,7 @@
     .medium-4.large-2.columns
       %label Email:
     .medium-8.large-10.columns
-      %p= link_to user.email, "mailto#{user.email}"
+      %p= link_to user.email, "mailto:#{user.email}"
   - if can? :grant_privileges, Membership
     .row
       .medium-4.large-2.columns

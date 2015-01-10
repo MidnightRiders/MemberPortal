@@ -14,14 +14,14 @@
         .medium-8.columns
           .row
             .small-6.columns
-              = f.text_field :first_name, autocorrect: 'off', placeholder: 'First Name', autocapitalize: 'words'
+              = f.text_field :first_name, autocorrect: 'off', placeholder: 'First Name', autocapitalize: 'words', autofocus: true, tabindex: 1
             .small-6.columns
-              = f.text_field :last_name, autocorrect: 'off', placeholder: 'Last Name', autocapitalize: 'words'
+              = f.text_field :last_name, autocorrect: 'off', placeholder: 'Last Name', autocapitalize: 'words', tabindex: 2
       .row
         .medium-4.columns
           = f.label :member_since, class: 'inline'
         .medium-8.columns
-          = f.select :member_since, (1995..Date.current.year), selected: f.object.member_since || Date.current.year
+          = f.select :member_since, (1995..Date.current.year), { selected: (f.object.member_since || Date.current.year) }, tabindex: 3
       - if devise && devise_mapping.confirmable? && resource.pending_reconfirmation?
         %small.hint
           Currently waiting confirmation for:
@@ -31,20 +31,20 @@
         .medium-4.columns
           = f.label :username, class: 'inline'
         .medium-8.columns
-          = f.text_field :username, autofocus: true, autocapitalize: 'off', autocorrect: 'off'
+          = f.text_field :username, autocapitalize: 'off', autocorrect: 'off', tabindex: 4
       - if devise
         .row
           .medium-4.columns
             = f.label :password, class: 'inline'
           .medium-8.columns
-            = f.password_field :password, autocapitalize: 'off', autocorrect: 'off'
+            = f.password_field :password, autocapitalize: 'off', autocorrect: 'off', tabindex: 5
             - if !f.object.new_record?
               %small.hint (leave blank if you don't want to change it)
         .row
           .medium-4.columns
             = f.label :password_confirmation, class: 'inline'
           .medium-8.columns
-            = f.password_field :password_confirmation, autocapitalize: 'off', autocorrect: 'off'
+            = f.password_field :password_confirmation, autocapitalize: 'off', autocorrect: 'off', tabindex: 6
   .row
     .large-4.columns
       %h3 Contact Information
@@ -53,21 +53,21 @@
         .medium-4.columns
           = f.label :email, class: 'inline'
         .medium-8.columns
-          = f.email_field :email, autocorrect: false, autocapitalize: false
+          = f.email_field :email, autocorrect: false, autocapitalize: false, tabindex: 7
       .row
         .small-12.columns
           = f.label :address, 'Street Address'
-          = f.text_area :address, rows: 3, autocapitalize: 'words'
+          = f.text_area :address, rows: 3, autocapitalize: 'words', tabindex: 8
       .row
         .medium-5.large-6.columns
           = f.label :city
-          = f.text_field :city, autocapitalize: 'words'
+          = f.text_field :city, autocapitalize: 'words', tabindex: 9
         .small-4.medium-3.large-2.columns
           = f.label :state
-          = f.text_field :state, size: 2
+          = f.text_field :state, size: 2, tabindex: 10
         .small-8.medium-4.columns
           = f.label :postal_code
-          = f.text_field :postal_code
+          = f.text_field :postal_code, tabindex: 11
   - if devise && !f.object.new_record?
     .row
       .large-4.columns
@@ -79,6 +79,6 @@
           .large-4.columns
             = f.label :current_password, class: 'inline'
           .large-8.columns
-            = f.password_field :current_password
+            = f.password_field :current_password, tabindex: 12
   .row.text-right
-    .small-12.columns= f.submit (f.object.new_record? ? 'Create' : 'Update'), class: 'button'
+    .small-12.columns= f.submit (f.object.new_record? ? 'Create' : 'Update'), class: 'button', tabindex: 13
