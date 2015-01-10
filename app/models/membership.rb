@@ -131,6 +131,8 @@ class Membership < ActiveRecord::Base
   def cancel(provide_refund = false)
     if is_subscription?
       stripe_customer.subscriptions.retrieve(stripe_subscription_id).delete
+      stripe_subscription_id = nil
+      flash[:now][:success] = 'Automatic renewal was successfully canceled.' if save!
       refund if provide_refund
     else
       errors.add :base, 'This is not a recurring subscription.'
@@ -161,7 +163,6 @@ class Membership < ActiveRecord::Base
       logger.error 'There is no Stripe customer'
       errors.add :base, 'No customer token was found on the membership.'
     end
-    binding.pry
     errors.add :base, 'No action was successfully taken' if refunded.nil?
     save!
   rescue Stripe::StripeError => e

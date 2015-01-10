@@ -32,24 +32,24 @@ class User < ActiveRecord::Base
 
   default_scope { includes(:memberships) }
 
-  scope :scores, -> {
+  scope :scores, ->(season = Date.current.year) {
     unscoped.select('*',
-      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct) AS correct_pick_ems',
-      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) AS total_pick_ems',
-      '(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_score',
-      '(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_count' )
+      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct AND season = #{season}) AS correct_pick_ems",
+      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND season = #{season}) AS total_pick_ems",
+      "(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_score",
+      "(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_count" )
   }
 
-  scope :rev_guess_scores, -> {
+  scope :rev_guess_scores, ->(season = Date.current.year) {
     unscoped.select('*',
-      '(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_score',
-      '(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) AS rev_guesses_count' )
+      "(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_score",
+      "(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_count" )
   }
 
-  scope :pick_em_scores, -> {
+  scope :pick_em_scores, ->(season = Date.current.year) {
     unscoped.select('*',
-      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct) AS correct_pick_ems',
-      '(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) AS total_pick_ems' )
+      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct AND season = #{season}) AS correct_pick_ems",
+      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND season = #{season}) AS total_pick_ems" )
   }
 
   # Get all current members, or members for specified year
@@ -70,8 +70,6 @@ class User < ActiveRecord::Base
   has_many :mot_ms
   has_many :rev_guesses
   has_many :pick_ems
-
-  accepts_nested_attributes_for :memberships
 
   validates :first_name, :last_name, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false

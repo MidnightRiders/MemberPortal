@@ -17,7 +17,7 @@ class PickEm < ActiveRecord::Base
   # Possible PickEm/Match results and their corresponding integer values.
   RESULTS = { home: 1, draw: 0, away: -1 }
 
-  belongs_to :match
+  belongs_to :match, -> { unscope(where: :season).all_seasons }
   belongs_to :user
   validates :match, :user, presence: true
   validates_uniqueness_of :match_id, scope: :user_id, message: 'has already been voted on by this user.'
