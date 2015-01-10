@@ -3,6 +3,11 @@ MidnightRiders::Application.configure do
 
   config.action_mailer.default_url_options = { :host => 'localhost:3010' }
   config.action_mailer.asset_host = 'http://localhost:3010'
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { :address => 'localhost', :port => 1025 }
+  config.action_mailer.logger = Logger.new(STDOUT)
+
+  Rails.logger = Logger.new(STDOUT)
 
   # The test environment is used exclusively to run your application's
   # test suite. You never need to work with it otherwise. Remember that

@@ -80,7 +80,7 @@ class UsersController < ApplicationController
   # Accepts +:file+ to import new +Users+.
   def import
     if params[:file]
-      User.import(params[:file])
+      User.import(params[:file],[],current_user.id)
       redirect_to users_path, notice: 'Users imported.'
     else
       redirect_to users_path, alert: 'No file was selected'
