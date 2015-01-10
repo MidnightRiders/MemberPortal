@@ -1,0 +1,41 @@
+- content_for :title, "Transactions: #{params[:view].try(:titleize) || 'New'} Memberships"
+
+%h2 Transactions: #{params[:view].try(:titleize) || 'New'} Memberships
+
+= render 'transactions_nav'
+
+%table
+  %thead
+    %th Year
+    %th User
+    %th Type
+    %th Privileges
+    %th.text-right Actions
+  %tbody
+    - @transactions.each do |membership|
+      %tr{ data: { event_id: membership.id } }
+        %td= membership.year
+        %td
+          %strong= link_to membership.user.username, membership.user
+          %br
+          %small
+            %time= membership.created_at.strftime('%m-%d-%Y %I:%M%P')
+        %td
+          = membership.type
+          - if membership.is_a? Family
+            %br
+            - if membership.relatives.empty?
+              %em No Relatives
+            - else
+              - membership.relatives.includes(:user).each do |relative|
+                #{link_to relative.user.username, relative.user},
+        %td= membership.privileges.join(', ')
+        %td.text-right
+          - if can? :cancel, membership
+            = link_to cancel_user_membership_path(membership.user, membership), class: 'button tiny alert', title: 'Cancel' do
+              = icon 'ban'
+          - if can? :refund, membership
+            = link_to cancel_user_membership_path(membership.user, membership, refund: true), class: 'button tiny alert', title: 'Cancel and Refund' do
+              = icon 'undo'
+.text-right
+  = will_paginate(@transactions, previous_label: 'Newer', next_label: 'Older', params: { view: params[:view] })

@@ -6,7 +6,7 @@ class AddTypeToMemberships < ActiveRecord::Migration
     Membership.all.each do |membership|
       membership.type = (membership.privileges & Membership::TYPES.map(&:downcase)).first.titleize
       membership.privileges = membership.privileges - Membership::TYPES.map(&:downcase)
-      membership.save
+      membership.save!
     end
   end
 

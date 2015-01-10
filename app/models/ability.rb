@@ -46,6 +46,7 @@ class Ability
           can :create, [ User, Membership ]
           can :read, :all
           can :index, MotM
+          can :transactions, :static_page
         else
           can :show, [ User, Club, Match ]
           can :index, Match
@@ -60,6 +61,8 @@ class Ability
           cannot :refund, Membership
           cannot :grant_privileges, Membership
         end
+        cannot :cancel_subscription, Membership
+        can :cancel_subscription, user.current_membership
       else
         can :create, Membership, user_id: user.id
       end

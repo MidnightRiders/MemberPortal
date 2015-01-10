@@ -33,7 +33,7 @@ subscription =
 
 $ ->
   stripePublicKey = $('meta[name="stripe-public-key"]').attr('content')
-  console.log stripePublicKey
+#  console.log stripePublicKey
   $('#show-credit-card-info').on 'click', (e)->
     e.preventDefault()
     $('#credit-card-info').removeClass('hide').hide().slideDown(150)

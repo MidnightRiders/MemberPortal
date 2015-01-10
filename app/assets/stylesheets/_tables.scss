@@ -6,6 +6,7 @@ table,
   border: $table-border-style $table-border-size $table-border-color;
   list-style: none;
   margin-left: 0;
+  max-width: 100%;
   width: 100%;
   td,
   .td,
@@ -90,6 +91,9 @@ table,
           margin-left: .25em;
           margin-right: .25em;
         }
+      }
+      ul {
+        font-size: $table-row-font-size;
       }
       &.no-pad {
         padding-left: 0;

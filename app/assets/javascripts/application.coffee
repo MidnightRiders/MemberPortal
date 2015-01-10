@@ -22,6 +22,14 @@ $ ->
   $(document).foundation()
   $.ajaxSettings.dataType = 'json'
 
+  $('a.toggle-div').on 'click', (e)->
+    e.preventDefault()
+    $target = if $(@).data('target')
+      $($(@).data('target'))
+    else
+      $(@).parent().find('.toggle-target')
+    $target.slideToggle()
+
   $(document).on 'change', ':input[data-autosubmit]', ->
     parent.location = $(this).data().autosubmit.replace('YYYY-MM-DD',$(this).val())
 
@@ -29,7 +37,7 @@ $ ->
       $this = $(this)
       val = $this.val() || 'efefef'
       val = "#{Array(6 - val.length+1).join('0')}#{val}"
-      console.log val, darken(val), getContrastYIQ(val)
+#      console.log val, darken(val), getContrastYIQ(val)
       $(".prefix[data-color-input=#{$this.attr('id')}").css
         'background-color': "##{val}"
         'border-color': "##{darken(val)}"

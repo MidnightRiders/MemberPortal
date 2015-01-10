@@ -35,6 +35,7 @@ MidnightRiders::Application.routes.draw do
   get 'home', to: 'users#home', as: :user_home
 
   get 'standings', to: 'static_pages#standings'
+  get 'transactions', to: 'static_pages#transactions'
   get 'faq', to: 'static_pages#faq'
   get 'contact', to: 'static_pages#contact'
 

@@ -55,9 +55,18 @@
   #credit-card-info{ class: ('hide' if f.object.user.stripe_customer_token) }
     .row
       .medium-4.columns
-        = label_tag 'stripe_card_number', 'Credit Card Number', class: 'inline'
+        = label_tag 'stripe_card_number', class: 'inline' do
+          Credit Card Number
       .medium-8.columns
-        = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
+        .row.collapse
+          .small-10.columns
+            = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
+          .small-2.columns
+            = link_to 'https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=members.midnightriders.com', target: '_blank', class: 'button secondary postfix', title: 'Learn more' do
+              = icon 'lock fa-fw'
+              %small SSL
+            -#%a{ href: 'https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=members.midnightriders.com', target: '_blank' }
+            -#  %img{ alt: 'Expedited SSL Scanner', src: 'https://www.expeditedssl.com/ssl-secure-badge.png' }
     .row
       .medium-4.columns
         = label_tag 'stripe_exp_month', 'Expiration / CVC'

@@ -27,7 +27,7 @@
     %tr
       %th.small-4 Year
       %th.small-4 Privileges
-      - if current_user.privilege? 'admin'
+      - if can? :edit, user.current_membership
         %th.small-4 Actions
   %tbody
     - user.memberships.reverse.each do |membership|
@@ -37,20 +37,18 @@
           %strong= membership.year
         %td
           = membership.list_privileges
-        - if current_user.privilege? 'admin'
+        - if can? :edit, user.current_membership
           %td
             = link_to edit_user_membership_path(user,membership), class: 'button expand tiny split', title: 'Edit' do
               = icon 'pencil'
               Edit
-              %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
-            %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
-              %li
-                = link_to (membership.is_subscription? ? cancel_user_membership_path(user, membership) : refund_user_membership_path(user, membership)), method: :patch, title: membership.refund_action(false, false).titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
-                  = membership.refund_action(false, false).titleize
-              - if can?(:refund, membership) && membership.stripe_charge_id.present?
+              - if can? :cancel_subscription, membership
+                %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
+            - if can? :cancel_subscription, membership
+              %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
                 %li
-                  = link_to (membership.is_subscription? ? cancel_user_membership_path(user, membership) : refund_user_membership_path(user, membership)), method: :patch, class: 'alert', title: membership.refund_action.titleize, confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
-                    = membership.refund_action.titleize
+                  = link_to cancel_user_membership_path(user, membership), confirm: "Are you sure you wish to cancel this #{membership.year} membership?" do
+                    Cancel
 
 %hr
 - if current_user==user
