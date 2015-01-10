@@ -119,6 +119,9 @@ GEM
     netrc (0.10.2)
     nokogiri (1.6.3.1)
       mini_portile (= 0.6.0)
+    order_query (0.3.2)
+      activerecord (~> 4.0)
+      activesupport (~> 4.0)
     orm_adapter (0.5.0)
     paper_trail (3.0.5)
       activerecord (>= 3.0, < 5.0)
@@ -266,6 +269,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   launchy
+  order_query
   paper_trail
   paperclip
   paperclip-storage-ftp

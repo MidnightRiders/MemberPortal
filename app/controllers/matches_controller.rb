@@ -7,12 +7,13 @@ class MatchesController < ApplicationController
   # GET /matches.json
   def index
     @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
-    @matches = Match.with_clubs.includes(:pick_ems).where('kickoff BETWEEN :start_date AND :end_date', start_date: @start_date, end_date: @start_date + 7.days).order('kickoff ASC')
+    @matches = Match.with_clubs.includes(:pick_ems).where(kickoff: (@start_date..@start_date + 7.days)).order(kickoff: :asc, location: :asc)
   end
 
   # GET /matches/1
   # GET /matches/1.json
   def show
+    @order_point = @match.order_selected(Match.all_seasons)
     @motm_players = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total(@match.id) && x.mot_m_total(@match.id) > 0 }.sort_by{|x| x.mot_m_total(@match.id)}.reverse if @match.teams.include? revs
   end
 

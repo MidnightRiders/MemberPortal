@@ -7,6 +7,7 @@ gem 'rails', '~> 4.1.8'
 # Use postgresql as the database for Active Record
 gem 'pg'
 gem 'hstore_accessor'
+gem 'order_query'
 
 gem 'haml-rails'
 gem 'sass-rails'
