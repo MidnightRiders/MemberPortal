@@ -89,8 +89,9 @@ class User < ActiveRecord::Base
   end
 
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
-  def list_current_privileges(verbose=false)
+  def list_current_privileges(verbose = false, no_admin = false)
     ps = current_privileges.map(&:titleize)
+    ps = ps.reject{ |v| v == 'admin' } if no_admin
     if ps.empty?
       'None'
     elsif verbose
@@ -98,6 +99,11 @@ class User < ActiveRecord::Base
     else
       ps.join(', ')
     end
+  end
+
+  # A test that comes up a lost
+  def leadership_or_admin?
+    privilege?('admin') || privilege?('executive_board')
   end
 
   # Returns +Membership+ for current year.

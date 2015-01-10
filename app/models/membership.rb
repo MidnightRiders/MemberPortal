@@ -42,8 +42,9 @@ class Membership < ActiveRecord::Base
   validate :is_paid_membership
 
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
-  def list_privileges(verbose=false)
+  def list_privileges(verbose=false, no_admin = false)
     ps = privileges.map(&:titleize)
+    ps = ps.reject{ |v| v == 'admin' } if no_admin
     if privileges.empty?
       'None'
     elsif verbose
@@ -132,8 +133,11 @@ class Membership < ActiveRecord::Base
     if is_subscription?
       stripe_customer.subscriptions.retrieve(stripe_subscription_id).delete
       stripe_subscription_id = nil
-      flash[:now][:success] = 'Automatic renewal was successfully canceled.' if save!
-      refund if provide_refund
+      if provide_refund
+        refund if save!
+      else
+        save!
+      end
     else
       errors.add :base, 'This is not a recurring subscription.'
     end

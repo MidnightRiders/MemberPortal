@@ -30,7 +30,7 @@
     background-position: center;
     position: relative;
     @include radius(0);
-    background-image: linear-gradient(bottom,rgba(255,255,255,.35),rgba(255,255,255,0) 50%,rgba(0,0,0,0) 51%,rgba(0,0,0,.25));
+    background-image: linear-gradient(to top,rgba(255,255,255,.35),rgba(255,255,255,0) 50%,rgba(0,0,0,0) 51%,rgba(0,0,0,.25));
     &.secondary {
       background-color: $secondary-color;
       color: #fff;
@@ -44,7 +44,7 @@
       min-width: 2em;
       text-shadow: 0 2px 2px rgba(0,0,0,.6);
       box-shadow: 0 0 .7em #fff inset;
-      background: linear-gradient(top,$success-color,darken($success-color,5%));
+      background: linear-gradient(to bottom,$success-color,darken($success-color,5%));
     }
     &.correct, &.wrong, &.actual {
       &:before {
