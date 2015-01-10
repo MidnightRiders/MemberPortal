@@ -21,6 +21,7 @@
           %small
             %time= membership.created_at.strftime('%m-%d-%Y %I:%M%P')
         %td
+          = icon 'repeat fa-fw' if membership.is_subscription?
           = membership.type
           - if membership.is_a? Family
             %br

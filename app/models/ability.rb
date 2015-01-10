@@ -62,7 +62,7 @@ class Ability
           cannot :grant_privileges, Membership
         end
         cannot :cancel_subscription, Membership
-        can :cancel_subscription, user.current_membership
+        can :cancel_subscription, user.current_membership if user.current_membership.is_subscription?
       else
         can :create, Membership, user_id: user.id
       end
