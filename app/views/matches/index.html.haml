@@ -33,6 +33,9 @@
             New Match
 
 - if @matches.present?
+  .row
+    .medium-9.medium-centered.columns
+      %h2 Matches for the week of #{@start_date.strftime('%_m.%-d.%Y')}
   %ul.matches
     = render @matches
 - else

@@ -15,8 +15,14 @@
 #
 
 class Match < ActiveRecord::Base
+  include OrderQuery
+
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
+
+  order_query :order_selected,
+              [ :kickoff, :asc ],
+              [ :location, :asc ]
 
   default_scope -> {
     where(season: Date.current.year)
@@ -126,14 +132,14 @@ class Match < ActiveRecord::Base
   end
 
   # Returns +Match+. Retrieves match immediately after the given match.
-  def next
-    Match.with_clubs.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
-  end
-
-  # Returns +Match+. Retrieves match immediately before the given match.
-  def previous
-    Match.with_clubs.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
-  end
+  # def next
+  #   Match.with_clubs.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
+  # end
+  #
+  # # Returns +Match+. Retrieves match immediately before the given match.
+  # def previous
+  #   Match.with_clubs.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
+  # end
 
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
   # Retrieves previous +n+ matches from <tt>Time.current</tt>.
