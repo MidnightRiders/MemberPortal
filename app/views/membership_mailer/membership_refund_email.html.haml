@@ -1,0 +1,6 @@
+%p #{@user.first_name},
+%p Your #{@membership.year} #{@membership.type} Membership has been successfully refunded, in the amount of #{number_to_currency(Membership::COSTS[@membership.type.to_sym].to_i / 100.0)}.
+%p Please keep this email for your records.
+%center
+  %code Refund ID: #{@membership.refunded}
+%p The Midnight Riders
