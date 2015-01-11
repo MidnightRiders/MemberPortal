@@ -12,4 +12,14 @@ module ApplicationHelper
       content_tag :small, "#{object.class.human_attribute_name(method)} #{object.errors[method].to_sentence}", class: 'error'
     end
   end
+
+  # Receives JavaScript for output
+  def enqueue_javascript(*files)
+    @javascript_files = ((@javascript_files || []) + [ files ]).flatten.uniq
+  end
+
+  # Outputs JavaScript
+  def render_javascript
+    javascript_include_tag *@javascript_files if @javascript_files
+  end
 end

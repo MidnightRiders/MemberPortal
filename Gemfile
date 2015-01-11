@@ -2,11 +2,12 @@ source 'https://rubygems.org'
 ruby '2.1.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails'
+gem 'rails', '~> 4.1.8'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
-gem 'activerecord-postgres-hstore'
+gem 'hstore_accessor'
+gem 'order_query'
 
 gem 'haml-rails'
 gem 'sass-rails'
@@ -35,6 +36,9 @@ gem 'devise'
 gem 'cancancan'
 gem 'paper_trail'
 
+# Payments
+gem 'stripe'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
 
@@ -54,6 +58,7 @@ group :development, :test do
   gem 'faker'
   gem 'fivemat'
   gem 'poltergeist'
+  gem 'thin'
   gem 'launchy'
   gem 'active_record_query_trace'
 end

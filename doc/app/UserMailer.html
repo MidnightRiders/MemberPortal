@@ -134,7 +134,7 @@ account has been created and give them instructions.</p>
             <pre><span class="ruby-comment"># File app/mailers/user_mailer.rb, line 11</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new_user_creation_email</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">temp_pass</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
-  <span class="ruby-ivar">@title</span> = <span class="ruby-string">&#39;Welcome to the Midnight Riders’ new Members Site&#39;</span>
+  <span class="ruby-ivar">@title</span> = <span class="ruby-string">&#39;Welcome to the Midnight Riders’ Members Portal&#39;</span>
   <span class="ruby-ivar">@temp_pass</span> = <span class="ruby-identifier">temp_pass</span>
   <span class="ruby-identifier">mail</span>(<span class="ruby-identifier">to</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>, <span class="ruby-identifier">subject</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@title</span>)
 <span class="ruby-keyword">end</span></pre>

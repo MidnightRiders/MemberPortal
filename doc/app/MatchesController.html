@@ -144,7 +144,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 62</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 73</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@match</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">match_params</span>)
 
@@ -187,7 +187,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 92</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 103</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -224,7 +224,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 57</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 68</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -256,30 +256,40 @@
 
           
           <div class="method-source-code" id="import-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 22</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 23</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">import</span>
-  <span class="ruby-identifier">url</span> = <span class="ruby-constant">URI</span>(<span class="ruby-string">&#39;https://r.e-c.al/ecal-sub/53187c3d7f4b3faf25000047/MLS+Calendar.ics&#39;</span>)
+  <span class="ruby-identifier">url</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:url</span>])
   <span class="ruby-keyword">begin</span>
-    <span class="ruby-identifier">src</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">url</span>)
+    <span class="ruby-identifier">req</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span><span class="ruby-operator">::</span><span class="ruby-constant">Get</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">url</span>.<span class="ruby-identifier">path</span>)
+    <span class="ruby-identifier">response</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">start</span>(<span class="ruby-identifier">url</span>.<span class="ruby-identifier">host</span>, <span class="ruby-identifier">url</span>.<span class="ruby-identifier">port</span>){ <span class="ruby-operator">|</span><span class="ruby-identifier">http</span><span class="ruby-operator">|</span> <span class="ruby-identifier">http</span>.<span class="ruby-identifier">request</span>(<span class="ruby-identifier">req</span>) }
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">response</span>.<span class="ruby-identifier">code_type</span>.<span class="ruby-identifier">in?</span> [ <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPRedirection</span>, <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPFound</span> ]
+      <span class="ruby-identifier">response</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>(<span class="ruby-identifier">response</span>[<span class="ruby-string">&#39;location&#39;</span>]))
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">response</span> = <span class="ruby-identifier">response</span>.<span class="ruby-identifier">body</span>
+    <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">rescue</span> <span class="ruby-constant">SocketError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;SocketError during Match import: #{e}&quot;</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">matches_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-identifier">e</span> <span class="ruby-keyword">and</span> <span class="ruby-keyword">return</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-identifier">cals</span> = <span class="ruby-constant">Icalendar</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">src</span>)
+  <span class="ruby-identifier">cals</span> = <span class="ruby-constant">Icalendar</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">response</span>)
   <span class="ruby-identifier">cal</span> = <span class="ruby-identifier">cals</span>.<span class="ruby-identifier">first</span>
   <span class="ruby-identifier">count</span> = <span class="ruby-value">0</span>
   <span class="ruby-identifier">cal</span>.<span class="ruby-identifier">events</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
-    <span class="ruby-identifier">match</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">find_or_initialize_by</span>(<span class="ruby-identifier">uid</span><span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">uid</span>)
-    <span class="ruby-identifier">teams</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">summary</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/\s*vs\s*/i</span>)
-    <span class="ruby-identifier">teams</span>.<span class="ruby-identifier">map!</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[\.\-]/</span>,<span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\s*(FC|SC)\s*/i</span>,<span class="ruby-string">&#39;&#39;</span>)}
-    <span class="ruby-identifier">match</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">location</span>
+    <span class="ruby-identifier">match</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">uid</span><span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">uid</span>.<span class="ruby-identifier">to_s</span>).<span class="ruby-identifier">first_or_initialize</span>
+    <span class="ruby-identifier">teams</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">summary</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/\(.+?\)/</span>,<span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/\s*vs\.?\s*/i</span>).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/[\.\-]/</span>,<span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp">/(?&lt;=\s|\A)(?!NYC)([A-Z]\.?){2,}(?=\s|\z)/</span>,<span class="ruby-string">&#39;&#39;</span>).<span class="ruby-identifier">sub</span>(<span class="ruby-regexp">/edbull/i</span>, <span class="ruby-string">&#39;ed Bull&#39;</span>)}
+    <span class="ruby-identifier">match</span>.<span class="ruby-identifier">location</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">location</span>.<span class="ruby-identifier">to_s</span>
     <span class="ruby-identifier">match</span>.<span class="ruby-identifier">home_team</span> = <span class="ruby-constant">Club</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;replace(name,\é\,\e\) LIKE :name&#39;</span>, <span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;%#{teams[0]}%&quot;</span>).<span class="ruby-identifier">first</span>
     <span class="ruby-identifier">match</span>.<span class="ruby-identifier">away_team</span> = <span class="ruby-constant">Club</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;replace(name,\é\,\e\) LIKE :name&#39;</span>, <span class="ruby-identifier">name</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;%#{teams[1]}%&quot;</span>).<span class="ruby-identifier">first</span>
-    <span class="ruby-identifier">match</span>.<span class="ruby-identifier">kickoff</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">dtstart</span>
-    <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">save</span>
-      <span class="ruby-identifier">count</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">new_record?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">changed?</span>
+    <span class="ruby-identifier">match</span>.<span class="ruby-identifier">kickoff</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">dtstart</span>.<span class="ruby-identifier">to_time</span>
+    <span class="ruby-identifier">match</span>.<span class="ruby-identifier">season</span> = <span class="ruby-identifier">match</span>.<span class="ruby-identifier">kickoff</span>.<span class="ruby-identifier">year</span>
+    <span class="ruby-identifier">count_it</span> = <span class="ruby-identifier">match</span>.<span class="ruby-identifier">new_record?</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">changed?</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-identifier">teams</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">save!</span>
+      <span class="ruby-identifier">count</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">count_it</span>
     <span class="ruby-keyword">else</span>
       <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">alert</span> <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;&#39;</span>
       <span class="ruby-identifier">flash</span>.<span class="ruby-identifier">alert</span> <span class="ruby-operator">+=</span> <span class="ruby-node">&quot;\nCould not save #{m.summary}: #{match.errors.to_hash}&quot;</span>
+      <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Could not save #{m.summary}: #{match.errors.to_hash}&quot;</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">flash</span>[<span class="ruby-value">:success</span>] = <span class="ruby-node">&quot;#{count} Matches were saved or updated.&quot;</span>
@@ -317,7 +327,7 @@
             <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 8</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-ivar">@start_date</span> = (<span class="ruby-identifier">params</span>[<span class="ruby-value">:date</span>].<span class="ruby-identifier">try</span>(<span class="ruby-value">:in_time_zone</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">zone</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">beginning_of_week</span>
-  <span class="ruby-ivar">@matches</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:pick_ems</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff BETWEEN :start_date AND :end_date&#39;</span>, <span class="ruby-identifier">start_date</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@start_date</span>, <span class="ruby-identifier">end_date</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@start_date</span> <span class="ruby-operator">+</span> <span class="ruby-value">7</span>.<span class="ruby-identifier">days</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff ASC&#39;</span>)
+  <span class="ruby-ivar">@matches</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:pick_ems</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> (<span class="ruby-ivar">@start_date</span><span class="ruby-operator">..</span><span class="ruby-ivar">@start_date</span> <span class="ruby-operator">+</span> <span class="ruby-value">7</span>.<span class="ruby-identifier">days</span>)).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>, <span class="ruby-identifier">location</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -348,7 +358,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 52</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@match</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
@@ -383,6 +393,7 @@
           <div class="method-source-code" id="show-source">
             <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 15</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-ivar">@order_point</span> = <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">order_selected</span>(<span class="ruby-constant">Match</span>.<span class="ruby-identifier">all_seasons</span>)
   <span class="ruby-ivar">@motm_players</span> = <span class="ruby-constant">Player</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:motm_firsts</span>,<span class="ruby-value">:motm_seconds</span>,<span class="ruby-value">:motm_thirds</span>).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>)}.<span class="ruby-identifier">reverse</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">teams</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">revs</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -414,7 +425,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 78</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">match_params</span>)

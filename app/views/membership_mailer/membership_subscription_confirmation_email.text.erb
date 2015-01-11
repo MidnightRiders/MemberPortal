@@ -1,0 +1,11 @@
+<%=@user.first_name%>,
+
+Congratulations! You're officially a <%=@membership.year%> <%=@membership.type%> member.
+We've received confirmation of your yearly payment of <%=number_to_currency(Membership::COSTS[@membership.type.to_sym].to_i / 100.0)%>.
+Please keep this email for your records.
+
+Charge ID: <%=@membership.stripe_charge_id%>
+
+See you in the parking lots!
+
+The Midnight Riders

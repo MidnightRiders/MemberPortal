@@ -139,6 +139,12 @@
                     = link_to users_path do
                       = icon 'users fa-fw'
                       Users
+                - if can? :transactions, :static_page
+                  %li
+                    = link_to transactions_path do
+                      = icon 'dollar fa-fw'
+                      Transactions
+                %li.divider
                 %li
                   = link_to clubs_path do
                     = icon 'shield fa-fw'

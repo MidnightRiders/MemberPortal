@@ -166,36 +166,43 @@ href="https://github.com/ryanb/cancan/wiki/Defining-Abilities">github.com/ryanb/
           <div class="method-source-code" id="new-source">
             <pre><span class="ruby-comment"># File app/models/ability.rb, line 30</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">user</span>)
+  <span class="ruby-identifier">alias_action</span> <span class="ruby-value">:create</span>, <span class="ruby-value">:read</span>, <span class="ruby-value">:update</span>, <span class="ruby-value">:destroy</span>, <span class="ruby-identifier">to</span><span class="ruby-operator">:</span> <span class="ruby-value">:crud</span>
+
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>
-    <span class="ruby-identifier">can</span> <span class="ruby-value">:home</span>, [<span class="ruby-constant">User</span>]
+    <span class="ruby-identifier">can</span> <span class="ruby-value">:home</span>, [ <span class="ruby-constant">User</span> ]
+    <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-identifier">user</span>
     <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_member?</span>
+      <span class="ruby-identifier">can</span> <span class="ruby-value">:standings</span>, <span class="ruby-value">:static_page</span>
       <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">privilege?</span> <span class="ruby-string">&#39;admin&#39;</span>
         <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-value">:all</span>
-        <span class="ruby-identifier">can</span> <span class="ruby-value">:grant_privileges</span>, <span class="ruby-constant">Membership</span>
+        <span class="ruby-comment"># Implicit</span>
+        <span class="ruby-comment"># can :refund, Membership, year: (Date.current.year..Date.current.year + 1)</span>
+        <span class="ruby-comment"># can :grant_privileges, Membership</span>
       <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">privilege?</span> <span class="ruby-string">&#39;executive_board&#39;</span>
         <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, [ <span class="ruby-constant">User</span>, <span class="ruby-constant">Membership</span>, <span class="ruby-constant">Club</span>, <span class="ruby-constant">Match</span>, <span class="ruby-constant">Player</span>, <span class="ruby-constant">RevGuess</span> ]
         <span class="ruby-identifier">cannot</span> <span class="ruby-value">:destroy</span>, [ <span class="ruby-constant">Club</span>, <span class="ruby-constant">Player</span> ]
         <span class="ruby-identifier">can</span> <span class="ruby-value">:create</span>, [ <span class="ruby-constant">User</span>, <span class="ruby-constant">Membership</span> ]
         <span class="ruby-identifier">can</span> <span class="ruby-value">:read</span>, <span class="ruby-value">:all</span>
         <span class="ruby-identifier">can</span> <span class="ruby-value">:index</span>, <span class="ruby-constant">MotM</span>
+        <span class="ruby-identifier">can</span> <span class="ruby-value">:transactions</span>, <span class="ruby-value">:static_page</span>
       <span class="ruby-keyword">else</span>
-        <span class="ruby-identifier">can</span> <span class="ruby-value">:show</span>, [<span class="ruby-constant">User</span>, <span class="ruby-constant">Club</span>, <span class="ruby-constant">Match</span>]
+        <span class="ruby-identifier">can</span> <span class="ruby-value">:show</span>, [ <span class="ruby-constant">User</span>, <span class="ruby-constant">Club</span>, <span class="ruby-constant">Match</span> ]
         <span class="ruby-identifier">can</span> <span class="ruby-value">:index</span>, <span class="ruby-constant">Match</span>
-        <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, [ <span class="ruby-constant">MotM</span>, <span class="ruby-constant">RevGuess</span>, <span class="ruby-constant">PickEm</span> ], <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>
-        <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-identifier">user</span>
+        <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, [ <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>, <span class="ruby-identifier">user</span>.<span class="ruby-identifier">mot_ms</span>, <span class="ruby-identifier">user</span>.<span class="ruby-identifier">rev_guesses</span>, <span class="ruby-identifier">user</span>.<span class="ruby-identifier">pick_ems</span> ]
+        <span class="ruby-identifier">can</span> <span class="ruby-value">:create</span>, [ <span class="ruby-constant">MotM</span>, <span class="ruby-constant">RevGuess</span> ], <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>
+        <span class="ruby-identifier">can</span> <span class="ruby-value">:vote</span>, <span class="ruby-constant">PickEm</span>, <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>
         <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Family</span>
-          <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-constant">Family</span>, <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>
           <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-constant">Relative</span>, <span class="ruby-identifier">family_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">id</span>
-          <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-constant">User</span>, <span class="ruby-identifier">memberships</span><span class="ruby-operator">:</span> { <span class="ruby-identifier">family_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">id</span> }
-          <span class="ruby-identifier">cannot</span> <span class="ruby-value">:index</span>, [ <span class="ruby-constant">User</span>, <span class="ruby-constant">Relative</span>, <span class="ruby-constant">Family</span> ]
-        <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Relative</span>
-          <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-constant">Relative</span>, <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>
-        <span class="ruby-keyword">else</span>
-          <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, <span class="ruby-constant">Individual</span>, <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>
+          <span class="ruby-identifier">can</span> <span class="ruby-value">:manage</span>, [ <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">relatives</span>, <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">relatives</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:user</span>) ]
         <span class="ruby-keyword">end</span>
         <span class="ruby-identifier">cannot</span> <span class="ruby-value">:index</span>, [ <span class="ruby-constant">Club</span>, <span class="ruby-constant">Membership</span>, <span class="ruby-constant">Player</span>, <span class="ruby-constant">User</span>, <span class="ruby-constant">MotM</span>, <span class="ruby-constant">Relative</span>, <span class="ruby-constant">Family</span> ]
+        <span class="ruby-identifier">cannot</span> <span class="ruby-value">:refund</span>, <span class="ruby-constant">Membership</span>
         <span class="ruby-identifier">cannot</span> <span class="ruby-value">:grant_privileges</span>, <span class="ruby-constant">Membership</span>
       <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">cannot</span> <span class="ruby-value">:cancel_subscription</span>, <span class="ruby-constant">Membership</span>
+      <span class="ruby-identifier">can</span> <span class="ruby-value">:cancel_subscription</span>, <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">current_membership</span>.<span class="ruby-identifier">is_subscription?</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">can</span> <span class="ruby-value">:create</span>, <span class="ruby-constant">Membership</span>, <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">cannot</span> <span class="ruby-value">:index</span>, <span class="ruby-value">:all</span>
