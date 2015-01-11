@@ -102,7 +102,7 @@ class MembershipsController < ApplicationController
     logger.info event.type
     logger.info event.data.object
     object = event.data.object
-    user  = User.find_by(stripe_customer_token: object.customer )
+    user  = User.find_by(stripe_customer_token: object.object == 'customer' ? object.id : object.customer )
     if user
       customer = Stripe::Customer.retrieve(object.customer)
       if object.object == 'charge'
@@ -124,6 +124,8 @@ class MembershipsController < ApplicationController
           )
           MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
         end
+      else
+        render status: 200
       end
     else
       logger.error "No user could be found with ID #{object.customer}\n  Event ID: #{event.id}"
