@@ -138,3 +138,9 @@ select[multiple], select[size] {
 .toggle-target {
   display: none;
 }
+
+#scarf-vote-modal.open {
+  bottom: 20px;
+  position: fixed;
+  top: 20px;
+}

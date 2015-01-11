@@ -4,10 +4,16 @@
 
 = render 'register_now', user: current_user unless current_user.current_member?
 
+= render 'static_pages/jotform' if current_user.current_member?
+
 .row
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
+    - if current_user.current_member?
+      = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
+        = icon 'check'
+        Vote for the 2015 Scarf
     = render 'static_pages/events', events: @events
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 

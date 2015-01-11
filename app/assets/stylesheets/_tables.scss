@@ -132,4 +132,10 @@ table,
     &.numeric {
       text-align: right; }
   }
+
+  &.hoverable {
+    tr:hover {
+      background-color: $primary-color;
+    }
+  }
 }
