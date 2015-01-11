@@ -143,4 +143,12 @@ select[multiple], select[size] {
   bottom: 20px;
   position: fixed;
   top: 20px;
+
+  tr:hover {
+    img {
+      background: #fff;
+      border: 1px solid #fff;
+      box-shadow: 0 0 3px #fff;
+    }
+  }
 }
