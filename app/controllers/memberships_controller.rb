@@ -2,19 +2,25 @@
 
 # Controller for +Membership+ model.
 class MembershipsController < ApplicationController
-  load_and_authorize_resource except: [ :webhooks ]
-  before_action :get_user, except: [ :webhooks ]
+  authorize_resource except: [ :webhooks ]
+  before_action :get_user_membership, except: [ :webhooks ]
   skip_before_action :verify_authenticity_token, only: [ :webhooks ]
 
   # GET /users/:user_id/memberships
   # GET /users/:user_id/memberships.json
-  def in
+  def index
     @memberships = @user.memberships
   end
 
   # GET /users/:user_id/memberships/1
   # GET /users/:user_id/memberships/1.json
   def show
+    @card = nil
+    if @membership.stripe_charge_id
+      @card = Stripe::Charge.retrieve(@membership.stripe_charge_id).card
+    end
+  rescue Stripe::StripeError => e
+    logger.error "Stripe error retrieving charge: #{e.message}"
   end
 
   # GET /users/:user_id/memberships/new
@@ -103,14 +109,14 @@ class MembershipsController < ApplicationController
       elsif object.object == 'invoice'
         subscription = customer.subscriptions.retrieve(object.subscription)
         if event.type == 'invoice.payment_succeeded'
-          user.memberships.create!(
+          membership = user.memberships.new(
             year: Time.at(subscription.current_period_start),
             type: subscription.plan.id.titleize,
             info: {
               stripe_subscription_id: subscription.id
             }
           )
-          UserMailer.membership_subscription_confirmation_email(@user, @membership).deliver
+          UserMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
         end
       end
     else
@@ -123,8 +129,9 @@ class MembershipsController < ApplicationController
   private
 
     # Define +@user+ based on route +:user_id+
-    def get_user
+    def get_user_membership
       @user = User.find_by(username: params[:user_id])
+      @membership = Membership.unscoped.find(params[:id])
     end
 
     # Determine where to redirect after success

@@ -170,13 +170,13 @@ class User < ActiveRecord::Base
            logger.info '  No changes' unless user.changed?
         end
       end
-      if user.save!
+      if user.save
         m = user.memberships.where(year: Time.current.year).first_or_initialize
         if m.new_record?
           m.info = { override: override_id }
           m.privileges = privileges
           m.type = row['membership_type'].titleize || 'Individual'
-          logger.info "#{m.year} #{m.type} Membership created for #{user.first_name} #{user.last_name} (#{user.username})" if m.save!
+          logger.info "#{m.year} #{m.type} Membership created for #{user.first_name} #{user.last_name} (#{user.username})" if m.save
         end
         UserMailer.new_user_creation_email(user,pass).deliver if pass
       else
