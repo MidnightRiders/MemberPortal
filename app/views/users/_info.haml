@@ -27,7 +27,7 @@
     %tr
       %th.small-4 Year
       %th.small-4= current_user.leadership_or_admin? ? 'Privileges' : 'Board'
-      - if can? :edit, user.current_membership
+      - if can? :show, user.current_membership
         %th.small-4 Actions
   %tbody
     - user.memberships.reverse.each do |membership|
@@ -37,12 +37,11 @@
           %strong= membership.year
         %td
           = membership.list_privileges(false, current_user.leadership_or_admin?)
-        - if can? :edit, user.current_membership
+        - if can? :show, user.current_membership
           %td
             - if membership == user.current_membership
-              = link_to edit_user_membership_path(user,membership), class: "button expand tiny #{'split' if can?(:cancel_subscription, membership)}", title: 'Edit' do
-                = icon 'pencil'
-                Edit
+              = link_to user_membership_path(user,membership), class: "button expand tiny #{'split' if can?(:cancel_subscription, membership)}", title: 'Edit' do
+                View
                 - if can? :cancel_subscription, membership
                   %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
               - if can? :cancel_subscription, membership

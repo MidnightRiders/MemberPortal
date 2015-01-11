@@ -1,0 +1,39 @@
+.row
+  .large-4.columns
+    %h3
+      = @membership.year
+      Membership
+      = content_tag :small, 'Canceled', class: 'alert' if @membership.refunded
+  .large-8.columns
+    .row
+      .medium-4.columns
+        %label Membership Type
+      .medium-8.columns
+        %p= @membership.type
+    .row
+      .medium-4.columns
+        %label Payment
+      .medium-8.columns
+        - if @card
+          %p
+            XXXX XXXX XXXX
+            = @card.last4
+            %br
+            Expires:
+            #{@card.exp_month}/#{@card.exp_year}
+        - else
+          %p Paid in person
+    - if @card
+      .row
+        .medium-4.columns
+          Auto-Renew
+        .medium-8.columns
+          - if @membership.stripe_subscription_id.nil?
+            %strong Off
+          - else
+            %strong On
+            (next charge: #{(Date.current + 1.year).beginning_of_year.strftime('%-m/%-d/%Y')})
+            = link_to 'cancel', cancel_user_membership_path(@user, @membership), data: { method: :patch, confirm: 'Are you sure you wish to cancel automatic renewal?' }
+
+
+
