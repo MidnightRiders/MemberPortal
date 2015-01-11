@@ -1,9 +1,9 @@
 %p
   #{@user.first_name},
 %p Congratulations! You're officially a #{@membership.year} #{@membership.type} member.
-%p We've received confirmation of your yearly payment of #{number_to_currency(Membership::COSTS[@membership.type.to_sym].to_i / 100.0)}.
+%p We've received confirmation of your payment of #{number_to_currency(Membership::COSTS[@membership.type.to_sym].to_i / 100.0)}.
 %p Please keep this email for your records.
 %center
   %code Charge ID: #{@membership.stripe_charge_id}
 %p See you in the parking lots!
-%p Midnight Riders
+%p The Midnight Riders

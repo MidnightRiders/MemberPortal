@@ -3,7 +3,8 @@
 # Controller for +Membership+ model.
 class MembershipsController < ApplicationController
   authorize_resource except: [ :webhooks ]
-  before_action :get_user_membership, except: [ :webhooks ]
+  before_action :get_membership, except: [ :new, :create, :webhooks ]
+  before_action :get_user, except: [ :webhooks ]
   skip_before_action :verify_authenticity_token, only: [ :webhooks ]
 
   # GET /users/:user_id/memberships
@@ -41,7 +42,8 @@ class MembershipsController < ApplicationController
 
     respond_to do |format|
       if @membership.save_with_payment
-        UserMailer.new_membership_confirmation_email(@user, @membership).deliver
+        MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
+        MembershipMailer.new_membership_alert(@user, @membership).deliver
         format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
         format.json { render action: 'show', status: :created, location: @membership }
       else
@@ -71,8 +73,12 @@ class MembershipsController < ApplicationController
     respond_to do |format|
       refund = params.fetch(:refund, false).in? [true, 'true']
       if @membership.cancel(refund)
-        format.html { redirect_to get_user_path, notice: "Membership was successfully #{@membership.decorate.refund_action(true, refund)}." }
-        format.json { render json: { notice: "Membership was successfully #{@membership.decorate.refund_action(true, refund)}."}, status: :ok }
+        if refund
+          MembershipMailer.membership_cancellation_alert(@user, @membership).deliver
+          MembershipMailer.membership_refund_email(@user, @membership).deliver
+        end
+        format.html { redirect_to get_user_path, notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." }
+        format.json { render json: { notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}."}, status: :ok }
       else
         format.html { redirect_to get_user_path, alert: @membership.errors.messages.map(&:last).join('\n') }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
@@ -116,7 +122,7 @@ class MembershipsController < ApplicationController
               stripe_subscription_id: subscription.id
             }
           )
-          UserMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
+          MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
         end
       end
     else
@@ -129,8 +135,12 @@ class MembershipsController < ApplicationController
   private
 
     # Define +@user+ based on route +:user_id+
-    def get_user_membership
+    def get_user
       @user = User.find_by(username: params[:user_id])
+    end
+
+    # Define +@membership+ based on route +:id+
+    def get_membership
       @membership = Membership.unscoped.find(params[:id])
     end
 

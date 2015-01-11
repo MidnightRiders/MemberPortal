@@ -131,15 +131,15 @@ class Membership < ActiveRecord::Base
   # Cancel current subscription
   def cancel(provide_refund = false)
     if is_subscription?
-      stripe_customer.subscriptions.retrieve(stripe_subscription_id).delete
-      stripe_subscription_id = nil
-      if provide_refund
-        refund if save!
-      else
-        save!
-      end
+      stripe_customer.subscriptions.retrieve(self.stripe_subscription_id).delete
+      self.stripe_subscription_id = nil
     else
-      errors.add :base, 'This is not a recurring subscription.'
+      self.refunded = 'canceled'
+    end
+    if provide_refund
+      refund if save
+    else
+      save
     end
   rescue Stripe::StripeError => e
     logger.error "Stripe error while creating customer: #{e.message}"
@@ -154,21 +154,19 @@ class Membership < ActiveRecord::Base
         charge = Stripe::Charge.retrieve(stripe_charge_id)
         refund = charge.refunds.create
         if refund
-          refunded = refund.id
+          self.refunded = refund.id
         end
-      elsif is_subscription?
-        if stripe_customer.subscriptions.retrieve(stripe_customer_token).delete
-          refunded = 'canceled'
-        end
+      else
+        logger.error "Stripe Customer #{user.stripe_customer_token} does not have a charge associated"
       end
     elsif override
-      refunded = 'true'
+      self.refunded = 'true'
     else
       logger.error 'There is no Stripe customer'
       errors.add :base, 'No customer token was found on the membership.'
     end
     errors.add :base, 'No action was successfully taken' if refunded.nil?
-    save!
+    save
   rescue Stripe::StripeError => e
     logger.error "Stripe error while refunding customer: #{e.message}"
     errors.add :base, 'There was a problem refunding the transaction.'
