@@ -1,7 +1,7 @@
 class Family < Membership
   has_many :relatives
 
-  after_save :re_up_relatives
+  after_create :re_up_relatives
 
   private
     def re_up_relatives
