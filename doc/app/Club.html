@@ -316,7 +316,7 @@ lost.</p>
           <div class="method-source-code" id="matches-source">
             <pre><span class="ruby-comment"># File app/models/club.rb, line 53</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">matches</span>
-  <span class="ruby-constant">Match</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;home_team_id = :id OR away_team_id = :id&#39;</span>, <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff ASC&#39;</span>)
+  <span class="ruby-constant">Match</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;home_team_id = :id OR away_team_id = :id&#39;</span>, <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -384,7 +384,7 @@ lost.</p>
           <div class="method-source-code" id="next_matches-source">
             <pre><span class="ruby-comment"># File app/models/club.rb, line 64</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">next_matches</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>,<span class="ruby-identifier">time</span>=<span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>)
-  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">kickoff</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">time</span>}
+  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &gt;= :time&#39;</span>, <span class="ruby-identifier">time</span><span class="ruby-operator">:</span> <span class="ruby-identifier">time</span>)
   <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">n</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -420,7 +420,7 @@ lost.</p>
           <div class="method-source-code" id="previous_matches-source">
             <pre><span class="ruby-comment"># File app/models/club.rb, line 58</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">previous_matches</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>,<span class="ruby-identifier">time</span>=<span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>)
-  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">reverse</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">kickoff</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">time</span>}.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">n</span>)
+  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt; :time&#39;</span>, <span class="ruby-identifier">time</span><span class="ruby-operator">:</span> <span class="ruby-identifier">time</span>).<span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:desc</span>)
   <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">n</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>

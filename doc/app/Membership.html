@@ -73,9 +73,23 @@
 
   <ul class="link-list" role="directory">
     
+    <li ><a href="#method-i-cancel">#cancel</a>
+    
+    <li class="calls-super" ><a href="#method-i-info">#info</a>
+    
+    <li ><a href="#method-i-is_subscription-3F">#is_subscription?</a>
+    
     <li ><a href="#method-i-list_privileges">#list_privileges</a>
     
+    <li ><a href="#method-i-overriding_admin">#overriding_admin</a>
+    
     <li ><a href="#method-i-privileges">#privileges</a>
+    
+    <li ><a href="#method-i-refund">#refund</a>
+    
+    <li ><a href="#method-i-save_with_payment">#save_with_payment</a>
+    
+    <li ><a href="#method-i-stripe_customer">#stripe_customer</a>
     
   </ul>
 </div>
@@ -103,6 +117,7 @@ year       :integer
 info       :hstore
 privileges :json
 type       :string
+refunded   :string
 created_at :datetime
 updated_at :datetime</pre>
 
@@ -123,6 +138,11 @@ updated_at :datetime</pre>
       </header>
       <dl>
       
+        <dt id="COSTS">COSTS
+        
+        <dd>
+        
+      
         <dt id="PRIVILEGES">PRIVILEGES
         
         <dd>
@@ -138,6 +158,40 @@ updated_at :datetime</pre>
     
 
     
+    <section class="attribute-method-details" class="method-section">
+      <header>
+        <h3>Attributes</h3>
+      </header>
+
+      
+      <div id="attribute-i-stripe_card_token" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">stripe_card_token</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+      <div id="attribute-i-subscription" class="method-detail">
+        <div class="method-heading attribute-method-heading">
+          <span class="method-name">subscription</span><span
+            class="attribute-access-type">[RW]</span>
+        </div>
+
+        <div class="method-description">
+        
+        
+        
+        </div>
+      </div>
+      
+    </section>
+    
 
     
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
@@ -146,11 +200,133 @@ updated_at :datetime</pre>
        </header>
 
     
+      <div id="method-i-cancel" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cancel</span><span
+            class="method-args">(provide_refund = false)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Cancel current subscription</p>
+          
+          
+
+          
+          <div class="method-source-code" id="cancel-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 132</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cancel</span>(<span class="ruby-identifier">provide_refund</span> = <span class="ruby-keyword">false</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">is_subscription?</span>
+    <span class="ruby-identifier">stripe_customer</span>.<span class="ruby-identifier">subscriptions</span>.<span class="ruby-identifier">retrieve</span>(<span class="ruby-keyword">self</span>.<span class="ruby-identifier">stripe_subscription_id</span>).<span class="ruby-identifier">delete</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">stripe_subscription_id</span> = <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">refunded</span> = <span class="ruby-string">&#39;canceled&#39;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">provide_refund</span>
+    <span class="ruby-identifier">refund</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">save</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">StripeError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Stripe error while creating customer: #{e.message}&quot;</span>
+  <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-value">:base</span>, <span class="ruby-string">&#39;There was a problem with your credit card: &#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">message</span>
+  <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-info" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">info</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              
+            </div>
+          
+
+          
+          <div class="method-source-code" id="info-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 186</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">info</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">read_attribute</span>(<span class="ruby-value">:info</span>).<span class="ruby-identifier">nil?</span>
+    {}
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">super</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-is_subscription-3F" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">is_subscription?</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="is_subscription-3F-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 65</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">is_subscription?</span>
+  <span class="ruby-identifier">stripe_subscription_id</span>.<span class="ruby-identifier">present?</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-list_privileges" class="method-detail ">
         
         <div class="method-heading">
           <span class="method-name">list_privileges</span><span
-            class="method-args">(verbose=false)</span>
+            class="method-args">(verbose=false, no_admin = false)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -166,9 +342,10 @@ in plain english if <code>verbose</code> is true.</p>
 
           
           <div class="method-source-code" id="list_privileges-source">
-            <pre><span class="ruby-comment"># File app/models/membership.rb, line 33</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">list_privileges</span>(<span class="ruby-identifier">verbose</span>=<span class="ruby-keyword">false</span>)
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 45</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">list_privileges</span>(<span class="ruby-identifier">verbose</span>=<span class="ruby-keyword">false</span>, <span class="ruby-identifier">no_admin</span> = <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">ps</span> = <span class="ruby-identifier">privileges</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:titleize</span>)
+  <span class="ruby-identifier">ps</span> = <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">reject</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;admin&#39;</span> } <span class="ruby-keyword">if</span> <span class="ruby-identifier">no_admin</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">privileges</span>.<span class="ruby-identifier">empty?</span>
     <span class="ruby-string">&#39;None&#39;</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">verbose</span>
@@ -176,6 +353,39 @@ in plain english if <code>verbose</code> is true.</p>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">ps</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;, &#39;</span>)
   <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-overriding_admin" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">overriding_admin</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="overriding_admin-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 61</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">overriding_admin</span>
+  <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:user</span>).<span class="ruby-identifier">find_by</span>(<span class="ruby-identifier">users</span><span class="ruby-operator">:</span> { <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">override</span> }, <span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-identifier">year</span>).<span class="ruby-identifier">try</span>(<span class="ruby-value">:user</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -206,9 +416,193 @@ in plain english if <code>verbose</code> is true.</p>
 
           
           <div class="method-source-code" id="privileges-source">
-            <pre><span class="ruby-comment"># File app/models/membership.rb, line 44</span>
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 57</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">privileges</span>
   <span class="ruby-identifier">read_attribute</span>(<span class="ruby-value">:privileges</span>) <span class="ruby-operator">||</span> []
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-refund" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">refund</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Refund payment if possible and destroy <a
+href="Membership.html">Membership</a></p>
+          
+          
+
+          
+          <div class="method-source-code" id="refund-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 151</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">refund</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">stripe_customer</span>
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">stripe_charge_id</span>
+      <span class="ruby-identifier">charge</span> = <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">Charge</span>.<span class="ruby-identifier">retrieve</span>(<span class="ruby-identifier">stripe_charge_id</span>)
+      <span class="ruby-identifier">refund</span> = <span class="ruby-identifier">charge</span>.<span class="ruby-identifier">refunds</span>.<span class="ruby-identifier">create</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">refund</span>
+        <span class="ruby-keyword">self</span>.<span class="ruby-identifier">refunded</span> = <span class="ruby-identifier">refund</span>.<span class="ruby-identifier">id</span>
+      <span class="ruby-keyword">end</span>
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Stripe Customer #{user.stripe_customer_token} does not have a charge associated&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">override</span>
+    <span class="ruby-keyword">self</span>.<span class="ruby-identifier">refunded</span> = <span class="ruby-string">&#39;true&#39;</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-string">&#39;There is no Stripe customer&#39;</span>
+    <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-value">:base</span>, <span class="ruby-string">&#39;No customer token was found on the membership.&#39;</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-value">:base</span>, <span class="ruby-string">&#39;No action was successfully taken&#39;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">refunded</span>.<span class="ruby-identifier">nil?</span>
+  <span class="ruby-identifier">save</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">StripeError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Stripe error while refunding customer: #{e.message}&quot;</span>
+  <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-value">:base</span>, <span class="ruby-string">&#39;There was a problem refunding the transaction.&#39;</span>
+  <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-save_with_payment" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">save_with_payment</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Save with Stripe payment if applicable</p>
+          
+          
+
+          
+          <div class="method-source-code" id="save_with_payment-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 70</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">save_with_payment</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">valid?</span>
+    <span class="ruby-keyword">unless</span> <span class="ruby-identifier">overriding_admin</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Relative</span>)
+      <span class="ruby-identifier">customer_params</span> = {
+        <span class="ruby-identifier">description</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{user.first_name} #{user.last_name}&quot;</span>,
+        <span class="ruby-identifier">email</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">email</span>,
+        <span class="ruby-identifier">metadata</span><span class="ruby-operator">:</span> {
+          <span class="ruby-identifier">first_name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">first_name</span>,
+          <span class="ruby-identifier">last_name</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">last_name</span>,
+          <span class="ruby-identifier">address</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{user.address}\n#{user.city}, #{user.state} #{user.postal_code}&quot;</span>,
+          <span class="ruby-identifier">phone</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">phone</span>
+        }
+      }
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">stripe_customer_token</span>
+        <span class="ruby-identifier">customer</span> = <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">Customer</span>.<span class="ruby-identifier">retrieve</span>(<span class="ruby-identifier">user</span>.<span class="ruby-identifier">stripe_customer_token</span>)
+
+        <span class="ruby-keyword">if</span> <span class="ruby-identifier">stripe_card_token</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">email</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">email</span>
+          <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">stripe_card_token</span> = <span class="ruby-identifier">stripe_card_token</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">stripe_card_token</span>
+          <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">email</span> = <span class="ruby-identifier">user</span>.<span class="ruby-identifier">email</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">email</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">email</span>
+          <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">save</span>
+        <span class="ruby-keyword">end</span>
+
+        <span class="ruby-comment"># TODO: Compare generated info w Stripe &amp; update if necessary. This is an estimation.</span>
+        <span class="ruby-comment"># saved_customer_params = Hash[customer.reject{|k,v| !customer_params.keys.include? k.to_sym }.map{|k,v| [k.to_sym, v]}]</span>
+        <span class="ruby-comment"># if saved_customer_params != customer_params</span>
+        <span class="ruby-comment">#   customer.update_attributes(customer_params)</span>
+        <span class="ruby-comment"># end</span>
+
+      <span class="ruby-keyword">else</span>
+        <span class="ruby-identifier">customer</span> = <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">Customer</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">customer_params</span>.<span class="ruby-identifier">deep_merge</span>(<span class="ruby-identifier">card</span><span class="ruby-operator">:</span> <span class="ruby-identifier">stripe_card_token</span>, <span class="ruby-identifier">metadata</span><span class="ruby-operator">:</span> { <span class="ruby-identifier">start_year</span><span class="ruby-operator">:</span> <span class="ruby-identifier">year</span> }))
+        <span class="ruby-identifier">user</span>.<span class="ruby-identifier">stripe_customer_token</span> = <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">id</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-keyword">if</span> <span class="ruby-identifier">subscription</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+        <span class="ruby-identifier">subscription</span> = <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">subscriptions</span>.<span class="ruby-identifier">create</span>(
+            <span class="ruby-identifier">plan</span><span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">downcase</span>,
+            <span class="ruby-identifier">trial_end</span><span class="ruby-operator">:</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">year</span>.<span class="ruby-identifier">from_now</span>.<span class="ruby-identifier">beginning_of_year</span>.<span class="ruby-identifier">to_i</span>
+        )
+        <span class="ruby-keyword">self</span>.<span class="ruby-identifier">stripe_subscription_id</span> = <span class="ruby-identifier">subscription</span>.<span class="ruby-identifier">id</span>
+      <span class="ruby-keyword">end</span>
+      <span class="ruby-identifier">charge</span> = <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">Charge</span>.<span class="ruby-identifier">create</span>(
+          <span class="ruby-identifier">customer</span><span class="ruby-operator">:</span> <span class="ruby-identifier">customer</span>.<span class="ruby-identifier">id</span>,
+          <span class="ruby-identifier">description</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;Midnight Riders #{year} #{type.titleize} Membership&quot;</span>,
+          <span class="ruby-identifier">metadata</span><span class="ruby-operator">:</span> {
+              <span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-identifier">year</span>,
+              <span class="ruby-identifier">type</span><span class="ruby-operator">:</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">titleize</span>
+          },
+          <span class="ruby-identifier">receipt_email</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">email</span>,
+          <span class="ruby-identifier">amount</span><span class="ruby-operator">:</span> <span class="ruby-constant">COSTS</span>[<span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_sym</span>],
+          <span class="ruby-identifier">currency</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;usd&#39;</span>,
+          <span class="ruby-identifier">statement_descriptor</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;MRiders #{year} #{type.to_s[0..2].titleize} Mem&quot;</span>,
+      )
+      <span class="ruby-keyword">self</span>.<span class="ruby-identifier">stripe_charge_id</span> = <span class="ruby-identifier">charge</span>.<span class="ruby-identifier">id</span>
+    <span class="ruby-keyword">end</span>
+    <span class="ruby-identifier">save!</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">StripeError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Stripe error while creating customer: #{e.message}&quot;</span>
+  <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span> <span class="ruby-value">:base</span>, <span class="ruby-string">&#39;There was a problem with your credit card: &#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">message</span>
+  <span class="ruby-keyword">false</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-stripe_customer" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">stripe_customer</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="stripe_customer-source">
+            <pre><span class="ruby-comment"># File app/models/membership.rb, line 176</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">stripe_customer</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">stripe_customer_token</span>
+    <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">Customer</span>.<span class="ruby-identifier">retrieve</span>(<span class="ruby-identifier">user</span>.<span class="ruby-identifier">stripe_customer_token</span>)
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-keyword">nil</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">rescue</span> <span class="ruby-constant">Stripe</span><span class="ruby-operator">::</span><span class="ruby-constant">InvalidRequestError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+  <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Stripe::InvalidRequestError: #{e}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
