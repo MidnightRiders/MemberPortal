@@ -98,6 +98,7 @@ class Membership < ActiveRecord::Base
         else
           customer = Stripe::Customer.create(customer_params.deep_merge(card: stripe_card_token, metadata: { start_year: year }))
           user.stripe_customer_token = customer.id
+          user.save
         end
         if subscription.to_i == 1
           subscription = customer.subscriptions.create(
