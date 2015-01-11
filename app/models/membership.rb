@@ -101,7 +101,7 @@ class Membership < ActiveRecord::Base
         end
         if subscription.to_i == 1
           subscription = customer.subscriptions.create(
-              plan: type,
+              plan: type.downcase,
               trial_end: 1.year.from_now.beginning_of_year.to_i
           )
           self.stripe_subscription_id = subscription.id
