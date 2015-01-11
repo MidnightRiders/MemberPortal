@@ -81,6 +81,8 @@
     
     <li ><a href="#method-i-standings">#standings</a>
     
+    <li ><a href="#method-i-transactions">#transactions</a>
+    
   </ul>
 </div>
 
@@ -237,6 +239,57 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">standings</span>
   <span class="ruby-ivar">@rev_guess_standings</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">rev_guess_scores</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) &gt; 0&#39;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;rev_guesses_score DESC, rev_guesses_count ASC, username ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:rev_guess_p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>)
   <span class="ruby-ivar">@pick_em_standings</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">pick_em_scores</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) &gt; 0&#39;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;correct_pick_ems DESC, total_pick_ems ASC, username ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pick_em_p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-transactions" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">transactions</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Admin-only: view transactions</p>
+          
+          
+
+          
+          <div class="method-source-code" id="transactions-source">
+            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 30</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">transactions</span>
+  <span class="ruby-identifier">view</span> = <span class="ruby-string">&#39;memberships&#39;</span>
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:view</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;detailed&#39;</span>
+      <span class="ruby-identifier">require</span> <span class="ruby-string">&#39;will_paginate/array&#39;</span>
+      <span class="ruby-ivar">@transactions</span> = <span class="ruby-identifier">stripe_events</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>, <span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
+      <span class="ruby-ivar">@users</span> = <span class="ruby-constant">Hash</span>[<span class="ruby-constant">User</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">stripe_customer_token</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@transactions</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">e</span><span class="ruby-operator">|</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">data</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">object</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;customer&#39;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">data</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">id</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">data</span>.<span class="ruby-identifier">object</span>.<span class="ruby-identifier">customer</span>}.<span class="ruby-identifier">reject</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:nil?</span>)).<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">u</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">u</span>.<span class="ruby-identifier">stripe_customer_token</span>, <span class="ruby-identifier">u</span>] }]
+      <span class="ruby-identifier">view</span> = <span class="ruby-string">&#39;transactions&#39;</span>
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;all&#39;</span>
+      <span class="ruby-ivar">@transactions</span> = <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">unscoped</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>.<span class="ruby-identifier">not</span>(<span class="ruby-identifier">type</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Relative&#39;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">created_at</span><span class="ruby-operator">:</span> <span class="ruby-value">:desc</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>, <span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
+    <span class="ruby-keyword">when</span> <span class="ruby-string">&#39;refunded&#39;</span>
+      <span class="ruby-ivar">@transactions</span> = <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">refunds</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>.<span class="ruby-identifier">not</span>(<span class="ruby-identifier">type</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Relative&#39;</span>).<span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">created_at</span><span class="ruby-operator">:</span> <span class="ruby-value">:desc</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>, <span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-ivar">@transactions</span> = <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:user</span>).<span class="ruby-identifier">where</span>.<span class="ruby-identifier">not</span>(<span class="ruby-identifier">type</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Relative&#39;</span>).<span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">created_at</span><span class="ruby-operator">:</span> <span class="ruby-value">:desc</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>, <span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:page</span>])
+  <span class="ruby-keyword">end</span>
+
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">view</span> }
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">js</span> { <span class="ruby-identifier">render</span> <span class="ruby-identifier">json</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@transactions</span> }
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
