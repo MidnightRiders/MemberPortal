@@ -1,0 +1,17 @@
+%h1 Listing user_membership_relatives
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @user_membership_relatives.each do |user_membership_relative|
+    %tr
+      %td= link_to 'Show', user_membership_relative
+      %td= link_to 'Edit', edit_user_membership_relative_path(user_membership_relative)
+      %td= link_to 'Destroy', user_membership_relative, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Relative', new_user_membership_relative_path

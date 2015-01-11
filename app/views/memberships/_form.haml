@@ -1,15 +1,13 @@
-= form_for [@user,@membership] do |f|
+- content_for :head do
+  %meta{ name: 'stripe-public-key', content: ENV['STRIPE_PUBLIC_KEY'] || Rails.application.secrets.stripe_public_key }
+- enqueue_javascript 'https://js.stripe.com/v2/'
+
+= form_for [@user, @membership.becomes(Membership)], html: { autocomplete: 'on' } do |f|
   .row
     .large-4.columns
       %h3
         = @membership.new_record? ? 'New' : 'Edit'
         Membership
     .large-8.columns
-      = f.fields_for :info do |info_fields|
-        - if f.object.info
-          - f.object.info.try(:each) do |key, value|
-            = info_fields.hidden_field key, value: value
-        - else
-          = info_fields.hidden_field :override, value: current_user.id
       = render 'fields', f: f
       = f.submit class: 'button right'

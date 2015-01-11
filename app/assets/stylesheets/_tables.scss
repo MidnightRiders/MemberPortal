@@ -1,3 +1,4 @@
+table,
 .table {
   display: table;
   background: $table-bg;
@@ -5,8 +6,12 @@
   border: $table-border-style $table-border-size $table-border-color;
   list-style: none;
   margin-left: 0;
+  max-width: 100%;
   width: 100%;
-  .td, .thd {
+  td,
+  .td,
+  th,
+  .thd {
     display: table-cell;
     vertical-align: middle;
     &.color {
@@ -15,19 +20,29 @@
       }
     }
   }
+  thead,
   .thead {
     display: table-header-group;
   }
+  tbody,
   .tbody {
     display: table-row-group;
   }
+  tfoot,
   .tfoot {
     display: table-footer-group;
   }
-  .thead, .tfoot{
+  thead,
+  .thead,
+  tfoot,
+  .tfoot{
     background: $table-head-bg;
+    tr,
     .tr {
-      .td, .thd {
+      td,
+      .td,
+      th,
+      .thd {
         padding: $table-head-padding;
         font-size: $table-head-font-size;
         font-weight: $table-head-font-weight;
@@ -38,18 +53,25 @@
       }
     }
   }
+  tr,
   .tr {
     display: table-row;
     &.highlight, &.highlight:nth-of-type(1n) {
       background-color: $revs-navy;
-      .td, .thd {
+      td,
+      .td,
+      th,
+      .thd {
         color: #fff;
-        a:link, a:visited {
+        > a:link,
+        > a:visited {
           color: #fff;
         }
       }
     }
+    th,
     .thd,
+    td,
     .td {
       padding: $table-row-padding;
       font-size: $table-row-font-size;
@@ -57,8 +79,21 @@
       &.column, &.columns {
         float: none;
       }
-      button, .button, & > :last-child {
+      button,
+      .button,
+      & > :last-child {
         margin-bottom: 0;
+      }
+      button,
+      .button {
+        i.fa {
+          font-size: 1.6em;
+          margin-left: .25em;
+          margin-right: .25em;
+        }
+      }
+      ul {
+        font-size: $table-row-font-size;
       }
       &.no-pad {
         padding-left: 0;
@@ -75,16 +110,23 @@
     &:nth-of-type(even) { background: $table-even-row-bg; }
   }
 
+  thead tr th,
   .thead .tr .thd,
+  tfoot tr th,
   .tfoot .tr .thd,
+  tbody tr td,
   .tbody .tr .td,
+  tr td,
   .tr .td,
+  tfoot tr td,
   .tfoot .tr .td { display: $table-display; line-height: $table-line-height; }
-  
+  th,
   .thd {
     text-align: center;
     font-weight: bold; }
+  td,
   .td,
+  th,
   .thd {
     padding: 2px;
     &.numeric {

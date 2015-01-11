@@ -2,7 +2,7 @@
 
 = render partial: 'users/update_prompt'
 
-= render 'register_now' unless current_user.current_member?
+= render 'register_now', user: current_user unless current_user.current_member?
 
 .row
   %section.medium-6.columns
@@ -16,7 +16,8 @@
   %section.row
     .medium-6.columns
       %ul.matches.small
-        = render partial: 'matches/match', collection: @revs_matches, locals: { small: true }
+        - @revs_matches.each do |match|
+          = render match, small: true
     .medium-6.columns
-      = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses
+      = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses.where(matches: { season: Date.current.year }).present?
 

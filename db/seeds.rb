@@ -33,12 +33,8 @@ clubs.each do |club|
   club = club.to_hash
   c = Club.find_or_initialize_by(abbrv: club['abbrv'])
   new = c.new_record?
-  puts "#{new ? 'Adding' : 'Updating'} #{club['name']}…" unless Rails.env.test?
-  if Rails.env.test?
-    create_or_update(c, club)
-  else
-    puts create_or_update(c, club)
-  end
+  puts "#{new ? 'Adding' : 'Updating'} #{club['name']}…"
+  puts create_or_update(c, club)
 end
 
 players = CSV.parse(File.read(Rails.root.join('lib/assets/players.csv')), headers: true)

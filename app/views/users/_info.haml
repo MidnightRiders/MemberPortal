@@ -17,31 +17,47 @@
   .medium-4.columns.text-right
     - if can? :destroy, User
       = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => "Are you sure you wish to destroy @#{user.username}?" }, title: 'Destroy' do
-        = icon 'trash-o', '', class: 'fa-lg fa-fw'
+        = icon 'trash-o fa-lg fa-fw'
 
 %hr
 %h4
-  - if can? :manage, :all
-    -#- if can? :create, Membership, user_id: user.id
-    = link_to new_user_membership_path(user), class: 'button tiny right', title: 'Create Membership' do
-      = icon 'plus fa-fw'
-  Membership history:
-%ul
-  - user.memberships.each do |membership|
-    %li
-      = membership.year
-      –
-      = membership.list_privileges
-      = link_to 'Edit', edit_user_membership_path(user,membership) if can? :edit, membership
+  Digital Membership history:
+%table.expand
+  %thead
+    %tr
+      %th.small-4 Year
+      %th.small-4= current_user.leadership_or_admin? ? 'Privileges' : 'Board'
+      - if can? :show, user.current_membership
+        %th.small-4 Actions
+  %tbody
+    - user.memberships.reverse.each do |membership|
+      - membership = membership.decorate
+      %tr{ class: ('highlight' if membership == user.current_membership)}
+        %td
+          %strong= membership.year
+        %td
+          = membership.list_privileges(false, current_user.leadership_or_admin?)
+        - if can? :show, user.current_membership
+          %td
+            - if membership == user.current_membership
+              = link_to user_membership_path(user,membership), class: "button expand tiny #{'split' if can?(:cancel_subscription, membership)}", title: 'Edit' do
+                View
+                - if can? :cancel_subscription, membership
+                  %span{ data: { dropdown: "dropdown-membership-#{membership.id}" } }
+              - if can? :cancel_subscription, membership
+                %ul.f-dropdown{ id: "dropdown-membership-#{membership.id}", data: { dropdown_content: true } }
+                  %li
+                    = link_to cancel_user_membership_path(user, membership), data: { method: :patch, confirm: 'Are you sure you wish to cancel your automatic renewal?' } do
+                      Cancel Automatic Renewal
 
 %hr
 - if current_user==user
   .row
     .small-6.columns
-      - if lastmatch = revs.last_match
+      - if (lastmatch = revs.last_match) && can?(:vote, MotM, match_id: lastmatch.id)
         = lastmatch.decorate.mot_m_button('tiny secondary expand', true)
     .small-6.columns
-      - if nextmatch = revs.next_match
+      - if (nextmatch = revs.next_match) && can?(:vote, RevGuess, match_id: nextmatch.id)
         = nextmatch.decorate.rev_guess_button('tiny secondary expand', true)
 
 .table
@@ -55,12 +71,12 @@
     .tr
       .td.text-center
         %p
-          = user.rev_guesses.score
-          %small (#{user.rev_guesses.select{|r| r.match.complete? }.length} games)
+          = user.rev_guesses.where(matches: { season: Date.current.year }).score
+          %small (#{user.rev_guesses.where(matches: { season: Date.current.year }).select{|r| r.match.complete? }.length} games)
       .td.text-center
         %p
-          = user.pick_ems.score
-          %small (#{user.pick_ems.select{|r| r.match.complete? }.length} games)
+          = user.pick_ems.where(matches: { season: Date.current.year }).score
+          %small (#{user.pick_ems.where(matches: { season: Date.current.year }).select{|r| r.match.complete? }.length} games)
 
 %hr
 
@@ -70,7 +86,7 @@
       %label Address:
     .medium-8.large-10.columns
       %p
-        - if user.address
+        - if user.address.present?
           = user.address.gsub(/\n/,'<br>').html_safe
           %br
           #{user.city},
@@ -88,10 +104,10 @@
     .medium-4.large-2.columns
       %label Email:
     .medium-8.large-10.columns
-      %p= link_to user.email, "mailto#{user.email}"
+      %p= link_to user.email, "mailto:#{user.email}"
   - if can? :grant_privileges, Membership
     .row
       .medium-4.large-2.columns
         %label Privileges:
       .medium-8.large-10.columns
-        %p= user.current_membership.list_privileges
+        %p= user.list_current_privileges

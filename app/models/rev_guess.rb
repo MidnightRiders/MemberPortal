@@ -14,7 +14,7 @@
 #
 
 class RevGuess < ActiveRecord::Base
-  belongs_to :match
+  belongs_to :match, -> { unscope(where: :season).all_seasons }
   belongs_to :user
 
   default_scope { includes(:match) }

@@ -23,7 +23,7 @@ class UsersController < ApplicationController
   def home
     @articles = RidersBlog.articles.sort_by{|x| x['pubDate'].to_date }.last(2).reverse
     @events = FacebookApi.events['data'].try(:select){|x| x['start_time'] >= Time.current - 1.week }
-    @revs_matches = [ revs.last_match, revs.next_matches(2) ].flatten
+    @revs_matches = [ revs.last_match, revs.next_matches(2) ].flatten.reject(&:nil?)
   end
 
   # GET /users/1/edit
@@ -80,7 +80,7 @@ class UsersController < ApplicationController
   # Accepts +:file+ to import new +Users+.
   def import
     if params[:file]
-      User.import(params[:file])
+      User.import(params[:file],[],current_user.id)
       redirect_to users_path, notice: 'Users imported.'
     else
       redirect_to users_path, alert: 'No file was selected'
@@ -91,6 +91,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username, memberships: [ :year, :type, :privileges ])
+      params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username)
     end
 end

@@ -51,18 +51,18 @@ class Club < ActiveRecord::Base
 
   # Returns *Array* of +Matches+ involving the club.
   def matches
-    Match.with_clubs.where('home_team_id = :id OR away_team_id = :id', id: id).order('kickoff ASC')
+    Match.with_clubs.where('home_team_id = :id OR away_team_id = :id', id: id).order(kickoff: :asc)
   end
 
   # Returns +Match+ or *Array* of +Matches+, depending on +n+, before +time+ (defaults to now).
   def previous_matches(n=1,time=Time.current)
-    ms = matches.reverse.select{|x| x.kickoff < time}.first(n)
+    ms = matches.where('kickoff < :time', time: time).reorder(kickoff: :desc)
     n == 1 ? ms.first : ms.first(n)
   end
 
   # Returns +Match+ or *Array* of +Matches+, depending on +n+, after +time+ (defaults to now).
   def next_matches(n=1,time=Time.current)
-    ms = matches.select{|x| x.kickoff >= time}
+    ms = matches.where('kickoff >= :time', time: time)
     n == 1 ? ms.first : ms.first(n)
   end
 

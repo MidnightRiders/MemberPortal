@@ -232,7 +232,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">home</span>
   <span class="ruby-ivar">@articles</span> = <span class="ruby-constant">RidersBlog</span>.<span class="ruby-identifier">articles</span>.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-string">&#39;pubDate&#39;</span>].<span class="ruby-identifier">to_date</span> }.<span class="ruby-identifier">last</span>(<span class="ruby-value">2</span>).<span class="ruby-identifier">reverse</span>
   <span class="ruby-ivar">@events</span> = <span class="ruby-constant">FacebookApi</span>.<span class="ruby-identifier">events</span>[<span class="ruby-string">&#39;data&#39;</span>].<span class="ruby-identifier">try</span>(<span class="ruby-value">:select</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-string">&#39;start_time&#39;</span>] <span class="ruby-operator">&gt;=</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span> }
-  <span class="ruby-ivar">@revs_matches</span> = [ <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">last_match</span>, <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">next_matches</span>(<span class="ruby-value">2</span>) ].<span class="ruby-identifier">flatten</span>
+  <span class="ruby-ivar">@revs_matches</span> = [ <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">last_match</span>, <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">next_matches</span>(<span class="ruby-value">2</span>) ].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">reject</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:nil?</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -267,7 +267,7 @@
             <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 81</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">import</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:file</span>]
-    <span class="ruby-constant">User</span>.<span class="ruby-identifier">import</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:file</span>])
+    <span class="ruby-constant">User</span>.<span class="ruby-identifier">import</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:file</span>],[],<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">users_path</span>, <span class="ruby-identifier">notice</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Users imported.&#39;</span>
   <span class="ruby-keyword">else</span>
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">users_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;No file was selected&#39;</span>

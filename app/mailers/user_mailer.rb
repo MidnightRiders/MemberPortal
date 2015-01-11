@@ -10,7 +10,7 @@ class UserMailer < ActionMailer::Base
   # that their account has been created and give them instructions.
   def new_user_creation_email(user, temp_pass)
     @user = user
-    @title = 'Welcome to the Midnight Riders’ new Members Site'
+    @title = 'Welcome to the Midnight Riders’ Members Portal'
     @temp_pass = temp_pass
     mail(to: @user.email, subject: @title)
   end

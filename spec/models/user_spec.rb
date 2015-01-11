@@ -62,9 +62,9 @@ describe User do
       user = FactoryGirl.build(:user)
       user.member_since = 1990
       expect(user).to_not be_valid
-      user.member_since = 2015
+      user.member_since = Date.current.year + 1
       expect(user).to_not be_valid
-      user.member_since = Date.today.year
+      user.member_since = Date.current.year
       expect(user).to be_valid
     end
   end

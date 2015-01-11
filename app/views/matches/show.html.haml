@@ -1,23 +1,23 @@
 .row
   .small-4.medium-3.large-2.columns
-    - if @match.previous
-      = link_to @match.previous, class: "button tiny expand primary-bg #{@match.previous.home_team.abbrv.downcase}" do
+    - if @order_point.previous(false)
+      = link_to @order_point.previous(false), class: "button tiny expand primary-bg #{@order_point.previous(false).home_team.abbrv.downcase}" do
         = icon 'arrow-left'
-        = @match.previous.home_team.abbrv
+        = @order_point.previous(false).home_team.abbrv
         v
-        = @match.previous.away_team.abbrv
-        = @match.previous.kickoff.strftime('%_m.%-d')
+        = @order_point.previous(false).away_team.abbrv
+        = @order_point.previous(false).kickoff.strftime('%_m.%-d')
   .small-4.medium-6.large-8.columns.text-center
     = link_to matches_path(date: @match.kickoff.to_date), class: 'button tiny' do
       = icon 'calendar fa-fw'
       Back
   .small-4.medium-3.large-2.columns.right
-    - if @match.next
-      = link_to @match.next, class: "button tiny expand primary-bg #{@match.next.home_team.abbrv.downcase}" do
-        = @match.next.home_team.abbrv
+    - if @order_point.next(false)
+      = link_to @order_point.next(false), class: "button tiny expand primary-bg #{@order_point.next(false).home_team.abbrv.downcase}" do
+        = @order_point.next(false).home_team.abbrv
         v
-        = @match.next.away_team.abbrv
-        = @match.next.kickoff.strftime('%_m.%-d')
+        = @order_point.next(false).away_team.abbrv
+        = @order_point.next(false).kickoff.strftime('%_m.%-d')
         = icon 'arrow-right'
 .row.collapse
   .medium-5.large-5.columns

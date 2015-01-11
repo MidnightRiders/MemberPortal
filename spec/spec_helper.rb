@@ -10,6 +10,11 @@ require 'paper_trail/frameworks/rspec'
 Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
+Capybara.server do |app, port|
+  require 'rack/handler/thin'
+  Rack::Handler::Thin.run(app, Port: port)
+end
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }

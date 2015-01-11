@@ -6,7 +6,7 @@ MidnightRiders::Application.routes.draw do
   resources :mot_ms, path: 'motm', only: [ :index ]
 
   resources :matches do
-    collection { get :import }
+    collection { post :import }
     resources :mot_ms, path: 'motm', except: [ :index, :show ]
     resources :rev_guesses, path: 'revguess', except: [ :index, :show ]
     resources :pick_ems, path: 'pickem', except: [ :new, :edit, :show, :create, :update ] do
@@ -16,18 +16,25 @@ MidnightRiders::Application.routes.draw do
 
   resources :clubs
 
-  match 'users/sign_up', to: 'static_pages#home', via: :all
-  devise_for :users
+  match 'memberships/webhooks', to: 'memberships#webhooks', via: :all
+  devise_for :users, controllers: { registrations: 'registrations' }
   resources :users do
     collection do
       post :import
     end
-    resources :memberships
+    resources :memberships do
+      resources :relatives, type: 'Relative'
+    end
+    resources :individuals, controller: 'memberships', type: 'Individual'
+    resources :families, controller: 'memberships', type: 'Family'
   end
+
+  match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: 'cancel_user_membership', via: [ :put, :patch ]
 
   get 'home', to: 'users#home', as: :user_home
 
   get 'standings', to: 'static_pages#standings'
+  get 'transactions', to: 'static_pages#transactions'
   get 'faq', to: 'static_pages#faq'
   get 'contact', to: 'static_pages#contact'
 

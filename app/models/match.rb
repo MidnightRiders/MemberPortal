@@ -15,9 +15,21 @@
 #
 
 class Match < ActiveRecord::Base
+  include OrderQuery
+
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
 
+  order_query :order_selected,
+              [ :kickoff, :asc ],
+              [ :location, :asc ]
+
+  default_scope -> {
+    where(season: Date.current.year)
+  }
+  scope :all_seasons, -> {
+    unscope(where: :season)
+  }
   scope :with_clubs, -> {
     includes(:home_team,:away_team)
   }
@@ -32,10 +44,13 @@ class Match < ActiveRecord::Base
   has_many :rev_guesses
   has_many :pick_ems
 
+  before_validation :check_for_season
+
   validates :home_team, :away_team, :kickoff, :location, presence: true
   validates :home_goals, :away_goals, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
   validates :home_goals, presence: { if: -> { !away_goals.blank? } }
   validates :away_goals, presence: { if: -> { !home_goals.blank? } }
+  validates :season, presence: true
   validates :uid, uniqueness: { case_sensitive: true, allow_blank: true }
 
   after_save :update_games, if: -> { complete? }
@@ -117,14 +132,14 @@ class Match < ActiveRecord::Base
   end
 
   # Returns +Match+. Retrieves match immediately after the given match.
-  def next
-    Match.with_clubs.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
-  end
-
-  # Returns +Match+. Retrieves match immediately before the given match.
-  def previous
-    Match.with_clubs.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
-  end
+  # def next
+  #   Match.with_clubs.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
+  # end
+  #
+  # # Returns +Match+. Retrieves match immediately before the given match.
+  # def previous
+  #   Match.with_clubs.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
+  # end
 
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
   # Retrieves previous +n+ matches from <tt>Time.current</tt>.
@@ -164,6 +179,11 @@ class Match < ActiveRecord::Base
     pick_ems.each do |p|
       p.update_attribute(:correct, p.result == PickEm::RESULTS[result])
     end
+  end
+
+  # Check for season and create it if it doesn't exist
+  def check_for_season
+    season ||= kickoff.year
   end
 
 end

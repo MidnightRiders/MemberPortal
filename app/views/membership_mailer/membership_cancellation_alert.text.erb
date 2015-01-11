@@ -1,0 +1,9 @@
+A <%=@membership.year%> <%=@membership.type%> Membership has been refunded for <%=@user.first_name%> <%=@user.last_name%> (@<%=@user.username%>):
+
+User:       <%=user_url(@user)%>
+Membership: <%=user_membership_url(@user, @membership)%>
+
+Actions:
+
+  - Refunded Memberships: <%=transactions_url(view: 'refunded')%>
+  - All Transactions: <%=transactions_url(view: 'detailed')%>
