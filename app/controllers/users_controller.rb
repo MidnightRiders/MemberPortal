@@ -6,12 +6,12 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @privilege = params[:privilege] || nil
-    @users = @users.text_search(params[:search])
-    if @privilege
-      @users = @users.joins(:memberships).where('memberships.privileges::jsonb ?| array[:privileges]', privileges: [@privilege].flatten).order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
-    else
-      @users = @users.order('last_name ASC, first_name ASC').paginate(page: params[:p], per_page: 20)
-    end
+    @year = params.fetch(:year, Date.current.year).to_i
+    @show_all = params[:show_all].in? [true, 'true']
+    @users = @users.text_search(params[:search]) if params[:search]
+    @users = @users.where(memberships: { year: @year }) unless @show_all
+    @users = @users.where('memberships.privileges::jsonb ?| array[:privileges]', year: Date.current.year, privileges: [@privilege].flatten) if @privilege
+    @users = @users.includes(:memberships).order(last_name: :asc, first_name: :asc).paginate(page: params[:p], per_page: 20)
   end
 
   # GET /users/1
