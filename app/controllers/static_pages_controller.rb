@@ -22,8 +22,9 @@ class StaticPagesController < ApplicationController
 
   # Shows standings for Pick 'Em and RevGuess.
   def standings
-    @rev_guess_standings = User.rev_guess_scores.where('(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) > 0').order('rev_guesses_score DESC, rev_guesses_count ASC, username ASC').paginate(page: params[:rev_guess_p], per_page: 25)
-    @pick_em_standings = User.pick_em_scores.where('(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) > 0').order('correct_pick_ems DESC, total_pick_ems ASC, username ASC').paginate(page: params[:pick_em_p], per_page: 25)
+    @season = params.fetch(:season, Date.current.year)
+    @rev_guess_standings = User.rev_guess_scores(@season).where('(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) > 0').order('rev_guesses_score DESC, rev_guesses_count ASC, username ASC').paginate(page: params[:rev_guess_p], per_page: 25)
+    @pick_em_standings = User.pick_em_scores(@season).where('(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) > 0').order('correct_pick_ems DESC, total_pick_ems ASC, username ASC').paginate(page: params[:pick_em_p], per_page: 25)
   end
 
   # Admin-only: view transactions
