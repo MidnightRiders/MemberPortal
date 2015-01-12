@@ -102,9 +102,10 @@ class MembershipsController < ApplicationController
     logger.info event.type
     logger.info event.data.object
     object = event.data.object
-    user  = User.find_by(stripe_customer_token: object.object == 'customer' ? object.id : object.customer )
+    customer_token = (object.object == 'customer' ? object.id : object.customer)
+    user  = User.find_by(stripe_customer_token: customer_token )
     if user
-      customer = Stripe::Customer.retrieve(object.customer)
+      customer = Stripe::Customer.retrieve(customer_token)
       if object.object == 'charge'
         membership = Membership.with_stripe_charge_id(object.id)
         # charge.succeeded is handled immediately - no webhook
@@ -128,7 +129,7 @@ class MembershipsController < ApplicationController
         render nothing: true, status: 200
       end
     else
-      logger.error "No user could be found with ID #{object.customer}\n  Event ID: #{event.id}"
+      logger.error "No user could be found with ID #{customer_token}\n  Event ID: #{event.id}"
       render nothing: true, status: 404
     end
   rescue Stripe::StripeError => e
