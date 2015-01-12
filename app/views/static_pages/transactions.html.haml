@@ -15,7 +15,8 @@
     - @transactions.each do |event|
       - user = @users[event.data.object.object == 'customer' ? event.data.object.id : event.data.object.customer]
       %tr{ data: { event_id: event.id } }
-        %td= Time.at(event.created).strftime('%m-%d-%Y %I:%M%P')
+        %td
+          %small= l(Time.at(event.created), format: '%m-%d-%Y %I:%M%P')
         %td= event.type
         %td
           - if user
