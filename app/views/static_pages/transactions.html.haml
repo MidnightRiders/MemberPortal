@@ -16,7 +16,7 @@
       - user = @users[event.data.object.object == 'customer' ? event.data.object.id : event.data.object.customer]
       %tr{ data: { event_id: event.id } }
         %td
-          %small= l(Time.at(event.created), format: '%m-%d-%Y %I:%M%P')
+          %small= Time.at(event.created).in_time_zone.strftime('%m-%d-%Y %I:%M%P')
         %td= event.type
         %td
           - if user
