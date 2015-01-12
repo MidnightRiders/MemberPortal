@@ -34,22 +34,22 @@ class User < ActiveRecord::Base
 
   scope :scores, ->(season = Date.current.year) {
     unscoped.select('*',
-      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct AND season = #{season}) AS correct_pick_ems",
-      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND season = #{season}) AS total_pick_ems",
-      "(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_score",
-      "(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_count" )
+      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND matches.season = #{season}) AS correct_pick_ems",
+      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = #{season}) AS total_pick_ems",
+      "(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_score",
+      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_count" )
   }
 
   scope :rev_guess_scores, ->(season = Date.current.year) {
     unscoped.select('*',
-      "(SELECT SUM(rev_guesses.score) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_score",
-      "(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_count" )
+      "(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_score",
+      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND season = #{season}) AS rev_guesses_count" )
   }
 
   scope :pick_em_scores, ->(season = Date.current.year) {
     unscoped.select('*',
-      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct AND season = #{season}) AS correct_pick_ems",
-      "(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND season = #{season}) AS total_pick_ems" )
+      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND season = #{season}) AS correct_pick_ems",
+      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND season = #{season}) AS total_pick_ems" )
   }
 
   # Get all current members, or members for specified year

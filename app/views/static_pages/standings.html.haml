@@ -20,7 +20,7 @@
               = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
               = u.username
           .td.numeric
-            = u.rev_guesses_score
+            = u.rev_guesses_score || 0
             %small
               \/
               = u.rev_guesses_count * 5

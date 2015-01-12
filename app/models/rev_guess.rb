@@ -47,13 +47,13 @@ class RevGuess < ActiveRecord::Base
     end
   end
 
-  # Returns *Integer*
-  def self.score
-    sum(:score)
-  end
-
   # Validates that one of the teams is the Revs.
   def is_revs_match
     errors.add(:match_id, 'is not a Revolution match') unless match.teams.map(&:abbrv).include? 'NE'
+  end
+
+  # Returns *Integer*
+  def self.score(season = Date.current.year)
+    joins(:match).where(matches: { season: season }).sum(:score)
   end
 end
