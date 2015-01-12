@@ -7,13 +7,14 @@ class MotMsController < ApplicationController
   # GET /mot_ms
   # GET /mot_ms.json
   def index
-    @months = Match.where('kickoff <= ?', Time.current).group_by{|x| x.kickoff.beginning_of_month }.sort.map(&:first)
-    @mstart = params[:date].try(:to_datetime) || Date.current.beginning_of_month
-    month_matches = revs.matches.where(kickoff: (@mstart...@mstart.end_of_month))
-    @match_ids = month_matches.map(&:id)
-    @mot_ms   = Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }.sort_by(&:last_name)
-    @mot_m_mo = @mot_ms.select{|x| x.mot_m_total(@match_ids) > 0 }.group_by{|x| x.mot_m_total(@match_ids) }.sort_by(&:first).reverse
-    @mot_m_yr = @mot_ms.group_by(&:mot_m_total).sort_by(&:first).reverse
+    @mstart       = (params[:date].try(:to_datetime) || Date.current).beginning_of_month
+    @season       = @mstart.year
+    @months       = Match.unscoped.where('kickoff <= :time', time: Time.current).group_by{|x| x.kickoff.beginning_of_month }.sort.map(&:first) + [ Date.current.beginning_of_month ]
+    @months.uniq!
+    @match_ids    = revs.matches.unscope(where: :season).where(kickoff: (@mstart..@mstart.end_of_month)).map(&:id)
+    @mot_ms       = Player.includes(:mot_m_firsts,:mot_m_seconds,:mot_m_thirds).select{|x| x.mot_m_total(season: @season) > 0 }.sort_by(&:last_name)
+    @mot_m_mo     = @mot_ms.group_by{|x| x.mot_m_total(match_id: @match_ids) }.reject{|k,v| k == 0 }.sort_by(&:first).reverse
+    @mot_m_yr     = @mot_ms.group_by{|motm| motm.mot_m_total(season: @season)}.sort_by(&:first).reverse
   end
 
   # GET /mot_ms/1
@@ -78,7 +79,7 @@ class MotMsController < ApplicationController
   private
     # Set +@match+ based on route's +:match_id+.
     def set_match
-      @match = Match.find(params[:match_id])
+      @match = Match.unscoped.find(params[:match_id])
     end
 
     # Redirects to matches path for that week if the match is not voteable

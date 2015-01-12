@@ -91,7 +91,7 @@
     - if @match.teams.include?(revs)
       %h3 Man of the Match Standings
       %ul.table
-        - if @motm_players.empty?
+        - if @mot_m_players.empty?
           %li.tr
             .td No votes cast yet
         - else
@@ -104,7 +104,7 @@
               .thd.numeric 3
           - place = 0
           - last = nil
-          - @motm_players.each do |mot_m|
+          - @mot_m_players.each do |mot_m|
             %li.tr
               .td.numeric= last == mot_m.mot_m_total ? '' : (place += 1)
               .td
@@ -112,11 +112,11 @@
                   = mot_m.first_name
                   %strong= mot_m.last_name
               .td
-                %p= mot_m.motm_firsts.where(match: @match).length
+                %p= mot_m.mot_m_firsts.where(match: @match).length
               .td
-                %p= mot_m.motm_seconds.where(match: @match).length
+                %p= mot_m.mot_m_seconds.where(match: @match).length
               .td
-                %p= mot_m.motm_thirds.where(match: @match).length
+                %p= mot_m.mot_m_thirds.where(match: @match).length
       %h3 RevGuesses
       %ul.table
         .thead

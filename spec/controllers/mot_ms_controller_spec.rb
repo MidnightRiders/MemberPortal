@@ -72,7 +72,7 @@ describe MotMsController do
     it 'allows #index' do
       sign_in FactoryGirl.create(:user, :admin)
       get :index
-      expect(assigns(:mot_ms)).to eq Player.includes(:motm_firsts,:motm_seconds,:motm_thirds).select{|x| x.mot_m_total > 0 }
+      expect(assigns(:mot_ms)).to eq Player.includes(:mot_m_firsts,:mot_m_seconds,:mot_m_thirds).select{|x| x.mot_m_total > 0 }
     end
   end
 end
