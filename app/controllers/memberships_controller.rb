@@ -103,9 +103,13 @@ class MembershipsController < ApplicationController
     logger.info event.data.object
     object = event.data.object
     customer_token = (object.object == 'customer' ? object.id : object.customer)
+    customer = Stripe::Customer.retrieve(customer_token)
     user  = User.find_by(stripe_customer_token: customer_token )
+    if user.nil? && (user = User.find_by(email: customer.email)) && user.stripe_customer_token.nil?
+      logger.error "Stripe::Customer #{customer_token} had email #{customer.email} but User #{user.username} with email #{user.email} did not have customer_token"
+      user.update_attribute(:stripe_customer_token, customer_token)
+    end
     if user
-      customer = Stripe::Customer.retrieve(customer_token)
       if object.object == 'charge'
         membership = Membership.with_stripe_charge_id(object.id)
         # charge.succeeded is handled immediately - no webhook
@@ -125,12 +129,16 @@ class MembershipsController < ApplicationController
           )
           MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
         end
-      else
-        render nothing: true, status: 200
       end
+      render nothing: true, status: 200
     else
-      logger.error "No user could be found with ID #{customer_token}\n  Event ID: #{event.id}"
-      render nothing: true, status: 404
+      if event.type == 'customer.deleted'
+        logger.info "Stripe::Customer #{customer_token} has been deleted."
+        render nothing: true, status: 200
+      else
+        logger.error "No user could be found with ID #{customer_token}\n  Event ID: #{event.id}"
+        render nothing: true, status: 404
+      end
     end
   rescue Stripe::StripeError => e
     logger.fatal "StripeError encountered: #{e}"
