@@ -31,7 +31,7 @@ $ ->
     $target.slideToggle()
 
   $(document).on 'change', ':input[data-autosubmit]', ->
-    parent.location = $(this).data().autosubmit.replace('YYYY-MM-DD',$(this).val())
+    parent.location = $(this).data('autosubmit').replace('___',$(this).val())
 
   $(':input[name*=_color]').on('change', ->
       $this = $(this)
