@@ -43,9 +43,9 @@ class Player < ActiveRecord::Base
   validates :position, inclusion: POSITIONS.keys
 
   belongs_to :club
-  has_many :motm_firsts, class_name: 'MotM', foreign_key: 'first_id'
-  has_many :motm_seconds, class_name: 'MotM', foreign_key: 'second_id'
-  has_many :motm_thirds, class_name: 'MotM', foreign_key: 'third_id'
+  has_many :mot_m_firsts, -> { includes(:match) }, class_name: 'MotM', foreign_key: 'first_id'
+  has_many :mot_m_seconds, -> { includes(:match) }, class_name: 'MotM', foreign_key: 'second_id'
+  has_many :mot_m_thirds, -> { includes(:match) }, class_name: 'MotM', foreign_key: 'third_id'
 
   # Returns *Boolean*. Alias for <tt>!active?</tt>.
   def inactive?
@@ -54,11 +54,11 @@ class Player < ActiveRecord::Base
 
   # Returns *Integer*. Scores Man of the Match voting for a player.
   # If no +match_id+ is provided, returns total scoring. Otherwise, scoring for that match.
-  def mot_m_total(match_id = nil)
-    if match_id
-      (motm_firsts.where(match_id: match_id).length * 3) + (motm_seconds.where(match_id: match_id).length * 2) + (motm_thirds.where(match_id: match_id).length * 1)
+  def mot_m_total(params = { season: Date.current.year })
+    if params[:season]
+      (mot_m_firsts.select{|x| x.match.season == params[:season]}.length * 3) + (mot_m_seconds.select{|x| x.match.season == params[:season]}.length * 2) + (mot_m_thirds.select{|x| x.match.season == params[:season]}.length * 1)
     else
-      (motm_firsts.length * 3) + (motm_seconds.length * 2) + (motm_thirds.length * 1)
+      (mot_m_firsts.select{|x| x.match_id.in? [params[:match_id]].flatten }.length * 3) + (mot_m_seconds.select{|x| x.match_id.in? [params[:match_id]].flatten }.length * 2) + (mot_m_thirds.select{|x| x.match_id.in? [params[:match_id]].flatten }.length * 1)
     end
   end
 
