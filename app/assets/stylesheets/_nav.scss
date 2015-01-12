@@ -14,6 +14,24 @@
       margin-right: .3em;
     }
   }
+
+  li.external {
+    a:link,
+    a:visited {
+      padding-right: rem-calc(35);
+      position: relative;
+      &:after {
+        @include fa-icon;
+        content: $fa-var-external-link;
+        font-size: rem-calc(9);
+        line-height: rem-calc(45);
+        position: absolute;
+        top: 0;
+        right: rem-calc(10);
+      }
+    }
+  }
+
   @media #{$small-only} {
     .title-area .name h1 {
       overflow: visible;

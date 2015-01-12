@@ -151,4 +151,11 @@ select[multiple], select[size] {
       box-shadow: 0 0 3px #fff;
     }
   }
+
+  @media #{$small-only} {
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    top: 5px !important;
+  }
 }

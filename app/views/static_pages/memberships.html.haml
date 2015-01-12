@@ -24,6 +24,7 @@
             %time= membership.created_at.strftime('%m-%d-%Y %I:%M%P')
         %td
           = icon 'repeat fa-fw' if membership.is_subscription?
+          = icon 'credit-card fa-fw' if membership.stripe_charge_id
           = membership.type
           - if membership.is_a? Family
             %br
