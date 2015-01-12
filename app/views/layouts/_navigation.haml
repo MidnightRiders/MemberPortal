@@ -4,7 +4,8 @@
       %li.name
         %h1= link_to 'Midnight Riders', root_path
       %li.toggle-topbar.menu-icon
-        %a{ href: '#' } Menu
+        %a{ href: '#' }<>
+          %span Menu
 
     %section.top-bar-section
       %ul.left
@@ -71,9 +72,25 @@
 
           - if user_signed_in?
             %li
-              = link_to user_home_url do
+              = link_to user_home_path do
                 = icon 'home fa-fw'
                 Home
+          %li
+            = link_to faq_path, title: 'FAQ' do
+              .show-for-medium-up
+                = icon 'question fa-fw'
+                &nbsp;
+              .show-for-small-only
+                = icon 'question fa-fw'
+                FAQ
+          %li
+            = link_to contact_path, title: 'Contact Us' do
+              .show-for-medium-up
+                = icon 'comment-o fa-fw'
+                &nbsp;
+              .show-for-small-only
+                = icon 'comment-o fa-fw'
+                Contact Us
       %ul.right
         - if user_signed_in?
           - if current_user.current_member?
@@ -119,8 +136,12 @@
           - if current_user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
             %li.has-dropdown
               %a{ title: 'Admin' }
-                = icon 'bolt fa-fw'
-                &nbsp;
+                .show-for-medium-up
+                  = icon 'bolt fa-fw'
+                  &nbsp;
+                .hide-for-medium-up
+                  = icon 'bolt fa-fw'
+                  Admin
               %ul.dropdown
                 - if can? :view, :users
                   %li
@@ -147,5 +168,11 @@
               %i.fa.fa-power-off.fa-fw
               Sign Out
         - else
-          -# %li= link_to 'Sign Up', new_user_registration_path
-          %li= link_to 'Sign In', new_user_session_path
+          %li
+            = link_to new_user_registration_path do
+              = icon 'pencil-square-o fa-fw'
+              Sign Up
+          %li
+            = link_to new_user_session_path do
+              = icon 'sign-in fa-fw'
+              Sign In

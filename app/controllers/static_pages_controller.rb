@@ -8,8 +8,6 @@ class StaticPagesController < ApplicationController
     redirect_to user_signed_in? ? user_home_path : new_user_session_path
   end
 
-  # TODO: Fill out FAQ
-
   # Frequently Asked Questions
   def faq
   end
