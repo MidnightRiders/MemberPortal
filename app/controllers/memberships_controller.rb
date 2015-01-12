@@ -125,13 +125,15 @@ class MembershipsController < ApplicationController
           MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
         end
       else
-        render status: 200
+        render nothing: true, status: 200
       end
     else
       logger.error "No user could be found with ID #{object.customer}\n  Event ID: #{event.id}"
+      render nothing: true, status: 404
     end
   rescue Stripe::StripeError => e
-    logger.error "StripeError encountered: #{e}"
+    logger.fatal "StripeError encountered: #{e}"
+    render nothing: true, status: 500
   end
 
   private
