@@ -145,7 +145,7 @@ class MembershipsController < ApplicationController
         end
         render nothing: true, status: 200
       else
-        if event.type == 'customer.deleted'
+        if event.type == 'customer.deleted' || customer.deleted == true
           logger.info "Stripe::Customer #{customer_token} has been deleted."
           render nothing: true, status: 200
         else
