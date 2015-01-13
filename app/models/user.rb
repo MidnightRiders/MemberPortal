@@ -205,4 +205,15 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Retrieve Stripe customer object
+  def stripe_customer
+    if stripe_customer_token
+      Stripe::Customer.retrieve(stripe_customer_token)
+    else
+      nil
+    end
+  rescue Stripe::InvalidRequestError => e
+    logger.error "Stripe::InvalidRequestError: #{e}"
+  end
+
 end

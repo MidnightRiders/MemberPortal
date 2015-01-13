@@ -132,7 +132,7 @@ class Membership < ActiveRecord::Base
   # Cancel current subscription
   def cancel(provide_refund = false)
     if is_subscription?
-      stripe_customer.subscriptions.retrieve(self.stripe_subscription_id).delete
+      user.stripe_customer.subscriptions.retrieve(self.stripe_subscription_id).delete
       self.stripe_subscription_id = nil
     else
       self.refunded = 'canceled'
@@ -150,9 +150,8 @@ class Membership < ActiveRecord::Base
 
   # Refund payment if possible and destroy Membership
   def refund
-    if stripe_customer
-      if stripe_charge_id
-        charge = Stripe::Charge.retrieve(stripe_charge_id)
+    if (customer = user.stripe_customer).present?
+      if stripe_charge_id && (charge = customer.charges.retrieve(stripe_charge_id)).present?
         refund = charge.refunds.create
         if refund
           self.refunded = refund.id
@@ -172,16 +171,6 @@ class Membership < ActiveRecord::Base
     logger.error "Stripe error while refunding customer: #{e.message}"
     errors.add :base, 'There was a problem refunding the transaction.'
     false
-  end
-
-  def stripe_customer
-    if user.stripe_customer_token
-      Stripe::Customer.retrieve(user.stripe_customer_token)
-    else
-      nil
-    end
-  rescue Stripe::InvalidRequestError => e
-    logger.error "Stripe::InvalidRequestError: #{e}"
   end
 
   def info
