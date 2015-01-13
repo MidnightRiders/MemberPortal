@@ -27,8 +27,8 @@ class BlogRss
         rss_parsed = Hash.from_xml(rss)
         rss = rss_parsed['rss']['channel']['item'] if rss_parsed
       rescue => e
-        Rails.logger.info 'Blog error for ' + self.url
-        Rails.logger.info e
+        Rails.logger.error 'Blog error for ' + self.url
+        Rails.logger.error e
         Rails.logger.info rss
       end
       rss ||= []

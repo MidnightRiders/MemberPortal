@@ -27,8 +27,11 @@ class MembershipsController < ApplicationController
   # GET /users/:user_id/memberships/new
   def new
     privileges = @user.memberships.last.try(:privileges)
-    year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
-    @membership = @user.memberships.new(year: year, privileges: privileges)
+    @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
+    if (customer = @user.stripe_customer).present?
+      @cards = customer.cards.data
+    end
+    @membership = @user.memberships.new(year: @year, privileges: privileges)
   end
 
   # GET /users/:user_id/memberships/1/edit
@@ -42,12 +45,23 @@ class MembershipsController < ApplicationController
 
     respond_to do |format|
       if @membership.save_with_payment
-        MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
-        MembershipMailer.new_membership_alert(@user, @membership).deliver
-        format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
+        if @membership.stripe_charge_id
+          MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
+          MembershipMailer.new_membership_alert(@user, @membership).deliver
+          notice = "Thank you for your payment. Your card has been charged #{number_to_currency(Membership::COSTS[@membership.type.to_sym].to_f/100)} and your Membership has been created."
+        else
+          notice = 'Membership was successfully created.'
+        end
+        format.html { redirect_to get_user_path, notice: notice }
         format.json { render action: 'show', status: :created, location: @membership }
       else
-        format.html { render action: 'new' }
+        format.html {
+          @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
+          if (customer = @user.stripe_customer).present?
+            @cards = customer.cards.data
+          end
+          render action: 'new'
+        }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -104,8 +118,9 @@ class MembershipsController < ApplicationController
     object = event.data.object
     customer_token = (object.object == 'customer' ? object.id : object.customer)
     customer = Stripe::Customer.retrieve(customer_token)
-    user  = User.find_by(stripe_customer_token: customer_token )
-    if user.nil? && (user = User.find_by(email: customer.data.object.email, stripe_customer_token: nil))
+    logger.info customer
+    user  = User.find_by(stripe_customer_token: customer_token)
+    if user.nil? && (user = User.find_by(email: customer.email, stripe_customer_token: nil))
       logger.error "Stripe::Customer #{customer_token} had email #{customer.data.object.email} but User #{user.username} with email #{user.email} did not have customer_token. The token has been assigned."
       user.update_attribute(:stripe_customer_token, customer_token)
     end
