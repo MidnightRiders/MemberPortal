@@ -2,8 +2,8 @@
 
 # Controller for +Membership+ model.
 class MembershipsController < ApplicationController
-  authorize_resource except: [ :webhooks ]
   before_action :get_membership, except: [ :new, :create, :webhooks ]
+  load_and_authorize_resource except: [ :webhooks ]
   before_action :get_user, except: [ :webhooks ]
   skip_before_action :verify_authenticity_token, only: [ :webhooks ]
 
@@ -41,18 +41,15 @@ class MembershipsController < ApplicationController
   # POST /users/:user_id/memberships
   # POST /users/:user_id/memberships.json
   def create
-    @membership = @user.memberships.new(membership_params)
-
     respond_to do |format|
       if @membership.save_with_payment
         if @membership.stripe_charge_id
           MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
           MembershipMailer.new_membership_alert(@user, @membership).deliver
-          notice = "Thank you for your payment. Your card has been charged #{number_to_currency(Membership::COSTS[@membership.type.to_sym].to_f/100)} and your Membership has been created."
+          format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
         else
-          notice = 'Membership was successfully created.'
+          format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
         end
-        format.html { redirect_to get_user_path, notice: notice }
         format.json { render action: 'show', status: :created, location: @membership }
       else
         format.html {
