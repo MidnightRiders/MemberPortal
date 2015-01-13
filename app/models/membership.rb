@@ -69,7 +69,7 @@ class Membership < ActiveRecord::Base
   def cost
     cost = COSTS[type.to_sym].to_f / 100
     if override.present?
-      Math.floor(cost)
+      cost.floor
     else
       cost
     end
