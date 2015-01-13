@@ -110,47 +110,52 @@ class MembershipsController < ApplicationController
   # ALL /memberships/webhooks
   def webhooks
     event = Stripe::Event.retrieve(params[:id])
-    logger.info event.type
-    logger.info event.data.object
     object = event.data.object
-    customer_token = (object.object == 'customer' ? object.id : object.customer)
-    customer = Stripe::Customer.retrieve(customer_token)
-    logger.info customer
-    user  = User.find_by(stripe_customer_token: customer_token)
-    if user.nil? && (user = User.find_by(email: customer.email, stripe_customer_token: nil))
-      logger.error "Stripe::Customer #{customer_token} had email #{customer.data.object.email} but User #{user.username} with email #{user.email} did not have customer_token. The token has been assigned."
-      user.update_attribute(:stripe_customer_token, customer_token)
-    end
-    if user
-      if object.object == 'charge'
-        membership = Membership.with_stripe_charge_id(object.id)
-        # charge.succeeded is handled immediately - no webhook
-        if event.type == 'charge.refunded'
-          membership.refunded = true
-          membership.save!
-        end
-      elsif object.object == 'invoice'
-        subscription = customer.subscriptions.retrieve(object.subscription)
-        if event.type == 'invoice.payment_succeeded'
-          membership = user.memberships.new(
-            year: Time.at(subscription.current_period_start),
-            type: subscription.plan.id.titleize,
-            info: {
-              stripe_subscription_id: subscription.id
-            }
-          )
-          MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
-        end
+    logger.info event.type
+    logger.info object
+    customer_token = (object.object == 'customer' ? object.id : object.try(:customer))
+    if customer_token
+      customer = Stripe::Customer.retrieve(customer_token)
+      logger.info customer
+      user = User.find_by(stripe_customer_token: customer_token)
+      if user.nil? && customer.try(:deleted) != true && (user = User.find_by(email: customer.email, stripe_customer_token: nil)).present?
+        logger.error "Stripe::Customer #{customer_token} had email #{customer.data.object.email} but User #{user.username} with email #{user.email} did not have customer_token. The token has been assigned."
+        user.update_attribute(:stripe_customer_token, customer_token)
       end
-      render nothing: true, status: 200
-    else
-      if event.type == 'customer.deleted'
-        logger.info "Stripe::Customer #{customer_token} has been deleted."
+      if user
+        if object.object == 'charge'
+          membership = Membership.with_stripe_charge_id(object.id)
+          # charge.succeeded is handled immediately - no webhook
+          if event.type == 'charge.refunded'
+            membership.refunded = true
+            membership.save!
+          end
+        elsif object.object == 'invoice'
+          subscription = customer.subscriptions.retrieve(object.subscription)
+          if event.type == 'invoice.payment_succeeded'
+            membership = user.memberships.new(
+              year: Time.at(subscription.current_period_start),
+              type: subscription.plan.id.titleize,
+              info: {
+                stripe_subscription_id: subscription.id
+              }
+            )
+            MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
+          end
+        end
         render nothing: true, status: 200
       else
-        logger.error "No user could be found with ID #{customer_token}\n  Event ID: #{event.id}"
-        render nothing: true, status: 404
+        if event.type == 'customer.deleted'
+          logger.info "Stripe::Customer #{customer_token} has been deleted."
+          render nothing: true, status: 200
+        else
+          logger.error "No user could be found with ID #{customer_token}\n  Event ID: #{event.id}"
+          render nothing: true, status: 404
+        end
       end
+    else
+      logger.error 'No Stripe::Customer attached to event.'
+      render nothing: true, status: 200
     end
   rescue Stripe::StripeError => e
     logger.fatal "StripeError encountered: #{e}"
