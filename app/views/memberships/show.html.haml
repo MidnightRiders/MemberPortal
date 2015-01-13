@@ -14,6 +14,12 @@
       .medium-4.columns
         %label Payment
       .medium-8.columns
+        %p
+          %strong= number_to_currency @membership.cost
+    .row
+      .medium-4.columns
+        %label Payment Method
+      .medium-8.columns
         - if @card
           %p
             XXXX XXXX XXXX

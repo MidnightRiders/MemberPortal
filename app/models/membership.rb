@@ -66,6 +66,15 @@ class Membership < ActiveRecord::Base
     stripe_subscription_id.present?
   end
 
+  def cost
+    cost = COSTS[type.to_sym].to_f / 100
+    if override.present?
+      Math.floor(cost)
+    else
+      cost
+    end
+  end
+
   # Save with Stripe payment if applicable
   def save_with_payment
     if valid?
