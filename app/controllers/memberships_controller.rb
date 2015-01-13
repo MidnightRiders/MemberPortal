@@ -105,8 +105,8 @@ class MembershipsController < ApplicationController
     customer_token = (object.object == 'customer' ? object.id : object.customer)
     customer = Stripe::Customer.retrieve(customer_token)
     user  = User.find_by(stripe_customer_token: customer_token )
-    if user.nil? && (user = User.find_by(email: customer.email)) && user.stripe_customer_token.nil?
-      logger.error "Stripe::Customer #{customer_token} had email #{customer.email} but User #{user.username} with email #{user.email} did not have customer_token"
+    if user.nil? && (user = User.find_by(email: customer.data.object.email, stripe_customer_token: nil))
+      logger.error "Stripe::Customer #{customer_token} had email #{customer.data.object.email} but User #{user.username} with email #{user.email} did not have customer_token. The token has been assigned."
       user.update_attribute(:stripe_customer_token, customer_token)
     end
     if user
