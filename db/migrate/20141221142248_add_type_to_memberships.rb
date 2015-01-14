@@ -3,15 +3,21 @@ class AddTypeToMemberships < ActiveRecord::Migration
     add_column :memberships, :type, :string
     rename_column :memberships, :roles, :privileges
 
-    Membership.all.each do |membership|
-      membership.type = (membership.privileges & Membership::TYPES.map(&:downcase)).first.titleize
-      membership.privileges = membership.privileges - Membership::TYPES.map(&:downcase)
-      membership.save!
+    Membership.unscoped.all.each do |membership|
+      type = (membership.privileges & Membership::TYPES.map(&:downcase)).first.try(:titleize)
+      privileges = membership.privileges - Membership::TYPES.map(&:downcase)
+      if type
+        membership.update_attribute(:type, type)
+        membership.update_attribute(:privileges, privileges)
+      else
+        logger.error 'Type empty!'
+        logger.error membership
+      end
     end
   end
 
   def down
-    Membership.all.each do |membership|
+    Membership.unscoped.all.each do |membership|
       membership.privileges << membership.type.downcase if membership.type.present?
     end
 
