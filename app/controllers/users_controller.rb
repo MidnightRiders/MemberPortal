@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @privilege = params[:privilege] || nil
+    @privilege = params[:privilege].blank? ? nil : params[:privilege]
     @year = params.fetch(:year, Date.current.year).to_i
     @show_all = params[:show_all].in? [true, 'true']
     @users = @users.text_search(params[:search]) if params[:search]
