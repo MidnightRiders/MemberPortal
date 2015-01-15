@@ -13,7 +13,9 @@
               Import
   .small-6.medium-4.columns.text-right
     = form_tag users_path, method: :get do
-      = hidden_field_tag :privilege, params[:privilege] if params[:privilege]
+      = hidden_field_tag :privilege, @privilege
+      = hidden_field_tag :show_all, @show_all
+      = hidden_field_tag :year, @year
       .row.collapse
         .small-8.columns
           = text_field_tag :search, params[:search]
