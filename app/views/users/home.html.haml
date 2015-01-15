@@ -12,8 +12,8 @@
   %section.medium-6.columns
     - if current_user.current_member?
       = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
-        = icon 'check'
-        Vote for the 2015 Scarf
+        = icon 'check-circle'
+        Final Round: Vote for 2015’s Scarf
     = render 'static_pages/events', events: @events
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 
