@@ -28,10 +28,10 @@
       .td.text-center= club.conference.titleize
       .td.text-center= club.abbrv
       .td.actions.text-right
-        = link_to edit_club_path(club), class: 'button tiny' do
+        = link_to edit_club_path(club), class: 'button small' do
           = icon 'pencil fa-fw'
           Edit
         - if can? :destroy, club
-          = link_to club, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button tiny alert' do
+          = link_to club, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button small alert' do
             = icon 'trash-o fa-fw'
             Destroy

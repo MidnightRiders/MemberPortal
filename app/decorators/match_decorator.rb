@@ -3,9 +3,9 @@ class MatchDecorator < Draper::Decorator
   delegate_all
 
   # Returns <tt>a.button.secondary</tt> for +RevGuess+ for given match.
-  # +size+ defaults to 'tiny'. If +o+ (for opponent) is true, the button includes match
+  # +size+ defaults to 'small'. If +o+ (for opponent) is true, the button includes match
   # opponent information.
-  def rev_guess_button(size='tiny', o = false)
+  def rev_guess_button(size='small', o = false)
     h.link_to h.rev_guess_path_for(model), class: "button secondary #{size}" do
       opp = o ? opponent : ''
       h.icon('question fa-fw') + ' RevGuess' + opp + (": #{h.rev_guess_for(model)}" if h.rev_guess_for(model))
@@ -15,7 +15,7 @@ class MatchDecorator < Draper::Decorator
   # Returns <tt>a.button.secondary</tt> for +MotM+ for given match.
   # +size+ defaults to 'tiny'. If +o+ (for opponent) is true, the button includes match
   # opponent information.
-  def mot_m_button(size='tiny', o = false)
+  def mot_m_button(size='small', o = false)
     h.link_to h.mot_m_path_for(model), class: "button secondary #{size}" do
       opp = o ? opponent : ''
       h.icon('list-ol fa-fw') + ' MotM' + opp + (h.icon('check fa-fw') if h.mot_m_for(model))

@@ -4,16 +4,16 @@
   .medium-4.columns.text-left
     %ul.button-group
       %li
-        = link_to matches_path(date: @start_date.to_date - 7.days), class: 'button secondary tiny' do
+        = link_to matches_path(date: @start_date.to_date - 7.days), class: 'button secondary small' do
           = icon 'arrow-circle-o-left fa-fw'
           Previous Week
       - unless @start_date == Time.current.beginning_of_week
         %li
-          = link_to matches_path, class: 'button tiny' do
+          = link_to matches_path, class: 'button small' do
             = icon 'calendar-o fa-fw'
             This Week
       %li
-        = link_to matches_path(date: @start_date.to_date + 7.days), class: 'button secondary tiny' do
+        = link_to matches_path(date: @start_date.to_date + 7.days), class: 'button secondary small' do
           Next Week
           = icon 'arrow-circle-o-right fa-fw'
   - if can? :manage, Match
@@ -28,7 +28,7 @@
                 = icon 'cloud-download fa-fw'
                 Import/Update Matches
         .medium-4.columns
-          = link_to new_match_path, class: 'button tiny expand' do
+          = link_to new_match_path, class: 'button small expand' do
             = icon 'calendar fa-fw'
             New Match
 

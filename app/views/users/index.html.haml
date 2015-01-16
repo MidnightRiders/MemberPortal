@@ -8,7 +8,7 @@
           .small-8.large-9.columns
             = file_field_tag :file
           .small-4.large-3.columns.text-right
-            = button_tag :submit, class: 'button secondary tiny expand' do
+            = button_tag :submit, class: 'button secondary small expand' do
               %i.fa.fa-upload.fa-fw
               Import
   .small-6.medium-4.columns.text-right
@@ -33,23 +33,23 @@
   .medium-2.columns
     = select_tag :year, options_for_select((2014..Date.current.year), @year), data: { autosubmit: users_path(params.merge(year: '___')) }
   .medium-2.columns
-    = link_to users_path(year: @year), class: "button tiny expand #{'success' unless @privilege || @show_all}" do
+    = link_to users_path(year: @year), class: "button small expand #{'success' unless @privilege || @show_all}" do
       = icon 'users'
       Current Members
   .medium-2.columns
-    = link_to users_path(show_all: true, year: @year), class: "button tiny expand #{'success' if @show_all}" do
+    = link_to users_path(show_all: true, year: @year), class: "button small expand #{'success' if @show_all}" do
       = icon 'list'
       All Users
   .medium-2.columns
-    = link_to users_path(privilege: 'admin', year: @year), class: "button tiny expand #{'success' if @privilege == 'admin'}" do
+    = link_to users_path(privilege: 'admin', year: @year), class: "button small expand #{'success' if @privilege == 'admin'}" do
       = icon 'bolt'
       Admins
   .medium-2.columns
-    = link_to users_path(privilege: 'executive_board', year: @year), class: "button tiny expand #{'success' if @privilege == 'executive_board'}" do
+    = link_to users_path(privilege: 'executive_board', year: @year), class: "button small expand #{'success' if @privilege == 'executive_board'}" do
       = icon 'suitcase'
       Executive Board
   .medium-2.columns
-    = link_to users_path(privilege: [ 'executive_board', 'at_large_board' ], year: @year), class: "button tiny expand #{'success' if @privilege == ['executive_board','at_large_board']}" do
+    = link_to users_path(privilege: [ 'executive_board', 'at_large_board' ], year: @year), class: "button small expand #{'success' if @privilege == ['executive_board','at_large_board']}" do
       = icon 'sitemap'
       Boards
 %ul.table.members
