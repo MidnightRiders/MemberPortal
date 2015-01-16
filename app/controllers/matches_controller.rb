@@ -7,7 +7,11 @@ class MatchesController < ApplicationController
   # GET /matches.json
   def index
     @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
-    @matches = Match.with_clubs.includes(:pick_ems).where(kickoff: (@start_date..@start_date + 7.days)).order(kickoff: :asc, location: :asc)
+    @matches = Match.unscoped.with_clubs.includes(:pick_ems).where(kickoff: (@start_date..@start_date + 7.days)).order(kickoff: :asc, location: :asc)
+    @prev_link = "Previous #{'Game ' if @matches.empty?}Week"
+    @next_link = "Next #{'Game ' if @matches.empty?}Week"
+    @prev_date = @matches.empty? ? Match.unscoped.where('kickoff < NOW()').order(kickoff: :asc).last.kickoff.to_date : @start_date - 1.week
+    @next_date = @matches.empty? ? Match.unscoped.where('kickoff > NOW()').order(kickoff: :asc).first.kickoff.to_date : @start_date + 1.week
   end
 
   # GET /matches/1
