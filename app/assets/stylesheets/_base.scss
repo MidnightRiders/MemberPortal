@@ -159,3 +159,15 @@ select[multiple], select[size] {
     top: 5px !important;
   }
 }
+
+a:link,
+a:visited {
+  &.underline {
+    text-decoration: underline;
+  }
+}
+
+p.small {
+  font-size: rem-calc(12);
+  font-style: italic;
+}
