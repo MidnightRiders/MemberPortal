@@ -55,10 +55,10 @@
   .row
     .small-6.columns
       - if (lastmatch = revs.last_match) && can?(:vote, MotM, match_id: lastmatch.id)
-        = lastmatch.decorate.mot_m_button('tiny secondary expand', true)
+        = lastmatch.decorate.mot_m_button('small secondary expand', true)
     .small-6.columns
       - if (nextmatch = revs.next_match) && can?(:vote, RevGuess, match_id: nextmatch.id)
-        = nextmatch.decorate.rev_guess_button('tiny secondary expand', true)
+        = nextmatch.decorate.rev_guess_button('small secondary expand', true)
 
 .table
   .thead

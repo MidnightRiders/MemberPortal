@@ -42,6 +42,11 @@ $input-prefix-bg: $secondary-color;
 $input-prefix-border-color: $silver;
 $input-prefix-font-color: #fff;
 
+$button-med: rem-calc(12);
+$button-tny: rem-calc(7);
+$button-sml: rem-calc(10);
+$button-lrg: rem-calc(16);
+
 @import 'foundation';
 
 .field_with_errors {
