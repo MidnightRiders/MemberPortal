@@ -1,41 +1,62 @@
 !!!
 %html
   %head
-    %meta{content: 'text/html;charset=utf-8', 'http-equiv' => 'content-type'}/
-    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}/
+    %meta{content: 'text/html;charset=utf-8', 'http-equiv' => 'content-type'}
+    %meta{:name => 'viewport', :content => 'width=device-width, initial-scale=1.0'}
     %title= @title
+    = render 'shared/riders_logo'
   %body{bgcolor: '#290c2b', style: "background-color:#290c2b;background-image:url(#{image_url('bg.png')});background-repeat:repeat;color:#ffffff;font-family:sans-serif;margin:0;padding:0;border:0;"}
     :css
-      @import url('//fonts.googleapis.com/css?family=Lato:300,700');
-      body, body > table, #maincell {
-        margin:0; padding:0; border:0;
+      @import url(https://fonts.googleapis.com/css?family=Lato:300,700);
+      *, html, body, table {-webkit-text-size-adjust: none !important;}
+      body,
+      body > table,
+      #maincell {
         background: #290c2b url(#{image_url('bg.png')}) repeat;
+        border:0;
+        margin:0;
+        padding:0;
+      }
+      #maintable {
+        width: 600px !important;
+      }
+      #content {
+        padding: 30px 30px 15px !important;
+      }
+      @media screen and (max-width: 619px) {
+        #maintable {
+          width: auto !important;
+        }
+        #content {
+          padding: 10px 10px 5px !important;
+        }
       }
     %table{border: '0', cellpadding: '0', cellspacing: '0', style: "background:url(#{image_url('bg.png')}) repeat;color:#ffffff;font-family:sans-serif;", width: '100%'}
       %tr
         %td#maincell{align: 'center', style: 'padding: 10px;'}
-          %table{border: '0', cellpadding: '0', cellspacing: '0', style: 'display:block;width:600px;margin:0 auto;box-shadow:0 3px 6px #000;', width: '600'}
-            %tbody
+          %table#maintable{border: '0', cellpadding: '0', cellspacing: '0', style: 'display:block;width:600px;margin:0 auto;box-shadow:0 3px 6px #000;', width: '600'}
+            %thead
               %tr
                 %td{valign: 'top'}
                   %h1{style: 'margin:0;'}
                     %a{href: 'http://midnightriders.com'}
-                      %img{alt: 'Midnight Riders', src: image_url('email/header.jpg'), style: 'display:block;'}/
+                      %img{alt: 'Midnight Riders', src: image_url('email/header.jpg'), style: 'display:block;width:100%;'}
+            %tbody
               %tr
-                %td{colspan: '2', style: 'padding:30px;padding-bottom: 15px;color:#111133; font-size:15px; line-height: 20px; font-family: Lato, sans-serif; font-weight: 300; background-color:#ffffff;text-align:left;'}
+                %td#content{colspan: '2', style: 'padding:30px;padding-bottom: 15px;color:#111133; font-size:15px; line-height: 20px; font-family: Lato, sans-serif; font-weight: 300; background-color:#ffffff;text-align:left;'}
 
                   = yield
 
-                  %hr{style: 'border:none;border-bottom:1px solid #501;'}/
+                  %hr{style: 'border:none;border-bottom:1px solid #501;'}
                   %p{style: 'font-size:11px;text-align:center;'}
                     %strong{style: 'font-family:Georgia,serif;font-weight:600;'} Midnight Riders - A New England Independent Supporters Group
-                    %br/
+                    %br
                     %a{href: 'http://www.MidnightRiders.com', style: 'color: #881144; text-decoration: none; border-bottom: 1px dashed #881144; margin-bottom: -1px;'} www.MidnightRiders.com
                     |
                     %a{href: 'http://twitter.com/midnightriders', style: 'color: #881144; text-decoration: none; border-bottom: 1px dashed #881144; margin-bottom: -1px;'} @MidnightRiders
                     |
                     %a{href: 'http://facebook.com/MidnightRiders', style: 'color: #881144; text-decoration: none; border-bottom: 1px dashed #881144; margin-bottom: -1px;'} facebook.com/MidnightRiders
-                  %hr{style: 'border:none;border-bottom:1px solid #501;'}/
+                  %hr{style: 'border:none;border-bottom:1px solid #501;'}
                   %p{ style: 'text-align: center; font-size: 11px;' } Copyright © 1995 – #{Time.current.year}, Midnight Riders
                   %p{ style: 'text-align: left; font-size: 11px;'}
                     You are receiving this email because this address was registered to a member of the Midnight Riders. If that is not you, please

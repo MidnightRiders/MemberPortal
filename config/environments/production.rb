@@ -1,8 +1,8 @@
 MidnightRiders::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.action_mailer.default_url_options = { :host => 'members.midnightriders.com' }
-  config.action_mailer.asset_host = 'http://members.midnightriders.com'
+  config.action_mailer.default_url_options = { host: 'members.midnightriders.com', protocol: 'https' }
+  config.action_mailer.asset_host = 'https://members.midnightriders.com'
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both thread web servers
