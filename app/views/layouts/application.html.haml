@@ -20,6 +20,7 @@
       = stylesheet_link_tag 'iealert'
     = csrf_meta_tags
     = yield :head
+    = render 'shared/riders_logo'
   %body
     = render partial: 'layouts/header'
     = render partial: 'layouts/navigation'
