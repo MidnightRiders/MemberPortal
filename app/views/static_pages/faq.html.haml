@@ -8,6 +8,7 @@
       %li= link_to 'What’s my password?', '#password'
       %li= link_to 'Can family members have their own logins?', '#relatives'
       %li= link_to 'Do I need to sign in to buy merchandise?', '#merchandise'
+      %li= link_to 'I still can’t log in', '#other'
 
   .medium-8.columns
     %dl
@@ -20,7 +21,7 @@
           %em we do not store any of your financial information on our servers.
           Instead, your information is passed on to
           = succeed ',' do
-            = link_to 'Stripe', 'https://stripe.com', target: '_blank'
+            = link_to 'Stripe', 'https://stripe.com', target: '_blank', class: 'underline'
           a secure payment provider that manages credit cards and hands us a token by which to connect your account to their
           data. The only retrievable information Stripe maintains is the last four digits and expiration of your card, for
           your own reference, and tokens by which we can securely make charges. You will receive a receipt from us and from
@@ -28,7 +29,7 @@
       %dt#signup How do I become a member?
       %dd
         %p
-          Simple! Just go to the #{link_to 'home page', root_path} and click "Sign Up." Once you've created an account,
+          Simple! Just go to the #{link_to 'home page', root_path, class: 'underline'} and click "Sign Up." Once you've created an account,
           you can purchase a membership in one quick step. That’s it! Once you’ve done that, you’re a Midnight Rider, and
           you’ll have access to all of the benefits of being one, including Supporters Lot parking, merchandise discounts,
           and full access to the Member Portal.
@@ -39,7 +40,7 @@
           information around the time you signed up. If you’re not the
           %em primary accountholder
           of a Family membership, you do not have an account yet.
-          %strong= link_to 'See below', '#relatives'
+          %strong= link_to 'See below', '#relatives', class: 'underline'
           for more information about family members.
           The
           %strong default username
@@ -52,7 +53,7 @@
         %p
           If you signed up in person at a Riders event this year or last, you were sent a welcome email with your login
           information. If you know you have an account but don't remember your password,
-          %strong= link_to 'click here', new_user_password_path
+          %strong= link_to 'click here', new_user_password_path, class: 'underline'
           to request a password reset email. If you’ve never logged in,
       %dt#relatives Can family members have their own logins?
       %dd
@@ -64,5 +65,11 @@
       %dt#merchandise Do I need to sign in to buy merchandise?
       %dd
         %p
-          Not at this time. Just visit #{link_to 'the shop page', 'http://midnightriders.com/shop', target: '_blank'} to
+          Not at this time. Just visit #{link_to 'the shop page', 'http://midnightriders.com/shop', target: '_blank', class: 'underline'} to
           get all your Riders merch.
+      %dt#other I still can’t log in.
+      %dd
+        %p
+          If you think you should have an account, and you’ve tried the above solutions (check your #{link_to 'username', '#username', class: 'underline'},
+          try #{link_to 'resetting your password', '#password', class: 'underline'}) and you still can’t log in,
+          #{link_to 'send us an email', 'mailto:webczar@midnightriders.com?subject=Member%20Portal%20Access', class: 'underline'}.
