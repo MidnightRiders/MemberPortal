@@ -1,7 +1,7 @@
 - content_for :title, 'Match listings for the week of ' + @start_date.strftime('%_m.%-d.%Y')
 
 .row.actions
-  .medium-6.columns.text-left
+  .medium-5.columns.text-left
     %ul.button-group
       %li
         = link_to matches_path(date: @prev_date), class: 'button secondary small' do
@@ -17,7 +17,7 @@
           = @next_link
           = icon 'arrow-circle-o-right fa-fw'
   - if can? :manage, Match
-    .medium-6.columns.text-right
+    .medium-7.columns.text-right
       .row
         .medium-6.columns
           = form_tag import_matches_path, class: 'row collapse' do
