@@ -23,14 +23,24 @@ header.page-header {
     }
   }
   .next-game {
+    padding-bottom: 10px;
+
+    .crest {
+      @include text-hide;
+      background-size: auto 2.5em;
+      border: 1px solid;
+      border-radius: 2em;
+      height: 2.75em;
+      line-height: 2.75em;
+      margin-left: .7em;
+      padding: 0;
+      width: 2.75em;
+    }
+
     h5, h3 {
       margin: 0;
       line-height: 1.2em;
     }
-    h3 {
-      margin-bottom: 10px;
-    }
-    padding-bottom: 10px;
   }
   @media #{$small-only} {
     display: none;
