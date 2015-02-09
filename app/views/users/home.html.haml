@@ -4,16 +4,14 @@
 
 = render 'register_now', user: current_user unless current_user.current_member?
 
-= render 'static_pages/jotform' if current_user.current_member? && Time.current < '2015-01-19 17:00:00 -0500'.to_time
-
 .row
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
-    - if current_user.current_member? && Time.current < '2015-01-19 17:00:00 -0500'.to_time
+    - if current_user.current_member? && Time.current < '2015-02-22 00:00:00 -0500'.to_time
       = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
         = icon 'check-circle'
-        Final Round: Vote for 2015’s Scarf
+        Submit 2015 Board Nomination
     = render 'static_pages/events', events: @events
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 
@@ -27,3 +25,4 @@
     .medium-6.columns
       = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses.where(matches: { season: Date.current.year }).present?
 
+= render 'static_pages/jotform' if current_user.current_member? && Time.current < '2015-02-22 00:00:00 -0500'.to_time

@@ -171,3 +171,13 @@ p.small {
   font-size: rem-calc(12);
   font-style: italic;
 }
+
+ul.no-style {
+  list-style: none;
+
+  li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}

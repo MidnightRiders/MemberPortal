@@ -47,7 +47,23 @@ $button-tny: rem-calc(7);
 $button-sml: rem-calc(10);
 $button-lrg: rem-calc(16);
 
-@import 'foundation';
+@import "foundation/components/grid";
+@import "foundation/components/alert-boxes";
+@import "foundation/components/button-groups";
+@import "foundation/components/buttons";
+@import "foundation/components/dropdown";
+@import "foundation/components/dropdown-buttons";
+@import "foundation/components/flex-video";
+@import "foundation/components/forms";
+@import "foundation/components/inline-lists";
+@import "foundation/components/pagination";
+@import "foundation/components/reveal";
+@import "foundation/components/split-buttons";
+@import "foundation/components/tables";
+@import "foundation/components/tabs";
+@import "foundation/components/top-bar";
+@import "foundation/components/type";
+@import "foundation/components/visibility";
 
 .field_with_errors {
   @extend .error;
