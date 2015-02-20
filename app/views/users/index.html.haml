@@ -3,14 +3,15 @@
 .row
   .medium-6.columns
     - if can? :manage, :users
-      .alert-box
-        = form_tag import_users_path, multipart: true, class: 'row' do
-          .small-8.large-9.columns
-            = file_field_tag :file
-          .small-4.large-3.columns.text-right
-            = button_tag :submit, class: 'button secondary small expand' do
-              %i.fa.fa-upload.fa-fw
-              Import
+      = form_tag import_users_path, multipart: true, class: 'row collapse gray-background' do
+        .small-8.columns
+          = file_field_tag :file, class: 'no-margin-bottom'
+        .small-4.columns
+          = button_tag :submit, class: 'button small expand no-margin-bottom', title: 'Import' do
+            %i.fa.fa-upload.fa-fw
+  .medium-2.columns
+    = link_to users_path(format: 'csv', params: params.except(:action, :controller)), class: 'button secondary small expand', title: 'Download' do
+      = icon 'download fa-fw'
   .small-6.medium-4.columns.text-right
     = form_tag users_path, method: :get do
       = hidden_field_tag :privilege, @privilege
