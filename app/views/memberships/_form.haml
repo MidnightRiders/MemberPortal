@@ -52,7 +52,7 @@
       - elsif !f.object.user.current_member? && f.object.user.memberships.last && f.object.user.memberships.last.privileges.include?('admin')
         = f.hidden_field :privileges, value: 'admin', multiple: true
       
-      - if f.object.stripe_card_token || @cards
+      - if f.object.stripe_card_token || @cards.present?
         = f.hidden_field :stripe_card_token if f.object.stripe_card_token
         .row
           .medium-8.columns.right
@@ -65,7 +65,7 @@
               = select_tag :card, options_for_select(@cards.map{|card| ["#{card.brand}: x#{card.last4} (exp #{card.exp_month}/#{card.exp_year})", card.id] })
       
       - unless f.object.stripe_card_token
-        #credit-card-info{ class: ('hide' if f.object.user.stripe_customer_token) }
+        #credit-card-info{ class: ('hide' if f.object.user.stripe_customer_token && @cards.present?) }
           .row
             .medium-4.columns
               = label_tag 'stripe_card_number', class: 'inline' do
@@ -73,7 +73,7 @@
             .medium-8.columns
               .row.collapse
                 .small-10.columns
-                  = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
+                  = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: (f.object.user.stripe_customer_token && @cards.present?)
                 .small-2.columns
                   = link_to 'https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=members.midnightriders.com', target: '_blank', class: 'button secondary postfix', title: 'Learn more' do
                     = icon 'lock fa-fw'
@@ -84,12 +84,12 @@
             .medium-8.columns
               .row
                 .small-4.columns
-                  = select_tag nil, options_for_select((1..12), Date.current.month), id: 'stripe_exp_month', disabled: !!f.object.user.stripe_customer_token
+                  = select_tag nil, options_for_select((1..12), Date.current.month), id: 'stripe_exp_month', disabled: (f.object.user.stripe_customer_token && @cards.present?)
                 .small-4.columns
-                  = select_tag nil, options_for_select((Date.current.year..Date.current.year+10), Date.current.year), id: 'stripe_exp_year', disabled: !!f.object.user.stripe_customer_token
+                  = select_tag nil, options_for_select((Date.current.year..Date.current.year+10), Date.current.year), id: 'stripe_exp_year', disabled: (f.object.user.stripe_customer_token && @cards.present?)
                 .small-4.columns
-                  = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC', pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
-          = f.hidden_field :stripe_card_token, disabled: !!f.object.user.stripe_customer_token
+                  = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC', pattern: '[0-9]*', disabled: (f.object.user.stripe_customer_token && @cards.present?)
+          = f.hidden_field :stripe_card_token, disabled: (f.object.user.stripe_customer_token && @cards.present?)
       
       = f.button :submit, class: 'button right' do
         = icon 'card fa-fw'
