@@ -11,7 +11,17 @@ class UsersController < ApplicationController
     @users = @users.text_search(params[:search]) if params[:search]
     @users = @users.where(memberships: { year: @year }) unless @show_all
     @users = @users.where('memberships.privileges::jsonb ?| array[:privileges]', year: Date.current.year, privileges: [@privilege].flatten) if @privilege
-    @users = @users.includes(:memberships).order(last_name: :asc, first_name: :asc).paginate(page: params[:p], per_page: 20)
+    @users = @users.includes(:memberships).order(last_name: :asc, first_name: :asc)
+    @total_users = @users
+    @users = @users.paginate(page: params[:p], per_page: 20)
+
+    respond_to do |format|
+      format.html
+      format.json
+      format.csv {
+        render text: @total_users.to_csv
+      }
+    end
   end
 
   # GET /users/1

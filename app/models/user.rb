@@ -185,6 +185,19 @@ class User < ActiveRecord::Base
     end
   end
 
+  # Outputs CSV
+  def self.to_csv
+    filtered_columns = %w(created_at updated_at encrypted_password reset_password_token reset_password_sent_at remember_created_at current_sign_in_at sign_in_count current_sign_in_ip last_sign_in_ip stripe_customer_token)
+    columns_to_use = column_names - filtered_columns
+
+    CSV.generate do |csv|
+      csv << (columns_to_use + %w(current_member membership_type)).map(&:titleize)
+      all.each do |user|
+        csv << user.attributes.values_at(*columns_to_use) + [ user.current_membership.present?, user.current_membership.try(:type) ]
+      end
+    end
+  end
+
   # Converts the phone to *Integer* for storage.
   def phone= value
     value.gsub!(/\D/,'') if value.is_a? String
