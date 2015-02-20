@@ -50,8 +50,8 @@ $ ->
     label = if $label.length > 0 then $label.html() else 'Select File'
     $row = $("""
     <div class="row collapse file-input">
-      <div class="small-6 columns"><label for="#{$this.attr('id')}" class="button small expand no-margin-bottom"><i class="fa fa-file" /> #{label}</label></div>
-      <div class="small-6 columns"><label for="#{$this.attr('id')}" class="inline no-margin-bottom">No file selected</label></div>
+      <div class="small-6 columns"><label for="#{$this.attr('id')}" class="button small expand"><i class="fa fa-file" /> #{label}</label></div>
+      <div class="small-6 columns"><label for="#{$this.attr('id')}" class="inline">No file selected</label></div>
     </div>
     """);
     $row.insertAfter($this)

@@ -1,18 +1,18 @@
 - content_for :title, 'Members'
 
 .row
-  .medium-6.columns
+  .small-9.medium-6.columns
     - if can? :manage, :users
       = form_tag import_users_path, multipart: true, class: 'row collapse gray-background' do
-        .small-8.columns
+        .small-10.columns
           = file_field_tag :file, class: 'no-margin-bottom'
-        .small-4.columns
+        .small-2.columns
           = button_tag :submit, class: 'button small expand no-margin-bottom', title: 'Import' do
             %i.fa.fa-upload.fa-fw
-  .medium-2.columns
+  .small-3.medium-1.columns
     = link_to users_path(format: 'csv', params: params.except(:action, :controller)), class: 'button secondary small expand', title: 'Download' do
       = icon 'download fa-fw'
-  .small-6.medium-4.columns.text-right
+  .small-6.medium-3.columns.text-right
     = form_tag users_path, method: :get do
       = hidden_field_tag :privilege, @privilege
       = hidden_field_tag :show_all, @show_all
@@ -87,5 +87,9 @@
               = icon 'trash-o'
 
 .row
-  .small-12.text-right.columns
+  .medium-4.columns
+    %p
+      %strong Total:
+      = @total_users.size
+  .medium-8.columns.text-right
     = will_paginate(@users, param_name: 'p', inner_window: 2, outer_window: 2)

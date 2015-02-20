@@ -2,20 +2,29 @@ form {
   input[type], select, textarea {
     + .hint {
       display: block;
-      margin-top: -($form-spacing - rem-calc(4));
       margin-bottom: $form-spacing;
+      margin-top: -($form-spacing - rem-calc(4));
     }
   }
   h3 + .hint {
     display: block;
-    margin-top: -($header-bottom-margin - rem-calc(4));
     margin-bottom: $header-bottom-margin;
+    margin-top: -($header-bottom-margin - rem-calc(4));
   }
 }
-.file-input label.inline {
-  margin-left: .5em;
-  overflow-x: hidden;
-  white-space: nowrap;
+.file-input {
+  .button,
+  button,
+  label {
+    margin-bottom: 0;
+  }
+
+  label.inline {
+    margin-left: .5em;
+    overflow-x: hidden;
+    padding-bottom: 0;
+    white-space: nowrap;
+  }
 }
 .actions {
   text-align: right;
