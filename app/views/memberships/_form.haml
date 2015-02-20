@@ -58,11 +58,10 @@
           .medium-8.columns.right
             %label.inline
               Credit Card has been provided
-              - if f.object.user.stripe_customer_token
-                = link_to '(Change Card)', '#', id: 'show-credit-card-info'
+              = link_to '(Change Card)', '#', id: 'show-credit-card-info'
 
-            - if @cards
-              = select_tag :card, options_for_select(@cards.map{|card| ["#{card.brand}: x#{card.last4} (exp #{card.exp_month}/#{card.exp_year})", card.id] })
+            - if @cards.present?
+              = select_tag :card_id, options_for_select(@cards.map{|card| ["#{card.brand}: x#{card.last4} (exp #{card.exp_month}/#{card.exp_year})", card.id] })
       
       - unless f.object.stripe_card_token
         #credit-card-info{ class: ('hide' if f.object.user.stripe_customer_token && @cards.present?) }
