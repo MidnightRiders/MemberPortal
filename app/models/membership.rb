@@ -76,7 +76,7 @@ class Membership < ActiveRecord::Base
   end
 
   # Save with Stripe payment if applicable
-  def save_with_payment
+  def save_with_payment(card_id)
     if valid?
       unless overriding_admin || is_a?(Relative)
         customer_params = {
@@ -89,12 +89,16 @@ class Membership < ActiveRecord::Base
             phone: user.phone
           }
         }
-        if user.stripe_customer_token
-          customer = Stripe::Customer.retrieve(user.stripe_customer_token)
+        if (customer = user.stripe_customer).present?
 
-          if stripe_card_token || user.email != customer.email
-            customer.stripe_card_token = stripe_card_token if stripe_card_token
-            customer.email = user.email if user.email != customer.email
+          if stripe_card_token
+            card = customer.sources.create(source: stripe_card_token)
+            customer.default_source = card.id
+            customer.save
+          end
+
+          if user.email != customer.email
+            customer.email = user.email
             customer.save
           end
 
@@ -112,7 +116,8 @@ class Membership < ActiveRecord::Base
         if subscription.to_i == 1
           subscription = customer.subscriptions.create(
               plan: type.downcase,
-              trial_end: 1.year.from_now.beginning_of_year.to_i
+              trial_end: 1.year.from_now.beginning_of_year.to_i,
+              source: card_id
           )
           self.stripe_subscription_id = subscription.id
         end
@@ -127,6 +132,7 @@ class Membership < ActiveRecord::Base
             amount: COSTS[type.to_sym],
             currency: 'usd',
             statement_descriptor: "MRiders #{year} #{type.to_s[0..2].titleize} Mem",
+            source: card_id
         )
         self.stripe_charge_id = charge.id
       end
