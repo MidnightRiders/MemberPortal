@@ -76,7 +76,7 @@ class Membership < ActiveRecord::Base
   end
 
   # Save with Stripe payment if applicable
-  def save_with_payment(card_id)
+  def save_with_payment(card_id = nil)
     if valid?
       unless overriding_admin || is_a?(Relative)
         customer_params = {
