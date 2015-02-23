@@ -42,8 +42,8 @@ class MembershipsController < ApplicationController
   # POST /users/:user_id/memberships.json
   def create
     respond_to do |format|
-      if @membership.save_with_payment
-        if @membership.stripe_charge_id(card_id: params[:card_id])
+      if @membership.save_with_payment(params[:card_id])
+        if @membership.stripe_charge_id
           MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
           MembershipMailer.new_membership_alert(@user, @membership).deliver
           format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
