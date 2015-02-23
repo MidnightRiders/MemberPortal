@@ -118,7 +118,7 @@ class User < ActiveRecord::Base
 
   # Returns +PickEm+ for given +match+, or new +PickEm+.
   def pick_for(match)
-    pick_ems.select{|x| x.match_id == match.id }.try(:first) || PickEm.new
+    pick_ems.find_by(match: match) || PickEm.new
   end
 
   # Returns *String*. Either picked result, or +nil+.
