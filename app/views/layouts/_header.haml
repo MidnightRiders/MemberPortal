@@ -12,8 +12,8 @@
     - if @next_revs_match
       - @opponent = (@next_revs_match.teams - [ @revs ]).first
       = link_to @next_revs_match do
-        .crest.right.secondary-bg.primary-border{ class: @opponent.abbrv.downcase }
-          = @opponent.name
+        .next-club.right.secondary-bg.primary-border{ class: @opponent.abbrv.downcase }
+          = image_tag 'http://midnightriders.com' + @opponent.crest.url(:thumb), title: @opponent.name
         %h5.subheader
           = @next_revs_match.kickoff.strftime('%A,')
           = @next_revs_match.kickoff.strftime('%_m.%-d, %l:%M%P')

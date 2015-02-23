@@ -25,16 +25,23 @@ header.page-header {
   .next-game {
     padding-bottom: 10px;
 
-    .crest {
-      @include text-hide;
+    .next-club {
       background-size: auto 2.5em;
       border: 1px solid;
       border-radius: 2em;
       height: 2.75em;
       line-height: 2.75em;
       margin-left: .7em;
+      overflow: hidden;
       padding: 0;
+      text-align: center;
       width: 2.75em;
+
+      img {
+        filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .4));
+        height: 2.75em;
+        width: auto;
+      }
     }
 
     h5, h3 {
