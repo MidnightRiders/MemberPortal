@@ -34,6 +34,7 @@ class Ability
       can :home, [ User ]
       can :manage, user
       if user.current_member?
+        can :show, :download
         if user.privilege? 'admin'
           can :manage, :all
           # Implicit
