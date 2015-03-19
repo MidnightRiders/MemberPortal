@@ -29,6 +29,8 @@ MidnightRiders::Application.routes.draw do
     resources :families, controller: 'memberships', type: 'Family'
   end
 
+  get 'downloads/:filename', to: 'downloads#show', as: 'download'
+
   match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: 'cancel_user_membership', via: [ :put, :patch ]
 
   get 'home', to: 'users#home', as: :user_home

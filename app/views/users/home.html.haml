@@ -8,10 +8,10 @@
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
-    - if current_user.current_member? && Time.current < '2015-02-22 00:00:00 -0500'.to_time
-      = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
-        = icon 'check-circle'
-        Submit 2015 Board Nomination
+    - if current_user.current_member? && Time.current < '2015-03-21 15:00:00 -0500'.to_time
+      = link_to download_path('20150321-parking-pass.pdf'), class: 'button large expand' do
+        = icon 'car fa-fw'
+        Download Temporary Parking Pass
     = render 'static_pages/events', events: @events
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 
@@ -24,5 +24,3 @@
           = render match, small: true
     .medium-6.columns
       = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses.where(matches: { season: Date.current.year }).present?
-
-= render 'static_pages/jotform' if current_user.current_member? && Time.current < '2015-02-22 00:00:00 -0500'.to_time
