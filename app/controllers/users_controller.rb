@@ -31,8 +31,9 @@ class UsersController < ApplicationController
 
   # GET /home
   def home
-    @articles = RidersBlog.articles.sort_by{|x| x['pubDate'].to_date }.last(2).reverse
-    @events = FacebookApi.events['data'].try(:select){|x| x['start_time'] >= Time.current - 1.week }
+    @articles = RidersBlog.articles.sort_by{|x| x['pubDate'].to_date }.last(2).reverse if RidersBlog.articles
+    @events = FacebookApi.events
+    @events = @events['data'].try(:select){|x| x['start_time'] >= Time.current - 1.week } if @events
     @revs_matches = [ revs.last_match, revs.next_matches(2) ].flatten.reject(&:nil?)
   end
 
