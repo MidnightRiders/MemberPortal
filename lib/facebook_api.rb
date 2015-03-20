@@ -29,14 +29,28 @@ module FacebookApi
 
     # Retrieves auth_token from API
     def self.get_auth_token
-      uri = URI('https://graph.facebook.com/oauth/access_token?client_id=560921750673121&client_secret=920dfdce9d33e5f0b2ff46d9a3ea343a&grant_type=client_credentials')
-      Net::HTTP.get(uri)
+      begin
+        uri = URI('https://graph.facebook.com/oauth/access_token?client_id=560921750673121&client_secret=920dfdce9d33e5f0b2ff46d9a3ea343a&grant_type=client_credentials')
+        Net::HTTP.get(uri)
+      rescue => e
+        Rails.logger.warn 'FacebookApi Error:'
+        Rails.logger.warn e
+      end
     end
 
     # Retrieves events from API
     def self.get_events
-      uri = URI("https://graph.facebook.com/MidnightRiders/events?#{URI.encode(self.auth_token)}")
-      response = Net::HTTP.get(uri)
-      JSON.parse(response)
+      response = {}
+      begin
+        if self.auth_token
+          uri = URI("https://graph.facebook.com/MidnightRiders/events?#{URI.encode(self.auth_token)}")
+          response = Net::HTTP.get(uri)
+          response = JSON.parse(response)
+        end
+      rescue => e
+        Rails.logger.error 'FacebookApi Error:'
+        Rails.logger.error e
+      end
+      response
     end
 end

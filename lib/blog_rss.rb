@@ -29,13 +29,13 @@ class BlogRss
       rescue => e
         Rails.logger.error 'Blog error for ' + self.url
         Rails.logger.error e
-        Rails.logger.info rss
+        Rails.logger.info 'RSS:' + rss
       end
       rss ||= []
-      @last_retrieved = Time.now
       if rss.empty?
         @articles || []
       else
+        @last_retrieved = Time.now
         rss
       end
     end
