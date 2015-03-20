@@ -90,6 +90,6 @@
   .medium-4.columns
     %p
       %strong Total:
-      = @total_users.size
+      = @user_set.size
   .medium-8.columns.text-right
     = will_paginate(@users, param_name: 'p', inner_window: 2, outer_window: 2)
