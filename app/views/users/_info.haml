@@ -1,21 +1,23 @@
 .row
-  .medium-8.columns
+  .columns{ class: "#{'medium-8' if can?(:destroy, User)}" }
     %h1
-      = image_tag(user.gravatar, class: 'gravatar', alt: 'gravatar')
+      - if user == current_user
+        = link_to 'https://en.gravatar.com/support/what-is-gravatar/', target: '_blank' do
+          = image_tag user.gravatar, class: 'gravatar', alt: 'gravatar', title: 'To change your user avatar, visit gravatar.com'
+      - else
+        = image_tag(user.gravatar, class: 'gravatar', alt: 'gravatar')
       = user.first_name
-      %strong=  user.last_name
+      %strong= user.last_name
       %small
         %br
         @#{user.username}
         - if can? :edit, user
-          \(
-          = link_to 'edit', edit_user_path(user)
-          \)
+          %small (#{link_to 'edit', edit_user_path(user)})
     %h3.subheader
       %b Member since
       = user.member_since || "at least #{user.created_at.year}"
-  .medium-4.columns.text-right
-    - if can? :destroy, User
+  - if can? :destroy, User
+    .medium-4.columns.text-right
       = link_to user, class: 'button secondary tiny', :method => :delete, :data => { :confirm => "Are you sure you wish to destroy @#{user.username}?" }, title: 'Destroy' do
         = icon 'trash-o fa-lg fa-fw'
 
