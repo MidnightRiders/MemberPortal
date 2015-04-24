@@ -9,11 +9,11 @@
       .td.text-center Points
       .td.comment Comment
   .tbody
-    - user.rev_guesses.where(matches: { season: Date.current.year }).sort_by{|x| x.match.kickoff }.last(count).each do |m|
+    - user.rev_guesses.where(matches: { season: Date.current.year }).order('matches.kickoff desc').limit(count).reverse.each do |m|
       %li.tr
         .td
           %p
-            = link_to match_rev_guess_path(m.match,m) do
+            = link_to match_path(m.match) do
               = m.match.home_team.abbrv
               v
               = m.match.away_team.abbrv
