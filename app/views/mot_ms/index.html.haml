@@ -11,6 +11,6 @@
           .small-6.columns
             = hidden_field_tag 'date(2i)', 1
             = select_tag 'date(1i)', options_for_select(@months.map{|x| [x.strftime('%B %Y'),x.to_date] }, @mstart.to_date || @months.last.to_date), data: { autosubmit: mot_ms_path(date: '___') }
-    = render 'mot_ms', mot_ms: @mot_m_mo, match_ids: @match_ids
+    = render 'mot_ms', mot_ms: @mot_m_mo, match_ids: @mo_match_ids
     %h2 Year-Long Standings (#{@mstart.year})
-    = render 'mot_ms', mot_ms: @mot_m_yr
+    = render 'mot_ms', mot_ms: @mot_m_yr, match_ids: @yr_match_ids

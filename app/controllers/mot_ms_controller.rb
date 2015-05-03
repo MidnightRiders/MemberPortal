@@ -11,9 +11,11 @@ class MotMsController < ApplicationController
     @season       = @mstart.year
     @months       = Match.unscoped.where('kickoff <= :time', time: Time.current).group_by{|x| x.kickoff.beginning_of_month }.sort.map(&:first) + [ Date.current.beginning_of_month ]
     @months.uniq!
-    @match_ids    = revs.matches.unscope(where: :season).where(kickoff: (@mstart..@mstart.end_of_month)).map(&:id)
+    yr_matches    = revs.matches.unscope(where: :season).where(season: @mstart.year)
+    @yr_match_ids = yr_matches.map(&:id)
+    @mo_match_ids = yr_matches.where(kickoff: (@mstart..@mstart.end_of_month)).map(&:id)
     @mot_ms       = Player.includes(:mot_m_firsts,:mot_m_seconds,:mot_m_thirds).select{|x| x.mot_m_total(season: @season) > 0 }.sort_by(&:last_name)
-    @mot_m_mo     = @mot_ms.group_by{|x| x.mot_m_total(match_id: @match_ids) }.reject{|k,v| k == 0 }.sort_by(&:first).reverse
+    @mot_m_mo     = @mot_ms.group_by{|x| x.mot_m_total(match_id: @mo_match_ids) }.reject{|k,v| k == 0 }.sort_by(&:first).reverse
     @mot_m_yr     = @mot_ms.group_by{|motm| motm.mot_m_total(season: @season)}.sort_by(&:first).reverse
   end
 
