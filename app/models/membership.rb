@@ -63,7 +63,7 @@ class Membership < ActiveRecord::Base
   end
 
   def is_subscription?
-    stripe_subscription_id.present?
+    info['stripe_subscription_id'].present?
   end
 
   def cost
