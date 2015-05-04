@@ -20,13 +20,61 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  actions: 'Actions'
+  edit: 'Edit'
+  destroy: 'Destroy'
+  view: 'View'
+  vs: 'vs'
+  at: 'at'
+  time:
+    formats:
+      kickoff: '%_m.%-d %l:%M%P'
+      kickoff_at: '%_m.%-d at %l:%M%P'
+      kickoff_at_day: '%A, %_m.%-d.%Y at %l:%M%P %Z'
+
+  memberships:
+    cancel: Cancel Automatic Renewal
+    cancel_message: Are you sure you wish to cancel your automatic renewal?
+    create:
+      payment_success: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.'
+  rev_guesses:
+    index:
+      title: 'Listing RevGuesses'
+    create:
+      success: 'RevGuess was successfully created.'
+    new:
+      title: 'New RevGuess'
+    update:
+      success: 'RevGuess was successfully updated.'
+  users:
+    info:
+      member_since_year: 'Member since %{year}'
+      membership_history: Digital Membership history
+    home:
+
   activerecord:
     models:
-      mot_m: 'Man of the Match vote'
-      rev_guess: 'RevGuess'
+      mot_m:
+        one: Man of the Match vote
+        other: Man of the Match votes
+      rev_guess:
+        one: RevGuess
+        other: RevGuesses
+      pick_em:
+        one: Pick ’Em
+        other: Pick ’Ems
 
     attributes:
       club:
         abbrv: 'Abbreviation'
       membership:
+        privileges: 'Privileges'
         type: 'Membership Type'
+        year: 'Year'
+      pick_em:
+        score: 'score'
+      rev_guess:
+        score: 'score'
+        comment: 'comment'
+      user:
+        phone: 'Phone'

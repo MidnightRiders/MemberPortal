@@ -25,7 +25,7 @@
     - if @club.next_match
       %p
         = link_to @club.next_match do
-          = @club.next_match.kickoff.strftime('%_m.%-d at %l:%M%P')
+          = l @club.next_match.kickoff, format: :kickoff_at
           %br
           vs
           - if @club.next_match.home_team == @club

@@ -196,7 +196,7 @@
 
         <div class="method-description">
           
-          <p>Root path. Shows sign_in if not signed in, user_home if signed in</p>
+          <p>Root path. Shows sign_in if not signed in, users_home if signed in</p>
           
           
 
@@ -204,7 +204,7 @@
           <div class="method-source-code" id="home-source">
             <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">home</span>
-  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_signed_in?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">user_home_path</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">new_user_session_path</span>
+  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">user_signed_in?</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">users_home_path</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">new_user_session_path</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

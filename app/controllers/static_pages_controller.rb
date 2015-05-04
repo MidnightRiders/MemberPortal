@@ -3,9 +3,9 @@ class StaticPagesController < ApplicationController
 
   authorize_resource class: false, only: [:standings, :transactions]
 
-  # Root path. Shows sign_in if not signed in, user_home if signed in
+  # Root path. Shows sign_in if not signed in, users_home if signed in
   def home
-    redirect_to user_signed_in? ? user_home_path : new_user_session_path
+    redirect_to user_signed_in? ? users_home_path : new_user_session_path
   end
 
   # Frequently Asked Questions

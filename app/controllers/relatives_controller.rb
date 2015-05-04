@@ -72,7 +72,7 @@ class RelativesController < ApplicationController
       @user = User.find_by(username: params[:user_id])
       @membership = @user.memberships.find(params[:membership_id])
 
-      redirect_to user_home_path, notice: 'Your account type does not permit relatives.' unless @membership.is_a? Family
+      redirect_to users_home_path, notice: 'Your account type does not permit relatives.' unless @membership.is_a? Family
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

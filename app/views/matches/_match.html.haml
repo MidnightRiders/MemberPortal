@@ -3,7 +3,7 @@
 %li.match{ class: "#{'pending' unless match.complete?} #{'highlight' if match.teams.include?(revs) && !small }"}
   %time{ datetime: match.kickoff.xmlschema }
     = link_to match do
-      = match.kickoff.strftime('%_m.%-d %l:%M%P')
+      = l match.kickoff, format: :kickoff
       = icon 'arrow-circle-right fa-fw'
   .score
     - unless match.in_future?

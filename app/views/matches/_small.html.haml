@@ -23,5 +23,5 @@
           %small
             %br
             = succeed ',' do
-              = m.kickoff.strftime('%_m.%-d %l:%M%P')
+              = l m.kickoff, format: :kickoff
             = m.location

@@ -46,7 +46,7 @@ class MembershipsController < ApplicationController
         if @membership.stripe_charge_id
           MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
           MembershipMailer.new_membership_alert(@user, @membership).deliver
-          format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
+          format.html { redirect_to user_membership_path(@user, @membership), notice: t('.payment_success') }
         else
           format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
         end
@@ -176,7 +176,7 @@ class MembershipsController < ApplicationController
 
     # Determine where to redirect after success
     def get_user_path
-      @user == current_user ? user_home_path : user_path(@user)
+      @user == current_user ? users_home_path : user_path(@user)
     end
 
     # Strong params for +Membership+

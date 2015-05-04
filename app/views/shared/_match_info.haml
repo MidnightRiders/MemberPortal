@@ -1,5 +1,5 @@
 %h2.text-center
-  = match.kickoff.strftime('%B %-d %l:%M%P :')
+  = l match.kickoff, format: :kickoff
   %span.primary{class: match.home_team.abbrv.downcase}= match.home_team.name
-  vs
+  = t('vs')
   %span.primary{class: match.away_team.abbrv.downcase}= match.away_team.name
