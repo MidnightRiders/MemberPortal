@@ -25,11 +25,10 @@ MidnightRiders::Application.routes.draw do
     collection do
       post :import
     end
-    resources :memberships do
+    resources :memberships, controller: 'memberships', type: 'Individual'
+    resources :memberships, controller: 'memberships', type: 'Family' do
       resources :relatives, type: 'Relative'
     end
-    resources :individuals, controller: 'memberships', type: 'Individual'
-    resources :families, controller: 'memberships', type: 'Family'
   end
 
   get 'downloads/:filename', to: 'downloads#show', as: 'download'
