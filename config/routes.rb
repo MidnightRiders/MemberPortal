@@ -33,6 +33,8 @@ MidnightRiders::Application.routes.draw do
 
   get 'downloads/:filename', to: 'downloads#show', as: 'download'
 
+  get 'users/:user_id/memberships/:id/invite_relative', to: 'memberships#invite_relative', as: 'invite_relative'
+  post 'users/:user_id/memberships/:id/invite_relative', to: 'memberships#send_relative_invitation'
   match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: 'cancel_user_membership', via: [ :put, :patch ]
 
   get 'home', to: 'users#home', as: :user_home

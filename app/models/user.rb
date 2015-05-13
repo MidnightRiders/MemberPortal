@@ -29,6 +29,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  delegate :can?, :cannot?, to: :ability
 
   default_scope { includes(:memberships) }
 

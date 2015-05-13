@@ -53,7 +53,9 @@ class Ability
           can :manage, [ user.current_membership, user.mot_ms, user.rev_guesses, user.pick_ems ]
           can :create, [ MotM, RevGuess ], user_id: user.id
           can :vote, PickEm, user_id: user.id
+          cannot :manage, Relative
           if user.current_membership.is_a? Family
+            can :invite_relative, Membership
             can :manage, Relative, family_id: user.current_membership.id
             can :manage, [ user.current_membership.relatives, user.current_membership.relatives.map(&:user) ]
           end
