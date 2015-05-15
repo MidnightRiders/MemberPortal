@@ -47,7 +47,7 @@ class MembershipsController < ApplicationController
           MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
           MembershipMailer.new_membership_alert(@user, @membership).deliver
           count = Membership.where(year: @membership.year).size
-          SlackBot.post_message("New Membership! There are now *#{count} #{@membership.year} Memberships.*")
+          SlackBot.post_message("New Membership! There are now *#{count} #{@membership.year} Memberships.*", '#general')
           SlackBot.post_message("New Membership for #{@user.first_name} #{@user.last_name} (@#{@user.username}):\n#{user_url(@user)}.\nThere are now *#{count} #{@membership.year} Memberships.*", 'exec-board')
           format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
         else
