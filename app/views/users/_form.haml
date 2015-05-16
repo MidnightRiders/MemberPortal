@@ -38,7 +38,7 @@
             = f.label :password, class: 'inline'
           .medium-8.columns
             = f.password_field :password, autocapitalize: 'off', autocorrect: 'off', tabindex: 5
-            - if !f.object.new_record?
+            - if f.object.persisted?
               %small.hint (leave blank if you don't want to change it)
         .row
           .medium-4.columns
@@ -68,7 +68,7 @@
         .small-8.medium-4.columns
           = f.label :postal_code
           = f.text_field :postal_code, tabindex: 11
-  - if devise && !f.object.new_record?
+  - if devise && f.object.persisted?
     .row
       .large-4.columns
         %h3
