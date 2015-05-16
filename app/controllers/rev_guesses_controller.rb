@@ -19,7 +19,7 @@ class RevGuessesController < ApplicationController
 
     respond_to do |format|
       if @rev_guess.save
-        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: t('.success') }
+        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: 'Rev guess was successfully created.' }
         format.json { render action: 'show', status: :created, location: @rev_guess }
       else
         format.html { render action: 'new' }
@@ -33,7 +33,7 @@ class RevGuessesController < ApplicationController
   def update
     respond_to do |format|
       if @rev_guess.update(rev_guess_params)
-        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: t('.success') }
+        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: 'Rev guess was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
