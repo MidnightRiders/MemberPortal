@@ -6,7 +6,10 @@ MidnightRiders::Application.routes.draw do
   resources :mot_ms, path: 'motm', only: [ :index ]
 
   resources :matches do
-    collection { post :import }
+    collection do
+      post :import
+      post :bulk_update
+    end
     resources :mot_ms, path: 'motm', except: [ :index, :show ]
     resources :rev_guesses, path: 'revguess', except: [ :index, :show ]
     resources :pick_ems, path: 'pickem', except: [ :new, :edit, :show, :create, :update ] do
