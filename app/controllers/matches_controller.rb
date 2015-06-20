@@ -12,6 +12,7 @@ class MatchesController < ApplicationController
     @next_link = "Next #{'Game ' if @matches.empty?}Week"
     @prev_date = (@matches.empty? ? Match.unscoped.where('kickoff < NOW()').order(kickoff: :asc).last.kickoff : @start_date - 1.week).to_date
     @next_date = (@matches.empty? ? Match.unscoped.where('kickoff > NOW()').order(kickoff: :asc).first.kickoff : @start_date + 1.week).to_date
+    @is_current_week = @start_date == Time.current.beginning_of_week
   end
 
   # GET /matches/1
@@ -61,6 +62,22 @@ class MatchesController < ApplicationController
     end
     flash[:success] = "#{count} Matches were saved or updated."
     redirect_to matches_path
+  end
+
+  # POST /matches/bulk_update
+  def bulk_update
+    updated = 0
+    matches = CSV.table(params[:file].path.to_s)
+    matches.each do |m|
+      d = m[:date].to_date.beginning_of_day
+      match = Match.find_by(kickoff: (d..d+1.day), home_team: Club.find_by(abbrv: m[:home]), away_team: Club.find_by(abbrv: m[:away]), home_goals: nil, away_goals: nil)
+      if match.present?
+        updated += 1 if match.update_attributes(home_goals: m[:hg], away_goals: m[:ag])
+      else
+        logger.error "Bulk Import Error: no incomplete Match found for #{m[:home]} v #{m[:away]} on #{m[:date]} (#{d})"
+      end
+    end
+    redirect_to matches_path, notice: "#{updated}/#{matches.length} Matches were successfully updated."
   end
 
   # GET /matches/new
