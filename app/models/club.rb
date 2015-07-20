@@ -49,6 +49,30 @@ class Club < ActiveRecord::Base
 
   has_many :players
 
+  # Hacky function that's not really production-ready (too database-heavy) but will get standings of clubs for
+  # use in console etc at least.
+  def self.standings(options = {})
+    opts = {
+      float: 2,
+      format: :raw
+    }.deep_merge(options)
+    clubs = Club.includes(:home_matches, :away_matches).where.not(matches: { id: nil }).map{ |c|
+      c.attributes.symbolize_keys.merge({
+        wins: c.wins.size,
+        draws: c.draws.size,
+        losses: c.losses.size,
+        points: c.wins.size * 3 + c.draws.size,
+        ppg: ((c.wins.size * 3 + c.draws.size).to_f/(c.matches.completed.size)).round(opts[:float])
+      })
+    }.sort_by{|c| [c[:points], c[:ppg]] }.reverse
+    case opts[:format]
+      when :text
+        clubs.map{|c| "#{c[:abbrv]} | #{c[:points]} | #{c[:ppg]} | #{c[:wins]} | #{c[:draws]} | #{c[:losses]}" }.join("\n")
+      else
+        clubs
+    end
+  end
+
   # Returns *Array* of +Matches+ involving the club.
   def matches
     Match.with_clubs.where('home_team_id = :id OR away_team_id = :id', id: id).order(kickoff: :asc)
