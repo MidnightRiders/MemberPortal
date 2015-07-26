@@ -1,7 +1,7 @@
 = form_for @user_membership_relative do |f|
   - if @user_membership_relative.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@user_membership_relative.errors.count, "error")} prohibited this user_membership_relative from being saved:"
+      %h2= "#{pluralize(@user_membership_relative.errors.count, 'error')} prohibited this user_membership_relative from being saved:"
       %ul
         - @user_membership_relative.errors.full_messages.each do |msg|
           %li= msg

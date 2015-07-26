@@ -15,7 +15,7 @@
         = icon 'pencil'
         Edit
       - if can? :destroy, @club
-        = link_to @club, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button alert small' do
+        = link_to @club, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button alert small' do
           = icon 'trash-o'
           Destroy
 .row

@@ -91,7 +91,7 @@ class MatchDecorator < Draper::Decorator
   def admin_controls
     h.capture do
       h.concat h.link_to(h.icon('pencil fa-fw'), h.edit_match_path(model), title: 'Edit') if h.can? :edit, model
-      h.concat h.link_to(h.icon('trash-o fa-fw'),  model, method: :delete, data: { :confirm => 'Are you sure?' }, title: 'Destroy') if h.can? :destroy, model
+      h.concat h.link_to(h.icon('trash-o fa-fw'),  model, method: :delete, data: { confirm: 'Are you sure?' }, title: 'Destroy') if h.can? :destroy, model
     end
   end
 

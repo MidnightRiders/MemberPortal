@@ -83,7 +83,7 @@
           = link_to edit_user_path(user), class: 'button tiny', title: 'Edit' do
             = icon 'pencil'
           - if can? :destroy, user
-            = link_to user, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button tiny alert', title: 'Destroy' do
+            = link_to user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny alert', title: 'Destroy' do
               = icon 'trash-o'
 
 .row

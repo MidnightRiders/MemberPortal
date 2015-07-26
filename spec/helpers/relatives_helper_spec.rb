@@ -10,6 +10,6 @@ require 'spec_helper'
 #     end
 #   end
 # end
-RSpec.describe RelativesHelper, :type => :helper do
+RSpec.describe RelativesHelper, type: :helper do
   skip "add some examples to (or delete) #{__FILE__}"
 end

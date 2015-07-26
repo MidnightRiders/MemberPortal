@@ -1,7 +1,7 @@
 = form_for @club, html: { multipart: true } do |f|
   - if @club.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@club.errors.count, "error")} prohibited this club from being saved:"
+      %h2= "#{pluralize(@club.errors.count, 'error')} prohibited this club from being saved:"
       %ul
         - @club.errors.full_messages.each do |msg|
           %li= msg
@@ -54,7 +54,7 @@
     .large-8.columns
       = f.text_field :abbrv
   .row.actions
-    .small-12.columns.text-right
+    .column.text-right
       = f.button :submit, class: 'button' do
         - if f.object.new_record?
           = icon 'check fa-fw'

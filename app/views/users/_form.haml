@@ -55,7 +55,7 @@
         .medium-8.columns
           = f.email_field :email, autocorrect: false, autocapitalize: false, tabindex: 7
       .row
-        .small-12.columns
+        .column
           = f.label :address, 'Street Address'
           = f.text_area :address, rows: 3, autocapitalize: 'words', tabindex: 8
       .row
@@ -81,4 +81,4 @@
           .large-8.columns
             = f.password_field :current_password, tabindex: 12
   .row.text-right
-    .small-12.columns= f.submit (f.object.new_record? ? 'Create' : 'Update'), class: 'button', tabindex: 13
+    .column= f.submit (f.object.new_record? ? 'Create' : 'Update'), class: 'button', tabindex: 13

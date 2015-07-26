@@ -17,6 +17,6 @@
         %i.fa.fa-pencil.fa-fw
         Edit
     - if can? :destroy, player
-      = link_to player, :method => :delete, :data => { :confirm => 'Are you sure?' }, class: 'button alert tiny' do
+      = link_to player, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button alert tiny' do
         %i.fa.fa-trash-o.fa-fw
         Destroy

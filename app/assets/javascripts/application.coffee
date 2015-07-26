@@ -64,5 +64,5 @@ $ ->
   $(document).on 'ajax:complete', ->
     $('body').removeClass 'wait'
   $(document).on 'ajax:success', '[data-remote]', (e,data)->
-    $('main > .row > .small-12.columns').html(data.html) if data.html
     $('body').removeClass 'wait'
+    $(data.selector).html(data.html) if data && data.selector && data.html
