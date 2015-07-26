@@ -2,7 +2,7 @@
 = form_for [@match,@mot_m] do |f|
   - if @mot_m.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@mot_m.errors.count, "error")} prohibited this mot_m from being saved:"
+      %h2= "#{pluralize(@mot_m.errors.count, 'error')} prohibited this mot_m from being saved:"
       %ul
         - @mot_m.errors.full_messages.each do |msg|
           %li= msg

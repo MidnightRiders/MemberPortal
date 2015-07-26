@@ -18,7 +18,7 @@ require 'spec_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-RSpec.describe RelativesController, :type => :controller do
+RSpec.describe RelativesController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
   # Relative. As you add validations to Relative, be sure to
@@ -47,7 +47,7 @@ RSpec.describe RelativesController, :type => :controller do
   skip "GET show" do
     it "assigns the requested relative as @relative" do
       relative = Relative.create! valid_attributes
-      get :show, {:id => relative.to_param}, valid_session
+      get :show, {id: relative.to_param}, valid_session
       expect(assigns(:relative)).to eq(relative)
     end
   end
@@ -62,7 +62,7 @@ RSpec.describe RelativesController, :type => :controller do
   skip "GET edit" do
     it "assigns the requested relative as @relative" do
       relative = Relative.create! valid_attributes
-      get :edit, {:id => relative.to_param}, valid_session
+      get :edit, {id: relative.to_param}, valid_session
       expect(assigns(:relative)).to eq(relative)
     end
   end
@@ -71,30 +71,30 @@ RSpec.describe RelativesController, :type => :controller do
     skip "with valid params" do
       it "creates a new Relative" do
         expect {
-          post :create, {:relative => valid_attributes}, valid_session
+          post :create, {relative: valid_attributes}, valid_session
         }.to change(Relative, :count).by(1)
       end
 
       it "assigns a newly created relative as @relative" do
-        post :create, {:relative => valid_attributes}, valid_session
+        post :create, {relative: valid_attributes}, valid_session
         expect(assigns(:relative)).to be_a(Relative)
         expect(assigns(:relative)).to be_persisted
       end
 
       it "redirects to the created relative" do
-        post :create, {:relative => valid_attributes}, valid_session
+        post :create, {relative: valid_attributes}, valid_session
         expect(response).to redirect_to(Relative.last)
       end
     end
 
     skip "with invalid params" do
       it "assigns a newly created but unsaved relative as @relative" do
-        post :create, {:relative => invalid_attributes}, valid_session
+        post :create, {relative: invalid_attributes}, valid_session
         expect(assigns(:relative)).to be_a_new(Relative)
       end
 
       it "re-renders the 'new' template" do
-        post :create, {:relative => invalid_attributes}, valid_session
+        post :create, {relative: invalid_attributes}, valid_session
         expect(response).to render_template("new")
       end
     end
@@ -108,20 +108,20 @@ RSpec.describe RelativesController, :type => :controller do
 
       it "updates the requested relative" do
         relative = Relative.create! valid_attributes
-        put :update, {:id => relative.to_param, :relative => new_attributes}, valid_session
+        put :update, {id: relative.to_param, relative: new_attributes}, valid_session
         relative.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested relative as @relative" do
         relative = Relative.create! valid_attributes
-        put :update, {:id => relative.to_param, :relative => valid_attributes}, valid_session
+        put :update, {id: relative.to_param, relative: valid_attributes}, valid_session
         expect(assigns(:relative)).to eq(relative)
       end
 
       it "redirects to the relative" do
         relative = Relative.create! valid_attributes
-        put :update, {:id => relative.to_param, :relative => valid_attributes}, valid_session
+        put :update, {id: relative.to_param, relative: valid_attributes}, valid_session
         expect(response).to redirect_to(relative)
       end
     end
@@ -129,13 +129,13 @@ RSpec.describe RelativesController, :type => :controller do
     skip "with invalid params" do
       it "assigns the relative as @relative" do
         relative = Relative.create! valid_attributes
-        put :update, {:id => relative.to_param, :relative => invalid_attributes}, valid_session
+        put :update, {id: relative.to_param, relative: invalid_attributes}, valid_session
         expect(assigns(:relative)).to eq(relative)
       end
 
       it "re-renders the 'edit' template" do
         relative = Relative.create! valid_attributes
-        put :update, {:id => relative.to_param, :relative => invalid_attributes}, valid_session
+        put :update, {id: relative.to_param, relative: invalid_attributes}, valid_session
         expect(response).to render_template("edit")
       end
     end
@@ -145,13 +145,13 @@ RSpec.describe RelativesController, :type => :controller do
     it "destroys the requested relative" do
       relative = Relative.create! valid_attributes
       expect {
-        delete :destroy, {:id => relative.to_param}, valid_session
+        delete :destroy, {id: relative.to_param}, valid_session
       }.to change(Relative, :count).by(-1)
     end
 
     it "redirects to the relatives list" do
       relative = Relative.create! valid_attributes
-      delete :destroy, {:id => relative.to_param}, valid_session
+      delete :destroy, {id: relative.to_param}, valid_session
       expect(response).to redirect_to(relatives_url)
     end
   end

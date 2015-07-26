@@ -1,13 +1,13 @@
 %h2 Forgot your password?
-= form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
   = devise_error_messages!
   .row
     .large-4.columns
       = f.label :email, class: 'inline'
     .large-8.columns
-      = f.email_field :email, :autofocus => true
+      = f.email_field :email, autofocus: true
   .row.actions
-    .small-12.columns
+    .column
       = f.button :submit, class: 'button' do
         =icon('envelope fa-fw')
         Send me reset password instructions

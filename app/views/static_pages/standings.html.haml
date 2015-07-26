@@ -36,7 +36,7 @@
             #{(u.rev_guesses_score.to_f / (u.rev_guesses_count == 0 ? 1 : u.rev_guesses_count.to_f * 5) * 100).round(2)}%
           - last = u.rev_guesses_score
     .row
-      .small-12.columns
+      .column
         = will_paginate(@rev_guess_standings, param_name: 'rev_guess_p')
   .medium-6.columns
     %h2 Pick ’Em Standings
@@ -65,5 +65,5 @@
             #{(u.correct_pick_ems.to_f / (u.total_pick_ems == 0 ? 1 : u.total_pick_ems).to_f * 100).round(2)}%
           - last = u.correct_pick_ems
     .row
-      .small-12.columns.text-right
+      .column.text-right
         = will_paginate(@pick_em_standings, param_name: 'pick_em_p')

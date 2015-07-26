@@ -19,7 +19,7 @@ describe PickEmsController do
   skip 'GET show' do
     it 'assigns the requested pick_em as @pick_em' do
       pick_em = PickEm.create! valid_attributes
-      get :show, {:id => pick_em.to_param}
+      get :show, {id: pick_em.to_param}
       expect(assigns(:pick_em)).to eq(pick_em)
     end
   end
@@ -34,7 +34,7 @@ describe PickEmsController do
   skip 'GET edit' do
     it 'assigns the requested pick_em as @pick_em' do
       pick_em = PickEm.create! valid_attributes
-      get :edit, {:id => pick_em.to_param}
+      get :edit, {id: pick_em.to_param}
       expect(assigns(:pick_em)).to eq(pick_em)
     end
   end
@@ -43,18 +43,18 @@ describe PickEmsController do
     skip 'with valid params' do
       it 'creates a new PickEm' do
         expect {
-          post :create, {:pick_em => valid_attributes}
+          post :create, {pick_em: valid_attributes}
         }.to change(PickEm, :count).by(1)
       end
 
       it 'assigns a newly created pick_em as @pick_em' do
-        post :create, {:pick_em => valid_attributes}
+        post :create, {pick_em: valid_attributes}
         expect(assigns(:pick_em)).to be_a(PickEm)
         expect(assigns(:pick_em)).to be_persisted
       end
 
       it 'redirects to the created pick_em' do
-        post :create, {:pick_em => valid_attributes}
+        post :create, {pick_em: valid_attributes}
         expect(response).to redirect_to(PickEm.last)
       end
     end
@@ -63,14 +63,14 @@ describe PickEmsController do
       it 'assigns a newly created but unsaved pick_em as @pick_em' do
         # Trigger the behavior that occurs when invalid params are submitted
         PickEm.any_instance.stub(:save).and_return(false)
-        post :create, {:pick_em => { match:  'invalid value' }}
+        post :create, {pick_em: { match:  'invalid value' }}
         expect(assigns(:pick_em)).to be_a_new(PickEm)
       end
 
       it 're-renders the "new" template' do
         # Trigger the behavior that occurs when invalid params are submitted
         PickEm.any_instance.stub(:save).and_return(false)
-        post :create, {:pick_em => { match:  'invalid value' }}
+        post :create, {pick_em: { match:  'invalid value' }}
         expect(response).to render_template("new")
       end
     end
@@ -85,18 +85,18 @@ describe PickEmsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         expect(PickEm.any_instance).to_receive(:update).with({ match:  "" })
-        put :update, {:id => pick_em.to_param, :pick_em => { match:  "" }}
+        put :update, {id: pick_em.to_param, pick_em: { match:  "" }}
       end
 
       it 'assigns the requested pick_em as @pick_em' do
         pick_em = PickEm.create! valid_attributes
-        put :update, {:id => pick_em.to_param, :pick_em => valid_attributes}
+        put :update, {id: pick_em.to_param, pick_em: valid_attributes}
         expect(assigns(:pick_em)).to eq(pick_em)
       end
 
       it 'redirects to the pick_em' do
         pick_em = PickEm.create! valid_attributes
-        put :update, {:id => pick_em.to_param, :pick_em => valid_attributes}
+        put :update, {id: pick_em.to_param, pick_em: valid_attributes}
         expect(response).to redirect_to(pick_em)
       end
     end
@@ -106,7 +106,7 @@ describe PickEmsController do
         pick_em = PickEm.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         PickEm.any_instance.stub(:save).and_return(false)
-        put :update, {:id => pick_em.to_param, :pick_em => { match:  'invalid value' }}
+        put :update, {id: pick_em.to_param, pick_em: { match:  'invalid value' }}
         expect(assigns(:pick_em)).to eq(pick_em)
       end
 
@@ -114,7 +114,7 @@ describe PickEmsController do
         pick_em = PickEm.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         PickEm.any_instance.stub(:save).and_return(false)
-        put :update, {:id => pick_em.to_param, :pick_em => { match:  'invalid value' }}
+        put :update, {id: pick_em.to_param, pick_em: { match:  'invalid value' }}
         expect(response).to render_template("edit")
       end
     end
@@ -124,13 +124,13 @@ describe PickEmsController do
     it 'destroys the requested pick_em' do
       pick_em = PickEm.create! valid_attributes
       expect {
-        delete :destroy, {:id => pick_em.to_param}
+        delete :destroy, {id: pick_em.to_param}
       }.to change(PickEm, :count).by(-1)
     end
 
     it 'redirects to the pick_ems list' do
       pick_em = PickEm.create! valid_attributes
-      delete :destroy, {:id => pick_em.to_param}
+      delete :destroy, {id: pick_em.to_param}
       expect(response).to redirect_to(pick_ems_url)
     end
   end

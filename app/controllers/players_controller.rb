@@ -46,7 +46,7 @@ class PlayersController < ApplicationController
         format.html { redirect_to @player, notice: 'Player was successfully updated.' }
         format.json {
           @players = Player.all
-          render json: { html: render_to_string(action: 'index', layout: false, formats: [:html]) }
+          render json: { selector: '#content', html: render_to_string(action: 'index', layout: false, formats: [:html]) }
         }
       else
         format.html { render action: 'edit' }

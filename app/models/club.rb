@@ -42,7 +42,7 @@ class Club < ActiveRecord::Base
   validates :name, :abbrv, uniqueness: true
   validates :conference, inclusion: CONFERENCES, allow_blank: false
   validates :primary_color, :secondary_color, :accent_color, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 'ffffff'.to_i(16) }
-  validates_attachment :crest, content_type: { :content_type => ['image/jpg', 'image/gif', 'image/png'] }
+  validates_attachment :crest, content_type: { content_type: ['image/jpg', 'image/gif', 'image/png'] }
 
   has_many :home_matches, class_name: 'Match', foreign_key: 'home_team_id'
   has_many :away_matches, class_name: 'Match', foreign_key: 'away_team_id'
