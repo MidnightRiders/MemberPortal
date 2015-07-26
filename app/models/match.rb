@@ -166,15 +166,13 @@ class Match < ActiveRecord::Base
   # Updates the picking games on save so that they don't have to pull in +Match+ data
   # any and every time they need to evaluate scores
   def update_games
-    unless rev_guesses.empty?
-      rev_guesses.each do |rg|
-        sum = 0
-        sum += 2 if rg.result == result
-        sum += 1 if rg.home_goals == home_goals
-        sum += 1 if rg.away_goals == away_goals
-        sum += 1 if (rg.home_goals - rg.away_goals) == (home_goals - away_goals)
-        rg.update_attribute(:score, sum)
-      end
+    rev_guesses.each do |rg|
+      sum = 0
+      sum += 2 if rg.result == result
+      sum += 1 if rg.home_goals == home_goals
+      sum += 1 if rg.away_goals == away_goals
+      sum += 1 if (rg.home_goals - rg.away_goals) == (home_goals - away_goals)
+      rg.update_attribute(:score, sum)
     end
     pick_ems.each do |p|
       p.update_attribute(:correct, p.result == PickEm::RESULTS[result])
