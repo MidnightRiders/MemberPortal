@@ -47,7 +47,7 @@
             = f.fields_for :info do |info_fields|
               = info_fields.check_box :override, value: current_user.id, include_hidden: false, checked: f.object.info.try(:override), disabled: !f.object.info.try(:override).in?([nil, current_user.id])
               = info_fields.label :override, 'Override Credit Card', class: 'inline'
-      
+
         = f.hidden_field :subscription, value: 0
       - elsif !f.object.user.current_member? && f.object.user.memberships.last && f.object.user.memberships.last.privileges.include?('admin')
         = f.hidden_field :privileges, value: 'admin', multiple: true

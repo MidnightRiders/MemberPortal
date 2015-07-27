@@ -144,7 +144,7 @@ class Match < ActiveRecord::Base
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
   # Retrieves previous +n+ matches from <tt>Time.current</tt>.
   def self.previous(n=1)
-    ms = where('kickoff < ?', Time.current).order('kickoff DESC')
+    ms = where('kickoff < ?', Time.current).order(kickoff: :desc)
     if n==1
       ms.first
     else
@@ -155,7 +155,7 @@ class Match < ActiveRecord::Base
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
   # Retrieves next +n+ matches from <tt>Time.current</tt>.
   def self.next(n=1)
-    ms = upcoming.order('kickoff DESC')
+    ms = upcoming.order(kickoff: :desc)
     if n==1
       ms.first
     else
