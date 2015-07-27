@@ -15,7 +15,7 @@
     .medium-4.columns
       = f.label :club_id
     .medium-8.columns
-      = f.select :club_id, options_for_select(Club.all.order('name ASC').map{|x| [x.name,x.id]},f.object.club_id)
+      = f.select :club_id, options_for_select(Club.all.order(name: :asc).map{|x| [x.name,x.id]},f.object.club_id)
   .row
     .medium-4.columns
       = f.label :position

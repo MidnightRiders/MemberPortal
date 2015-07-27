@@ -30,3 +30,6 @@ en:
         abbrv: 'Abbreviation'
       membership:
         type: 'Membership Type'
+  unauthorized:
+    manage:
+      all: 'This user is not authorized to perform that action.'

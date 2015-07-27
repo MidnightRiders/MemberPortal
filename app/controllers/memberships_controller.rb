@@ -192,7 +192,7 @@ class MembershipsController < ApplicationController
 
     # Define +@membership+ based on route +:id+
     def get_membership
-      @membership = Membership.unscoped.find(params[:id])
+      @membership = Membership.unscoped.find(params[:id] || params[:membership_id])
     end
 
     # Determine where to redirect after success
