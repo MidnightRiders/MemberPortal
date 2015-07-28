@@ -45,4 +45,22 @@ class MembershipMailer < ActionMailer::Base
     @title = "[MemberPortalAlert] #{@membership.year} #{@membership.type} Membership Refunded for #{@user.first_name} #{@user.last_name}"
     mail(to: 'Membership Chair<membership@midnightriders.com>,President<president@midnightriders.com>,Web Chair<webczar@midnightriders.com>', subject: @title)
   end
+
+  # Invite existing user to join Family membership
+  def invite_existing_user_to_family(user, family, relative)
+    @user = user
+    @family = family
+    @relative = relative
+    @title = "#{@user.first_name}, #{@family.user.first_name} has invited you to join a #{@family.year} Family Membership"
+    mail(to: @user.email, subject: @title)
+  end
+
+  # Invite email to complete account and join Family membership
+  def invite_new_user_to_family(user, family, relative)
+    @user = user
+    @family = family
+    @relative = relative
+    @title = "#{@family.user.first_name} has invited you to join a #{@family.year} Midnight Riders Family Membership"
+    mail(to: @user.email, subject: @title)
+  end
 end

@@ -21,9 +21,16 @@ class RelativesController < ApplicationController
       redirect_to new_user_membership_relative_path(@family.user, @family), flash: { error: 'There is already a user with a current membership for that email.' }
     else
       if Devise::email_regexp =~ @relative_user.email
-        @relative_user.save(validate: false)
-        @relative = @family.relatives.create(year: @family.year, user: @relative_user, info: { pending_approval: true })
-        redirect_to @relative, notice: 'Relative was successfully created.'
+        new_user = @relative_user.persisted?
+        @relative_user.save(validate: false) unless new_user
+        @relative = @relative_user.memberships.new(type: 'Relative', year: @family.year, family_id: @family.id, info: { pending_approval: true })
+        @relative.save(validate: false)
+        if new_user
+          MembershipMailer.invite_existing_user_to_family(@relative_user, @family, @relative).deliver
+        else
+          MembershipMailer.invite_new_user_to_family(@relative_user, @family, @relative).deliver
+        end
+        redirect_to user_membership_path(@user, @family), flash: { success: "#{@relative_user.email} has been invited to join your family membership." }
       else
         @relative_user.errors.add(:email, 'does not appear to be valid')
         render action: 'new'
@@ -31,12 +38,29 @@ class RelativesController < ApplicationController
     end
   end
 
+  # POST /users/:username/memberships/relatives/1/accept_invitation
+  def accept_invitation
+    if @relative.pending_approval
+      if @relative.update_attribute(:info, @relative.info.except(:pending_approval))
+        redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
+      else
+        redirect_to user_home_path, flash: { error: @relative.errors.to_sentence }
+      end
+    else
+      redirect_to user_home_path, flash: { error: 'This membership is not eligible to accept a family membership.' }
+    end
+  end
+
   # DELETE /users/memberships/relatives/1
   # DELETE /users/memberships/relatives/1.json
   def destroy
+    @relative_user = @relative.user
+    pending_approval = @relative.pending_approval
     @relative.destroy
+    name = @relative_user.valid? ? "#{@relative_user.first_name} #{@relative_user.last_name}" : @relative_user.email
+    @relative_user.destroy if pending_approval && @relative_user.memberships.reload.empty?
     respond_to do |format|
-      format.html { redirect_to user_membership_relatives_url }
+      format.html { redirect_to user_membership_path(@user, @family), flash: { success: "#{name} was successfully removed from your membership." } }
       format.json { head :no_content }
     end
   end

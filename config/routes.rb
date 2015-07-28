@@ -27,7 +27,11 @@ MidnightRiders::Application.routes.draw do
     end
     resources :memberships, controller: 'memberships', type: 'Individual'
     resources :memberships, controller: 'memberships', type: 'Family' do
-      resources :relatives, type: 'Relative', only: [ :new, :create, :destroy ]
+      resources :relatives, type: 'Relative', only: [ :new, :create, :destroy ] do
+        member do
+          post :accept_invitation
+        end
+      end
     end
   end
 
