@@ -112,9 +112,14 @@ class User < ActiveRecord::Base
     memberships.where(year: (Date.today.year..Date.today.year + 1)).order(year: :asc).first
   end
 
+  # Returns +Family+ +Membership+ for current year, if applicable
+  def current_family
+    current_membership.try(:family)
+  end
+
   # Returns *Boolean*. Determines whether user has a current membership.
   def current_member?
-    current_membership.present?
+    current_membership.present? && !current_membership.pending_approval
   end
 
   # Returns +PickEm+ for given +match+, or new +PickEm+.

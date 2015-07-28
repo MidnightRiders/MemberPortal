@@ -1,0 +1,14 @@
+%section.row.register-now
+  .medium-9.large-6.medium-centered.columns
+    %h2.text-center You’ve been invited to join #{user.current_family.user.first_name} #{user.current_family.user.last_name}’s #{user.current_family.year} Family Membership!
+    .text-center
+      %ul.button-group
+        %li
+          = link_to user_membership_relative_path(user, user.current_family, user.current_membership), class: 'button large success', data: { method: :patch, relative: {  }} do
+            = icon 'check fa-fw'
+            Accept Family Membership
+        %li
+          = link_to user_membership_relative_path(user, user.current_family, user.current_membership), class: 'button large alert', data: { method: :delete, confirm: 'Are you sure you wish to reject this invitation?' }
+            = icon 'times fa-fw'
+            Reject Invitation
+%hr
