@@ -198,7 +198,7 @@ class Membership < ActiveRecord::Base
   end
 
   def can_have_relatives?
-    is_a? Family
+    is_a?(Family) || is_a?(Relative)
   end
 
   def has_relatives?

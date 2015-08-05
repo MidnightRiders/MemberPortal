@@ -41,7 +41,7 @@ class RelativesController < ApplicationController
   # POST /users/:username/memberships/relatives/1/accept_invitation
   def accept_invitation
     if @relative.pending_approval
-      if @relative.update_attribute(:info, @relative.info.except(:pending_approval))
+      if @relative.update_attribute(:info, @relative.info.with_indifferent_access.except(:pending_approval))
         redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
       else
         redirect_to user_home_path, flash: { error: @relative.errors.to_sentence }
@@ -57,10 +57,20 @@ class RelativesController < ApplicationController
     @relative_user = @relative.user
     pending_approval = @relative.pending_approval
     @relative.destroy
-    name = @relative_user.valid? ? "#{@relative_user.first_name} #{@relative_user.last_name}" : @relative_user.email
-    @relative_user.destroy if pending_approval && @relative_user.memberships.reload.empty?
+    name = pending_approval || !@relative_user.valid? ? @relative_user.email : "#{@relative_user.first_name} #{@relative_user.last_name}"
+    @relative_user.destroy if pending_approval && !@relative_user.valid? && @relative_user.memberships.reload.empty?
+    unless current_user.in? [ @user, @relative_user ]
+      Rails.logger.info "current_user: #{current_user}\n@user: #{@user}\n@relative_user: #{@relative_user}"
+      raise 'current_user is neither @user nor @relative'
+    end
     respond_to do |format|
-      format.html { redirect_to user_membership_path(@user, @family), flash: { success: "#{name} was successfully removed from your membership." } }
+      format.html do
+        if current_user == @relative_user
+          redirect_to user_home_path(@relative_user), flash: { success: "Your Relative membership with #{@user.first_name} #{@user.last_name} has been destroyed."}
+        else current_user == @user
+          redirect_to user_membership_path(@user, @family), flash: { success: "#{name} was successfully removed from your membership." }
+        end
+      end
       format.json { head :no_content }
     end
   end
