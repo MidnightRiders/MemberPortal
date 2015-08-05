@@ -5,6 +5,10 @@ class Relative < Membership
   validate :has_good_family
   validate :no_time_traveling
 
+  def relatives
+    [ family ] + family.relatives - [ self ]
+  end
+
   private
 
     def has_good_family

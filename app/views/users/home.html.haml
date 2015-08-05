@@ -2,9 +2,9 @@
 
 = render partial: 'users/update_prompt'
 
-= render 'register_now', user: current_user unless current_user.current_member?
+= render 'register_now', user: current_user unless current_user.current_member? || current_user.current_membership.try(:pending_approval)
 
-= render 'accept_family_invitation', user: current_user if current_user.current_membership.pending_approval
+= render 'accept_family_invitation', user: current_user if current_user.current_membership.try(:pending_approval)
 
 .row
   %section.medium-6.columns
