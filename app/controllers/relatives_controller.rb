@@ -83,6 +83,8 @@ class RelativesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def relative_params
-      params.require(:relative).permit(user_attributes: [ :email ])
+      r = params.require(:relative).permit(user_attributes: [ :email ])
+      r[:user_attributes][:email].downcase! if r[:user_attributes].try(:[], :email)
+      r
     end
 end
