@@ -119,7 +119,17 @@ class User < ActiveRecord::Base
 
   # Returns *Boolean*. Determines whether user has a current membership.
   def current_member?
-    current_membership.present? && !current_membership.pending_approval
+    current_membership.present?
+  end
+
+  # Returns +Relative+ +Membership+ if invited to join +Family+
+  def family_invitation
+    Membership.with_invited_email(email).first
+  end
+
+  # Returns *Boolean* based on +family_invitation+
+  def has_family_invitation?
+    !current_member? && family_invitation.present?
   end
 
   # Returns +PickEm+ for given +match+, or new +PickEm+.
