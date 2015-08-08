@@ -1,10 +1,16 @@
-= form_for @user_membership_relative do |f|
-  - if @user_membership_relative.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@user_membership_relative.errors.count, 'error')} prohibited this user_membership_relative from being saved:"
-      %ul
-        - @user_membership_relative.errors.full_messages.each do |msg|
-          %li= msg
-
-  .actions
-    = f.submit 'Save'
+= form_for @relative, url: user_membership_relatives_path(@family.user, @family) do |f|
+  = f.fields_for :user, @relative_user do |ff|
+    .row
+      .medium-4.columns
+        = ff.label :email, class: 'inline'
+      .medium-8.columns
+        = ff.text_field :email, placeholder: 'Email Address'
+        - if @relative_user.errors.include?(:email)
+          %small.error
+            = @relative_user.class.human_attribute_name(:email).titleize
+            = @relative_user.errors.messages[:email].to_sentence
+  .row.actions
+    .column
+      = f.button :submit, class: 'button' do
+        = icon 'plus'
+        Add

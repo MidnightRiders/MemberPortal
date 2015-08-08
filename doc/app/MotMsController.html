@@ -141,7 +141,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 40</span>
+            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 43</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@mot_m</span> = <span class="ruby-constant">MotM</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">mot_m_params</span>)
 
@@ -184,7 +184,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 70</span>
+            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 73</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@mot_m</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -221,7 +221,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 35</span>
+            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 38</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -255,13 +255,16 @@
           <div class="method-source-code" id="index-source">
             <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 9</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-ivar">@months</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt;= ?&#39;</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">group_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">kickoff</span>.<span class="ruby-identifier">beginning_of_month</span> }.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:first</span>)
-  <span class="ruby-ivar">@mstart</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:date</span>].<span class="ruby-identifier">try</span>(<span class="ruby-value">:to_datetime</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">beginning_of_month</span>
-  <span class="ruby-identifier">month_matches</span> = <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">matches</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> (<span class="ruby-ivar">@mstart</span><span class="ruby-operator">...</span><span class="ruby-ivar">@mstart</span>.<span class="ruby-identifier">end_of_month</span>))
-  <span class="ruby-ivar">@match_ids</span> = <span class="ruby-identifier">month_matches</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:id</span>)
-  <span class="ruby-ivar">@mot_ms</span>   = <span class="ruby-constant">Player</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:mot_m_firsts</span>,<span class="ruby-value">:mot_m_seconds</span>,<span class="ruby-value">:mot_m_thirds</span>).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:last_name</span>)
-  <span class="ruby-ivar">@mot_m_mo</span> = <span class="ruby-ivar">@mot_ms</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match_ids</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">group_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match_ids</span>) }.<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:first</span>).<span class="ruby-identifier">reverse</span>
-  <span class="ruby-ivar">@mot_m_yr</span> = <span class="ruby-ivar">@mot_ms</span>.<span class="ruby-identifier">group_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:mot_m_total</span>).<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:first</span>).<span class="ruby-identifier">reverse</span>
+  <span class="ruby-ivar">@mstart</span>       = (<span class="ruby-identifier">params</span>[<span class="ruby-value">:date</span>].<span class="ruby-identifier">try</span>(<span class="ruby-value">:to_datetime</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">beginning_of_month</span>
+  <span class="ruby-ivar">@season</span>       = <span class="ruby-ivar">@mstart</span>.<span class="ruby-identifier">year</span>
+  <span class="ruby-ivar">@months</span>       = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">unscoped</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt;= :time&#39;</span>, <span class="ruby-identifier">time</span><span class="ruby-operator">:</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">group_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">kickoff</span>.<span class="ruby-identifier">beginning_of_month</span> }.<span class="ruby-identifier">sort</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:first</span>) <span class="ruby-operator">+</span> [ <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">beginning_of_month</span> ]
+  <span class="ruby-ivar">@months</span>.<span class="ruby-identifier">uniq!</span>
+  <span class="ruby-identifier">yr_matches</span>    = <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">matches</span>.<span class="ruby-identifier">unscope</span>(<span class="ruby-identifier">where</span><span class="ruby-operator">:</span> <span class="ruby-value">:season</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">season</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@mstart</span>.<span class="ruby-identifier">year</span>)
+  <span class="ruby-ivar">@yr_match_ids</span> = <span class="ruby-identifier">yr_matches</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:id</span>)
+  <span class="ruby-ivar">@mo_match_ids</span> = <span class="ruby-identifier">yr_matches</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> (<span class="ruby-ivar">@mstart</span><span class="ruby-operator">..</span><span class="ruby-ivar">@mstart</span>.<span class="ruby-identifier">end_of_month</span>)).<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:id</span>)
+  <span class="ruby-ivar">@mot_ms</span>       = <span class="ruby-constant">Player</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:mot_m_firsts</span>,<span class="ruby-value">:mot_m_seconds</span>,<span class="ruby-value">:mot_m_thirds</span>).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-identifier">season</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@season</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:last_name</span>)
+  <span class="ruby-ivar">@mot_m_mo</span>     = <span class="ruby-ivar">@mot_ms</span>.<span class="ruby-identifier">group_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-identifier">match_id</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@mo_match_ids</span>) }.<span class="ruby-identifier">reject</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:first</span>).<span class="ruby-identifier">reverse</span>
+  <span class="ruby-ivar">@mot_m_yr</span>     = <span class="ruby-ivar">@mot_ms</span>.<span class="ruby-identifier">group_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">motm</span><span class="ruby-operator">|</span> <span class="ruby-identifier">motm</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-identifier">season</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@season</span>)}.<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:first</span>).<span class="ruby-identifier">reverse</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -292,7 +295,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 29</span>
+            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 32</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_match_mot_m_url</span>(<span class="ruby-ivar">@match</span>,<span class="ruby-ivar">@mot_m</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@mot_m</span> = <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">mot_ms</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@current_user</span>)
   <span class="ruby-ivar">@mot_m</span> = <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">mot_ms</span>.<span class="ruby-identifier">new</span>
@@ -326,7 +329,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 56</span>
+            <pre><span class="ruby-comment"># File app/controllers/mot_ms_controller.rb, line 59</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@mot_m</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">mot_m_params</span>)

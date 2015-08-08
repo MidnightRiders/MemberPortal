@@ -26,7 +26,9 @@ class Membership < ActiveRecord::Base
   hstore_accessor :info,
                   stripe_subscription_id: :string,
                   stripe_charge_id: :string,
-                  override: :integer
+                  override: :integer,
+                  pending_approval: :boolean,
+                  invited_email: :string
 
   belongs_to :user
 
@@ -194,6 +196,14 @@ class Membership < ActiveRecord::Base
     else
       super
     end
+  end
+
+  def can_have_relatives?
+    is_a?(Family) || is_a?(Relative)
+  end
+
+  def has_relatives?
+    can_have_relatives? && relatives.present?
   end
 
   private

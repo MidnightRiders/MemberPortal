@@ -29,6 +29,7 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  delegate :can?, :cannot?, to: :ability
 
   default_scope { includes(:memberships) }
 
@@ -71,7 +72,7 @@ class User < ActiveRecord::Base
   has_many :rev_guesses
   has_many :pick_ems
 
-  validates :first_name, :last_name, presence: true
+  validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
   validates :member_since, numericality: { less_than_or_equal_to: Date.today.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
@@ -108,12 +109,27 @@ class User < ActiveRecord::Base
 
   # Returns +Membership+ for current year.
   def current_membership
-    memberships.where(year: (Date.today.year..Date.today.year + 1)).order('year ASC').first
+    memberships.where(year: (Date.today.year..Date.today.year + 1)).order(year: :asc).first
+  end
+
+  # Returns +Family+ +Membership+ for current year, if applicable
+  def current_family
+    current_membership.try(:family)
   end
 
   # Returns *Boolean*. Determines whether user has a current membership.
   def current_member?
     current_membership.present?
+  end
+
+  # Returns +Relative+ +Membership+ if invited to join +Family+
+  def family_invitation
+    Membership.with_invited_email(email).first
+  end
+
+  # Returns *Boolean* based on +family_invitation+
+  def has_family_invitation?
+    !current_member? && family_invitation.present?
   end
 
   # Returns +PickEm+ for given +match+, or new +PickEm+.
@@ -128,7 +144,7 @@ class User < ActiveRecord::Base
 
   # Returns *String*. URL for Gravatar based on email.
   def gravatar
-    '//gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/,'@')) + '?d=mm'
+    'https://gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/,'@')) + '?d=mm'
   end
 
   # TODO: Clean the shit out of this import. Stabilize it.
@@ -227,6 +243,10 @@ class User < ActiveRecord::Base
     end
   rescue Stripe::InvalidRequestError => e
     logger.error "Stripe::InvalidRequestError: #{e}"
+  end
+
+  def ability
+    @ability ||= Ability.new(self)
   end
 
 end

@@ -1,0 +1,9 @@
+Hello,
+
+You’re receiving this email because <%= @family.user.first_name %> <%= @family.user.last_name %> has invited you to join his or her <%= @family.year %> Midnight Riders Family Membership. If you think this was in error, do nothing. We will not use this email to contact you again unless you choose to sign up.
+
+If you’d like to accept the invitation, just visit the link below and create your Midnight Riders Member Portal account (make sure to use this email address), then click "Accept Family Invitation" from the home page once logged in.
+
+[ <%= new_user_registration_url(email: @user.email) %> ]
+
+The Midnight Riders

@@ -34,6 +34,24 @@ class MembershipsController < ApplicationController
     @membership = @user.memberships.new(year: @year, privileges: privileges)
   end
 
+  # GET /users/:user_id/memberships/1/invite
+  def invite_relative
+    # Nothing really goes here?
+  end
+
+  # POST /users/:user_id/memberships/1/invite
+  def send_relative_invitation
+    if (user = User.find_by(email: params[:email])).present?
+      if user.current_membership.present?
+        # Return error: user already has a membership this year
+      else
+        # Send email invitation to confirm Family connection
+      end
+    else
+      # Send email to invite to sign up
+    end
+  end
+
   # GET /users/:user_id/memberships/1/edit
   def edit
   end
@@ -174,7 +192,7 @@ class MembershipsController < ApplicationController
 
     # Define +@membership+ based on route +:id+
     def get_membership
-      @membership = Membership.unscoped.find(params[:id])
+      @membership = Membership.unscoped.find(params[:id] || params[:membership_id])
     end
 
     # Determine where to redirect after success
