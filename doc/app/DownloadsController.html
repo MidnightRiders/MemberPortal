@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8">
 
-<title>class Relative - Rails Application Documentation</title>
+<title>class DownloadsController - Rails Application Documentation</title>
 
 <link href="./fonts.css" rel="stylesheet">
 <link href="./rdoc.css" rel="stylesheet">
@@ -61,7 +61,7 @@
   <h3>Parent</h3>
 
   
-  <p class="link"><a href="Membership.html">Membership</a>
+  <p class="link"><a href="ApplicationController.html">ApplicationController</a>
   
 </div>
 
@@ -73,7 +73,7 @@
 
   <ul class="link-list" role="directory">
     
-    <li ><a href="#method-i-relatives">#relatives</a>
+    <li ><a href="#method-i-show">#show</a>
     
   </ul>
 </div>
@@ -81,9 +81,9 @@
   </div>
 </nav>
 
-<main role="main" aria-labelledby="class-Relative">
-  <h1 id="class-Relative" class="class">
-    class Relative
+<main role="main" aria-labelledby="class-DownloadsController">
+  <h1 id="class-DownloadsController" class="class">
+    class DownloadsController
   </h1>
 
   <section class="description">
@@ -109,10 +109,10 @@
        </header>
 
     
-      <div id="method-i-relatives" class="method-detail ">
+      <div id="method-i-show" class="method-detail ">
         
         <div class="method-heading">
-          <span class="method-name">relatives</span><span
+          <span class="method-name">show</span><span
             class="method-args">()</span>
           
           <span class="method-click-advice">click to toggle source</span>
@@ -127,10 +127,18 @@
           
 
           
-          <div class="method-source-code" id="relatives-source">
-            <pre><span class="ruby-comment"># File app/models/relative.rb, line 8</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">relatives</span>
-  [ <span class="ruby-identifier">family</span> ] <span class="ruby-operator">+</span> <span class="ruby-identifier">family</span>.<span class="ruby-identifier">relatives</span> <span class="ruby-operator">-</span> [ <span class="ruby-keyword">self</span> ]
+          <div class="method-source-code" id="show-source">
+            <pre><span class="ruby-comment"># File app/controllers/downloads_controller.rb, line 2</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
+  <span class="ruby-identifier">authorize!</span> <span class="ruby-value">:show</span>, <span class="ruby-value">:download</span>
+  <span class="ruby-identifier">filename</span> = <span class="ruby-constant">Rails</span>.<span class="ruby-identifier">root</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">&#39;private&#39;</span>, <span class="ruby-identifier">params</span>[<span class="ruby-value">:filename</span>] <span class="ruby-operator">+</span> <span class="ruby-string">&#39;.&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:format</span>])
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span> <span class="ruby-identifier">filename</span>
+    <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span> <span class="ruby-identifier">filename</span>, <span class="ruby-string">&#39;rb&#39;</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">send_data</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">read</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">root_path</span>, <span class="ruby-identifier">alert</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;No such file exists: &#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">filename</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           

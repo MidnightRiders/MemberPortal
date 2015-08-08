@@ -144,7 +144,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 60</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 70</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
 
   <span class="ruby-identifier">u</span> = <span class="ruby-identifier">user_params</span>
@@ -192,7 +192,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 30</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 40</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
   <span class="ruby-keyword">unless</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">privilege?</span>(<span class="ruby-string">&#39;admin&#39;</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">privilege?</span>(<span class="ruby-string">&#39;executive_board&#39;</span>)
     <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">edit_user_registration_path</span>(<span class="ruby-ivar">@user</span>)
@@ -228,10 +228,10 @@
 
           
           <div class="method-source-code" id="home-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 23</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">home</span>
-  <span class="ruby-ivar">@articles</span> = <span class="ruby-constant">RidersBlog</span>.<span class="ruby-identifier">articles</span>.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-string">&#39;pubDate&#39;</span>].<span class="ruby-identifier">to_date</span> }.<span class="ruby-identifier">last</span>(<span class="ruby-value">2</span>).<span class="ruby-identifier">reverse</span>
-  <span class="ruby-ivar">@events</span> = <span class="ruby-constant">FacebookApi</span>.<span class="ruby-identifier">events</span>[<span class="ruby-string">&#39;data&#39;</span>].<span class="ruby-identifier">try</span>(<span class="ruby-value">:select</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-string">&#39;start_time&#39;</span>] <span class="ruby-operator">&gt;=</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span> }
+  <span class="ruby-ivar">@articles</span> = <span class="ruby-constant">RidersBlog</span>.<span class="ruby-identifier">articles</span>.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-string">&#39;pubDate&#39;</span>].<span class="ruby-identifier">to_date</span> }.<span class="ruby-identifier">last</span>(<span class="ruby-value">2</span>).<span class="ruby-identifier">reverse</span> <span class="ruby-keyword">if</span> <span class="ruby-constant">RidersBlog</span>.<span class="ruby-identifier">articles</span>
+  <span class="ruby-ivar">@events</span> = <span class="ruby-constant">FacebookApi</span>.<span class="ruby-identifier">events</span>[<span class="ruby-string">&#39;data&#39;</span>].<span class="ruby-identifier">try</span>(<span class="ruby-value">:select</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-string">&#39;start_time&#39;</span>] <span class="ruby-operator">&gt;=</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span> } <span class="ruby-keyword">if</span> <span class="ruby-constant">FacebookApi</span>.<span class="ruby-identifier">events</span>
   <span class="ruby-ivar">@revs_matches</span> = [ <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">last_match</span>, <span class="ruby-identifier">revs</span>.<span class="ruby-identifier">next_matches</span>(<span class="ruby-value">2</span>) ].<span class="ruby-identifier">flatten</span>.<span class="ruby-identifier">reject</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:nil?</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -264,7 +264,7 @@
 
           
           <div class="method-source-code" id="import-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 81</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 91</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">import</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:file</span>]
     <span class="ruby-constant">User</span>.<span class="ruby-identifier">import</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:file</span>],[],<span class="ruby-identifier">current_user</span>.<span class="ruby-identifier">id</span>)
@@ -304,12 +304,22 @@
           <div class="method-source-code" id="index-source">
             <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-ivar">@privilege</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:privilege</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword">nil</span>
-  <span class="ruby-ivar">@users</span> = <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">text_search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:search</span>])
-  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@privilege</span>
-    <span class="ruby-ivar">@users</span> = <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">joins</span>(<span class="ruby-value">:memberships</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;memberships.privileges::jsonb ?| array[:privileges]&#39;</span>, <span class="ruby-identifier">privileges</span><span class="ruby-operator">:</span> [<span class="ruby-ivar">@privilege</span>].<span class="ruby-identifier">flatten</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;last_name ASC, first_name ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">20</span>)
-  <span class="ruby-keyword">else</span>
-    <span class="ruby-ivar">@users</span> = <span class="ruby-ivar">@users</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;last_name ASC, first_name ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">20</span>)
+  <span class="ruby-ivar">@privilege</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:privilege</span>].<span class="ruby-identifier">blank?</span> <span class="ruby-operator">?</span> <span class="ruby-keyword">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:privilege</span>]
+  <span class="ruby-ivar">@year</span> = <span class="ruby-identifier">params</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:year</span>, <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>).<span class="ruby-identifier">to_i</span>
+  <span class="ruby-ivar">@show_all</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:show_all</span>].<span class="ruby-identifier">in?</span> [<span class="ruby-keyword">true</span>, <span class="ruby-string">&#39;true&#39;</span>]
+  <span class="ruby-ivar">@user_set</span> = <span class="ruby-ivar">@users</span>
+  <span class="ruby-ivar">@user_set</span> = <span class="ruby-ivar">@user_set</span>.<span class="ruby-identifier">text_search</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:search</span>]) <span class="ruby-keyword">if</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:search</span>]
+  <span class="ruby-ivar">@user_set</span> = <span class="ruby-ivar">@user_set</span>.<span class="ruby-identifier">where</span>(<span class="ruby-identifier">memberships</span><span class="ruby-operator">:</span> { <span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@year</span> }) <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@show_all</span>
+  <span class="ruby-ivar">@user_set</span> = <span class="ruby-ivar">@user_set</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;memberships.privileges::jsonb ?| array[:privileges]&#39;</span>, <span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>, <span class="ruby-identifier">privileges</span><span class="ruby-operator">:</span> [<span class="ruby-ivar">@privilege</span>].<span class="ruby-identifier">flatten</span>) <span class="ruby-keyword">if</span> <span class="ruby-ivar">@privilege</span>
+  <span class="ruby-ivar">@user_set</span> = <span class="ruby-ivar">@user_set</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:memberships</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">last_name</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>, <span class="ruby-identifier">first_name</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>)
+  <span class="ruby-ivar">@users</span> = <span class="ruby-ivar">@user_set</span>.<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">20</span>)
+
+  <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">html</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">json</span>
+    <span class="ruby-identifier">format</span>.<span class="ruby-identifier">csv</span> {
+      <span class="ruby-identifier">render</span> <span class="ruby-identifier">text</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@user_set</span>.<span class="ruby-identifier">to_csv</span>
+    }
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -341,7 +351,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 53</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 63</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@user</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@membership</span> = <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">year</span><span class="ruby-operator">:</span> <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>)
@@ -375,7 +385,7 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 19</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -407,7 +417,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 39</span>
+            <pre><span class="ruby-comment"># File app/controllers/users_controller.rb, line 49</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">user_params</span>)

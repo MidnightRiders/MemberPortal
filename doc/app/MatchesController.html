@@ -73,6 +73,8 @@
 
   <ul class="link-list" role="directory">
     
+    <li ><a href="#method-i-bulk_update">#bulk_update</a>
+    
     <li ><a href="#method-i-create">#create</a>
     
     <li ><a href="#method-i-destroy">#destroy</a>
@@ -125,6 +127,50 @@
        </header>
 
     
+      <div id="method-i-bulk_update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">bulk_update</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>POST /matches/bulk_update</p>
+          
+          
+
+          
+          <div class="method-source-code" id="bulk_update-source">
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 68</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">bulk_update</span>
+  <span class="ruby-identifier">updated</span> = <span class="ruby-value">0</span>
+  <span class="ruby-identifier">matches</span> = <span class="ruby-constant">CSV</span>.<span class="ruby-identifier">table</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:file</span>].<span class="ruby-identifier">path</span>.<span class="ruby-identifier">to_s</span>)
+  <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">d</span> = <span class="ruby-identifier">m</span>[<span class="ruby-value">:date</span>].<span class="ruby-identifier">to_date</span>.<span class="ruby-identifier">beginning_of_day</span>
+    <span class="ruby-identifier">match</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> (<span class="ruby-identifier">d</span><span class="ruby-operator">..</span><span class="ruby-identifier">d</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>.<span class="ruby-identifier">day</span>), <span class="ruby-identifier">home_team</span><span class="ruby-operator">:</span> <span class="ruby-constant">Club</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-identifier">abbrv</span><span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">:home</span>]), <span class="ruby-identifier">away_team</span><span class="ruby-operator">:</span> <span class="ruby-constant">Club</span>.<span class="ruby-identifier">find_by</span>(<span class="ruby-identifier">abbrv</span><span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">:away</span>]), <span class="ruby-identifier">home_goals</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>, <span class="ruby-identifier">away_goals</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span>)
+    <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">present?</span>
+      <span class="ruby-identifier">updated</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">update_attributes</span>(<span class="ruby-identifier">home_goals</span><span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">:hg</span>], <span class="ruby-identifier">away_goals</span><span class="ruby-operator">:</span> <span class="ruby-identifier">m</span>[<span class="ruby-value">:ag</span>])
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Bulk Import Error: no incomplete Match found for #{m[:home]} v #{m[:away]} on #{m[:date]} (#{d})&quot;</span>
+    <span class="ruby-keyword">end</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">redirect_to</span> <span class="ruby-identifier">matches_path</span>, <span class="ruby-identifier">notice</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;#{updated}/#{matches.length} Matches were successfully updated.&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-create" class="method-detail ">
         
         <div class="method-heading">
@@ -144,7 +190,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 73</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 94</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@match</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">match_params</span>)
 
@@ -187,7 +233,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 103</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 124</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -224,7 +270,7 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 68</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 89</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -256,7 +302,7 @@
 
           
           <div class="method-source-code" id="import-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 23</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 28</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">import</span>
   <span class="ruby-identifier">url</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-identifier">params</span>[<span class="ruby-value">:url</span>])
   <span class="ruby-keyword">begin</span>
@@ -327,7 +373,12 @@
             <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 8</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
   <span class="ruby-ivar">@start_date</span> = (<span class="ruby-identifier">params</span>[<span class="ruby-value">:date</span>].<span class="ruby-identifier">try</span>(<span class="ruby-value">:in_time_zone</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">zone</span>) <span class="ruby-operator">||</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">beginning_of_week</span>
-  <span class="ruby-ivar">@matches</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:pick_ems</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> (<span class="ruby-ivar">@start_date</span><span class="ruby-operator">..</span><span class="ruby-ivar">@start_date</span> <span class="ruby-operator">+</span> <span class="ruby-value">7</span>.<span class="ruby-identifier">days</span>)).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>, <span class="ruby-identifier">location</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>)
+  <span class="ruby-ivar">@matches</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">unscoped</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:pick_ems</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> (<span class="ruby-ivar">@start_date</span><span class="ruby-operator">..</span><span class="ruby-ivar">@start_date</span> <span class="ruby-operator">+</span> <span class="ruby-value">7</span>.<span class="ruby-identifier">days</span>)).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>, <span class="ruby-identifier">location</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>)
+  <span class="ruby-ivar">@prev_link</span> = <span class="ruby-node">&quot;Previous #{&#39;Game &#39; if @matches.empty?}Week&quot;</span>
+  <span class="ruby-ivar">@next_link</span> = <span class="ruby-node">&quot;Next #{&#39;Game &#39; if @matches.empty?}Week&quot;</span>
+  <span class="ruby-ivar">@prev_date</span> = (<span class="ruby-ivar">@matches</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Match</span>.<span class="ruby-identifier">unscoped</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt; NOW()&#39;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>).<span class="ruby-identifier">last</span>.<span class="ruby-identifier">kickoff</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@start_date</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span>).<span class="ruby-identifier">to_date</span>
+  <span class="ruby-ivar">@next_date</span> = (<span class="ruby-ivar">@matches</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-operator">?</span> <span class="ruby-constant">Match</span>.<span class="ruby-identifier">unscoped</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &gt; NOW()&#39;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>).<span class="ruby-identifier">first</span>.<span class="ruby-identifier">kickoff</span> <span class="ruby-operator">:</span> <span class="ruby-ivar">@start_date</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>.<span class="ruby-identifier">week</span>).<span class="ruby-identifier">to_date</span>
+  <span class="ruby-ivar">@is_current_week</span> = <span class="ruby-ivar">@start_date</span> <span class="ruby-operator">==</span> <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">beginning_of_week</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -358,7 +409,7 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 63</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 84</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@match</span> = <span class="ruby-constant">Match</span>.<span class="ruby-identifier">new</span>
 <span class="ruby-keyword">end</span></pre>
@@ -391,10 +442,10 @@
 
           
           <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 15</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 20</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
   <span class="ruby-ivar">@order_point</span> = <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">order_selected</span>(<span class="ruby-constant">Match</span>.<span class="ruby-identifier">all_seasons</span>)
-  <span class="ruby-ivar">@mot_m_players</span> = <span class="ruby-constant">Player</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:mot_m_firsts</span>,<span class="ruby-value">:mot_m_seconds</span>,<span class="ruby-value">:mot_m_thirds</span>).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>)}.<span class="ruby-identifier">reverse</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">teams</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">revs</span>
+  <span class="ruby-ivar">@mot_m_players</span> = <span class="ruby-constant">Player</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:mot_m_firsts</span>,<span class="ruby-value">:mot_m_seconds</span>,<span class="ruby-value">:mot_m_thirds</span>).<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-identifier">match_id</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-identifier">match_id</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>) <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> }.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">mot_m_total</span>(<span class="ruby-identifier">match_id</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">id</span>)}.<span class="ruby-identifier">reverse</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">teams</span>.<span class="ruby-identifier">include?</span> <span class="ruby-identifier">revs</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -425,7 +476,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 89</span>
+            <pre><span class="ruby-comment"># File app/controllers/matches_controller.rb, line 110</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@match</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">match_params</span>)

@@ -73,6 +73,10 @@
 
   <ul class="link-list" role="directory">
     
+    <li ><a href="#method-i-invite_existing_user_to_family">#invite_existing_user_to_family</a>
+    
+    <li ><a href="#method-i-invite_new_user_to_family">#invite_new_user_to_family</a>
+    
     <li ><a href="#method-i-membership_cancellation_alert">#membership_cancellation_alert</a>
     
     <li ><a href="#method-i-membership_refund_email">#membership_refund_email</a>
@@ -119,6 +123,81 @@
        </header>
 
     
+      <div id="method-i-invite_existing_user_to_family" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">invite_existing_user_to_family</span><span
+            class="method-args">(user, family, relative)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Invite existing user to join <a href="Family.html">Family</a> membership</p>
+          
+          
+
+          
+          <div class="method-source-code" id="invite_existing_user_to_family-source">
+            <pre><span class="ruby-comment"># File app/mailers/membership_mailer.rb, line 50</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">invite_existing_user_to_family</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">family</span>, <span class="ruby-identifier">relative</span>)
+  <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
+  <span class="ruby-ivar">@family</span> = <span class="ruby-identifier">family</span>
+  <span class="ruby-ivar">@relative</span> = <span class="ruby-identifier">relative</span>
+  <span class="ruby-ivar">@title</span> = <span class="ruby-node">&quot;#{@user.first_name}, #{@family.user.first_name} has invited you to join a #{@family.year} Family Membership&quot;</span>
+  <span class="ruby-identifier">mail</span>(<span class="ruby-identifier">to</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>, <span class="ruby-identifier">subject</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@title</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-invite_new_user_to_family" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">invite_new_user_to_family</span><span
+            class="method-args">(user, family, relative)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Invite email to complete account and join <a href="Family.html">Family</a>
+membership</p>
+          
+          
+
+          
+          <div class="method-source-code" id="invite_new_user_to_family-source">
+            <pre><span class="ruby-comment"># File app/mailers/membership_mailer.rb, line 59</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">invite_new_user_to_family</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">family</span>, <span class="ruby-identifier">relative</span>)
+  <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
+  <span class="ruby-ivar">@family</span> = <span class="ruby-identifier">family</span>
+  <span class="ruby-ivar">@relative</span> = <span class="ruby-identifier">relative</span>
+  <span class="ruby-ivar">@title</span> = <span class="ruby-node">&quot;#{@family.user.first_name} has invited you to join a #{@family.year} Midnight Riders Family Membership&quot;</span>
+  <span class="ruby-identifier">mail</span>(<span class="ruby-identifier">to</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@user</span>.<span class="ruby-identifier">email</span>, <span class="ruby-identifier">subject</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@title</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
       <div id="method-i-membership_cancellation_alert" class="method-detail ">
         
         <div class="method-heading">
@@ -142,7 +221,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">membership_cancellation_alert</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">membership</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
   <span class="ruby-ivar">@membership</span> = <span class="ruby-identifier">membership</span>
-  <span class="ruby-ivar">@title</span> = <span class="ruby-node">&quot;#{@membership.year} #{@membership.type} Membership Refunded for #{@user.first_name} #{@user.last_name}&quot;</span>
+  <span class="ruby-ivar">@title</span> = <span class="ruby-node">&quot;[MemberPortalAlert] #{@membership.year} #{@membership.type} Membership Refunded for #{@user.first_name} #{@user.last_name}&quot;</span>
   <span class="ruby-identifier">mail</span>(<span class="ruby-identifier">to</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Membership Chair&lt;membership@midnightriders.com&gt;,President&lt;president@midnightriders.com&gt;,Web Chair&lt;webczar@midnightriders.com&gt;&#39;</span>, <span class="ruby-identifier">subject</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@title</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -250,7 +329,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new_membership_alert</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">membership</span>)
   <span class="ruby-ivar">@user</span> = <span class="ruby-identifier">user</span>
   <span class="ruby-ivar">@membership</span> = <span class="ruby-identifier">membership</span>
-  <span class="ruby-ivar">@title</span> = <span class="ruby-node">&quot;New #{@membership.year} #{@membership.type} Membership for #{@user.first_name} #{@user.last_name}&quot;</span>
+  <span class="ruby-ivar">@title</span> = <span class="ruby-node">&quot;[MemberPortalAlert] New #{@membership.year} #{@membership.type} Membership for #{@user.first_name} #{@user.last_name}&quot;</span>
   <span class="ruby-identifier">mail</span>(<span class="ruby-identifier">to</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Membership Chair&lt;membership@midnightriders.com&gt;,President&lt;president@midnightriders.com&gt;,Web Chair&lt;webczar@midnightriders.com&gt;&#39;</span>, <span class="ruby-identifier">subject</span><span class="ruby-operator">:</span> <span class="ruby-ivar">@title</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>

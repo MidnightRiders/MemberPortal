@@ -138,7 +138,7 @@
 
           
           <div class="method-source-code" id="contact-source">
-            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 20</span>
+            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 18</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">contact</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -170,7 +170,7 @@
 
           
           <div class="method-source-code" id="faq-source">
-            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 14</span>
+            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">faq</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -235,10 +235,11 @@
 
           
           <div class="method-source-code" id="standings-source">
-            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 24</span>
+            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 22</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">standings</span>
-  <span class="ruby-ivar">@rev_guess_standings</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">rev_guess_scores</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;(SELECT COUNT(*) FROM rev_guesses WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL) &gt; 0&#39;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;rev_guesses_score DESC, rev_guesses_count ASC, username ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:rev_guess_p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>)
-  <span class="ruby-ivar">@pick_em_standings</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">pick_em_scores</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;(SELECT COUNT(*) FROM pick_ems WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL) &gt; 0&#39;</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;correct_pick_ems DESC, total_pick_ems ASC, username ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pick_em_p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>)
+  <span class="ruby-ivar">@season</span> = <span class="ruby-identifier">params</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value">:season</span>, <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>)
+  <span class="ruby-ivar">@rev_guess_standings</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">rev_guess_scores</span>(<span class="ruby-ivar">@season</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;(SELECT COUNT(*) FROM rev_guesses LEFT JOIN matches ON rev_guesses.match_id = matches.id WHERE rev_guesses.user_id = users.id AND EXTRACT(YEAR FROM matches.kickoff)=? AND rev_guesses.score IS NOT NULL) &gt; 0&#39;</span>, <span class="ruby-ivar">@season</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;rev_guesses_score DESC, rev_guesses_count ASC, username ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:rev_guess_p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>)
+  <span class="ruby-ivar">@pick_em_standings</span> = <span class="ruby-constant">User</span>.<span class="ruby-identifier">pick_em_scores</span>(<span class="ruby-ivar">@season</span>).<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;(SELECT COUNT(*) FROM pick_ems LEFT JOIN matches ON pick_ems.match_id = matches.id WHERE pick_ems.user_id = users.id AND EXTRACT(YEAR FROM matches.kickoff)=? AND pick_ems.correct IS NOT NULL) &gt; 0&#39;</span>, <span class="ruby-ivar">@season</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;correct_pick_ems DESC, total_pick_ems ASC, username ASC&#39;</span>).<span class="ruby-identifier">paginate</span>(<span class="ruby-identifier">page</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:pick_em_p</span>], <span class="ruby-identifier">per_page</span><span class="ruby-operator">:</span> <span class="ruby-value">25</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -269,7 +270,7 @@
 
           
           <div class="method-source-code" id="transactions-source">
-            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 30</span>
+            <pre><span class="ruby-comment"># File app/controllers/static_pages_controller.rb, line 29</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">transactions</span>
   <span class="ruby-identifier">view</span> = <span class="ruby-string">&#39;memberships&#39;</span>
   <span class="ruby-keyword">case</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:view</span>]

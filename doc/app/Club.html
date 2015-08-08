@@ -73,6 +73,8 @@
 
   <ul class="link-list" role="directory">
     
+    <li ><a href="#method-c-standings">::standings</a>
+    
     <li ><a href="#method-i-dark_compliment">#dark_compliment</a>
     
     <li ><a href="#method-i-draws">#draws</a>
@@ -154,6 +156,66 @@ they&#39;re stored in this constant.</p>
     
 
     
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-standings" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">standings</span><span
+            class="method-args">(options = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Hacky function that&#39;s not really production-ready (too database-heavy)
+but will get standings of clubs for use in console etc at least.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="standings-source">
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 54</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">standings</span>(<span class="ruby-identifier">options</span> = {})
+  <span class="ruby-identifier">opts</span> = {
+    <span class="ruby-identifier">float</span><span class="ruby-operator">:</span> <span class="ruby-value">2</span>,
+    <span class="ruby-identifier">format</span><span class="ruby-operator">:</span> <span class="ruby-value">:raw</span>
+  }.<span class="ruby-identifier">deep_merge</span>(<span class="ruby-identifier">options</span>)
+  <span class="ruby-identifier">clubs</span> = <span class="ruby-constant">Club</span>.<span class="ruby-identifier">includes</span>(<span class="ruby-value">:home_matches</span>, <span class="ruby-value">:away_matches</span>).<span class="ruby-identifier">where</span>.<span class="ruby-identifier">not</span>(<span class="ruby-identifier">matches</span><span class="ruby-operator">:</span> { <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-keyword">nil</span> }).<span class="ruby-identifier">map</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">c</span>.<span class="ruby-identifier">attributes</span>.<span class="ruby-identifier">symbolize_keys</span>.<span class="ruby-identifier">merge</span>({
+      <span class="ruby-identifier">wins</span><span class="ruby-operator">:</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">wins</span>.<span class="ruby-identifier">size</span>,
+      <span class="ruby-identifier">draws</span><span class="ruby-operator">:</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">draws</span>.<span class="ruby-identifier">size</span>,
+      <span class="ruby-identifier">losses</span><span class="ruby-operator">:</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">losses</span>.<span class="ruby-identifier">size</span>,
+      <span class="ruby-identifier">points</span><span class="ruby-operator">:</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">wins</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">*</span> <span class="ruby-value">3</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">draws</span>.<span class="ruby-identifier">size</span>,
+      <span class="ruby-identifier">ppg</span><span class="ruby-operator">:</span> ((<span class="ruby-identifier">c</span>.<span class="ruby-identifier">wins</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">*</span> <span class="ruby-value">3</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">c</span>.<span class="ruby-identifier">draws</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">to_f</span><span class="ruby-operator">/</span>(<span class="ruby-identifier">c</span>.<span class="ruby-identifier">matches</span>.<span class="ruby-identifier">completed</span>.<span class="ruby-identifier">size</span>)).<span class="ruby-identifier">round</span>(<span class="ruby-identifier">opts</span>[<span class="ruby-value">:float</span>])
+    })
+  }.<span class="ruby-identifier">sort_by</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">c</span>[<span class="ruby-value">:points</span>], <span class="ruby-identifier">c</span>[<span class="ruby-value">:ppg</span>]] }.<span class="ruby-identifier">reverse</span>
+  <span class="ruby-keyword">case</span> <span class="ruby-identifier">opts</span>[<span class="ruby-value">:format</span>]
+    <span class="ruby-keyword">when</span> <span class="ruby-value">:text</span>
+      <span class="ruby-identifier">clubs</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;#{c[:abbrv]} | #{c[:points]} | #{c[:ppg]} | #{c[:wins]} | #{c[:draws]} | #{c[:losses]}&quot;</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-string">&quot;\n&quot;</span>)
+    <span class="ruby-keyword">else</span>
+      <span class="ruby-identifier">clubs</span>
+  <span class="ruby-keyword">end</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
      <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
        <header>
          <h3>Public Instance Methods</h3>
@@ -180,7 +242,7 @@ they&#39;re stored in this constant.</p>
 
           
           <div class="method-source-code" id="dark_compliment-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 110</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 134</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">dark_compliment</span>
   <span class="ruby-identifier">secondary_color</span> <span class="ruby-operator">==</span> <span class="ruby-string">&#39;ffffff&#39;</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">accent_color</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">secondary_color</span>
 <span class="ruby-keyword">end</span></pre>
@@ -214,7 +276,7 @@ drawn.</p>
 
           
           <div class="method-source-code" id="draws-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 90</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 114</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">draws</span>
   <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-value">:draw</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -247,7 +309,7 @@ drawn.</p>
 
           
           <div class="method-source-code" id="last_match-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 75</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 99</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">last_match</span>
   <span class="ruby-identifier">previous_matches</span>(<span class="ruby-value">1</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -281,7 +343,7 @@ lost.</p>
 
           
           <div class="method-source-code" id="losses-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 85</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 109</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">losses</span>
   <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">loser</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span> }
 <span class="ruby-keyword">end</span></pre>
@@ -314,7 +376,7 @@ lost.</p>
 
           
           <div class="method-source-code" id="matches-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 53</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 77</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">matches</span>
   <span class="ruby-constant">Match</span>.<span class="ruby-identifier">with_clubs</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;home_team_id = :id OR away_team_id = :id&#39;</span>, <span class="ruby-identifier">id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">id</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:asc</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -347,7 +409,7 @@ lost.</p>
 
           
           <div class="method-source-code" id="next_match-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 70</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 94</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">next_match</span>
   <span class="ruby-identifier">next_matches</span>(<span class="ruby-value">1</span>)
 <span class="ruby-keyword">end</span></pre>
@@ -382,7 +444,7 @@ lost.</p>
 
           
           <div class="method-source-code" id="next_matches-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 64</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 88</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">next_matches</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>,<span class="ruby-identifier">time</span>=<span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>)
   <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &gt;= :time&#39;</span>, <span class="ruby-identifier">time</span><span class="ruby-operator">:</span> <span class="ruby-identifier">time</span>)
   <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">n</span>)
@@ -418,7 +480,7 @@ lost.</p>
 
           
           <div class="method-source-code" id="previous_matches-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 58</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 82</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">previous_matches</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>,<span class="ruby-identifier">time</span>=<span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>)
   <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt; :time&#39;</span>, <span class="ruby-identifier">time</span><span class="ruby-operator">:</span> <span class="ruby-identifier">time</span>).<span class="ruby-identifier">reorder</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:desc</span>)
   <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span>(<span class="ruby-identifier">n</span>)
@@ -452,7 +514,7 @@ lost.</p>
 
           
           <div class="method-source-code" id="record-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 95</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 119</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">record</span>
   <span class="ruby-node">&quot;#{wins.size}-#{losses.size}-#{draws.size}&quot;</span>
 <span class="ruby-keyword">end</span></pre>
@@ -486,7 +548,7 @@ won.</p>
 
           
           <div class="method-source-code" id="wins-source">
-            <pre><span class="ruby-comment"># File app/models/club.rb, line 80</span>
+            <pre><span class="ruby-comment"># File app/models/club.rb, line 104</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">wins</span>
   <span class="ruby-identifier">matches</span>.<span class="ruby-identifier">select</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">winner</span> <span class="ruby-operator">==</span> <span class="ruby-keyword">self</span> }
 <span class="ruby-keyword">end</span></pre>

@@ -144,7 +144,7 @@
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">admin_controls</span>
   <span class="ruby-identifier">h</span>.<span class="ruby-identifier">capture</span> <span class="ruby-keyword">do</span>
     <span class="ruby-identifier">h</span>.<span class="ruby-identifier">concat</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;pencil fa-fw&#39;</span>), <span class="ruby-identifier">h</span>.<span class="ruby-identifier">edit_match_path</span>(<span class="ruby-identifier">model</span>), <span class="ruby-identifier">title</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Edit&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">can?</span> <span class="ruby-value">:edit</span>, <span class="ruby-identifier">model</span>
-    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">concat</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;trash-o fa-fw&#39;</span>),  <span class="ruby-identifier">model</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-value">:delete</span>, <span class="ruby-identifier">data</span><span class="ruby-operator">:</span> { <span class="ruby-value">:confirm</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;Are you sure?&#39;</span> }, <span class="ruby-identifier">title</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Destroy&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">can?</span> <span class="ruby-value">:destroy</span>, <span class="ruby-identifier">model</span>
+    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">concat</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">link_to</span>(<span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;trash-o fa-fw&#39;</span>),  <span class="ruby-identifier">model</span>, <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-value">:delete</span>, <span class="ruby-identifier">data</span><span class="ruby-operator">:</span> { <span class="ruby-identifier">confirm</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Are you sure?&#39;</span> }, <span class="ruby-identifier">title</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;Destroy&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">can?</span> <span class="ruby-value">:destroy</span>, <span class="ruby-identifier">model</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
@@ -161,7 +161,7 @@
         
         <div class="method-heading">
           <span class="method-name">mot_m_button</span><span
-            class="method-args">(size='tiny', o = false)</span>
+            class="method-args">(size='small', o = false)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -179,7 +179,7 @@ opponent) is true, the button includes match opponent information.</p>
           
           <div class="method-source-code" id="mot_m_button-source">
             <pre><span class="ruby-comment"># File app/decorators/match_decorator.rb, line 18</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">mot_m_button</span>(<span class="ruby-identifier">size</span>=<span class="ruby-string">&#39;tiny&#39;</span>, <span class="ruby-identifier">o</span> = <span class="ruby-keyword">false</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">mot_m_button</span>(<span class="ruby-identifier">size</span>=<span class="ruby-string">&#39;small&#39;</span>, <span class="ruby-identifier">o</span> = <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">h</span>.<span class="ruby-identifier">link_to</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">mot_m_path_for</span>(<span class="ruby-identifier">model</span>), <span class="ruby-identifier">class</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;button secondary #{size}&quot;</span> <span class="ruby-keyword">do</span>
     <span class="ruby-identifier">opp</span> = <span class="ruby-identifier">o</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">opponent</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>
     <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;list-ol fa-fw&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39; MotM&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">opp</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;check fa-fw&#39;</span>) <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">mot_m_for</span>(<span class="ruby-identifier">model</span>))
@@ -245,9 +245,9 @@ There used to be more options.</pre>
     <span class="ruby-identifier">h</span>.<span class="ruby-identifier">link_to</span>(
       <span class="ruby-identifier">content</span>,
       <span class="ruby-identifier">h</span>.<span class="ruby-identifier">vote_match_pick_ems_path</span>(<span class="ruby-identifier">model</span>),
-      <span class="ruby-identifier">remote</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>,
-      <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-value">:post</span>,
       <span class="ruby-identifier">data</span><span class="ruby-operator">:</span> {
+        <span class="ruby-identifier">remote</span><span class="ruby-operator">:</span> <span class="ruby-keyword">true</span>,
+        <span class="ruby-identifier">method</span><span class="ruby-operator">:</span> <span class="ruby-value">:post</span>,
         <span class="ruby-identifier">params</span><span class="ruby-operator">:</span> {
           <span class="ruby-identifier">pick_em</span><span class="ruby-operator">:</span> {
             <span class="ruby-identifier">user_id</span><span class="ruby-operator">:</span> <span class="ruby-identifier">user</span>.<span class="ruby-identifier">id</span>,
@@ -349,7 +349,7 @@ buttons - team records and optional admin controls.</p>
         
         <div class="method-heading">
           <span class="method-name">rev_guess_button</span><span
-            class="method-args">(size='tiny', o = false)</span>
+            class="method-args">(size='small', o = false)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -359,15 +359,15 @@ buttons - team records and optional admin controls.</p>
         <div class="method-description">
           
           <p>Returns <code>a.button.secondary</code> for <code>RevGuess</code> for given
-match. <code>size</code> defaults to &#39;tiny&#39;. If <code>o</code> (for
-opponent) is true, the button includes match opponent information.</p>
+match. <code>size</code> defaults to &#39;small&#39;. If <code>o</code>
+(for opponent) is true, the button includes match opponent information.</p>
           
           
 
           
           <div class="method-source-code" id="rev_guess_button-source">
             <pre><span class="ruby-comment"># File app/decorators/match_decorator.rb, line 8</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">rev_guess_button</span>(<span class="ruby-identifier">size</span>=<span class="ruby-string">&#39;tiny&#39;</span>, <span class="ruby-identifier">o</span> = <span class="ruby-keyword">false</span>)
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">rev_guess_button</span>(<span class="ruby-identifier">size</span>=<span class="ruby-string">&#39;small&#39;</span>, <span class="ruby-identifier">o</span> = <span class="ruby-keyword">false</span>)
   <span class="ruby-identifier">h</span>.<span class="ruby-identifier">link_to</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">rev_guess_path_for</span>(<span class="ruby-identifier">model</span>), <span class="ruby-identifier">class</span><span class="ruby-operator">:</span> <span class="ruby-node">&quot;button secondary #{size}&quot;</span> <span class="ruby-keyword">do</span>
     <span class="ruby-identifier">opp</span> = <span class="ruby-identifier">o</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">opponent</span> <span class="ruby-operator">:</span> <span class="ruby-string">&#39;&#39;</span>
     <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;question fa-fw&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39; RevGuess&#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">opp</span> <span class="ruby-operator">+</span> (<span class="ruby-node">&quot;: #{h.rev_guess_for(model)}&quot;</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">rev_guess_for</span>(<span class="ruby-identifier">model</span>))
