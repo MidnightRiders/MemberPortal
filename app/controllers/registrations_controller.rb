@@ -1,6 +1,15 @@
 # Controller for Devise Registrations.
 class RegistrationsController < Devise::RegistrationsController
 
+  def new
+    build_resource({ email: params[:email] })
+    @validatable = devise_mapping.validatable?
+    if @validatable
+      @minimum_password_length = resource_class.password_length.min
+    end
+    respond_with self.resource
+  end
+
   # Supercedes Devise +update+ method to allow editing of other users if admin.
   # def update
   #   account_update_params = devise_parameter_sanitizer.sanitize(:account_update)
@@ -26,6 +35,10 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
     def after_sign_up_path_for(resource)
-      new_user_membership_path(resource)
+      if Membership.with_invited_email(resource.email).present?
+        user_home_path
+      else
+        new_user_membership_path(resource)
+      end
     end
 end

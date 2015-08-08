@@ -2,16 +2,18 @@
 
 = render partial: 'users/update_prompt'
 
-= render 'register_now', user: current_user unless current_user.current_member?
+= render 'register_now', user: current_user unless current_user.current_member? || current_user.has_family_invitation?
+
+= render 'accept_family_invitation', user: current_user if current_user.has_family_invitation?
 
 .row
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
-    - if current_user.current_member? && Time.current < '2015-03-21 15:00:00 -0500'.to_time
-      = link_to download_path('20150321-parking-pass.pdf'), class: 'button large expand' do
-        = icon 'car fa-fw'
-        Download Temporary Parking Pass
+    - if current_user.current_member? && current_user.current_membership.is_a?(Family)
+      = link_to user_membership_path(current_user, current_user.current_membership), class: 'button large expand' do
+        = icon 'users fa-fw'
+        Manage Family Membership
     = render 'static_pages/events', events: @events
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 

@@ -135,7 +135,7 @@ updated_at :datetime</pre>
         
         <div class="method-heading">
           <span class="method-name">score</span><span
-            class="method-args">()</span>
+            class="method-args">(season = Date.current.year)</span>
           
           <span class="method-click-advice">click to toggle source</span>
           
@@ -150,9 +150,9 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="score-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 51</span>
-<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">score</span>
-  <span class="ruby-identifier">sum</span>(<span class="ruby-value">:score</span>)
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 56</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">score</span>(<span class="ruby-identifier">season</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">current</span>.<span class="ruby-identifier">year</span>)
+  <span class="ruby-identifier">joins</span>(<span class="ruby-value">:match</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">matches</span><span class="ruby-operator">:</span> { <span class="ruby-identifier">season</span><span class="ruby-operator">:</span> <span class="ruby-identifier">season</span> }).<span class="ruby-identifier">sum</span>(<span class="ruby-value">:score</span>)
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -191,7 +191,7 @@ updated_at :datetime</pre>
 
           
           <div class="method-source-code" id="is_revs_match-source">
-            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 56</span>
+            <pre><span class="ruby-comment"># File app/models/rev_guess.rb, line 51</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">is_revs_match</span>
   <span class="ruby-identifier">errors</span>.<span class="ruby-identifier">add</span>(<span class="ruby-value">:match_id</span>, <span class="ruby-string">&#39;is not a Revolution match&#39;</span>) <span class="ruby-keyword">unless</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">teams</span>.<span class="ruby-identifier">map</span>(<span class="ruby-operator">&amp;</span><span class="ruby-value">:abbrv</span>).<span class="ruby-identifier">include?</span> <span class="ruby-string">&#39;NE&#39;</span>
 <span class="ruby-keyword">end</span></pre>

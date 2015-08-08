@@ -79,11 +79,7 @@
     
     <li ><a href="#method-i-edit">#edit</a>
     
-    <li ><a href="#method-i-index">#index</a>
-    
     <li ><a href="#method-i-new">#new</a>
-    
-    <li ><a href="#method-i-show">#show</a>
     
     <li ><a href="#method-i-update">#update</a>
     
@@ -142,7 +138,7 @@
 
           
           <div class="method-source-code" id="create-source">
-            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 28</span>
+            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 17</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">create</span>
   <span class="ruby-ivar">@rev_guess</span> = <span class="ruby-constant">RevGuess</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">rev_guess_params</span>)
 
@@ -185,7 +181,7 @@
 
           
           <div class="method-source-code" id="destroy-source">
-            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 58</span>
+            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 47</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">destroy</span>
   <span class="ruby-ivar">@rev_guess</span>.<span class="ruby-identifier">destroy</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
@@ -222,41 +218,8 @@
 
           
           <div class="method-source-code" id="edit-source">
-            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 23</span>
+            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 12</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">edit</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-index" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">index</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>GET /rev_guesses GET /rev_guesses.json</p>
-          
-          
-
-          
-          <div class="method-source-code" id="index-source">
-            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 8</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">index</span>
-  <span class="ruby-ivar">@rev_guesses</span> = <span class="ruby-constant">RevGuess</span>.<span class="ruby-identifier">all</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -287,41 +250,9 @@
 
           
           <div class="method-source-code" id="new-source">
-            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 18</span>
+            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 7</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
   <span class="ruby-ivar">@rev_guess</span> = <span class="ruby-constant">RevGuess</span>.<span class="ruby-identifier">new</span>
-<span class="ruby-keyword">end</span></pre>
-          </div>
-          
-        </div>
-
-        
-
-        
-      </div>
-
-    
-      <div id="method-i-show" class="method-detail ">
-        
-        <div class="method-heading">
-          <span class="method-name">show</span><span
-            class="method-args">()</span>
-          
-          <span class="method-click-advice">click to toggle source</span>
-          
-        </div>
-        
-
-        <div class="method-description">
-          
-          <p>GET /rev_guesses/1 GET /rev_guesses/1.json</p>
-          
-          
-
-          
-          <div class="method-source-code" id="show-source">
-            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 14</span>
-<span class="ruby-keyword">def</span> <span class="ruby-identifier">show</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
@@ -352,7 +283,7 @@
 
           
           <div class="method-source-code" id="update-source">
-            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 44</span>
+            <pre><span class="ruby-comment"># File app/controllers/rev_guesses_controller.rb, line 33</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>
   <span class="ruby-identifier">respond_to</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">format</span><span class="ruby-operator">|</span>
     <span class="ruby-keyword">if</span> <span class="ruby-ivar">@rev_guess</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">rev_guess_params</span>)

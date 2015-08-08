@@ -75,6 +75,8 @@
     
     <li ><a href="#method-i-after_sign_up_path_for">#after_sign_up_path_for</a>
     
+    <li ><a href="#method-i-new">#new</a>
+    
   </ul>
 </div>
 
@@ -105,6 +107,52 @@
     
 
     
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 4</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">new</span>
+  <span class="ruby-identifier">build_resource</span>({ <span class="ruby-identifier">email</span><span class="ruby-operator">:</span> <span class="ruby-identifier">params</span>[<span class="ruby-value">:email</span>] })
+  <span class="ruby-ivar">@validatable</span> = <span class="ruby-identifier">devise_mapping</span>.<span class="ruby-identifier">validatable?</span>
+  <span class="ruby-keyword">if</span> <span class="ruby-ivar">@validatable</span>
+    <span class="ruby-ivar">@minimum_password_length</span> = <span class="ruby-identifier">resource_class</span>.<span class="ruby-identifier">password_length</span>.<span class="ruby-identifier">min</span>
+  <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">respond_with</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">resource</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
      <section id="protected-instance-5Buntitled-5D-method-details" class="method-section">
        <header>
          <h3>Protected Instance Methods</h3>
@@ -153,9 +201,13 @@ users if admin. def update</p>
 
           
           <div class="method-source-code" id="after_sign_up_path_for-source">
-            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 28</span>
+            <pre><span class="ruby-comment"># File app/controllers/registrations_controller.rb, line 37</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">after_sign_up_path_for</span>(<span class="ruby-identifier">resource</span>)
-  <span class="ruby-identifier">new_user_membership_path</span>(<span class="ruby-identifier">resource</span>)
+  <span class="ruby-keyword">if</span> <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">with_invited_email</span>(<span class="ruby-identifier">resource</span>.<span class="ruby-identifier">email</span>).<span class="ruby-identifier">present?</span>
+    <span class="ruby-identifier">user_home_path</span>
+  <span class="ruby-keyword">else</span>
+    <span class="ruby-identifier">new_user_membership_path</span>(<span class="ruby-identifier">resource</span>)
+  <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
           
