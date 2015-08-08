@@ -21,11 +21,9 @@ class RelativesController < ApplicationController
       redirect_to new_user_membership_relative_path(@family.user, @family), flash: { error: 'There is already a user with a current membership for that email.' }
     else
       if Devise::email_regexp =~ @relative_user.email
-        new_user = @relative_user.persisted?
-        @relative_user.save(validate: false) unless new_user
-        @relative = @relative_user.memberships.new(type: 'Relative', year: @family.year, family_id: @family.id, info: { pending_approval: true })
+        @relative = Relative.new(year: @family.year, family_id: @family.id, info: { pending_approval: true, invited_email: @relative_user.email })
         @relative.save(validate: false)
-        if new_user
+        if @relative_user.persisted?
           MembershipMailer.invite_existing_user_to_family(@relative_user, @family, @relative).deliver
         else
           MembershipMailer.invite_new_user_to_family(@relative_user, @family, @relative).deliver
@@ -41,7 +39,7 @@ class RelativesController < ApplicationController
   # POST /users/:username/memberships/relatives/1/accept_invitation
   def accept_invitation
     if @relative.pending_approval
-      if @relative.update_attribute(:info, @relative.info.with_indifferent_access.except(:pending_approval))
+      if (@relative_user = User.find_by(email: @relative.invited_email)).present? && @relative.update_attributes(user_id: @relative_user.id, info: @relative.info.with_indifferent_access.except(:pending_approval, :invited_email))
         redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
       else
         redirect_to user_home_path, flash: { error: @relative.errors.to_sentence }
@@ -55,19 +53,17 @@ class RelativesController < ApplicationController
   # DELETE /users/memberships/relatives/1.json
   def destroy
     @relative_user = @relative.user
-    pending_approval = @relative.pending_approval
+    name = @relative_user.present? ? "#{@relative_user.first_name} #{@relative_user.last_name}" : @relative.invited_email
     @relative.destroy
-    name = pending_approval || !@relative_user.valid? ? @relative_user.email : "#{@relative_user.first_name} #{@relative_user.last_name}"
-    @relative_user.destroy if pending_approval && !@relative_user.valid? && @relative_user.memberships.reload.empty?
-    unless current_user.in? [ @user, @relative_user ]
+    unless current_user.in? [ @user, @relative_user ].reject(&:nil?)
       Rails.logger.info "current_user: #{current_user}\n@user: #{@user}\n@relative_user: #{@relative_user}"
       raise 'current_user is neither @user nor @relative'
     end
     respond_to do |format|
       format.html do
-        if current_user == @relative_user
+        if @relative_user.present? && current_user == @relative_user
           redirect_to user_home_path(@relative_user), flash: { success: "Your Relative membership with #{@user.first_name} #{@user.last_name} has been destroyed."}
-        else current_user == @user
+        else
           redirect_to user_membership_path(@user, @family), flash: { success: "#{name} was successfully removed from your membership." }
         end
       end

@@ -27,7 +27,8 @@ class Membership < ActiveRecord::Base
                   stripe_subscription_id: :string,
                   stripe_charge_id: :string,
                   override: :integer,
-                  pending_approval: :boolean
+                  pending_approval: :boolean,
+                  invited_email: :string
 
   belongs_to :user
 
