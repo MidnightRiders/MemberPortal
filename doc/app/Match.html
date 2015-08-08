@@ -182,7 +182,7 @@ uid          :string(255)</pre>
           <div class="method-source-code" id="next-source">
             <pre><span class="ruby-comment"># File app/models/match.rb, line 157</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-keyword">next</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>)
-  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">upcoming</span>.<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff DESC&#39;</span>)
+  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">upcoming</span>.<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:desc</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span><span class="ruby-operator">==</span><span class="ruby-value">1</span>
     <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span>
   <span class="ruby-keyword">else</span>
@@ -222,7 +222,7 @@ uid          :string(255)</pre>
           <div class="method-source-code" id="previous-source">
             <pre><span class="ruby-comment"># File app/models/match.rb, line 146</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">previous</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">1</span>)
-  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt; ?&#39;</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">order</span>(<span class="ruby-string">&#39;kickoff DESC&#39;</span>)
+  <span class="ruby-identifier">ms</span> = <span class="ruby-identifier">where</span>(<span class="ruby-string">&#39;kickoff &lt; ?&#39;</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">current</span>).<span class="ruby-identifier">order</span>(<span class="ruby-identifier">kickoff</span><span class="ruby-operator">:</span> <span class="ruby-value">:desc</span>)
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">n</span><span class="ruby-operator">==</span><span class="ruby-value">1</span>
     <span class="ruby-identifier">ms</span>.<span class="ruby-identifier">first</span>
   <span class="ruby-keyword">else</span>
@@ -266,7 +266,7 @@ uid          :string(255)</pre>
 
           
           <div class="method-source-code" id="check_for_season-source">
-            <pre><span class="ruby-comment"># File app/models/match.rb, line 185</span>
+            <pre><span class="ruby-comment"># File app/models/match.rb, line 183</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">check_for_season</span>
   <span class="ruby-identifier">season</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">kickoff</span>.<span class="ruby-identifier">year</span>
 <span class="ruby-keyword">end</span></pre>
@@ -554,15 +554,13 @@ away_team ]</code></p>
           <div class="method-source-code" id="update_games-source">
             <pre><span class="ruby-comment"># File app/models/match.rb, line 168</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">update_games</span>
-  <span class="ruby-keyword">unless</span> <span class="ruby-identifier">rev_guesses</span>.<span class="ruby-identifier">empty?</span>
-    <span class="ruby-identifier">rev_guesses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rg</span><span class="ruby-operator">|</span>
-      <span class="ruby-identifier">sum</span> = <span class="ruby-value">0</span>
-      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">2</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">result</span>
-      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">home_goals</span>
-      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">away_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">away_goals</span>
-      <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">rg</span>.<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">away_goals</span>) <span class="ruby-operator">==</span> (<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">away_goals</span>)
-      <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:score</span>, <span class="ruby-identifier">sum</span>)
-    <span class="ruby-keyword">end</span>
+  <span class="ruby-identifier">rev_guesses</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">rg</span><span class="ruby-operator">|</span>
+    <span class="ruby-identifier">sum</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">2</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">result</span>
+    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">home_goals</span>
+    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">away_goals</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">away_goals</span>
+    <span class="ruby-identifier">sum</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> <span class="ruby-keyword">if</span> (<span class="ruby-identifier">rg</span>.<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">away_goals</span>) <span class="ruby-operator">==</span> (<span class="ruby-identifier">home_goals</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">away_goals</span>)
+    <span class="ruby-identifier">rg</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:score</span>, <span class="ruby-identifier">sum</span>)
   <span class="ruby-keyword">end</span>
   <span class="ruby-identifier">pick_ems</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">p</span>.<span class="ruby-identifier">update_attribute</span>(<span class="ruby-value">:correct</span>, <span class="ruby-identifier">p</span>.<span class="ruby-identifier">result</span> <span class="ruby-operator">==</span> <span class="ruby-constant">PickEm</span><span class="ruby-operator">::</span><span class="ruby-constant">RESULTS</span>[<span class="ruby-identifier">result</span>])
