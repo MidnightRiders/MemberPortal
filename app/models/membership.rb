@@ -34,6 +34,7 @@ class Membership < ActiveRecord::Base
 
   default_scope -> { where(refunded: nil).order(year: :asc) }
   scope :refunds, -> { unscoped.where.not(refunded: nil).order(year: :asc) }
+  scope :current, -> { includes(:user).where(year: Date.current.year).where.not(users: { id: nil }) }
 
   before_validation :remove_blank_privileges
 
