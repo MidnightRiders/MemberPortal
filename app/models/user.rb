@@ -71,6 +71,9 @@ class User < ActiveRecord::Base
   has_many :mot_ms
   has_many :rev_guesses
   has_many :pick_ems
+  has_many :discussions
+  has_many :comments
+  has_many :votes
 
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false
