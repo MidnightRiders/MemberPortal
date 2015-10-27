@@ -5,6 +5,8 @@ class Comment < ActiveRecord::Base
   has_many :comments
   has_many :votes, as: :post
 
+  has_paper_trail on: [ :update ], only: [ :content ]
+
   validates_associated :user
   validate :has_parent
 
