@@ -1,0 +1,4 @@
+%li
+  .score= render 'shared/votes', obj: discussion
+  = link_to discussion.title, discussion
+  = render 'actions', discussion: discussion

@@ -1,0 +1,12 @@
+.discussion
+  = render 'shared/votes', obj: @discussion
+  %h3
+    = @discussion.title
+  .content!= MD_RENDERER.render @discussion.content
+  %small.actions
+    = render 'actions', discussion: @discussion
+    = link_to new_discussion_comment_path(@discussion) do
+      %i.fa.fa-plus.fa-fw
+      Add Comment
+  %hr
+  %ul.comments= render @discussion.comments, discussion: @discussion

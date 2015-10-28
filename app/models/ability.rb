@@ -64,6 +64,8 @@ class Ability
           cannot :refund, Membership
           cannot :grant_privileges, Membership
         end
+        can :manage, [ user.discussions, user.comments, user.votes ]
+        can :create, Vote, user_id: user.id
         can :standings, :static_page
         can :show, user.current_membership
         cannot :cancel_subscription, Membership

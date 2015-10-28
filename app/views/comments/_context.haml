@@ -1,0 +1,8 @@
+%blockquote
+  - if comment.parent.is_a? Discussion
+    .discussion
+      %h4= comment.parent.title
+      .content= comment.parent.content
+  - elsif comment.parent.is_a? Comment
+    .comment
+      = comment.parent.content

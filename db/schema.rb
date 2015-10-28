@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151027032551) do
+ActiveRecord::Schema.define(version: 20151027223029) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,16 @@ ActiveRecord::Schema.define(version: 20151027032551) do
 
   add_index "players", ["club_id"], name: "index_players_on_club_id", using: :btree
 
+  create_table "post_views", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "post_id"
+    t.string   "post_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "post_views", ["user_id", "post_id", "post_type"], name: "index_post_views_on_user_id_and_post_id_and_post_type", unique: true, using: :btree
+
   create_table "rev_guesses", force: true do |t|
     t.integer  "match_id"
     t.integer  "user_id"
@@ -205,7 +215,6 @@ ActiveRecord::Schema.define(version: 20151027032551) do
     t.datetime "updated_at"
   end
 
-  add_index "votes", ["post_id", "post_type"], name: "index_votes_on_post_id_and_post_type", unique: true, using: :btree
-  add_index "votes", ["user_id"], name: "index_votes_on_user_id", using: :btree
+  add_index "votes", ["user_id", "post_id", "post_type"], name: "index_votes_on_user_id_and_post_id_and_post_type", unique: true, using: :btree
 
 end

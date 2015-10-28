@@ -22,18 +22,18 @@
 en:
   activerecord:
     models:
-      mot_m:
-        one: Man of the Match vote
-        other: Man of the Match votes
-      rev_guess:
-        one: RevGuess
-        other: RevGuesses
+      mot_m: Man of the Match vote
+      rev_guess: RevGuess
 
     attributes:
       club:
         abbrv: Abbreviation
       membership:
         type: Membership Type
+      discussion:
+        title: Thread Title
+      comment:
+        content: Comment
   unauthorized:
     manage:
-      all: This user is not authorized to perform that action.
+      all: 'This user is not authorized to perform that action.'

@@ -1,0 +1,12 @@
+= link_to new_discussion_path, class: 'button small right' do
+  %i.fa.fa-plus.fa-fw
+  New Thread
+
+%h1 Discussions
+
+- if @discussions.empty?
+  .alert-box
+    %h2.text-center No discussions
+- else
+  %ul.discussions= render @discussions
+

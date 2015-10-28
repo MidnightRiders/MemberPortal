@@ -1,0 +1,16 @@
+= form_for @discussion do |f|
+  .row
+    .large-4.columns
+      = f.label :title, class: 'inline'
+    .large-8.columns
+      = f.text_field :title, placeholder: Discussion.human_attribute_name(:title)
+  .row
+    .large-4.columns
+      = f.label :content, class: 'inline'
+    .large-8.columns
+      = f.text_area :content, rows: 8
+  .row.text-right
+    .column
+      %ul.button-group
+        %li= f.submit (f.object.new_record? ? 'Submit' : 'Update'), class: 'button', tabindex: 13
+        %li= link_to 'Cancel', (f.object.new_record? ? discussions_path : @discussion), class: 'button secondary'

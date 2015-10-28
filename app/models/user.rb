@@ -74,6 +74,7 @@ class User < ActiveRecord::Base
   has_many :discussions
   has_many :comments
   has_many :votes
+  has_many :post_views
 
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false

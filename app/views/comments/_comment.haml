@@ -1,0 +1,8 @@
+%li.comment
+  != MD_RENDERER.render comment.content
+  %small.actions
+    = link_to new_discussion_comment_comment_path(discussion, comment) do
+      %i.fa.fa-plus.fa-fw
+      Add Comment
+  - if comment.comments.present?
+    %ul.comments= render comment.comments, discussion: discussion

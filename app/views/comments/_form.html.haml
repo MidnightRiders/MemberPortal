@@ -1,0 +1,9 @@
+= form_for comment_context do |f|
+  .row
+    .column
+      = f.text_area :content, rows: 8, placeholder: Comment.human_attribute_name(:comment)
+  .row.text-right
+    .column
+      %ul.button-group
+        %li= f.submit (@comment.new_record? ? 'Submit' : 'Update'), class: 'button', tabindex: 13
+        %li= link_to 'Cancel', @discussion, class: 'button secondary'

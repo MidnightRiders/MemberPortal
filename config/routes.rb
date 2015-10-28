@@ -35,6 +35,12 @@ MidnightRiders::Application.routes.draw do
     end
   end
 
+  resources :discussions do
+    resources :comments, only: [ :new, :create, :edit, :update, :destroy ] do
+      resources :comments, only: [ :new, :create, :edit, :update, :destroy ], controller: 'comments'
+    end
+  end
+
   get 'downloads/:filename', to: 'downloads#show', as: :download
 
   match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: :cancel_user_membership, via: [ :put, :patch ]

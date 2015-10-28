@@ -31,6 +31,8 @@ gem 'will_paginate'
 gem 'paperclip'
 gem 'paperclip-storage-ftp'
 
+gem 'redcarpet'
+
 # Users/auth
 gem 'devise'
 gem 'cancancan'
