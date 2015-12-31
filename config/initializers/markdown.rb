@@ -1,5 +1,3 @@
-require 'html_with_user_tags'
-
 MD_RENDERER = Redcarpet::Markdown.new(
   HTMLWithUserTags.new({
     no_styles: true,

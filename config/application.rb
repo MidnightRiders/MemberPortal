@@ -30,6 +30,8 @@ module MidnightRiders
 
     config.i18n.enforce_available_locales = true
 
+    config.autoload_paths << Rails.root.join('lib')
+
     Rails.application.assets.register_mime_type 'text/html', '.html'
     Rails.application.assets.register_engine '.haml', Tilt::HamlTemplate
 

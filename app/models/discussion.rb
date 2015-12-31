@@ -1,8 +1,12 @@
 class Discussion < ActiveRecord::Base
+  include Voteable
+
   belongs_to :match
   belongs_to :user
   has_many :comments
   has_many :votes, as: :post
+
+  after_create :auto_upvote
 
   has_paper_trail on: [ :update ], only: [ :content ]
 
@@ -14,7 +18,12 @@ class Discussion < ActiveRecord::Base
       .order('EXTRACT(year FROM discussions.created_at) DESC, EXTRACT(week FROM discussions.created_at) DESC, score DESC')
   end
 
-  def score
-    self['score'] || votes.sum(:value) || 0
+  def top_level_comments
+    comments.where(comment_id: nil)
   end
+
+  private
+    def auto_upvote
+      upvote(self.user_id)
+    end
 end

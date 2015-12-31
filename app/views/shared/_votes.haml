@@ -1,4 +1,6 @@
 .votes
-  = link_to 'Down', '#'
-  = obj.score
-  = link_to 'Up', '#'
+  = link_to polymorphic_url((obj.is_a?(Discussion) ? obj : [obj.discussion, obj.parent_comment, obj]), action: :upvote), class: ('active' if obj.relevant_vote(current_user.id).try(:value) == 1), data: { method: :post, remote: true, type: :json } do
+    %i.fa.fa-arrow-up.fa-fw
+  %span{ class: (obj.score < 0 ? 'negative' : (obj.score > 0 ? 'positive' : ''))}= obj.score
+  = link_to polymorphic_url((obj.is_a?(Discussion) ? obj : [obj.discussion, obj.parent_comment, obj]), action: :downvote), class: ('active' if obj.relevant_vote(current_user.id).try(:value) == -1), data: { method: :post, remote: true, type: :json } do
+    %i.fa.fa-arrow-down.fa-fw

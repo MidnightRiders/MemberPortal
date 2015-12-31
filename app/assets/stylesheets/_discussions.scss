@@ -1,0 +1,74 @@
+.votes {
+  display: block;
+  float: left;
+  font-size: .6em;
+  height: 1.8em;
+  margin-left: -3.8333em;
+  width: 3em;
+
+  a,
+  span {
+    display: block;
+    line-height: 1em;
+    text-align: center;
+  }
+
+  a:link,
+  a:visited {
+    &.active {
+      color: lighten($secondary-color, 20%);
+    }
+  }
+
+  span {
+    font-weight: bold;
+  }
+
+  .negative {
+    color: $alert-color;
+  }
+
+  .positive {
+    color: lighten($secondary-color, 5%);
+  }
+}
+
+.discussion,
+.discussions,
+.comments {
+  small.actions {
+    display: block;
+    text-align: left;
+  }
+
+  .content {
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.discussion {
+  padding-left: 2.3em;
+
+  > ul.comments,
+  hr {
+    margin-left: -2.3em;
+  }
+}
+
+ul.comments {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+
+  li.comment {
+    padding-left: 2.3em;
+
+    > ul.comments,
+    + li.comment {
+      border-top: $blockquote-border;
+      padding-top: .5em;
+    }
+  }
+}

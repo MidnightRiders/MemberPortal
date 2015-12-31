@@ -26,7 +26,7 @@ class DiscussionsController < ApplicationController
   # POST /discussions
   # POST /discussions.json
   def create
-    @discussion = Discussion.new(discussion_params)
+    @discussion = Discussion.new(discussion_params.merge(user_id: current_user.id))
 
     respond_to do |format|
       if @discussion.save
@@ -60,6 +60,32 @@ class DiscussionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to discussions_url }
       format.json { head :no_content }
+    end
+  end
+
+  # POST /discussions/1/comments/1/upvote
+  # POST /discussions/1/comments/1/upvote.json
+  def upvote
+    if @discussion.upvote(current_user.id)
+      respond_to do |format|
+        format.html { redirect_to @discussion }
+        format.any(:js, :json) { render json: { html: render_to_string(partial: 'shared/votes', locals: { obj: @discussion }) }, status: :ok }
+      end
+    else
+      raise 'Could not save upvote'
+    end
+  end
+
+  # POST /discussions/1/comments/1/downvote
+  # POST /discussions/1/comments/1/downvote.json
+  def downvote
+    if @discussion.downvote(current_user.id)
+      respond_to do |format|
+        format.html { redirect_to @discussion }
+        format.any(:js, :json) { render json: { html: render_to_string(partial: 'shared/votes', locals: { obj: @discussion }) }, status: :ok }
+      end
+    else
+      raise 'Could not save upvote'
     end
   end
 

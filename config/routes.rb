@@ -36,8 +36,21 @@ MidnightRiders::Application.routes.draw do
   end
 
   resources :discussions do
+    member do
+      post :upvote
+      post :downvote
+    end
     resources :comments, only: [ :new, :create, :edit, :update, :destroy ] do
-      resources :comments, only: [ :new, :create, :edit, :update, :destroy ], controller: 'comments'
+      member do
+        post :upvote
+        post :downvote
+      end
+      resources :comments, only: [ :new, :create, :edit, :update, :destroy ], controller: 'comments' do
+        member do
+          post :upvote
+          post :downvote
+        end
+      end
     end
   end
 

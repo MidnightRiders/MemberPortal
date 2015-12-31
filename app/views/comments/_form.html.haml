@@ -1,4 +1,4 @@
-= form_for comment_context do |f|
+= form_for [@comment.discussion, @comment.parent, @comment] do |f|
   .row
     .column
       = f.text_area :content, rows: 8, placeholder: Comment.human_attribute_name(:comment)

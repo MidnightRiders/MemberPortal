@@ -18,6 +18,7 @@
 #= require hex_functions
 #= require pick_em
 #= require users/memberships
+#= require votes
 #= require_self
 
 jQuery ($)->

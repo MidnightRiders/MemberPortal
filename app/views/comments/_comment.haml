@@ -1,5 +1,6 @@
 %li.comment
-  != MD_RENDERER.render comment.content
+  = render 'shared/votes', obj: comment
+  .content!= MD_RENDERER.render comment.content
   %small.actions
     = link_to new_discussion_comment_comment_path(discussion, comment) do
       %i.fa.fa-plus.fa-fw
