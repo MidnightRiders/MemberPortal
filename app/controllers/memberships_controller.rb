@@ -158,17 +158,18 @@ class MembershipsController < ApplicationController
             logger.info 'Creating new membership'
             subscription = user.stripe_customer.subscriptions.retrieve(object[:subscription])
             membership = user.memberships.new(
-              year: Time.at(subscription.current_period_start),
+              year: Time.at(subscription.current_period_start).year,
               type: subscription.plan.id.titleize,
               info: {
                 stripe_subscription_id: subscription.id
               }
             )
             if membership.save
-              logger.info "#{Time.at(subscription.current_period_start)} Membership created for #{user.first_name} #{user.last_name}"
+              logger.info "#{Time.at(subscription.current_period_start).year} Membership created for #{user.first_name} #{user.last_name}"
               MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
             else
               logger.error "Error when saving membership: #{membership.errors.messages}"
+              logger.info membership
               render(nothing: true, status: 500) and return
             end
           end
