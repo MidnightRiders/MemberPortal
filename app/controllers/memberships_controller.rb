@@ -161,7 +161,8 @@ class MembershipsController < ApplicationController
               year: Time.at(subscription.current_period_start).year,
               type: subscription.plan.id.titleize,
               info: {
-                stripe_subscription_id: subscription.id
+                stripe_subscription_id: subscription.id,
+                stripe_charge_id: object[:charge]
               }
             )
             if membership.save
