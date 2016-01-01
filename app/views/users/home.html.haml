@@ -6,10 +6,16 @@
 
 = render 'accept_family_invitation', user: current_user if current_user.has_family_invitation?
 
+= render 'static_pages/jotform' if current_user.current_member?
+
 .row
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
+    - if current_user.current_member?
+      = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
+        = icon 'check-circle'
+        Final Round: Vote for 2015’s Scarf
     - if current_user.current_member? && current_user.current_membership.is_a?(Family)
       = link_to user_membership_path(current_user, current_user.current_membership), class: 'button large expand' do
         = icon 'users fa-fw'

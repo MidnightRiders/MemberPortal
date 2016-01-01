@@ -46,3 +46,42 @@ form {
     padding: 0;
   }
 }
+
+#scarf-vote-modal {
+  ul,
+  li {
+    list-style: none;
+    margin: inherit;
+  }
+
+  .scarf {
+    [type=radio] {
+      float: left;
+      height: 0;
+      overflow: hidden;
+      opacity: 0;
+      position: relative;
+      width: 0;
+
+      + label {
+        margin: 0 0 .75em;
+        padding: 1em;
+
+        &:hover {
+          background-color: transparentize($maroon, .5);
+        }
+
+        @media #{$medium-up} {
+          padding: 1em 2em;
+        }
+      }
+
+      &:checked + label {
+        &,
+        &:hover {
+          background-color: $maroon;
+        }
+      }
+    }
+  }
+}
