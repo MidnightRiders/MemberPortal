@@ -154,8 +154,9 @@ class MembershipsController < ApplicationController
             membership.save!
           end
         elsif object[:object] == 'invoice'
-          subscription = user.stripe_customer.subscriptions.retrieve(object[:subscription])
           if event[:type] == 'invoice.payment_succeeded'
+            logger.info 'Creating new membership'
+            subscription = user.stripe_customer.subscriptions.retrieve(object[:subscription])
             membership = user.memberships.new(
               year: Time.at(subscription.current_period_start),
               type: subscription.plan.id.titleize,
@@ -163,7 +164,10 @@ class MembershipsController < ApplicationController
                 stripe_subscription_id: subscription.id
               }
             )
-            MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
+            if membership.save
+              logger.info "#{Time.at(subscription.current_period_start)} Membership created for #{user.first_name} #{user.last_name}"
+              MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
+            end
           end
         end
         render nothing: true, status: 200
