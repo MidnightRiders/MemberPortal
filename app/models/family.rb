@@ -8,8 +8,9 @@ class Family < Membership
       last_membership = user.memberships.where.not(id: id).last
       if last_membership.present? && last_membership.is_a?(Family)
         last_membership.relatives.each do |relative|
-          new_relative = relative.clone
+          new_relative = relative.dup
           new_relative.year = year
+          new_relative.family_id = id
           new_relative.save!
         end
       end
