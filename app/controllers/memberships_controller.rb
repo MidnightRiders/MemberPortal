@@ -168,7 +168,8 @@ class MembershipsController < ApplicationController
               logger.info "#{Time.at(subscription.current_period_start)} Membership created for #{user.first_name} #{user.last_name}"
               MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver if membership.save
             else
-              logger.error "Error when saving membership: #{membership.errors}"
+              logger.error "Error when saving membership: #{membership.errors.messages}"
+              render(nothing: true, status: 500) and return
             end
           end
         end
