@@ -157,8 +157,14 @@ class MembershipsController < ApplicationController
           if event[:type] == 'invoice.payment_succeeded'
             logger.info 'Creating new membership'
             subscription = user.stripe_customer.subscriptions.retrieve(object[:subscription])
+            m = user.memberships.find_by(year: year)
+            year = Time.at(subscription.current_period_start).year
+            if m.present?
+              logger.info "Duplicate #{year} membership for #{user.username} (#{m.stripe_subscription_id}/#{subscription.id})"
+              render(nothing: true, status: 200) and return
+            end
             membership = user.memberships.new(
-              year: Time.at(subscription.current_period_start).year,
+              year: year,
               type: subscription.plan.id.titleize,
               info: {
                 stripe_subscription_id: subscription.id,
