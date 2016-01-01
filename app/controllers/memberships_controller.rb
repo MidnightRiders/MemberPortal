@@ -139,7 +139,7 @@ class MembershipsController < ApplicationController
     customer_token = (object[:object] == 'customer' ? object[:id] : object[:customer])
     if customer_token
       unless accepted_webhooks.include? event[:type]
-        logger.error "Stripe::Event type #{event[:type]} not in accepted webhooks. Returning 200."
+        logger.warn "Stripe::Event type #{event[:type]} not in accepted webhooks. Returning 200."
         render(nothing: true, status: 200) and return
       end
 
