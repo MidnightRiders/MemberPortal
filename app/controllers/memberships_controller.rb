@@ -130,30 +130,32 @@ class MembershipsController < ApplicationController
 
   # ALL /memberships/webhooks
   def webhooks
-    event = Stripe::Event.retrieve(params[:id])
-    object = event.data.object
-    logger.info event.type
+    accepted_webhooks = %w(charge.refunded invoice.payment_succeeded)
+
+    event = params
+    object = event[:data][:object]
+    logger.info event[:type]
     logger.info object
-    customer_token = (object.object == 'customer' ? object.id : object.try(:customer))
+    customer_token = (object[:object] == 'customer' ? object[:id] : object[:customer])
     if customer_token
-      customer = Stripe::Customer.retrieve(customer_token)
-      logger.info customer
-      user = User.find_by(stripe_customer_token: customer_token)
-      if user.nil? && customer.try(:deleted) != true && (user = User.find_by(email: customer.email, stripe_customer_token: nil)).present?
-        logger.error "Stripe::Customer #{customer_token} had email #{customer.data.object.email} but User #{user.username} with email #{user.email} did not have customer_token. The token has been assigned."
-        user.update_attribute(:stripe_customer_token, customer_token)
+      unless accepted_webhooks.include? event[:type]
+        logger.error "Stripe::Event type #{event[:type]} not in accepted webhooks. Returning 200."
+        render(nothing: true, status: 200) and return
       end
+
+      user = User.find_by(stripe_customer_token: customer_token)
+
       if user
-        if object.object == 'charge'
-          membership = Membership.with_stripe_charge_id(object.id)
+        if object[:object] == 'charge'
+          membership = Membership.with_stripe_charge_id(object[:id])
           # charge.succeeded is handled immediately - no webhook
-          if event.type == 'charge.refunded'
+          if event[:type] == 'charge.refunded'
             membership.refunded = true
             membership.save!
           end
-        elsif object.object == 'invoice'
-          subscription = customer.subscriptions.retrieve(object.subscription)
-          if event.type == 'invoice.payment_succeeded'
+        elsif object[:object] == 'invoice'
+          subscription = user.stripe_customer.subscriptions.retrieve(object[:subscription])
+          if event[:type] == 'invoice.payment_succeeded'
             membership = user.memberships.new(
               year: Time.at(subscription.current_period_start),
               type: subscription.plan.id.titleize,
@@ -166,13 +168,8 @@ class MembershipsController < ApplicationController
         end
         render nothing: true, status: 200
       else
-        if event.type == 'customer.deleted' || customer.deleted == true
-          logger.info "Stripe::Customer #{customer_token} has been deleted."
-          render nothing: true, status: 200
-        else
-          logger.error "No user could be found with ID #{customer_token}\n  Event ID: #{event.id}"
-          render nothing: true, status: 404
-        end
+        logger.error "No User could be found with Stripe ID #{customer_token}\n  Event ID: #{event[:id]}"
+        render nothing: true, status: 404
       end
     else
       logger.error 'No Stripe::Customer attached to event.'
@@ -180,6 +177,9 @@ class MembershipsController < ApplicationController
     end
   rescue Stripe::StripeError => e
     logger.fatal "StripeError encountered: #{e}"
+    render nothing: true, status: 500
+  rescue => e
+    logger.fatal "Webhooks error encountered: #{e}"
     render nothing: true, status: 500
   end
 
