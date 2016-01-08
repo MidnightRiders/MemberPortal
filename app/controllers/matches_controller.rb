@@ -29,6 +29,30 @@ class MatchesController < ApplicationController
   # Imports matches from MLS Calendar.
   def import
     url = URI.parse(params[:url])
+    team_hash = {
+      :'Chicago' => Club.find_by(abbrv: 'CHI'),
+      :'Colorado' => Club.find_by(abbrv: 'COL'),
+      :'Columbus' => Club.find_by(abbrv: 'CLB'),
+      :'United' => Club.find_by(abbrv: 'DC'),
+      :'Dallas' => Club.find_by(abbrv: 'DAL'),
+      :'Houston' => Club.find_by(abbrv: 'HOU'),
+      :'Montr' => Club.find_by(abbrv: 'MTL'),
+      :'Galaxy' => Club.find_by(abbrv: 'LA'),
+      :'Revolution' => Club.find_by(abbrv: 'NE'),
+      :'New York City' => Club.find_by(abbrv: 'NYCFC'),
+      :'NYC' => Club.find_by(abbrv: 'NYCFC'),
+      :'Red Bull' => Club.find_by(abbrv: 'NY'),
+      :'Redbull' => Club.find_by(abbrv: 'NY'),
+      :'Orlando' => Club.find_by(abbrv: 'OCSC'),
+      :'Philadelphia' => Club.find_by(abbrv: 'PHI'),
+      :'Portland' => Club.find_by(abbrv: 'POR'),
+      :'Salt Lake' => Club.find_by(abbrv: 'RSL'),
+      :'Earthquakes' => Club.find_by(abbrv: 'SJ'),
+      :'Seattle' => Club.find_by(abbrv: 'SEA'),
+      :'Sporting' => Club.find_by(abbrv: 'SKC'),
+      :'Toronto' => Club.find_by(abbrv: 'TFC'),
+      :'Vancouver' => Club.find_by(abbrv: 'VAN')
+    }
     begin
       req = Net::HTTP::Get.new(url.path)
       response = Net::HTTP.start(url.host, url.port){ |http| http.request(req) }
@@ -44,21 +68,19 @@ class MatchesController < ApplicationController
     cals = Icalendar.parse(response)
     cal = cals.first
     count = 0
+    team_regexp = Regexp.new(team_hash.keys.join('|'))
     cal.events.each do |m|
       match = Match.where(uid: m.uid.to_s).first_or_initialize
-      teams = m.summary.gsub(/\(.+?\)/,'').strip.split(/\s*vs\.?\s*/i).map{|t| t.gsub(/[\.\-]/,'').gsub(/(?<=\s|\A)(?!NYC)([A-Z]\.?){2,}(?=\s|\z)/,'').sub(/edbull/i, 'ed Bull')}
+      teams = m.summary.force_encoding('utf-8').scan(team_regexp)
       match.location = m.location.to_s
-      match.home_team = Club.where('replace(name,\'é\',\'e\') LIKE :name', name: "%#{teams[0]}%").first
-      match.away_team = Club.where('replace(name,\'é\',\'e\') LIKE :name', name: "%#{teams[1]}%").first
+      match.home_team = team_hash[teams[0].try(:to_sym)]
+      match.away_team = team_hash[teams[1].try(:to_sym)]
       match.kickoff = m.dtstart.to_time
       match.season = match.kickoff.year
       count_it = match.new_record? || match.changed?
-      puts teams
-      if match.save!
+      if match.save
         count += 1 if count_it
       else
-        flash.alert ||= ''
-        flash.alert += "\nCould not save #{m.summary}: #{match.errors.to_hash}"
         logger.error "Could not save #{m.summary}: #{match.errors.to_hash}"
       end
     end
