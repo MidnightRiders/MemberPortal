@@ -55,6 +55,8 @@ form {
   }
 
   .scarf {
+    width: 100%;
+
     [type=radio] {
       float: left;
       height: 0;
@@ -64,11 +66,24 @@ form {
       width: 0;
 
       + label {
+        display: block;
         margin: 0 0 .75em;
         padding: 1em;
+        position: relative;
 
         &:hover {
           background-color: transparentize($maroon, .5);
+        }
+
+        &:before {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          z-index: -1;
         }
 
         @media #{$medium-up} {
@@ -82,6 +97,14 @@ form {
           background-color: $maroon;
         }
       }
+    }
+
+    img {
+      display: block;
+      height: auto;
+      max-width: 100%;
+      pointer-events: none;
+      position: relative;
     }
   }
 }
