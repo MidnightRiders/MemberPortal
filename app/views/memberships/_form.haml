@@ -91,5 +91,5 @@
           = f.hidden_field :stripe_card_token, disabled: (f.object.user.stripe_customer_token && @cards.present?)
       
       = f.button :submit, class: 'button right' do
-        = icon 'card fa-fw'
+        = icon 'credit-card fa-fw'
         Purchase Membership
