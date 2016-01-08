@@ -6,7 +6,7 @@
 
 = render 'accept_family_invitation', user: current_user if current_user.has_family_invitation?
 
-= render 'static_pages/jotform' if current_user.current_member?
+= render 'static_pages/jotform' if current_user.current_member? && current_user.leadership_or_admin?
 
 .row
   %section.medium-6.columns
