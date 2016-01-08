@@ -96,8 +96,9 @@ class Membership < ActiveRecord::Base
 
           if stripe_card_token
             card = customer.sources.create(source: stripe_card_token)
-            customer.default_source = card.id
+            card_id = customer.default_source = card.id
             customer.save
+            customer.sources.data.select { |c| c.id != card.id }.map(&:delete)
           end
 
           if user.email != customer.email
@@ -118,9 +119,9 @@ class Membership < ActiveRecord::Base
         end
         if subscription.to_i == 1
           subscription = customer.subscriptions.create(
-              plan: type.downcase,
-              trial_end: 1.year.from_now.beginning_of_year.to_i,
-              source: card_id
+            plan: type.downcase,
+            trial_end: 1.year.from_now.beginning_of_year.to_i,
+            source: card_id
           )
           self.stripe_subscription_id = subscription.id
         end
@@ -128,8 +129,8 @@ class Membership < ActiveRecord::Base
             customer: customer.id,
             description: "Midnight Riders #{year} #{type.titleize} Membership",
             metadata: {
-                year: year,
-                type: type.titleize
+              year: year,
+              type: type.titleize
             },
             receipt_email: user.email,
             amount: COSTS[type.to_sym],
