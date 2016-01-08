@@ -65,8 +65,9 @@ class MembershipsController < ApplicationController
           MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
           MembershipMailer.new_membership_alert(@user, @membership).deliver
           count = Membership.current.size
-          SlackBot.post_message("New Membership! There are now *#{count} registered #{@membership.year} members.*", '#general')
-          SlackBot.post_message("New Membership for #{@user.first_name} #{@user.last_name} (@#{@user.username}):\n#{user_url(@user)}.\nThere are now *#{count} registered #{@membership.year} members.*", 'exec-board')
+          breakdown = Membership.unscoped.where(year: @membership.year).group(:type).count
+          SlackBot.post_message("New Membership! There are now *#{count} registered #{@membership.year} members.*\n#{breakdown.map {|k, v| "#{k}: #{v}"}.join(' | ')}", '#general')
+          SlackBot.post_message("New Membership for #{@user.first_name} #{@user.last_name} (@#{@user.username}):\n#{user_url(@user)}.\nThere are now *#{count} registered #{@membership.year} members.*\n#{breakdown.map {|k, v| "#{k}: #{v}"}.join(' | ')}", 'exec-board')
           format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
         else
           format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
