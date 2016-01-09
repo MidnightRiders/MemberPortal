@@ -41,9 +41,10 @@ class RelativesController < ApplicationController
     if @relative.pending_approval
       if (@relative_user = User.find_by(email: @relative.invited_email)).present? && @relative.update_attributes(user_id: @relative_user.id, info: @relative.info.with_indifferent_access.except(:pending_approval, :invited_email))
         count = Membership.current.size
-        breakdown = Membership.unscoped.where(year: @relative.year).group(:type).count
-        SlackBot.post_message("New Relative! There are now *#{count} registered #{@relative.year} Members.*\n#{breakdown.map {|k, v| "#{k}: #{v}"}.join(' | ')}", '#general')
-        SlackBot.post_message("#{@user.first_name} #{@user.last_name} (@#{@user.username}) has accepted *#{@family.user.first_name} #{@family.user.last_name}’s Family Membership invitation*:\n#{user_url(@user)}.\nThere are now *#{count} registered #{@relative.year} Memberships.*\n#{breakdown.map {|k, v| "#{k}: #{v}"}.join(' | ')}", 'exec-board')
+        breakdown = Membership.unscoped.where(year: @relative.year).where.not(user_id: nil).group(:type).count
+        breakdown = %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[type]}" }.join(' | ')
+        SlackBot.post_message("New Relative! There are now *#{count} registered #{@relative.year} Members.*\n#{breakdown}", '#general')
+        SlackBot.post_message("#{@user.first_name} #{@user.last_name} (@#{@user.username}) has accepted *#{@family.user.first_name} #{@family.user.last_name}’s Family Membership invitation*:\n#{user_url(@user)}.\nThere are now *#{count} registered #{@relative.year} Memberships.*\n#{breakdown}", 'exec-board')
         redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
       else
         redirect_to user_home_path, flash: { error: @relative.errors.to_sentence }
