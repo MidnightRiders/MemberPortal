@@ -13,13 +13,14 @@
 #= require modernizr
 #= require jquery
 #= require jquery_ujs
+#= require noconflict
 #= require foundation
 #= require hex_functions
 #= require pick_em
 #= require users/memberships
 #= require_self
 
-$ ->
+jQuery ($)->
   $(document).foundation()
   $.ajaxSettings.dataType = 'json'
 

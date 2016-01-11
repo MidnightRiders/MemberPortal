@@ -1,4 +1,4 @@
-$ ->
+jQuery ($)->
   $(document).on
     'ajax:beforeSend': (e,xhr,settings) ->
       pick = decodeURIComponent(settings.data).match(/pick_em\[result\]=(\-?[01])/)[1]
