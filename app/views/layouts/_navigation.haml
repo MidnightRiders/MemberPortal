@@ -139,7 +139,7 @@
               My Account
           - if current_user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
             %li.has-dropdown
-              %a{ title: 'Admin' }
+              %a{ href: '#', title: 'Admin' }
                 .show-for-medium-up
                   = icon 'bolt fa-fw'
                   &nbsp;
