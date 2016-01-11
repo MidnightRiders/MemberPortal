@@ -64,11 +64,7 @@ class MembershipsController < ApplicationController
         if @membership.stripe_charge_id
           MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
           MembershipMailer.new_membership_alert(@user, @membership).deliver
-          count = Membership.current.size
-          breakdown = Membership.unscoped.where(year: @membership.year).where.not(user_id: nil).group(:type).count
-          breakdown = %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[type]}" }.join(' | ')
-          SlackBot.post_message("New Membership! There are now *#{count} registered #{@membership.year} members.*\n#{breakdown}", '#general')
-          SlackBot.post_message("New Membership for #{@user.first_name} #{@user.last_name} (@#{@user.username}):\n#{user_url(@user)}.\nThere are now *#{count} registered #{@membership.year} members.*\n#{breakdown}", 'exec-board')
+          slack_notify_membership(@membership, @user)
           format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
         else
           format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
