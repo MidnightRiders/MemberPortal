@@ -40,11 +40,11 @@ class ApplicationController < ActionController::Base
       count = Membership.current.size
       breakdown = Membership.unscoped.where(year: membership.year).where.not(user_id: nil).group(:type).count
       breakdown = %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[type]}" }.join(' | ')
-      SlackBot.post_message("New Relative! There are now *#{count} registered #{membership.year} Members.*\n#{breakdown}", '#general')
+      SlackBot.post_message("New #{membership.type} Membership!\n*#{membership.year} Total: #{count}* | #{breakdown}", '#general')
       if family.present?
         SlackBot.post_message("#{user.first_name} #{user.last_name} (@#{user.username}) has accepted *#{family.user.first_name} #{family.user.last_name}’s Family Membership invitation*:\n#{user_url(user)}.\nThere are now *#{count} registered #{membership.year} Memberships.*\n#{breakdown}", 'membership')
       else
-        SlackBot.post_message("New Membership for #{user.first_name} #{user.last_name} (@#{user.username}):\n#{user_url(user)}.\nThere are now *#{count} registered #{membership.year} members.*\n#{breakdown}", 'membership')
+        SlackBot.post_message("New Membership for #{user.first_name} #{user.last_name} (<#{user_url(user)}|@#{user.username}>):\n*#{membership.year} Total: #{count}* | #{breakdown}", 'membership')
       end
     end
 end
