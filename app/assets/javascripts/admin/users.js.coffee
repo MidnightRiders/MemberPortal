@@ -1,4 +1,4 @@
-$ ->
+jQuery ($)->
   $('a.edit-membership').on 'click', (e)->
     e.preventDefault()
     $(this).closest('.row').slideUp 150

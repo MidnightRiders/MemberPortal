@@ -1,4 +1,4 @@
-$ ->
+jQuery ($)->
   if $('.popup-form').length > 0
     $('.popup-form').on 'ajax:success', ':input', (e, data) ->
       if data.flash != ""
