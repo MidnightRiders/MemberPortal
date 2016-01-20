@@ -136,8 +136,7 @@ class MembershipsController < ApplicationController
           # charge.succeeded is handled immediately - no webhook
           if membership.present?
             if event[:type] == 'charge.refunded'
-              membership.refunded = true
-              membership.save!
+              membership.update_attribute(:refunded, true)
             end
           else
             logger.error "No membership associated with Stripe Charge #{object[:id]}."
