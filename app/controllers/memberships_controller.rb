@@ -120,7 +120,7 @@ class MembershipsController < ApplicationController
     event = params
     object = event[:data][:object]
     logger.info event[:type]
-    logger.info object
+    logger.info object.to_yaml
     customer_token = (object[:object] == 'customer' ? object[:id] : object[:customer])
     if customer_token
       unless accepted_webhooks.include? event[:type]
@@ -132,11 +132,15 @@ class MembershipsController < ApplicationController
 
       if user
         if object[:object] == 'charge'
-          membership = Membership.with_stripe_charge_id(object[:id])
+          membership = Membership.with_stripe_charge_id(object[:id]).first
           # charge.succeeded is handled immediately - no webhook
-          if event[:type] == 'charge.refunded'
-            membership.refunded = true
-            membership.save!
+          if membership.present?
+            if event[:type] == 'charge.refunded'
+              membership.refunded = true
+              membership.save!
+            end
+          else
+            logger.error "No membership associated with Stripe Charge #{object[:id]}."
           end
         elsif object[:object] == 'invoice'
           if event[:type] == 'invoice.payment_succeeded'
