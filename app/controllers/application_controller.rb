@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
       if family.present?
         SlackBot.post_message("#{user.first_name} #{user.last_name} (@#{user.username}) has accepted *#{family.user.first_name} #{family.user.last_name}’s Family Membership invitation*:\n#{user_url(user)}.\nThere are now *#{count} registered #{membership.year} Memberships.*\n#{breakdown}", 'membership')
       else
-        SlackBot.post_message("New Membership for #{user.first_name} #{user.last_name} (<#{user_url(user)}|@#{user.username}>):\n*#{membership.year} Total: #{count}* | #{breakdown}", 'membership')
+        SlackBot.post_message("New #{membership.type} Membership for #{user.first_name} #{user.last_name} (<#{user_url(user)}|@#{user.username}>):\n*#{membership.year} Total: #{count}* | #{breakdown}", 'membership')
       end
     end
 end
