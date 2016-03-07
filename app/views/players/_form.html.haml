@@ -1,31 +1,27 @@
-= form_for @player do |f|
+= form_for @player do |player_form|
+  = player_form.hidden_field :club_id
   .row
     .medium-4.columns
-      = f.label :number
+      = player_form.label :number
     .medium-8.columns
-      = f.number_field :number
+      = player_form.number_field :number
   .row
     .medium-6.columns
-      = f.label :first_name
-      = f.text_field :first_name
+      = player_form.label :first_name
+      = player_form.text_field :first_name
     .medium-6.columns
-      = f.label :last_name
-      = f.text_field :last_name
+      = player_form.label :last_name
+      = player_form.text_field :last_name
   .row
     .medium-4.columns
-      = f.label :club_id
+      = player_form.label :position
     .medium-8.columns
-      = f.select :club_id, options_for_select(Club.all.order(name: :asc).map{|x| [x.name,x.id]},f.object.club_id)
-  .row
-    .medium-4.columns
-      = f.label :position
-    .medium-8.columns
-      = f.select :position, options_for_select(Player::POSITIONS.map{|k,v| [k, k] },f.object.position)
+      = player_form.select :position, options_for_select(Player::POSITIONS.map{|k,v| [k, k] },player_form.object.position)
   .row
     .column
-      = f.check_box :active
-      = f.label :active
+      = player_form.check_box :active
+      = player_form.label :active
   .row.actions
     .column
-      = f.button :submit do
+      = player_form.button :submit do
         Save

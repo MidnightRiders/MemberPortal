@@ -15,7 +15,7 @@ class PlayersController < ApplicationController
 
   # GET /players/new
   def new
-    @player = Player.new
+    @player = Player.new(club_id: revs.id)
   end
 
   # GET /players/1/edit
