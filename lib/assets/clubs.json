@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "name": "Chicago Fire",
+    "conference": "east",
+    "primary_color": "ba0c2f",
+    "secondary_color": "ffffff",
+    "accent_color": "071d49",
+    "abbrv": "CHI",
+    "active": true
+  },
+  {
+    "id": 2,
+    "name": "Chivas USA",
+    "conference": "west",
+    "primary_color": "9d2235",
+    "secondary_color": "ffffff",
+    "accent_color": "ffc72c",
+    "abbrv": "CHV",
+    "active": false
+  },
+  {
+    "id": 3,
+    "name": "Colorado Rapids",
+    "conference": "west",
+    "primary_color": "862633",
+    "secondary_color": "ffffff",
+    "accent_color": "8bb8e8",
+    "abbrv": "COL",
+    "active": true
+  },
+  {
+    "id": 4,
+    "name": "Columbus Crew",
+    "conference": "east",
+    "primary_color": "f6fa2b",
+    "secondary_color": "000000",
+    "accent_color": "ffffff",
+    "abbrv": "CLB",
+    "active": true
+  },
+  {
+    "id": 5,
+    "name": "DC United",
+    "conference": "east",
+    "primary_color": "000000",
+    "secondary_color": "cc0c00",
+    "accent_color": "ffffff",
+    "abbrv": "DC",
+    "active": true
+  },
+  {
+    "id": 6,
+    "name": "FC Dallas",
+    "conference": "west",
+    "primary_color": "bf0d3e",
+    "secondary_color": "ffffff",
+    "accent_color": "00205b",
+    "abbrv": "DAL",
+    "active": true
+  },
+  {
+    "id": 7,
+    "name": "Houston Dynamo",
+    "conference": "west",
+    "primary_color": "e57200",
+    "secondary_color": "ffffff",
+    "accent_color": "8bb8e8",
+    "abbrv": "HOU",
+    "active": true
+  },
+  {
+    "id": 8,
+    "name": "Los Angeles Galaxy",
+    "conference": "west",
+    "primary_color": "13294b",
+    "secondary_color": "ffffff",
+    "accent_color": "eaaa00",
+    "abbrv": "LA",
+    "active": true
+  },
+  {
+    "id": 9,
+    "name": "Montréal Impact",
+    "conference": "east",
+    "primary_color": "003087",
+    "secondary_color": "000000",
+    "accent_color": "7c878e",
+    "abbrv": "MTL",
+    "active": true
+  },
+  {
+    "id": 10,
+    "name": "New England Revolution",
+    "conference": "east",
+    "primary_color": "0c2340",
+    "secondary_color": "c8102e",
+    "accent_color": "ffffff",
+    "abbrv": "NE",
+    "active": true
+  },
+  {
+    "id": 11,
+    "name": "New York Red Bulls",
+    "conference": "east",
+    "primary_color": "c5003e",
+    "secondary_color": "002554",
+    "accent_color": "ffc72c",
+    "abbrv": "NY",
+    "active": true
+  },
+  {
+    "id": 21,
+    "name": "NYCFC",
+    "conference": "east",
+    "primary_color": "6aace6",
+    "secondary_color": "ffffff",
+    "accent_color": "f85002",
+    "abbrv": "NYCFC",
+    "active": true
+  },
+  {
+    "id": 20,
+    "name": "Orlando City SC",
+    "conference": "east",
+    "primary_color": "5e299a",
+    "secondary_color": "f8e196",
+    "accent_color": "ffffff",
+    "abbrv": "OCSC",
+    "active": true
+  },
+  {
+    "id": 12,
+    "name": "Philadelphia Union",
+    "conference": "east",
+    "primary_color": "041c2c",
+    "secondary_color": "85714d",
+    "accent_color": "418fde",
+    "abbrv": "PHI",
+    "active": true
+  },
+  {
+    "id": 13,
+    "name": "Portland Timbers",
+    "conference": "west",
+    "primary_color": "2c5234",
+    "secondary_color": "e1e000",
+    "accent_color": "ffffff",
+    "abbrv": "POR",
+    "active": true
+  },
+  {
+    "id": 14,
+    "name": "Real Salt Lake",
+    "conference": "west",
+    "primary_color": "001e62",
+    "secondary_color": "9d2235",
+    "accent_color": "daaa00",
+    "abbrv": "RSL",
+    "active": true
+  },
+  {
+    "id": 15,
+    "name": "San Jose Earthquakes",
+    "conference": "west",
+    "primary_color": "2d2926",
+    "secondary_color": "0072ce",
+    "accent_color": "b2b4b2",
+    "abbrv": "SJ",
+    "active": true
+  },
+  {
+    "id": 16,
+    "name": "Seattle Sounders",
+    "conference": "west",
+    "primary_color": "658d1b",
+    "secondary_color": "236192",
+    "accent_color": "1d252d",
+    "abbrv": "SEA",
+    "active": true
+  },
+  {
+    "id": 17,
+    "name": "Sporting Kansas City",
+    "conference": "west",
+    "primary_color": "a7bcd6",
+    "secondary_color": "0c2340",
+    "accent_color": "ffffff",
+    "abbrv": "SKC",
+    "active": true
+  },
+  {
+    "id": 18,
+    "name": "Toronto FC",
+    "conference": "east",
+    "primary_color": "c8102e",
+    "secondary_color": "333f48",
+    "accent_color": "a2aaad",
+    "abbrv": "TFC",
+    "active": true
+  },
+  {
+    "id": 19,
+    "name": "Vancouver Whitecaps",
+    "conference": "west",
+    "primary_color": "13294b",
+    "secondary_color": "8bb8e8",
+    "accent_color": "ffffff",
+    "abbrv": "VAN",
+    "active": true
+  }
+]
