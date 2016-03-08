@@ -6,20 +6,21 @@
 
 = render 'accept_family_invitation', user: current_user if current_user.has_family_invitation?
 
-= render 'static_pages/jotform' if current_user.current_member? && Time.current < Time.zone.local(2016,1,15,17)
+-#= render 'static_pages/jotform' if current_user.current_member? && Time.current < Time.zone.local(2016,1,15,17)
 
 .row
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
-    - if current_user.current_member? && Time.current < Time.zone.local(2016,1,15,17)
-      = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
-        = icon 'check-circle'
-        Vote for 2016’s Scarf
+    -#- if current_user.current_member? && Time.current < Time.zone.local(2016,1,15,17)
+    -#  = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
+    -#    = icon 'check-circle'
+    -#    Vote for 2016’s Scarf
     - if current_user.current_member? && current_user.current_membership.is_a?(Family)
       = link_to user_membership_path(current_user, current_user.current_membership), class: 'button large expand' do
         = icon 'users fa-fw'
         Manage Family Membership
+    .row.show-for-medium-up= render 'shared/next_last_games', last_match: revs.last_match, next_match: revs.next_match
     = render 'static_pages/events', events: @events
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 
