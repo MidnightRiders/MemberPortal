@@ -18,7 +18,7 @@ class MatchDecorator < Draper::Decorator
   def mot_m_button(size='small', o = false)
     h.link_to h.mot_m_path_for(model), class: "button secondary #{size}" do
       opp = o ? opponent : ''
-      h.icon('list-ol fa-fw') + ' MotM' + opp + (h.icon('check fa-fw') if h.mot_m_for(model))
+      h.icon('list-ol fa-fw') + ' Man of the Match' + opp + (h.icon('check fa-fw') if h.mot_m_for(model))
     end
   end
 
