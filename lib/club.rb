@@ -39,7 +39,7 @@ class Club
       float: 2,
       format: :raw
     }.deep_merge(options)
-    clubs = Club.includes(:home_matches, :away_matches).where.not(matches: { id: nil }).map{ |c|
+    clubs = Match.where('home_team_id = ? OR away_team_id = ?', id, id).map{ |c|
       c.attributes.symbolize_keys.merge({
                                           wins: c.wins.size,
                                           draws: c.draws.size,
