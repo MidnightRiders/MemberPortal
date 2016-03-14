@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
 
     def slack_notify_membership(membership, user, family=nil)
       count = Membership.current.size
-      breakdown = Membership.unscoped.where(year: membership.year).where.not(user_id: nil).group(:type).count
+      breakdown = Membership.unscoped.where(year: membership.year, refunded: [nil, false]).where.not(user_id: nil).group(:type).count
       breakdown = %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[type]}" }.join(' | ')
       SlackBot.post_message("New #{membership.type} Membership!\n*#{membership.year} Total: #{count}* | #{breakdown}", '#general')
       if family.present?
