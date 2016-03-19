@@ -79,8 +79,9 @@
                   = link_to 'http://topshelfcookies.com/', target: '_blank' do
                     Top Shelf Cookies
                     %small Quincy, MA
-                    %br
-                    15% Off Code: THEFORT
+                    - if user_signed_in? && current_user.current_member?
+                      %br
+                      15% Off Code: THEFORT
             %li.has-dropdown
               %a{ href: '#' }
                 = icon 'reddit fa-fw'
