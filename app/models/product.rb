@@ -9,6 +9,7 @@ class Product < ActiveRecord::Base
       thumb:    '75x75#'
     },
     default_style: :original,
+    default_url: '/assets/shop/default-:style.gif',
     storage: :s3
   }
 

@@ -2,7 +2,7 @@
 class RegistrationsController < Devise::RegistrationsController
 
   def new
-    build_resource({ email: params[:email] })
+    build_resource({ email: params[:email], member_since: params[:member_since] })
     @validatable = devise_mapping.validatable?
     if @validatable
       @minimum_password_length = resource_class.password_length.min

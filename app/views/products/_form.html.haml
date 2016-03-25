@@ -1,24 +1,34 @@
-= form_for @product do |product_form|
-  = image_tag @product.image.url(:medium)
-  = product_form.label :image
-  = product_form.file_field :image
+= form_for @product, html: { class: 'row' } do |product_form|
+  .large-4.columns
+    %h3= @product.persisted? ? @product.name : 'New Product'
+    = image_tag @product.image.url(:medium)
+  .large-8.columns
+    .row
+      .medium-4.columns= product_form.label :image, class: 'inline'
+      .medium-8.columns= product_form.file_field :image
+    .row
+      .medium-4.columns= product_form.label :name, class: 'inline'
+      .medium-8.columns= product_form.text_field :name
+    .row
+      .medium-4.columns= product_form.label :description, class: 'inline'
+      .medium-8.columns= product_form.text_area :description, rows: 3
+    .row
+      .medium-4.columns= product_form.label :member_cost, 'Cost', class: 'inline'
+      .medium-8.columns
+        .row
+          .small-6.columns
+            = product_form.number_field :member_cost, placeholder: 'Member'
+          .small-6.columns
+            = product_form.number_field :non_member_cost, placeholder: 'Non-member'
+    .row
 
-  = product_form.label :name
-  = product_form.text_field :name
-
-  = product_form.label :description
-  = product_form.text_field :description
-
-  = product_form.label :member_cost
-  = product_form.number_field :member_cost
-
-  = product_form.label :non_member_cost
-  = product_form.number_field :non_member_cost
-
-  = product_form.check_box :active
-  = product_form.label :active
-
-  = product_form.label :stock
-  = product_form.number_field :stock
-
-  = product_form.submit class: 'button primary'
+    .row
+      .medium-4.columns
+        = product_form.check_box :active
+        = product_form.label :active, class: 'inline'
+      .medium-4.columns
+        .row
+          .medium-4.columns= product_form.label :stock, class: 'inline'
+          .medium-8.columns= product_form.number_field :stock
+      .medium-4.columns.text-right
+        = product_form.submit class: 'button primary'

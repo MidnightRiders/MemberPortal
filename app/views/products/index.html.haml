@@ -1,8 +1,29 @@
-= link_to new_product_path, class: 'button right' do
-  %i.fa.fa-plus
-  New Product
+.row
+  .medium-4.columns
+    %h1 Shop
+  .medium-8.columns.text-right
+    %ul.button-group
+      %li
+        = link_to @cart.presence || new_user_session_path, title: 'Cart', class: 'button secondary' do
+          %i.fa.fa-fw.fa-shopping-cart
+          = @cart.present? ? @cart.products.size : 0
+          Items in Cart
+      - if can? :manage, Product
+        %li
+          = link_to new_product_path, class: 'button' do
+            %i.fa.fa-plus
+            New Product
+- unless @cart.present?
+  .alert-box
+    Please
+    = link_to 'Sign In', new_user_session_path
+    or
+    = link_to 'Create an Account', new_user_registration_path(member_since: '')
+    to add items to your cart.
+    %br
+    %strong Note:
+    creating an account is required for Shop purchases, and does not automatically make you a member.
 
-%h1 Shop
 
 %table
   %tr

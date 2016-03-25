@@ -21,7 +21,7 @@
         .medium-4.columns
           = f.label :member_since, class: 'inline'
         .medium-8.columns
-          = f.select :member_since, (1995..Date.current.year), { selected: (f.object.member_since || Date.current.year) }, tabindex: 3
+          = f.select :member_since, (1995..Date.current.year), { include_blank: 'N/A', selected: params[:member_since] || f.object.member_since || Date.current.year }, tabindex: 3
       - if devise && devise_mapping.confirmable? && resource.pending_reconfirmation?
         %small.hint
           Currently waiting confirmation for:
