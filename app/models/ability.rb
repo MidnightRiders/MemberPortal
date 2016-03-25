@@ -33,6 +33,8 @@ class Ability
     if user
       can :home, [ User ]
       can :manage, user
+      can [:index, :show], :products
+      can [:manage, :place], user.orders
       if user.current_member?
         can :show, :download
         cannot :create, :Registration
@@ -78,6 +80,7 @@ class Ability
       cannot :index, :all
       cannot :manage, :all
       can :create, :Registration
+      can [:index, :show], Product
     end
   end
 end

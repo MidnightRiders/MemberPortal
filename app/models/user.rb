@@ -67,6 +67,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :memberships
+  has_many :orders
 
   has_many :mot_ms
   has_many :rev_guesses
@@ -145,6 +146,10 @@ class User < ActiveRecord::Base
   # Returns *String*. URL for Gravatar based on email.
   def gravatar
     'https://gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/,'@')) + '?d=mm'
+  end
+
+  def cart
+    orders.find_or_create_by(completed_at: nil)
   end
 
   # TODO: Clean the shit out of this import. Stabilize it.

@@ -1,0 +1,24 @@
+= form_for @product do |product_form|
+  = image_tag @product.image.url(:medium)
+  = product_form.label :image
+  = product_form.file_field :image
+
+  = product_form.label :name
+  = product_form.text_field :name
+
+  = product_form.label :description
+  = product_form.text_field :description
+
+  = product_form.label :member_cost
+  = product_form.number_field :member_cost
+
+  = product_form.label :non_member_cost
+  = product_form.number_field :non_member_cost
+
+  = product_form.check_box :active
+  = product_form.label :active
+
+  = product_form.label :stock
+  = product_form.number_field :stock
+
+  = product_form.submit class: 'button primary'

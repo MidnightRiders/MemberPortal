@@ -1,0 +1,18 @@
+= link_to new_product_path, class: 'button right' do
+  %i.fa.fa-plus
+  New Product
+
+%h1 Shop
+
+%table
+  %tr
+    %th
+    %th
+    %th
+
+  - @products.each do |product|
+    %tr
+      %td= link_to 'Show', product
+      %td= link_to 'Edit', edit_product_path(product)
+      %td= link_to 'Destroy', product, :method => :delete, :data => { :confirm => 'Are you sure?' }
+

@@ -30,6 +30,15 @@ module MidnightRiders
 
     config.i18n.enforce_available_locales = true
 
+    config.paperclip_defaults = {
+      storage: :s3,
+      s3_credentials: {
+        bucket: Rails.application.secrets.s3_bucket_name,
+        access_key_id: ENV['AWS_ACCESS_KEY_ID'] || Rails.application.secrets.aws_access_key_id,
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'] || Rails.application.secrets.aws_secret_access_key
+      }
+    }
+
     Rails.application.assets.register_mime_type 'text/html', '.html'
     Rails.application.assets.register_engine '.haml', Tilt::HamlTemplate
 

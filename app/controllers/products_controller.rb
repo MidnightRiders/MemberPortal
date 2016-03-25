@@ -1,0 +1,78 @@
+class ProductsController < ApplicationController
+  load_and_authorize_resource
+  before_action :set_cart, only: [:index, :show]
+
+  # GET /products
+  # GET /products.json
+  def index
+    @products = Product.all
+  end
+
+  # GET /products/1
+  # GET /products/1.json
+  def show
+  end
+
+  # GET /products/new
+  def new
+    @product = Product.new(
+      active: true
+    )
+  end
+
+  # GET /products/1/edit
+  def edit
+  end
+
+  # POST /products
+  # POST /products.json
+  def create
+    @product = Product.new(product_params)
+
+    respond_to do |format|
+      if @product.save
+        format.html { redirect_to @product, notice: 'Product was successfully created.' }
+        format.json { render action: 'show', status: :created, location: @product }
+      else
+        format.html { render action: 'new' }
+        format.json { render json: @product.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /products/1
+  # PATCH/PUT /products/1.json
+  def update
+    respond_to do |format|
+      if @product.update(product_params)
+        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
+        format.json { head :no_content }
+      else
+        format.html { render action: 'edit' }
+        format.json { render json: @product.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /products/1
+  # DELETE /products/1.json
+  def destroy
+    @product.destroy
+    respond_to do |format|
+      format.html { redirect_to products_url }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    def set_cart
+      if user_signed_in?
+        @cart = current_user.cart
+      end
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def product_params
+      params.require(:product).permit(:name, :description, :file, :member_cost, :non_member_cost, :active, :stock)
+    end
+end

@@ -32,6 +32,9 @@ GEM
     arel (5.0.1.20140414130214)
     autoprefixer-rails (4.0.2.1)
       execjs
+    aws-sdk (1.49.0)
+      json (~> 1.4)
+      nokogiri (>= 1.4.4)
     bcrypt (3.1.9)
     builder (3.2.2)
     cancancan (1.9.2)
@@ -252,6 +255,7 @@ PLATFORMS
 DEPENDENCIES
   active_record_query_trace
   autoprefixer-rails
+  aws-sdk
   cancancan
   capybara
   coffee-rails (~> 4.0.0)

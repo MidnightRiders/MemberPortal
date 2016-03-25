@@ -20,6 +20,14 @@ MidnightRiders::Application.routes.draw do
 
   resources :clubs
 
+  scope 'shop' do
+    get '/', to: 'products#index', as: 'products'
+    resources :products, except: [:index]
+    resources :orders, only: [:index, :show] do
+      post 'place', to: 'orders#place'
+    end
+  end
+
   match 'memberships/webhooks', to: 'memberships#webhooks', via: :all
   devise_for :users, controllers: { registrations: 'registrations' }
   resources :users do
