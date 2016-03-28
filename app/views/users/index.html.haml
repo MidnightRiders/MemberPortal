@@ -59,6 +59,7 @@
       .thd
       .thd Member
       .thd Email
+      .thd Membership Type
       .thd.numeric Member since
       .thd.actions
 
@@ -77,6 +78,7 @@
               = user.first_name
               %small @#{user.username}
         .td= link_to user.email, "mailto: #{user.email}"
+        .td= user.current_membership.try(&:type)
         .td.numeric= user.member_since
         .td.text-right
           -#= link_to 'Show', user
