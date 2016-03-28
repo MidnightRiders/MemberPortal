@@ -22,9 +22,11 @@ MidnightRiders::Application.routes.draw do
 
   scope 'shop' do
     get '/', to: 'products#index', as: 'products'
-    resources :products, except: [:index]
+    post '/', to: 'products#create'
+    resources :products, except: [:index, :create]
     resources :orders, only: [:index, :show] do
       post 'place', to: 'orders#place'
+      resources :product_orders, only: [:create, :destroy], path_names: { create: 'add-to-cart' }
     end
   end
 

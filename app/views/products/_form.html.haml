@@ -1,14 +1,18 @@
 = form_for @product, html: { class: 'row' } do |product_form|
   .large-4.columns
-    %h3= @product.persisted? ? @product.name : 'New Product'
+    %h3= @product.persisted? ? link_to(@product.name, @product) : 'New Product'
     = image_tag @product.image.url(:medium)
   .large-8.columns
     .row
       .medium-4.columns= product_form.label :image, class: 'inline'
-      .medium-8.columns= product_form.file_field :image
+      .medium-8.columns
+        = product_form.file_field :image
+        = errors_for @product, :image
     .row
       .medium-4.columns= product_form.label :name, class: 'inline'
-      .medium-8.columns= product_form.text_field :name
+      .medium-8.columns
+        = product_form.text_field :name
+        = errors_for @product, :name
     .row
       .medium-4.columns= product_form.label :description, class: 'inline'
       .medium-8.columns= product_form.text_area :description, rows: 3
@@ -17,11 +21,37 @@
       .medium-8.columns
         .row
           .small-6.columns
-            = product_form.number_field :member_cost, placeholder: 'Member'
+            .row.collapse
+              .small-2.columns
+                %span.prefix.secondary $
+              .small-10.columns
+                = product_form.number_field :member_cost, placeholder: 'Member'
+            = errors_for @product, :member_cost
           .small-6.columns
-            = product_form.number_field :non_member_cost, placeholder: 'Non-member'
+            .row.collapse
+              .small-2.columns
+                %span.prefix.secondary $
+              .small-10.columns
+                = product_form.number_field :non_member_cost, placeholder: 'Non-member'
+            = errors_for @product, :non_member_cost
     .row
-
+      .medium-4.columns
+        = product_form.label :available_start, class: 'inline'
+      .medium-8.columns
+        = product_form.datetime_select :available_start,
+          { include_blank: true,
+            start_year: [@product.available_start.try(:year),
+              Date.current.year].select(&:present?).min,
+            end_year: Date.current.year + 2 }
+    .row
+      .medium-4.columns
+        = product_form.label :available_end, class: 'inline'
+      .medium-8.columns
+        = product_form.datetime_select :available_end,
+          { include_blank: true,
+            start_year: [@product.available_end.try(:year),
+              Date.current.year].select(&:present?).min,
+            end_year: Date.current.year + 2 }
     .row
       .medium-4.columns
         = product_form.check_box :active

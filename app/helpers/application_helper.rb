@@ -1,5 +1,9 @@
 # Application-wide helper module.
 module ApplicationHelper
+  # Returns +Boolean+ if user signed in and is a member
+  def member?
+    !!current_user.try(:current_member?)
+  end
 
   # Returns *ActiveRecord Object* for the Revolution.
   def revs

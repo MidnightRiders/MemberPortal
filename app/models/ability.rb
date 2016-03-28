@@ -33,7 +33,7 @@ class Ability
     if user
       can :home, [ User ]
       can :manage, user
-      can [:index, :show], :products
+      can [:index, :show], Product, available?: true
       can [:manage, :place], user.orders
       if user.current_member?
         can :show, :download

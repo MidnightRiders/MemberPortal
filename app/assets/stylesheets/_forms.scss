@@ -11,6 +11,11 @@ form {
     margin-bottom: $header-bottom-margin;
     margin-top: -($header-bottom-margin - rem-calc(4));
   }
+
+  select[name*='i)'] {
+    padding-right: 1.5em;
+    width: auto;
+  }
 }
 .file-input {
   .button,

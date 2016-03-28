@@ -1,0 +1,21 @@
+%li
+  = link_to products_path do
+    %i.fa.fa-fw.fa-tag
+    Shop
+%li.has-dropdown
+  = link_to @cart.presence || new_user_session_path do
+    %i.fa.fa-fw.fa-shopping-cart
+    - if @cart.present?
+      (#{@cart.products.size})
+  %ul.dropdown
+    - if @cart.present?
+      %li
+        = link_to @cart do
+          %i.fa.fa-fw.fa-shopping-cart
+          View Cart
+    - else
+      %li
+        = link_to new_user_session_path do
+          %i.fa.fa-fw.fa-sign-in
+          Sign In
+          %small to place an order

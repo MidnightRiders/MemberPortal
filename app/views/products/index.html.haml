@@ -25,15 +25,4 @@
     creating an account is required for Shop purchases, and does not automatically make you a member.
 
 
-%table
-  %tr
-    %th
-    %th
-    %th
-
-  - @products.each do |product|
-    %tr
-      %td= link_to 'Show', product
-      %td= link_to 'Edit', edit_product_path(product)
-      %td= link_to 'Destroy', product, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
+.products= render @products

@@ -1,6 +1,47 @@
-%p#notice= notice
+.row
+  .large-4.columns
+    %h3= @product.name
+    - if @product.description.present?
+      %p= @product.description.html_safe
+    = image_tag @product.image.url(:medium), class: 'product-image'
+  .large-8.columns
+    .alert-box
+      %h3
+        Member Cost: #{number_to_currency(@product.member_cost)}
+        - if user_signed_in?
+          - if current_user.current_member?
+            %small Your price!
+          - else
+            %small Join today to get this price!
+        - else
+          %small
+            = link_to 'Sign in', new_user_session_path
+            to apply membership discount
+      - if @product.non_member_cost.present?
+        %h4.subheader
+          Non-Member Cost: #{number_to_currency(@product.non_member_cost)}
+          - if current_user.try(&:current_member?) === false
+            %small Your price – join today
+      - else
+        %h4.subheader Exclusive Members-Only Product
+
+    .row
+      .small-3.columns
+        %strong In Stock:
+      .small-9.columns
+        = @product.in_stock? ? 'Yes' : 'No'
+        - unless @product.in_stock?
+          %small Check back soon!
+    - if @product.available_end.present?
+      .row
+        .small-3.columns
+          %strong Available Until:
+        .small-8.columns
+          - if @product.available_end < 6.days.from_now.end_of_day
+            = @product.available_end.strftime('%l:%M%P on %A')
+          - elsif @product.available_end < 11.months.from_now.end_of_month
+            = @product.available_end.strftime('%-h:%M%i on %B %-d')
+          - else
+            = @product.available_end.strftime('%-h:%M%i on %B %-d, %Y')
 
 
-= link_to 'Edit', edit_product_path(@product)
-\|
-= link_to 'Back', products_path

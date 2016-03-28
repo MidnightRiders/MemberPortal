@@ -1,0 +1,30 @@
+.product-tile
+  = link_to product, class: [('unavailable' if product.unavailable?), ('members-only' if product.members_only?)]do
+    = image_tag product.image.url(:thumb)
+    %h4= product.name
+    - if product.unavailable?
+      %h4.subheader Unavailable
+    %h5.subheader
+      - if product.member_cost == product.non_member_cost
+        = number_to_currency(product.member_cost)
+      - else
+        - unless product.members_only?
+          = content_tag member? ? :strike : :span,
+            number_to_currency(product.non_member_cost),
+            title: 'Non-Member Price'
+          %br
+        = content_tag product.members_only? || member? ? :span : :small,
+          number_to_currency(product.member_cost) + ' ' + (member? ? content_tag(:small, 'Your Price!') : '(Member)'),
+          title: 'Member Price'
+        - if product.members_only?
+          %br
+          %small Members Only
+    - if @cart.present? && product.available?
+      = form_for [@cart, @cart.product_orders.new], remote: true do |product_order_form|
+        = product_order_form.hidden_field :product_id, value: product.id
+        .row.collapse
+          .small-8.columns
+            = product_order_form.number_field :count, value: 1, class: 'text-center', min: 1
+          .small-4.columns
+            = product_order_form.button :submit, class: 'button postfix' do
+              %i.fa.fa-fw.fa-cart-plus

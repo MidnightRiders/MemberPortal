@@ -1,0 +1,163 @@
+.products {
+  @extend .clearfix;
+
+  margin-left: -$column-gutter/2;
+  margin-right: -$column-gutter/2;
+}
+
+.product-tile {
+  float: left;
+  padding: $column-gutter/2;
+  width: 50%;
+
+  &:nth-child(2n + 1) {
+    clear: left;
+  }
+
+  @media #{$medium-up} {
+    width: 33.33333%;
+
+    &:nth-child(2n + 1) {
+      clear: none;
+    }
+
+    &:nth-child(3n + 1) {
+      clear: left;
+    }
+  }
+
+  @media #{$large-up} {
+    width: 25%;
+
+    &:nth-child(3n + 1) {
+      clear: none;
+    }
+
+    &:nth-child(4n + 1) {
+      clear: left
+    }
+  }
+
+  a:link,
+  a:visited {
+    display: block;
+    padding: .5em;
+    position: relative;
+    text-align: center;
+
+    &:before {
+      border: 30px solid;
+      border-color: transparentize($navy, .33) transparent transparent transparentize($navy, .33);
+      content: '\00A0';
+      display: block;
+      height: 0;
+      left: 0;
+      position: absolute;
+      transition: border-color .5s;
+      top: 0;
+      width: 0;
+    }
+
+    &:after {
+      color: #fff;
+      display: block;
+      line-height: 35px;
+      font-family: 'FontAwesome';
+      font-size: 25px;
+      height: 35px;
+      left: 0;
+      position: absolute;
+      text-align: center;
+      top: 0;
+      width: 35px;
+    }
+
+    &:hover {
+      &,
+      img {
+        border-color: $navy;
+      }
+
+      &:before {
+        border-color: $navy transparent transparent $navy;
+      }
+
+      h4 {
+        color: mix($maroon, #000, 75%);
+      }
+
+      img {
+        border-color: $navy;
+      }
+    }
+
+    &,
+    img {
+      border: 1px solid transparentize($navy, .33);
+      transition: border-color .5s;
+    }
+
+    h4 {
+      color: $maroon;
+    }
+
+    strike {
+      color: $silver;
+    }
+
+    &.unavailable {
+      &,
+      h4,
+      h5,
+      strike,
+      span,
+      small {
+        border-color: mix(#fff, $silver);
+        color: mix(#fff, $silver);
+      }
+
+      &,
+      img {
+        &,
+        &:hover {
+          border-color: mix(#fff, $silver);
+        }
+      }
+
+      &:before,
+      &:hover:before {
+        border-color: mix(#fff, $silver) transparent transparent mix(#fff, $silver);
+      }
+
+      &:after {
+        content: $fa-var-times;
+      }
+    }
+
+    &.members-only {
+      &,
+      img {
+        border-color: transparentize($maroon, .33);
+      }
+
+      &:before {
+        border-color: transparentize($maroon, .33) transparent transparent transparentize($maroon, .33);
+      }
+
+      &:after {
+        content: $fa-var-shield;
+      }
+
+      &:hover {
+        &,
+        img {
+          border-color: $maroon;
+        }
+
+        &:before {
+          border-color: $maroon transparent transparent $maroon;
+        }
+      }
+    }
+  }
+}

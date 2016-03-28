@@ -38,9 +38,9 @@ $topbar-menu-link-color-toggled: #fff;
 $table-head-padding: rem-calc(6);
 $table-row-padding: rem-calc(6);
 
-$input-prefix-bg: $secondary-color;
+$input-prefix-bg: mix($secondary-color, #fff, 15%);
 $input-prefix-border-color: $silver;
-$input-prefix-font-color: #fff;
+$input-prefix-font-color: $secondary-color;
 
 $button-med: rem-calc(12);
 $button-tny: rem-calc(7);

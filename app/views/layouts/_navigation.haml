@@ -120,12 +120,9 @@
                 = icon 'comment-o fa-fw fa-flip-horizontal'
                 Contact Us
       %ul.right
+        = render 'shared/cart'
         - if user_signed_in?
           - if current_user.current_member?
-            %li
-              = link_to matches_url do
-                = icon 'calendar fa-fw'
-                Matches
             %li.has-dropdown
               = link_to '#' do
                 = icon 'trophy fa-fw'
@@ -160,11 +157,10 @@
                     = link_to mot_ms_path do
                       = icon 'list-ol fa-fw'
                       MotY Rankings
-
           %li
             = link_to edit_user_registration_path(current_user) do
               = icon 'user fa-fw'
-              My Account
+              Account
           - if current_user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
             %li.has-dropdown
               %a{ href: '#', title: 'Admin' }

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_filter :set_next_revs_match
+  before_filter :set_cart
   before_filter :configure_permitted_parameters, if: :devise_controller?
 
   before_filter do
@@ -26,6 +27,11 @@ class ApplicationController < ActionController::Base
     end
 
   private
+    # Returns an open +Order+ if the user is logged in
+    def set_cart
+      @cart = current_user.try(:cart)
+    end
+
     # Returns +Match+.
     def set_next_revs_match
       @next_revs_match = revs.try(:next_match)
