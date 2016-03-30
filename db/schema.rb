@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 20160409200748) do
     t.integer  "order_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "amount",     default: 1, null: false
   end
 
   add_index "product_orders", ["order_id"], name: "index_product_orders_on_order_id", using: :btree

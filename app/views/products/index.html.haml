@@ -6,8 +6,8 @@
       %li
         = link_to @cart.presence || new_user_session_path, title: 'Cart', class: 'button secondary' do
           %i.fa.fa-fw.fa-shopping-cart
-          = @cart.present? ? @cart.products.size : 0
-          Items in Cart
+          %span.cart-count= pluralize(@cart.present? ? @cart.product_orders.sum(:amount) : 0, 'Item')
+          in Cart
       - if can? :manage, Product
         %li
           = link_to new_product_path, class: 'button' do

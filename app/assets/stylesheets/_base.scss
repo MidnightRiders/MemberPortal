@@ -30,15 +30,6 @@ p.hint {
   font-style: italic;
 }
 
-.button {
-  span {
-    display: none;
-  }
-  &:hover span {
-    display: inline;
-  }
-}
-
 main {
   display: block;
   padding: rem-calc(10 5);

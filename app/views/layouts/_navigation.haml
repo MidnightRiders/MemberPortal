@@ -120,7 +120,11 @@
                 = icon 'comment-o fa-fw fa-flip-horizontal'
                 Contact Us
       %ul.right
-        = render 'shared/cart'
+        %li
+          = link_to products_path do
+            %i.fa.fa-fw.fa-tag
+            Shop
+        = render 'shared/cart', cart: @cart
         - if user_signed_in?
           - if current_user.current_member?
             %li.has-dropdown

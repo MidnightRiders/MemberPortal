@@ -1,18 +1,27 @@
-%li
-  = link_to products_path do
-    %i.fa.fa-fw.fa-tag
-    Shop
-%li.has-dropdown
-  = link_to @cart.presence || new_user_session_path do
-    %i.fa.fa-fw.fa-shopping-cart
-    - if @cart.present?
-      (#{@cart.products.size})
+%li.has-dropdown.cart
+  = link_to cart.presence || new_user_session_path do
+    .show-for-medium-up
+      = icon 'shopping-cart fa-fw'
+      &nbsp;
+      - if cart.present?
+        (#{cart.product_orders.sum(:amount)})
+    .show-for-small-only
+      = icon 'shopping-cart fa-fw'
+      Cart
+      - if cart.present?
+        (#{cart.product_orders.sum(:amount)})
   %ul.dropdown
-    - if @cart.present?
+    - if cart.present?
+      - cart.product_orders.each do |po|
+        %li.product
+          = link_to [cart, po], title: 'Remove', data: { cart: true, remote: true, method: :delete } do
+            %i.fa.fa-fw.fa-times
+          = po.product.name
+          (#{po.amount})
       %li
-        = link_to @cart do
+        = link_to cart do
           %i.fa.fa-fw.fa-shopping-cart
-          View Cart
+          View Cart &amp; Check Out
     - else
       %li
         = link_to new_user_session_path do

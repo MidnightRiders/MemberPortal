@@ -19,12 +19,11 @@
         - if product.members_only?
           %br
           %small Members Only
-    - if @cart.present? && product.available?
-      = form_for [@cart, @cart.product_orders.new], remote: true do |product_order_form|
-        = product_order_form.hidden_field :product_id, value: product.id
-        .row.collapse
-          .small-8.columns
-            = product_order_form.number_field :count, value: 1, class: 'text-center', min: 1
-          .small-4.columns
-            = product_order_form.button :submit, class: 'button postfix' do
-              %i.fa.fa-fw.fa-cart-plus
+  - if @cart.present? && product.available?
+    = form_for [@cart, ProductOrder.new], remote: true, html: { class: 'row collapse', data: { cart: true } } do |product_order_form|
+      = product_order_form.hidden_field :product_id, value: product.id
+      .small-8.columns
+        = product_order_form.number_field :amount, value: 1, class: 'text-center no-margin-bottom', min: 1
+      .small-4.columns
+        = product_order_form.button :submit, class: 'button postfix no-margin-bottom' do
+          %i.fa.fa-fw.fa-cart-plus

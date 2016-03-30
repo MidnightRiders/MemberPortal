@@ -37,3 +37,5 @@ en:
   unauthorized:
     manage:
       all: This user is not authorized to perform that action.
+  removed_from_cart: "%{name} was successfully removed from the cart."
+  added_to_cart: Successfully added %{name} (%{number}) to cart.
