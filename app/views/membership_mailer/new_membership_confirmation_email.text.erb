@@ -1,11 +1,25 @@
 <%=@user.first_name%>,
 
-Congratulations! You're officially a <%=@membership.year%> <%=@membership.type%> member.
-We've received confirmation of your payment of <%=number_to_currency(Membership::COSTS[@membership.type.to_sym].to_i / 100.0)%>.
-Please keep this email for your records.
+Congratulations! You're an official <%=@membership.type%> Midnight Rider for the <%=@membership.year%> Season.
+
+Now that you're an official Midnight Rider, be on the lookout for a few things:
+
+1. An invite (via email) to our official <%=@membership.year%>
+   Midnight Riders Facebook group and our Open Disucssion Facebook group. We utilize these groups to post various updates and alerts regarding games, away matches, watch parties, and philanthropy events. The Open Discussion Group is where Riders may discuss all things Revs, Riders, or MLS related. Accept your invite and join in on the discussion.
+2. Your Membership Packet will arrive in the mail and includes your Parking Pass<%= 'es' if @membership.is_a?(Family)%>, a Membership Card, and a wicked awesome sticker. You'll need your parking pass to park in our dedicated supporters lot. If you've signed up a couple days before a home game that you plan on attending, shoot an email to membership@midnightriders.com as your pack might not arrive on time.
+
+If you've got any further questions check out our New Member FAQ - it's got some really useful information:
+http://www.midnightriders.com/about-us/membership/new-member-faq/
+
+That's it, welcome aboard, and see you in the Parking Lots!
+
+-----------------------------------------------------------
+PAYMENT CONFIRMATION
+
+We've received your payment of <%=number_to_currency(Membership::COSTS[@membership.type.to_sym].to_f / 100)%>.
+Please keep this email for your financial records.
 
 Charge ID: <%=@membership.stripe_charge_id%>
-
-See you in the parking lots!
+-----------------------------------------------------------
 
 The Midnight Riders
