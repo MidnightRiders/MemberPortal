@@ -105,8 +105,7 @@ class MatchesController < ApplicationController
           ".//*[contains(@class, 'sb-home')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.home_team.abbrv}')] and " +
           ".//*[contains(@class, 'sb-away')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.away_team.abbrv}')]]").try(:first)
         next unless match_html.present?
-        match_info = scrape_single_result(match_html)
-        if match_info[:date] == match.kickoff.to_date
+        if (match_info = scrape_single_result(match_html))[:date] == match.kickoff.to_date
           if match_info[:home][:goals].present? && match_info[:away][:goals].present?
             if match.update_attributes(
                 home_goals: match_info[:home][:goals],
@@ -143,6 +142,8 @@ class MatchesController < ApplicationController
     redirect_to matches_path
   rescue => e
     flash[:error] = e.message
+    Rails.logger.error e.message
+    Rails.logger.info e.backtrace.to_yaml
     redirect_to matches_path
   end
 
@@ -228,15 +229,16 @@ class MatchesController < ApplicationController
       matches.map { |match| scrape_single_result(match) }
     end
 
-  def scrape_single_result(match)
-    result = { date: match.at_css('.sb-match-date').content.to_date }
-    %w(home away).each do |team|
-      data = match.at_css(".sb-#{team}")
-      result[team.to_sym] = {
-        team: data.at_css('.sb-club-name-short').content,
-        goals: data.at_css('.sb-score').present? ? data.at_css('.sb-score').content.to_i : nil
-      }
+    def scrape_single_result(match)
+      return {} unless match.at_css('.sb-match-date').try(:content).present?
+      result = { date: match.at_css('.sb-match-date').content.to_date }
+      %w(home away).each do |team|
+        data = match.at_css(".sb-#{team}")
+        result[team.to_sym] = {
+          team: data.at_css('.sb-club-name-short').content,
+          goals: data.at_css('.sb-score').present? ? data.at_css('.sb-score').content.to_i : nil
+        }
+      end
+      result
     end
-    result
-  end
 end
