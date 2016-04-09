@@ -1,0 +1,22 @@
+= form_for email do |email_form|
+  .row
+    .large-4.columns
+      %h3 Email
+    .large-8.columns
+      .row
+        .large-3.columns
+          = email_form.label :title, class: 'inline'
+        .large-9.columns
+          = email_form.text_field :title, placeholder: 'Title'
+      .row
+        .large-3.columns
+          = email_form.label :preheader, class: 'inline'
+        .large-9.columns
+          = email_form.text_field :preheader, placeholder: 'Text that shows under subject in email preview'
+      .row
+        .large-3.columns
+          = email_form.label :content, class: 'inline'
+        .large-9.columns
+          = email_form.text_area :content, placeholder: 'Email content (markdown-enabled)', rows: 15
+
+

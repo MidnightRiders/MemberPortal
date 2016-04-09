@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150110043129) do
+ActiveRecord::Schema.define(version: 20160407005641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "hstore"
+  enable_extension "pg_stat_statements"
 
   create_table "clubs", force: true do |t|
     t.string   "name"
@@ -33,6 +34,17 @@ ActiveRecord::Schema.define(version: 20150110043129) do
   end
 
   add_index "clubs", ["conference"], name: "index_clubs_on_conference", using: :btree
+
+  create_table "emails", force: true do |t|
+    t.string   "title"
+    t.string   "preheader"
+    t.text     "content"
+    t.text     "featured_shop"
+    t.json     "game"
+    t.json     "viewings"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "matches", force: true do |t|
     t.integer  "home_team_id"
@@ -79,6 +91,17 @@ ActiveRecord::Schema.define(version: 20150110043129) do
 
   add_index "mot_ms", ["user_id", "match_id"], name: "index_mot_ms_on_user_id_and_match_id", unique: true, using: :btree
 
+  create_table "orders", force: true do |t|
+    t.integer  "user_id"
+    t.hstore   "info"
+    t.datetime "completed_at"
+    t.boolean  "fulfilled",    default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "orders", ["user_id"], name: "index_orders_on_user_id", using: :btree
+
   create_table "pick_ems", force: true do |t|
     t.integer  "match_id"
     t.integer  "user_id"
@@ -104,6 +127,34 @@ ActiveRecord::Schema.define(version: 20150110043129) do
   end
 
   add_index "players", ["club_id"], name: "index_players_on_club_id", using: :btree
+
+  create_table "product_orders", force: true do |t|
+    t.integer  "product_id"
+    t.integer  "order_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "amount",     default: 1, null: false
+  end
+
+  add_index "product_orders", ["order_id"], name: "index_product_orders_on_order_id", using: :btree
+  add_index "product_orders", ["product_id"], name: "index_product_orders_on_product_id", using: :btree
+
+  create_table "products", force: true do |t|
+    t.string   "name"
+    t.integer  "member_cost"
+    t.integer  "non_member_cost"
+    t.boolean  "active"
+    t.integer  "stock"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "available_start"
+    t.datetime "available_end"
+  end
 
   create_table "rev_guesses", force: true do |t|
     t.integer  "match_id"

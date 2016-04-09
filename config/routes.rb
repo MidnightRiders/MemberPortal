@@ -35,6 +35,8 @@ MidnightRiders::Application.routes.draw do
     end
   end
 
+  resources :emails
+
   get 'downloads/:filename', to: 'downloads#show', as: :download
 
   match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: :cancel_user_membership, via: [ :put, :patch ]

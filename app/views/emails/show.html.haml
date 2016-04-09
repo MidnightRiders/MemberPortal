@@ -1,0 +1,90 @@
+#maincontent{ style: 'background-color:#ffffff;width:540px;' }
+  .tr{ style: 'background-color:#ffffff;' }
+    .td{ style: 'background-color:#ffffff;vertical-align:top;color:#111133; font-size:15px; line-height: 20px; font-family:Lato,sans-serif;' }
+      %p Hello {FIRST_NAME|Rider},
+      = @email.format(@email.content)
+    .td.right{style: 'background-color:#ffffff;vertical-align:top;color:#111133; font-size:15px; line-height: 20px; font-family:Lato,sans-serif;'}
+      - if @email.game.present?
+        %center{ style: 'border: 1px dashed #881144;' }
+          %h2{ style: 'color:#881144;font-family:Mayflower,Georgia,serif;font-size:19px;font-weight:200;border-bottom: 1px solid #881144;margin-bottom:5px;' }
+            = @email.game['title']
+          %h4{ style: 'font-size:17px;font-weight:200;margin-top:0;' }
+            = @email.game['location']
+            %br
+            Kickoff: #{@email.game['time'].strftime('%l:%M%P')}
+            %small{style: 'font-size: 10px;'}<> EST
+            - if @email.game['location'] == 'Gillette Stadium'
+              %br
+              Lots open: #{(@email.game['time'] - 3.hours).strftime('%l:%M%P')}
+        %center
+          %h3{ style: 'color:#881144;font-family:Mayflower,Georgia,serif;font-size:17px;font-weight:200;border-bottom: 1px solid #881144;' }
+            Partner Pubs
+          %p
+            %a{ href: 'http://bansheeboston.com', style: 'display:block;', target: '_blank' }
+              %img{alt: 'Banshee', border: '0', src: 'https://50a924a404-custmedia.vresp.com/library/1397919791/8ae15c476e/banshee-175.gif', style: 'display:block;', title: 'the Banshee - Dorchester, MA'}/
+              = @email.styled_link_to('Viewing', @email.viewings['banshee']) if @email.viewings['banshee'].present?
+          %p
+            %a{ href: 'http://parlorsportsbar.com', style: 'display:block;', target: '_blank' }
+              %img{alt: 'Parlor Sports', border: '0', src: 'https://50a924a404-custmedia.vresp.com/library/1397919805/f47c6a1dec/parlor-sports-175.gif', style: 'display:block;', title: 'Parlor Sports - Somerville, MA'}/
+              = @email.styled_link_to('Viewing', @email.viewings['parlor']) if @email.viewings['parlor'].present?
+          %p
+            %a{ href: 'http://britishbeer.com', style: 'display:block;', target: '_blank' }
+              %img{alt: 'British Beer Company', border: '0', src: 'https://50a924a404-custmedia.vresp.com/library/1426818142/28c8bc5cb5/british-beer.gif', style: 'display:block;', title: 'British Beer Company - Multiple Locations, MA'}/
+              - if @email.viewings['british_beer'].present?                   |
+                = @email.viewings['british_beer'].map { |location, link| @email.styled_link_to("#{location.titleize} Viewing", link) }.join('br')
+          %p
+            %a{ href: 'http://www.the-rumbleseat.com/', style: 'display:block;', target: '_blank' }
+              %img{alt: 'The Rumbleseat Bar  Grille', border: '0', src: 'https://50a924a404-custmedia.vresp.com/library/1446907626/6248735133/rumbleseat.gif', style: 'display:block;', title: 'The Rumbleseat Bar  Grille - Chicopee, MA'}/
+              = @email.styled_link_to('Viewing', @email.viewings['rumbleseat']) if @email.viewings['rumbleseat'].present?
+          %p
+            %a{ href: 'http://www.bisoncounty.com/', style: 'display:block;', target: '_blank' }
+              %img{alt: 'Bison County Bar and Grill', border: '0', src: 'https://50a924a404-custmedia.vresp.com/library/1455990351/2a04d34d2a/bison-county-175.gif', style: 'display:block;', title: 'Bison County Bar and Grill - Waltham, MA'}/
+              = @email.styled_link_to('Viewing', @email.viewings['bisoncounty']) if @email.viewings['bisoncounty'].present?
+        - if @email.featured_shop.present?
+          %h3{ style: 'color:#881144;font-family:Mayflower,Georgia,serif;font-size:17px;font-weight:200;border-bottom:1px solid #881144;text-align:center;' }
+            Featured in the Shop
+          %center= @email.format(@email.featured_shop)
+        %h3{style: 'color:#881144;font-family:Mayflower,Georgia,serif;font-size:17px;font-weight:200;border-bottom:1px solid #881144;text-align:center;'} Links
+        %ul{ style: 'margin-left:0;padding-left:.7em;font-size:13px;' }
+          %li= @email.styled_link_to('MidnightRiders.com', 'http://midnightriders.com')
+          %li= @email.styled_link_to('Member Portal', 'http://members.midnightriders.com')
+          %li= @email.styled_link_to('The Shop', 'http://midnightriders.com/shop')
+          %li
+            Facebook:
+            = @email.styled_link_to('Group', 'https://www.facebook.com/groups/MidnightRiders2015/')
+            \|
+            = @email.styled_link_to('Page', 'https://facebook.com/MidnightRiders')
+          %li= @email.styled_link_to('Twitter', 'http://twitter.com/MidnightRiders')
+          %li= @email.styled_link_to('Instagram', 'http://instagr.am/MidnightRiders1995')
+%h2{ style: 'color:#881144;font-family:Mayflower,Georgia,serif;font-size:19px;font-weight:200;' }
+  From the
+  = @email.styled_link_to 'Facebook group', 'https://facebook.com/groups/MidnightRiders2015'
+  and elsewhere
+%ul
+  %li
+    Subscribe to the Riders’ Google Calendar
+    = @email.styled_link_to('here', 'https://www.google.com/calendar/ical/midnightriders.com_6mbp90moh73i5lni5dd2bbs3vs%40group.calendar.google.com/public/basic.ics')
+    to stay up-to-date on upcoming Riders events.
+  %li
+    The #{@email.styled_link_to('Revolution subreddit', 'http://reddit.com/r/newenglandrevolution')} is full of
+    great information, discussions, and matchday threads. Check it out.
+  %li
+    Don’t forget to check us out on #{@email.styled_link_to('Instagram', 'http://instagr.am/midnightriders1995')},
+    #{@email.styled_link_to('YouTube', 'http://youtube.com/midnightridersne')}, #{@email.styled_link_to('Vine', 'vine://user/923046831699660800')},
+    #{@email.styled_link_to('Twitter', 'http://twitter.com/midnightriders')} and
+    #{@email.styled_link_to('Facebook', 'http://facebook.com/midnightriders')}.
+%p The Midnight Riders
+%hr{ style: 'border:none;border-bottom:1px solid #501;' }
+%p{ style: 'font-size:11px;text-align:center;' }
+  %strong{ style: 'font-family:Mayflower,Georgia,serif;font-weight:600;' } Midnight Riders - A New England Independent Supporters Group
+  %br
+    = @email.styled_link_to 'www.MidnightRiders.com', 'http://www.MidnightRiders.com'
+    \|
+    = @email.styled_link_to '@MidnightRiders', 'http://twitter.com/midnightriders'
+    \|
+    = @email.styled_link_to 'facebook.com/MidnightRiders', 'http://facebook.com/MidnightRiders'
+%hr{ style: 'border:none;border-bottom:1px solid #501;' }
+%center {VR_SOCIAL_SHARING}
+%p{ style: 'font-size:11px;text-align:center;' }= @email.styled_link_to 'Forward this message to a friend', '{VR_F2AF_LINK}'
+%p{ style: 'font-size:11px;text-align:left;' }
+  You have received this email as a customer, member, or newsletter subscriber of the Midnight Riders. To opt out, please click the Unsubscribe link below.

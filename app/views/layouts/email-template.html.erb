@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title><%= yield :title %></title>
+</head>
+<body bgcolor="#290c2b" style="background-color:#290c2b;background-image:url(https://50a924a404-custmedia.vresp.com/library/1364593427/3ca8c16f5e/bg.gif);background-repeat:repeat;color:#ffffff;font-family:sans-serif;margin:0;padding:0;border:0;"><% if content_for?(:preheader) %>
+<span style="color:#290c2b;font-size:1px;display:none;"><%= yield :preheader %></span><% end %>
+<style type="text/css">
+  body, body > table, #maincell {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: #290c2b url(https://50a924a404-custmedia.vresp.com/library/1364593427/3ca8c16f5e/bg.gif) repeat;
+  }
+
+  *, html, body, table {
+    -webkit-text-size-adjust: none !important;
+  }
+
+  @media screen and (max-width: 599px) {
+    #container {
+      width: auto !important;
+    }
+
+    #header {
+      width: 100% !important;
+      height: auto;
+    }
+
+    #maincontent {
+      width: 100% !important;
+    }
+
+    #maintd {
+      padding: 15px !important;
+    }
+
+    .large {
+      display: none !important;
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    .small {
+      display: none !important;
+    }
+
+    .large {
+      width: auto !important;
+      overflow: visible !important;
+      float: none !important;
+      display: block !important;
+    }
+
+    span.large {
+      display: inline !important;
+    }
+
+    #maincontent {
+      display: table;
+      border-collapse: collapse;
+    }
+
+    .tr {
+      display: table-row;
+    }
+
+    .td {
+      display: table-cell;
+      width: 335px;
+      padding-right: 15px;
+    }
+
+    .td.right {
+      padding-left: 15px;
+      padding-right: 0;
+      width: 175px;
+      border-left: 1px dashed #881144;
+    }
+  }
+</style>
+<table width="100%" cellspacing="0" cellpadding="0" border="0" style="background:url(https://50a924a404-custmedia.vresp.com/library/1364593427/3ca8c16f5e/bg.gif) repeat;color:#ffffff;font-family:sans-serif;">
+  <tr>
+    <td align="center" id="maincell" style="padding:0 5px;">
+      <p style="color:#ffffff; font-size:11px;">Email not displaying properly? Please
+        <a href="{VR_HOSTED_LINK}" style="color: #ffffff; text-decoration: none; border-bottom: 1px dashed #ffffff; margin-bottom: -1px;">go
+          here</a> to view it in your browser.</p>
+      <table id="container" width="600" cellspacing="0" cellpadding="0" border="0" style="display:block;width:600px;margin:0 auto;box-shadow:0 3px 6px #000;">
+        <tbody>
+        <tr>
+          <td valign="top"><h1 style="margin:0;">
+            <a href="http://midnightriders.com"><img src="https://50a924a404-custmedia.vresp.com/library/1364593451/541ae6233c/header.jpg" alt="Midnight Riders" style="display:block;" border=0 id="header"></a>
+          </h1></td>
+        </tr>
+        <tr>
+          <td id="maintd" style="padding:30px;padding-bottom: 15px;color:#111133; font-size:15px; line-height: 20px; font-family:Lato,sans-serif; background-color:#ffffff;text-align:left;" colspan="2">
+            <%= yield %>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

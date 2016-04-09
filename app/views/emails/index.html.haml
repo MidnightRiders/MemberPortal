@@ -1,0 +1,25 @@
+.row
+  .large-4.columns
+    %h3 Emails
+    = link_to new_email_path, class: 'button small expand' do
+      %i.fa.fa-fw.fa-plus
+      New Email
+  .large-8.columns
+    %table
+      %thead
+        %th Title
+        %th Date
+        %th
+      - @emails.each do |email|
+        %tr
+          %td= link_to email.title, email
+          %td= email.created_at.strftime('%Y-%m-%d')
+          %td
+            = link_to 'Edit', edit_email_path(email), class: 'button small primary'
+            = link_to 'View', email, class: 'button small secondary'
+            = link_to 'Delete', email, class: 'button small alert', method: :delete,
+              confirm: 'Are you sure you wish to delete this email? This action cannot be undone.'
+      %tr
+        %td{ colspan: 3 }
+          = link_to new_email_path, class: 'button small expand', title: 'New Email' do
+            %i.fa.fa-fw.fa-plus
