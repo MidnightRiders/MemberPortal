@@ -48,6 +48,10 @@
   .row
     .large-4.columns
       %h3 Contact Information
+      - unless f.object.address.present?
+        %p.alert-box
+          %strong We need your address
+          to be able to send you your membership package.
     .large-8.columns
       .row
         .medium-4.columns

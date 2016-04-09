@@ -1,6 +1,7 @@
 - content_for :title, 'Member Portal | Home'
 
 = render partial: 'users/update_prompt'
+= render partial: 'users/address_prompt'
 
 = render 'register_now', user: current_user unless current_user.current_member? || current_user.has_family_invitation?
 
