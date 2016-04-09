@@ -59,15 +59,18 @@
           = f.label :address, 'Street Address'
           = f.text_area :address, rows: 3, autocapitalize: 'words', tabindex: 8
       .row
-        .medium-5.large-6.columns
+        .medium-4.columns
           = f.label :city
           = f.text_field :city, autocapitalize: 'words', tabindex: 9
-        .small-4.medium-3.large-2.columns
+        .small-2.medium-2.columns
           = f.label :state
           = f.text_field :state, size: 2, tabindex: 10
-        .small-8.medium-4.columns
+        .small-4.medium-3.columns
           = f.label :postal_code
           = f.text_field :postal_code, tabindex: 11
+        .small-6.medium-3.columns
+          = f.label :country
+          = f.text_field :country, tabindex: 12
   - if devise && f.object.persisted?
     .row
       .large-4.columns
