@@ -37,6 +37,7 @@ FactoryGirl.define do
     city { Faker::Address.city }
     state { Faker::Address.state_abbr }
     postal_code { Faker::Address.postcode }
+    country { Faker::Address.country }
     phone { Faker::PhoneNumber.phone_number }
     email { Faker::Internet.email }
     member_since { (Random.rand*(Date.today.year-1995)).to_i+1995 }
