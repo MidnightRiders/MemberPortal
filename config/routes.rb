@@ -9,6 +9,7 @@ MidnightRiders::Application.routes.draw do
     collection do
       post :import
       post :bulk_update
+      get :auto_update
     end
     resources :mot_ms, path: 'motm', except: [ :index, :show ]
     resources :rev_guesses, path: 'revguess', except: [ :index, :show ]

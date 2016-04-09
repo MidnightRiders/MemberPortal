@@ -2,6 +2,7 @@
 class MatchesController < ApplicationController
   load_and_authorize_resource
   require 'net/http'
+  require 'nokogiri'
 
   # GET /matches
   # GET /matches.json
@@ -39,18 +40,18 @@ class MatchesController < ApplicationController
       :'Montr' => Club.find_by(abbrv: 'MTL'),
       :'Galaxy' => Club.find_by(abbrv: 'LA'),
       :'Revolution' => Club.find_by(abbrv: 'NE'),
-      :'New York City' => Club.find_by(abbrv: 'NYCFC'),
-      :'NYC' => Club.find_by(abbrv: 'NYCFC'),
+      :'New York City' => Club.find_by(abbrv: 'NYC'),
+      :'NYC' => Club.find_by(abbrv: 'NYC'),
       :'Red Bull' => Club.find_by(abbrv: 'NY'),
       :'Redbull' => Club.find_by(abbrv: 'NY'),
-      :'Orlando' => Club.find_by(abbrv: 'OCSC'),
+      :'Orlando' => Club.find_by(abbrv: 'ORL'),
       :'Philadelphia' => Club.find_by(abbrv: 'PHI'),
       :'Portland' => Club.find_by(abbrv: 'POR'),
       :'Salt Lake' => Club.find_by(abbrv: 'RSL'),
       :'Earthquakes' => Club.find_by(abbrv: 'SJ'),
       :'Seattle' => Club.find_by(abbrv: 'SEA'),
       :'Sporting' => Club.find_by(abbrv: 'SKC'),
-      :'Toronto' => Club.find_by(abbrv: 'TFC'),
+      :'Toronto' => Club.find_by(abbrv: 'TOR'),
       :'Vancouver' => Club.find_by(abbrv: 'VAN')
     }
     begin
@@ -85,6 +86,63 @@ class MatchesController < ApplicationController
       end
     end
     flash[:success] = "#{count} Matches were saved or updated."
+    redirect_to matches_path
+  end
+
+  # GET /matches/auto_update
+  def auto_update
+    finished_matches = Match.where('(home_goals IS NULL OR away_goals IS NULL) AND kickoff < ?', Time.current - 2.hours)
+    matches_by_week = finished_matches.group_by { |m| [m.kickoff.year, m.kickoff.strftime('%W')] }
+    successes = 0
+    failures = []
+    matches_by_week.each do |(_year, _week), matches|
+      week_start = matches.first.kickoff.to_date.beginning_of_week
+      uri = URI("http://matchcenter.mlssoccer.com/matches/#{week_start.strftime('%Y-%m-%d')}")
+      html = Nokogiri::HTML(Net::HTTP.get(uri))
+      matches.each do |match|
+        Rails.logger.info match
+        match_html = html.xpath('//*[contains(@class,"ml-link") and ' +
+          ".//*[contains(@class, 'sb-home')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.home_team.abbrv}')] and " +
+          ".//*[contains(@class, 'sb-away')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.away_team.abbrv}')]]").try(:first)
+        next unless match_html.present?
+        match_info = scrape_single_result(match_html)
+        if match_info[:date] == match.kickoff.to_date
+          if match_info[:home][:goals].present? && match_info[:away][:goals].present?
+            if match.update_attributes(
+                home_goals: match_info[:home][:goals],
+                away_goals: match_info[:away][:goals]
+              )
+              successes += 1
+            else
+              failures << [match, 'Could not save (see logs).']
+              Rails.logger.info match.errors.to_yaml
+            end
+          else
+            failures << [match, 'No score recorded.']
+            Rails.logger.warn 'No score recorded:'
+            Rails.logger.info match_info.to_yaml
+          end
+        else
+          failures << [match, 'Dates do not match.']
+          Rails.logger.warn 'Dates do not match:'
+          Rails.logger.info match.to_yaml
+          Rails.logger.info match_info.to_yaml
+        end
+      end
+    end
+    if finished_matches.empty?
+      flash[:notice] = 'There were no matches to update.'
+    else
+      flash[:success] = "#{successes} of #{finished_matches.size} #{'Match'.pluralize(finished_matches.size)} were updated."
+      if failures.any?
+        flash[:success] += '<br><ul><li>' + failures.map do |m, e|
+          "#{view_context.link_to "#{m.home_team.abbrv} v #{m.away_team.abbrv}", m}: #{e}"
+        end.join('</li><li>') + '</li></ul>'
+      end
+    end
+    redirect_to matches_path
+  rescue => e
+    flash[:error] = e.message
     redirect_to matches_path
   end
 
@@ -164,4 +222,21 @@ class MatchesController < ApplicationController
     def match_params
       params.require(:match).permit(:home_team_id, :away_team_id, :kickoff, :kickoff_date, :kickoff_time, :location, :home_goals, :away_goals)
     end
+
+    def scrape_all_results_for_week(html)
+      matches = html.css('.ml-link')
+      matches.map { |match| scrape_single_result(match) }
+    end
+
+  def scrape_single_result(match)
+    result = { date: match.at_css('.sb-match-date').content.to_date }
+    %w(home away).each do |team|
+      data = match.at_css(".sb-#{team}")
+      result[team.to_sym] = {
+        team: data.at_css('.sb-club-name-short').content,
+        goals: data.at_css('.sb-score').present? ? data.at_css('.sb-score').content.to_i : nil
+      }
+    end
+    result
+  end
 end
