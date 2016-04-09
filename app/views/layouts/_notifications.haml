@@ -1,4 +1,3 @@
 - if flash
   - flash.each do |k,f|
-    .alert-box{class: (k.to_sym == :error ? 'alert' : (k.to_sym == :notice ? 'info' : k))}
-      = f
+    .alert-box{class: (k.to_sym == :error ? 'alert' : (k.to_sym == :notice ? 'info' : k))}!= f

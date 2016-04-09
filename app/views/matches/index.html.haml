@@ -50,6 +50,11 @@
                   = icon 'upload fa-fw'
         .row
           .medium-8.columns.right
+            = link_to auto_update_matches_path, class: 'button small secondary expand' do
+              = icon 'refresh fa-fw'
+              Automated Results Update
+        .row
+          .medium-8.columns.right
             = link_to new_match_path, class: 'button small expand' do
               = icon 'calendar fa-fw'
               New Match
