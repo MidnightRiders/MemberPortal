@@ -5,7 +5,6 @@ var CardReader = (function($) {
       maybeListening = false,
       listening = false;
 
-  var char = function(keypress) { return String.fromCharCode(keypress.charCode); };
   var capitalize = function(str) {
     return str.toLowerCase().replace(
       /([^a-z])([a-z])(?=[a-z]{2})|^([a-z])/g,
@@ -14,6 +13,7 @@ var CardReader = (function($) {
       }
     );
   };
+
   var generateUserName = function(card) {
     $.get(
       '/users/username',
@@ -47,9 +47,9 @@ var CardReader = (function($) {
     generateUserName(card);
   };
 
-  var acceptInput = function(e) {
+  var acceptInput = function(char) {
     inputString = inputString || '%B';
-    inputString += char(e);
+    inputString += char;
     clearTimeout(timeout);
     timeout = setTimeout(endInput, 50);
   };
@@ -60,22 +60,26 @@ var CardReader = (function($) {
     listening = false;
   };
 
-  var listener = function(e) {
-    if (!listening && char(e) == '%') {
+  var listener = function() {
+    var lastChar = this.value.substr(-1);
+    if (!listening && lastChar == '%') {
       maybeListening = true;
     } else if (maybeListening) {
       maybeListening = false;
-      listening = char(e) == 'B';
+      listening = lastChar == 'B';
     } else if (listening) {
-      acceptInput(e);
+      acceptInput(lastChar);
     } else {
       return;
     }
-    e.preventDefault();
+    this.value = this.value.substr(0, -1);
   };
 
   return {
-    listen: function() { document.body.addEventListener('keypress', listener); }
+    listen: function() {
+      $(':input').on('input', listener)
+        .on('keyup keydown keypress', function(e) { if (e.which == 13) { e.preventDefault(); }});
+    }
   };
 })(jQuery);
 
