@@ -165,15 +165,8 @@ class User < ActiveRecord::Base
       end
 
       user = User.where(email: row['email'].strip.downcase).first_or_initialize
-      if user.new_record?
-        original_uname = row['username'] = "#{row['first_name']}#{row['last_name']}".downcase.gsub(/[^a-z]/,'')
-        i = 0
-        until User.find_by(username: row['username']).nil?
-          i += 1
-          row['username'] = "#{original_uname}#{i}"
-        end
-      end
       user.attributes = row.to_hash.select { |x| allowed_attributes.include? x.to_sym  }
+      user.generate_unique_username
       pass = false
       if user.new_record?
         logger.info "Adding #{row['first_name']} #{row['last_name']}…"
@@ -249,4 +242,14 @@ class User < ActiveRecord::Base
     @ability ||= Ability.new(self)
   end
 
+  def generate_unique_username
+    return if self.username.present?
+    temp_uname = original_uname = "#{first_name}#{last_name}".downcase.gsub(/[^a-z]/,'')
+    i = 0
+    until User.find_by(username: temp_uname).nil?
+      i += 1
+      temp_uname = "#{original_uname}#{i}"
+    end
+    self.username = temp_uname
+  end
 end

@@ -1,6 +1,6 @@
 # Controller for +User+ model.
 class UsersController < ApplicationController
-  load_and_authorize_resource find_by: :username
+  load_and_authorize_resource find_by: :username, except: [:username]
 
   # GET /users
   # GET /users.json
@@ -95,6 +95,11 @@ class UsersController < ApplicationController
     else
       redirect_to users_path, alert: 'No file was selected'
     end
+  end
+
+  # GET /users/username
+  def username
+    render json: { username: User.new(user_params).generate_unique_username }
   end
 
   private

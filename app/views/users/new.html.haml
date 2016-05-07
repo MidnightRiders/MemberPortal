@@ -2,4 +2,5 @@
   New User
   %small= link_to 'Return', users_path
 
-= render partial: 'users/form', locals: { user: @user }
+= render 'users/form', user: @user
+= render 'memberships/form', user: @user, membership: @user.memberships.build(year: Date.current.year, privileges: [])

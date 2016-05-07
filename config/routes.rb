@@ -25,6 +25,7 @@ MidnightRiders::Application.routes.draw do
   resources :users do
     collection do
       post :import
+      get :username
     end
     resources :memberships, controller: 'memberships', type: 'Individual'
     resources :memberships, controller: 'memberships', type: 'Family' do
