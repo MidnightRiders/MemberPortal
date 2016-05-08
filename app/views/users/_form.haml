@@ -1,27 +1,32 @@
 - devise ||= false
 - opts = devise ? { url: registration_path(user) } : {}
 
-= form_for(user, opts.merge({html: { autocomplete: 'on' }})) do |f|
+= form_for user, opts.merge({html: { autocomplete: 'on' }}) do |user_form|
   - if devise
     = devise_error_messages!
   .row
     .large-4.columns
       %h3 User Information
+      - unless devise || user_signed_in?
+        = link_to '#', class: 'button small secondary', data: { reveal_id: 'swipe-reveal' } do
+          = icon 'credit-card fa-fw'
+          Swipe Card
+
     .large-8.columns
       .row
         .medium-4.columns
-          = f.label :first_name, 'Name', class: 'inline'
+          = user_form.label :first_name, 'Name', class: 'inline'
         .medium-8.columns
           .row
             .small-6.columns
-              = f.text_field :first_name, autocorrect: 'off', placeholder: 'First Name', autocapitalize: 'words', autofocus: true, tabindex: 1
+              = user_form.text_field :first_name, autocorrect: 'off', placeholder: 'First Name', autocapitalize: 'words', autofocus: true, tabindex: 1
             .small-6.columns
-              = f.text_field :last_name, autocorrect: 'off', placeholder: 'Last Name', autocapitalize: 'words', tabindex: 2
+              = user_form.text_field :last_name, autocorrect: 'off', placeholder: 'Last Name', autocapitalize: 'words', tabindex: 2
       .row
         .medium-4.columns
-          = f.label :member_since, class: 'inline'
+          = user_form.label :member_since, class: 'inline'
         .medium-8.columns
-          = f.select :member_since, (1995..Date.current.year), { selected: (f.object.member_since || Date.current.year) }, tabindex: 3
+          = user_form.select :member_since, (1995..Date.current.year), { selected: (user_form.object.member_since || Date.current.year) }, tabindex: 3
       - if devise && devise_mapping.confirmable? && resource.pending_reconfirmation?
         %small.hint
           Currently waiting confirmation for:
@@ -29,53 +34,53 @@
     .large-8.columns
       .row
         .medium-4.columns
-          = f.label :username, class: 'inline'
+          = user_form.label :username, class: 'inline'
         .medium-8.columns
-          = f.text_field :username, autocapitalize: 'off', autocorrect: 'off', tabindex: 4
+          = user_form.text_field :username, autocapitalize: 'off', autocorrect: 'off', tabindex: 4
       - if devise
         .row
           .medium-4.columns
-            = f.label :password, class: 'inline'
+            = user_form.label :password, class: 'inline'
           .medium-8.columns
-            = f.password_field :password, autocapitalize: 'off', autocorrect: 'off', tabindex: 5
-            - if f.object.persisted?
+            = user_form.password_field :password, autocapitalize: 'off', autocorrect: 'off', tabindex: 5
+            - if user_form.object.persisted?
               %small.hint (leave blank if you don't want to change it)
         .row
           .medium-4.columns
-            = f.label :password_confirmation, class: 'inline'
+            = user_form.label :password_confirmation, class: 'inline'
           .medium-8.columns
-            = f.password_field :password_confirmation, autocapitalize: 'off', autocorrect: 'off', tabindex: 6
+            = user_form.password_field :password_confirmation, autocapitalize: 'off', autocorrect: 'off', tabindex: 6
   .row
     .large-4.columns
       %h3 Contact Information
-      - unless f.object.address.present?
+      - unless user_form.object.address.present?
         %p.alert-box
           %strong We need your address
           to be able to send you your membership package.
     .large-8.columns
       .row
         .medium-4.columns
-          = f.label :email, class: 'inline'
+          = user_form.label :email, class: 'inline'
         .medium-8.columns
-          = f.email_field :email, autocorrect: false, autocapitalize: false, tabindex: 7
+          = user_form.email_field :email, autocorrect: false, autocapitalize: false, tabindex: 7
       .row
         .column
-          = f.label :address, 'Street Address'
-          = f.text_area :address, rows: 3, autocapitalize: 'words', tabindex: 8
+          = user_form.label :address, 'Street Address'
+          = user_form.text_area :address, rows: 3, autocapitalize: 'words', tabindex: 8
       .row
         .medium-4.columns
-          = f.label :city
-          = f.text_field :city, autocapitalize: 'words', tabindex: 9
+          = user_form.label :city
+          = user_form.text_field :city, autocapitalize: 'words', tabindex: 9
         .small-2.medium-2.columns
-          = f.label :state
-          = f.text_field :state, size: 2, tabindex: 10
+          = user_form.label :state
+          = user_form.text_field :state, size: 2, tabindex: 10
         .small-4.medium-3.columns
-          = f.label :postal_code
-          = f.text_field :postal_code, tabindex: 11
+          = user_form.label :postal_code
+          = user_form.text_field :postal_code, tabindex: 11
         .small-6.medium-3.columns
-          = f.label :country
-          = f.text_field :country, tabindex: 12
-  - if devise && f.object.persisted?
+          = user_form.label :country
+          = user_form.text_field :country, tabindex: 12
+  - if devise && user_form.object.persisted?
     .row
       .large-4.columns
         %h3
@@ -84,8 +89,10 @@
       .large-8.columns
         .row
           .large-4.columns
-            = f.label :current_password, class: 'inline'
+            = user_form.label :current_password, class: 'inline'
           .large-8.columns
-            = f.password_field :current_password, tabindex: 12
+            = user_form.password_field :current_password, tabindex: 12
+  - unless devise
+    = render 'memberships/form', user: user, membership: user.memberships.build(year: Date.current.year, privileges: []), parent_form: user_form
   .row.text-right
-    .column= f.submit (f.object.new_record? ? 'Create' : 'Update'), class: 'button', tabindex: 13
+    .column= user_form.submit (user_form.object.new_record? ? 'Create' : 'Update'), class: 'button', tabindex: 13

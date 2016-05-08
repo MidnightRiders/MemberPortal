@@ -1,0 +1,15 @@
+#swipe-input {
+  height: 0;
+  float: left;
+  position: absolute;
+  opacity: 0;
+  width: 0;
+
+  &:invalid + .text-center button {
+    @include button($bg: $silver, $disabled: true);
+  }
+
+  &:valid + .text-center button {
+    @include button($bg: $success-color);
+  }
+}

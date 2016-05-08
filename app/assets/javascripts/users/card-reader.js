@@ -22,7 +22,9 @@ var CardReader = (function($) {
     );
   };
 
-  var process = function(stripeInfo) {
+  var process = function(e) {
+    e.preventDefault();
+    var stripeInfo = this['swipe-input'].value;
     console.log(stripeInfo);
     var breakdown = stripeInfo.match(/^%B(\d+) *(.)(?=.{2,26})(.+?)\/(.+?) *\2(\d{2})(\d{2})/i);
     if (!breakdown) { return false; }
@@ -45,45 +47,20 @@ var CardReader = (function($) {
     $('#stripe_exp_month').val(card.exp.month);
     $('#stripe_exp_year').val(card.exp.year);
     generateUserName(card);
+    $('#swipe-reveal').foundation('reveal', 'close');
+    $('#stripe_cvc').val(prompt('Please enter your CVC (the number on the back of the card)'));
   };
-
-  var acceptInput = function(char) {
-    inputString = inputString || '%B';
-    inputString += char;
-    clearTimeout(timeout);
-    timeout = setTimeout(endInput, 50);
-  };
-
-  var endInput = function() {
-    if (/^%B.+?\?/.test(inputString)) { process(inputString); }
-    inputString = void 0;
-    listening = false;
-  };
-
-  var listener = function() {
-    var lastChar = this.value.substr(-1);
-    if (!listening && lastChar == '%') {
-      maybeListening = true;
-    } else if (maybeListening) {
-      maybeListening = false;
-      listening = lastChar == 'B';
-    } else if (listening) {
-      acceptInput(lastChar);
-    } else {
-      return;
-    }
-    this.value = this.value.substr(0, -1);
-  };
-
   return {
-    listen: function() {
-      $(':input').on('input', listener)
-        .on('keyup keydown keypress', function(e) { if (e.which == 13) { e.preventDefault(); }});
-    }
+    process: process
   };
 })(jQuery);
 
 jQuery(function($) {
   'use strict';
-  CardReader.listen();
+  $(function() {
+    $('#swipe-reveal').on('opened', function() {
+      $('#swipe-input').val('').focus();
+    });
+    $('#swipe').on('submit', CardReader.process);
+  });
 });

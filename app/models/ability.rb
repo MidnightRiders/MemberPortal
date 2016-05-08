@@ -77,7 +77,7 @@ class Ability
     else
       cannot :index, :all
       cannot :manage, :all
-      can :create, :Registration
+      can :create, [:Registration, User]
     end
   end
 end

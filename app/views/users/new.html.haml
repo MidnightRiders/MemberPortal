@@ -1,6 +1,15 @@
 - content_for :title do
   New User
-  %small= link_to 'Return', users_path
 
 = render 'users/form', user: @user
-= render 'memberships/form', user: @user, membership: @user.memberships.build(year: Date.current.year, privileges: [])
+
+- unless user_signed_in?
+  #swipe-reveal.reveal-modal.small{ data: { reveal: true } }
+    .close-reveal-modal &#215;
+    %h3.text-center Swipe Your Card Now
+    = form_tag '#', id: 'swipe', autocomplete: 'off' do
+      = text_field_tag 'swipe-input', '', id: 'swipe-input', data: { autofocus: true }, required: 'required', pattern: '^%B(\d+) *(.)(?=.{2,26})(.+?)\/(.+?) *\2(\d{2})(\d{2}).*$', autocomplete: 'off'
+      .text-center
+        = button_tag :submit, class: 'button no-margin-bottom' do
+          = icon 'check-circle fa-fw'
+          Done

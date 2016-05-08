@@ -27,11 +27,10 @@ class MembershipsController < ApplicationController
   # GET /users/:user_id/memberships/new
   def new
     privileges = @user.memberships.last.try(:privileges)
-    @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
     if (customer = @user.stripe_customer).present?
       @cards = customer.cards.data
     end
-    @membership = @user.memberships.new(year: @year, privileges: privileges)
+    @membership = @user.memberships.new(year: greatest_membership_year, privileges: privileges)
   end
 
   # GET /users/:user_id/memberships/1/invite

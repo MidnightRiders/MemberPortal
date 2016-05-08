@@ -1,97 +1,20 @@
+:ruby
+  parent_form ||= nil
+  enqueue_javascript 'https://js.stripe.com/v2/'
+  if parent_form.present?
+    enqueue_javascript 'users/card-reader'
+    enqueue_javascript 'admin/test-card-reader' if Rails.env.development?
+  end
+
 - content_for :head do
   %meta{ name: 'stripe-public-key', content: ENV['STRIPE_PUBLIC_KEY'] }
-- enqueue_javascript 'https://js.stripe.com/v2/', 'users/card-reader'
-- if Rails.env.development?
-  - enqueue_javascript 'admin/test-card-reader'
 
-= form_for [user, membership.becomes(Membership)], html: { autocomplete: 'on' } do |membership_form|
-  .row
-    .large-4.columns
-      %h3
-        = membership.new_record? ? 'New' : 'Edit'
-        Membership
-    .large-8.columns
-      - unless membership.errors[:base].empty?
-        .alert-box.alert
-          - membership.errors[:base].each do |error|
-            %p= error
-      .row
-        .medium-4.columns
-          = membership_form.label :year, class: 'inline'
-        .medium-8.columns
-          - if can? :manage, User
-            = membership_form.select :year, (1994..@year), {}
-            = errors_for(membership, :year)
-          - else
-            = membership_form.hidden_field :year
-            .inline= membership.year
-      
-      .row
-        .medium-4.columns
-          = membership_form.label :type, class: 'inline'
-        .medium-8.columns
-          = membership_form.select :type, Membership::COSTS.map{|type, cost| ["#{type}: #{number_to_currency(cost.to_f/100)}", type]}, {}
-          = errors_for(membership, :type)
-      .row
-        .medium-8.columns.right
-          = membership_form.check_box :subscription
-          = membership_form.label :subscription, 'Sign up for automatic yearly renewal'
-      
-      - if can? :grant_privileges, Membership
-        .row
-          .medium-4.columns
-            = membership_form.label :privileges, 'Privileges', class: 'inline'
-          .medium-8.columns
-            = membership_form.select :privileges, Membership::PRIVILEGES.sort.map{|r| [r.titleize,r]}, {}, multiple: true, size: 3
-            = errors_for(membership, :privileges)
-        .row
-          .medium-8.columns.right
-            = membership_form.fields_for :info do |info_fields|
-              = info_fields.check_box :override, value: current_user.id, include_hidden: false, checked: membership.info.try(:override), disabled: !membership.info.try(:override).in?([nil, current_user.id])
-              = info_fields.label :override, 'Override Credit Card', class: 'inline'
-
-        = membership_form.hidden_field :subscription, value: 0
-      - elsif !membership.user.current_member? && membership.user.memberships.last && membership.user.memberships.last.privileges.include?('admin')
-        = membership_form.hidden_field :privileges, value: 'admin', multiple: true
-      
-      - if membership.stripe_card_token || @cards.present?
-        = membership_form.hidden_field :stripe_card_token if membership.stripe_card_token
-        .row
-          .medium-8.columns.right
-            %label.inline
-              Credit Card has been provided
-              = link_to '(Change Card)', '#', id: 'show-credit-card-info'
-
-            - if @cards.present?
-              = select_tag :card_id, options_for_select(@cards.map{|card| ["#{card.brand}: x#{card.last4} (exp #{card.exp_month}/#{card.exp_year})", card.id] })
-      
-      - unless membership.stripe_card_token
-        #credit-card-info{ class: ('hide' if membership.user.stripe_customer_token && @cards.present?) }
-          .row
-            .medium-4.columns
-              = label_tag 'stripe_card_number', class: 'inline' do
-                Credit Card Number
-            .medium-8.columns
-              .row.collapse
-                .small-10.columns
-                  = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: (membership.user.stripe_customer_token && @cards.present?)
-                .small-2.columns
-                  = link_to 'https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=members.midnightriders.com', target: '_blank', class: 'button secondary postfix', title: 'Learn more' do
-                    = icon 'lock fa-fw'
-                    %small SSL
-          .row
-            .medium-4.columns
-              = label_tag 'stripe_exp_month', 'Expiration / CVC'
-            .medium-8.columns
-              .row
-                .small-4.columns
-                  = select_tag nil, options_for_select((1..12), Date.current.month), id: 'stripe_exp_month', disabled: (membership.user.stripe_customer_token && @cards.present?)
-                .small-4.columns
-                  = select_tag nil, options_for_select((Date.current.year..Date.current.year+10), Date.current.year), id: 'stripe_exp_year', disabled: (membership.user.stripe_customer_token && @cards.present?)
-                .small-4.columns
-                  = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC', pattern: '[0-9]*', disabled: (membership.user.stripe_customer_token && @cards.present?)
-          = membership_form.hidden_field :stripe_card_token, disabled: (membership.user.stripe_customer_token && @cards.present?)
-      
-      = membership_form.button :submit, class: 'button right' do
-        = icon 'credit-card fa-fw'
-        Purchase Membership
+- if parent_form.present?
+  = parent_form.fields_for membership.becomes(Membership) do |membership_form|
+    = render 'memberships/form_fields', membership_form: membership_form, user: user, membership: membership
+- else
+  = form_for [user, membership.becomes(Membership)], html: { autocomplete: 'on' } do |membership_form|
+    = render 'memberships/form_fields', membership_form: membership_form, user: user, membership: membership
+    = membership_form.button :submit, class: 'button right' do
+      = icon 'credit-card fa-fw'
+      Purchase Membership

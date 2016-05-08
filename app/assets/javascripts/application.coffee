@@ -60,10 +60,14 @@ jQuery ($)->
     $this.on 'change', ()->
       $row.find('label.inline').text($this.val().replace('C:\\fakepath\\','') or 'No file selected')
 
-  $(document).on 'ajax:send', ->
-    $('body').addClass 'wait'
-  $(document).on 'ajax:complete', ->
-    $('body').removeClass 'wait'
-  $(document).on 'ajax:success', '[data-remote]', (e,data)->
+  $(document).on(
+    'ajax:send': ->
+      $('body').addClass 'wait'
+    'ajax:complete': ->
+      $('body').removeClass 'wait'
+  ).on('ajax:success', '[data-remote]', (e,data)->
     $('body').removeClass 'wait'
     $(data.selector).html(data.html) if data && data.selector && data.html
+  ).on('opened', '[data-reveal]', () ->
+    $(this).find('[data-autofocus]').first().focus()
+  )

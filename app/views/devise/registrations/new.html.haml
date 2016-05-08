@@ -1,4 +1,3 @@
 - content_for :title, 'Sign Up'
 
 = render 'users/form', user: resource, devise: true
-= render 'memberships/form', user: resource, membership: resource.memberships.build(year: Date.current.year, privileges: [])
