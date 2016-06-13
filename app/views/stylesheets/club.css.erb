@@ -18,10 +18,10 @@
 .crest.<%=abbrv%>, .pre-crest.<%=abbrv%>:before { display: none; }
 <%- else %>
 .crest.<%=abbrv%>, .pre-crest.<%=abbrv%>:before {
-  background-image: url('//midnightriders.com<%=club.crest.url(:standard)%>');
+  background-image: url('<%=club.crest.url(:standard)%>');
 }
   .crest.<%=abbrv%>.small, .pre-crest.<%=abbrv%>.small:before {
-    background-image: url('//midnightriders.com<%=club.crest.url(:thumb)%>');
+    background-image: url('<%=club.crest.url(:thumb)%>');
   }
 <%- end %>
         
