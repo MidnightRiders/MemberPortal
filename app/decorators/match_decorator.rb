@@ -49,7 +49,7 @@ class MatchDecorator < Draper::Decorator
     end
 
     content = if team
-      team.crest.blank? ? team.abbrv : h.image_tag('http://midnightriders.com' + team.crest.url(:thumb), title: team.name)
+      team.crest.blank? ? team.abbrv : h.image_tag(team.crest.url(:thumb), title: team.name)
     else
       'D'
     end

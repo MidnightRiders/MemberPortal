@@ -23,7 +23,7 @@
       .td.color.accent{ style: "background-color: ##{club.accent_color}" }
       .td
         = link_to club do
-          = image_tag('http://midnightriders.com' + club.crest.url(:thumb), class: 'crest-img', alt: club.abbrv ) unless club.crest.blank?
+          = image_tag(club.crest.url(:thumb), class: 'crest-img', alt: club.abbrv ) unless club.crest.blank?
           = club.name
       .td.text-center= club.conference.titleize
       .td.text-center= club.abbrv

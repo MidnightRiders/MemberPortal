@@ -24,18 +24,12 @@ class Club < ActiveRecord::Base
   CONFERENCES = %w(east west)
 
   has_attached_file :crest,
-                    storage: :ftp,
-                    path: '/public_html/member_portal/:class/:attachment/:id/:style_:filename',
-                    url: '/member_portal/:class/:attachment/:id/:style_:filename',
-                    ftp_servers: [{
-                        host: 'ftp.midnightriders.com',
-                        user: 'midnigi3',
-                        password: 'V9NP+rs96FRcZ-S',
-                        passive: true
-                    }],
+                    storage: :s3,
+                    path: '/:class/:attachment/:id/:style_:filename',
+                    default_style: :standard,
                     styles: {
-                        thumb: '100x100>',
-                        standard: '250x250>'
+                      thumb: '100x100>',
+                      standard: '250x250>'
                     }
 
   validates :name, :abbrv, :primary_color, :secondary_color, :accent_color, presence: true

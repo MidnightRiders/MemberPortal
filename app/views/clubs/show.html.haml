@@ -3,7 +3,7 @@
   %small= link_to 'Return', clubs_path
 %h2.club{ class: @club.abbrv.downcase }
   - unless @club.crest.blank?
-    = image_tag 'http://midnightriders.com' + @club.crest.url(:thumb), class: 'crest-img', alt: @club.name + ' crest'
+    = image_tag @club.crest.url(:thumb), class: 'crest-img', alt: @club.name + ' crest'
   = @club.name
   %small{ style: "color:##{get_contrast_yiq(@club.primary_color)}"}= @club.abbrv
 .row
