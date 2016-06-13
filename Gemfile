@@ -29,7 +29,7 @@ gem 'date_time_attribute'
 gem 'will_paginate'
 
 gem 'paperclip'
-gem 'paperclip-storage-ftp'
+gem 'aws-sdk'
 
 # Users/auth
 gem 'devise'
