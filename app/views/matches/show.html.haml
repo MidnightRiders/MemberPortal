@@ -68,7 +68,7 @@
               - if @match.home_team.crest.blank?
                 = @match.home_team.abbrv
               - else
-                = image_tag('http://midnightriders.com' + @match.home_team.crest.url(:thumb), class: 'crest-img', alt: @match.home_team.abbrv)
+                = image_tag(@match.home_team.crest.url(:thumb), class: 'crest-img', alt: @match.home_team.abbrv)
               %small
                 (#{home_picks}/#{picks})
           - if draw_picks > 0
@@ -81,7 +81,7 @@
               - if @match.away_team.crest.blank?
                 = @match.away_team.abbrv
               - else
-                = image_tag('http://midnightriders.com' + @match.away_team.crest.url(:thumb), class: 'crest-img', alt: @match.away_team.abbrv)
+                = image_tag(@match.away_team.crest.url(:thumb), class: 'crest-img', alt: @match.away_team.abbrv)
               %small
                 (#{away_picks}/#{picks})
     - else
