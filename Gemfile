@@ -63,7 +63,10 @@ group :development, :test do
   gem 'active_record_query_trace'
 end
 
-gem 'database_cleaner', group: :test
+group :test do
+  gem 'database_cleaner'
+  gem 'capybara-webkit'
+end
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
