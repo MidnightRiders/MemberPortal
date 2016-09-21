@@ -15,8 +15,10 @@ class MotMsController < ApplicationController
     @yr_match_ids = yr_matches.map(&:id)
     @mo_match_ids = yr_matches.where(kickoff: (@mstart..@mstart.end_of_month)).map(&:id)
     @mot_ms       = Player.includes(:mot_m_firsts,:mot_m_seconds,:mot_m_thirds).select{|x| x.mot_m_total(season: @season) > 0 }.sort_by(&:last_name)
-    @mot_m_mo     = @mot_ms.group_by{|x| x.mot_m_total(match_id: @mo_match_ids) }.reject{|k,v| k == 0 }.sort_by(&:first).reverse
+    @mot_m_mo     = @mot_ms.group_by{|x| x.mot_m_total(match_id: @mo_match_ids) }.reject{|k,_v| k == 0 }.sort_by(&:first).reverse
     @mot_m_yr     = @mot_ms.group_by{|motm| motm.mot_m_total(season: @season)}.sort_by(&:first).reverse
+    @mot_ms_for_mo = Player.mot_ms_for(Match.find(@mo_match_ids))
+    @mot_ms_for_yr = Player.mot_ms_for(yr_matches)
   end
 
   # GET /mot_ms/1
