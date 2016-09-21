@@ -73,7 +73,7 @@ class Player < ActiveRecord::Base
     matches.each do |match|
       votes = {}
       match.mot_ms.each do |mot_m|
-        { first_id: 3, second_id: 2, third_id: 3 }.each do |place, points|
+        { first_id: 3, second_id: 2, third_id: 1 }.each do |place, points|
           votes[mot_m[place]] ||= 0
           votes[mot_m[place]] += points
         end
