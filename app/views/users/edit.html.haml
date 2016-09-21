@@ -2,4 +2,4 @@
   Edit User
   %small= link_to 'Return', users_path
 
-= render partial: 'users/form', locals: { user: @user }
+= render 'users/form', user: resource, membership: resource.memberships&.last

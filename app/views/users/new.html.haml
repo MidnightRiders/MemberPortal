@@ -1,8 +1,9 @@
 - content_for :title do
   New User
 
-= render 'users/form', user: @user
+= render 'users/form', user: @user, membership: @membership
 
+-# If user is signed in and able to see this page, he or she is an admin
 - unless user_signed_in?
   #swipe-reveal.reveal-modal.small{ data: { reveal: true } }
     .close-reveal-modal &#215;

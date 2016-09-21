@@ -44,7 +44,7 @@
             = info_fields.label :override, 'Override Credit Card', class: 'inline'
 
       = membership_form.hidden_field :subscription, value: 0
-    - elsif !membership.user.current_member? && membership.user.memberships.last && membership.user.memberships.last.privileges.include?('admin')
+    - elsif !membership.user.current_member? && membership.user.memberships.last&.privileges&.include?('admin')
       = membership_form.hidden_field :privileges, value: 'admin', multiple: true
 
     - if membership.stripe_card_token || @cards.present?

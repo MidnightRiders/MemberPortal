@@ -60,7 +60,7 @@ class User < ActiveRecord::Base
 
   # Get non-members
   scope :non_members, -> (year = (Date.today.year..Date.today.year+1)) {
-    where.not(id: joins(:memberships).members(year).select('id'))
+    where.not(id: joins(:memberships).members(year).select(:id))
   }
 
   devise :database_authenticatable, :registerable,
@@ -77,6 +77,8 @@ class User < ActiveRecord::Base
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
   validates :member_since, numericality: { less_than_or_equal_to: Date.today.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
 
+  accepts_nested_attributes_for :memberships
+
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
 
   # Returns +privileges+ from current +Membership+
@@ -87,6 +89,12 @@ class User < ActiveRecord::Base
   # Returns *Boolean*. Determines whether the user has a given privilege.
   def privilege?(r)
     current_privileges.include? r
+  end
+
+  Membership::PRIVILEGES.each do |p|
+    define_method("is_#{p}?") do
+      privilege? p
+    end
   end
 
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.

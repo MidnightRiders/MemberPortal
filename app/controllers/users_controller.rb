@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   def index
     @privilege = params[:privilege].blank? ? nil : params[:privilege]
     @year = params.fetch(:year, Date.current.year).to_i
-    @show_all = params[:show_all].in? [true, 'true']
+    @show_all = params[:show_all].to_s == 'true'
     @user_set = @users
     @user_set = @user_set.text_search(params[:search]) if params[:search]
     @user_set = @user_set.where(memberships: { year: @year }) unless @show_all
@@ -18,9 +18,7 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.html
       format.json
-      format.csv {
-        render text: @user_set.to_csv
-      }
+      format.csv { render text: @user_set.to_csv }
     end
   end
 
@@ -62,21 +60,24 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
-    @membership = @user.memberships.new(year: Date.current.year)
+    @membership = @user.memberships.build(year: Membership.valid_years.last, privileges: []).tap { |m| m.user = @user }
   end
 
   # POST /users
   # POST /users.json
   def create
-
+    binding.pry
     u = user_params
-    u[:password] = (pass = rand(36**10).to_s(36))
+    if (pass = user_params[:password]).nil?
+      u[:password] = (pass = rand(36**10).to_s(36))
+      u[:password_confirmation] = pass
+    end
 
     @user = User.new(u)
 
     respond_to do |format|
       if @user.save
-        UserMailer.new_user_creation_email(@user,pass)
+        UserMailer.new_user_creation_email(@user, pass)
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
@@ -106,6 +107,13 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :country, :phone, :email, :member_since, :username)
+      params.require(:user).permit(
+        :last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :country, :phone, :email, :member_since, :username,
+        { memberships: [ :user_id, :year, :type, :stripe_card_token, :subscription, privileges: [] ] }
+      ).tap do |whitelisted|
+        params[:memberships_attributes]&.each do |k, v|
+          whitelisted[:memberships][k][:info] = v[:info]
+        end
+      end
     end
 end

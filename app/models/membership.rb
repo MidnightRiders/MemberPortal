@@ -38,7 +38,7 @@ class Membership < ActiveRecord::Base
 
   before_validation :remove_blank_privileges
 
-  validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }
+  validates :year, presence: true, inclusion: { in: Proc.new { self.valid_years } }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }, if: :year_changed?
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
   validate :accepted_privileges
   validate :stripe_info_is_unique?
@@ -206,6 +206,14 @@ class Membership < ActiveRecord::Base
 
   def has_relatives?
     can_have_relatives? && relatives.present?
+  end
+
+  def self.valid_years
+    if Date.current.month >= 9
+      Date.current.year..Date.current.year+1
+    else
+      [Date.current.year]
+    end
   end
 
   private

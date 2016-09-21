@@ -53,7 +53,7 @@
   .row
     .large-4.columns
       %h3 Contact Information
-      - unless user_form.object.address.present?
+      - if devise && user_form.object.address.blank?
         %p.alert-box
           %strong We need your address
           to be able to send you your membership package.
@@ -63,23 +63,24 @@
           = user_form.label :email, class: 'inline'
         .medium-8.columns
           = user_form.email_field :email, autocorrect: false, autocapitalize: false, tabindex: 7
-      .row
-        .column
-          = user_form.label :address, 'Street Address'
-          = user_form.text_area :address, rows: 3, autocapitalize: 'words', tabindex: 8
-      .row
-        .medium-4.columns
-          = user_form.label :city
-          = user_form.text_field :city, autocapitalize: 'words', tabindex: 9
-        .small-2.medium-2.columns
-          = user_form.label :state
-          = user_form.text_field :state, size: 2, tabindex: 10
-        .small-4.medium-3.columns
-          = user_form.label :postal_code
-          = user_form.text_field :postal_code, tabindex: 11
-        .small-6.medium-3.columns
-          = user_form.label :country
-          = user_form.text_field :country, tabindex: 12
+      - if devise && user_form.object.address.blank?
+        .row
+          .column
+            = user_form.label :address, 'Street Address'
+            = user_form.text_area :address, rows: 3, autocapitalize: 'words', tabindex: 8
+        .row
+          .medium-4.columns
+            = user_form.label :city
+            = user_form.text_field :city, autocapitalize: 'words', tabindex: 9
+          .small-2.medium-2.columns
+            = user_form.label :state
+            = user_form.text_field :state, size: 2, tabindex: 10
+          .small-4.medium-3.columns
+            = user_form.label :postal_code
+            = user_form.text_field :postal_code, tabindex: 11
+          .small-6.medium-3.columns
+            = user_form.label :country
+            = user_form.text_field :country, tabindex: 12
   - if devise && user_form.object.persisted?
     .row
       .large-4.columns
@@ -93,6 +94,6 @@
           .large-8.columns
             = user_form.password_field :current_password, tabindex: 12
   - unless devise
-    = render 'memberships/form', user: user, membership: user.memberships.build(year: Date.current.year, privileges: []), parent_form: user_form
+    = render 'memberships/form', user: user, membership: membership, parent_form: user_form
   .row.text-right
     .column= user_form.submit (user_form.object.new_record? ? 'Create' : 'Update'), class: 'button', tabindex: 13

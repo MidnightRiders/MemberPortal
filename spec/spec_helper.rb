@@ -4,11 +4,18 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'ffaker'
 require 'capybara/rails'
-require 'capybara/poltergeist'
+require 'capybara/rspec'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
-Capybara.javascript_driver = :poltergeist
+require 'capybara-screenshot/rspec'
+Capybara.javascript_driver = :webkit
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
+
+Capybara::Webkit.configure do |config|
+  config.allow_url('fonts.googleapis.com')
+  config.allow_url('*.stripe.com')
+  config.allow_url('fonts.gstatic.com')
+end
 
 Capybara.register_server :thin do |app, port|
   require 'rack/handler/thin'

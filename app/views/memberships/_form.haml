@@ -3,14 +3,14 @@
   enqueue_javascript 'https://js.stripe.com/v2/'
   if parent_form.present?
     enqueue_javascript 'users/card-reader'
-    enqueue_javascript 'admin/test-card-reader' if Rails.env.development?
+    enqueue_javascript 'admin/test-card-reader' unless Rails.env.production?
   end
 
 - content_for :head do
   %meta{ name: 'stripe-public-key', content: ENV['STRIPE_PUBLIC_KEY'] }
 
 - if parent_form.present?
-  = parent_form.fields_for membership.becomes(Membership) do |membership_form|
+  = parent_form.fields_for :memberships, membership.becomes(Membership) do |membership_form|
     = render 'memberships/form_fields', membership_form: membership_form, user: user, membership: membership
 - else
   = form_for [user, membership.becomes(Membership)], html: { autocomplete: 'on' } do |membership_form|

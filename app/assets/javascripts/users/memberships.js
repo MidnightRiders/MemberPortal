@@ -31,7 +31,7 @@
     },
     handleStripeResponse: function (status, response) {
       if (status === 200) {
-        $('#membership_stripe_card_token').val(response.id).closest('form')[0].submit();
+        $('[id$=stripe_card_token]').val(response.id).closest('form')[0].submit();
       } else {
         $('#stripe_card_number').closest('form').find(':submit').prop('disabled', false);
         $('.field_with_errors [id^=stripe]').each(function () {
