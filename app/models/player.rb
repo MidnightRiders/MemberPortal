@@ -79,11 +79,13 @@ class Player < ActiveRecord::Base
           votes[mot_m[place]] += points
         end
       end
-      votes = votes.to_a.sort_by(&:last).reverse
-      winners = { first: votes[0] || [], second: votes[1] || [], third: votes[2] || [] }
-      %i(first second third).each do |place|
-        players[winners[place][0]] ||= { first: 0, second: 0, third: 0 }
-        players[winners[place][0]][place] += 1
+      votes = votes.to_a.group_by(&:last).to_a.sort_by(&:first).reverse
+      winners = { first: votes[0]&.last || [], second: votes[1]&.last || [], third: votes[2]&.last || [] }
+      winners.each do |place, set|
+        set.each do |winner|
+          players[winner[0]] ||= { first: 0, second: 0, third: 0 }
+          players[winner[0]][place] += 1
+        end
       end
     end
     players.to_a
