@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.3.1'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.1.8'
+gem 'rails', '~> 4.2.7'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
@@ -13,10 +13,10 @@ gem 'haml-rails'
 gem 'sass-rails'
 gem 'sass'
 gem 'autoprefixer-rails'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
+gem 'uglifier'
+gem 'coffee-rails'
 gem 'jquery-rails'
-gem 'foundation-rails'
+gem 'foundation-rails', '<6.0'
 gem 'font-awesome-sass'
 
 gem 'roo' # For imports
