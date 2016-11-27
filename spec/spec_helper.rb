@@ -2,7 +2,6 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'cancan/matchers'
@@ -10,7 +9,7 @@ require 'paper_trail/frameworks/rspec'
 Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
-Capybara.server do |app, port|
+Capybara.register_server :thin do |app, port|
   require 'rack/handler/thin'
   Rack::Handler::Thin.run(app, Port: port)
 end
@@ -25,8 +24,8 @@ ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 
 RSpec.configure do |config|
 
-  config.include Devise::TestHelpers, type: :controller
-  config.include Devise::TestHelpers, type: :view
+  config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :view
   config.extend ControllerMacros, type: :controller
   config.include Warden::Test::Helpers
   config.include Capybara::DSL
