@@ -6,22 +6,22 @@
       - if @prev_date
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }
           = link_to matches_path(date: @prev_date), class: 'button secondary small expand' do
-            = icon 'arrow-circle-o-left fa-fw'
+            = fa_icon 'arrow-circle-o-left fw'
             = @prev_link
       - unless @is_current_week
         %li.small-4
           = link_to matches_path, class: 'button small expand' do
-            = icon 'calendar-o fa-fw'
+            = fa_icon 'calendar-o fw'
             This Week
       - if @next_date
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }
           = link_to matches_path(date: @next_date), class: 'button secondary small expand' do
             = @next_link
-            = icon 'arrow-circle-o-right fa-fw'
+            = fa_icon 'arrow-circle-o-right fw'
   - if can? :manage, Match
     .medium-4.columns.text-right
       = link_to '#', class: 'button small expand', data: { reveal_id: 'matches-admin' } do
-        = icon 'bolt fa-fw'
+        = fa_icon 'bolt fw'
         Admin
       #matches-admin.reveal-modal.small{ data: { reveal: true } }
         %a.close-reveal-modal{ href: '#' } &times;
@@ -35,7 +35,7 @@
                 = text_field_tag :url, 'http://e-qo.de/lfnk.ics'
               .small-4.columns
                 = button_tag :submit, class: 'button secondary postfix', title: 'Import/Update Matches' do
-                  = icon 'cloud-download fa-fw'
+                  = fa_icon 'cloud-download fw'
         .row
           = form_tag bulk_update_matches_path, class: 'row collapse', multipart: true, method: :post do
             .medium-4.columns
@@ -47,16 +47,16 @@
                 = file_field_tag :file
               .small-4.columns
                 = button_tag :submit, class: 'button secondary postfix', title: 'Upload' do
-                  = icon 'upload fa-fw'
+                  = fa_icon 'upload fw'
         .row
           .medium-8.columns.right
             = link_to auto_update_matches_path, class: 'button small secondary expand' do
-              = icon 'refresh fa-fw'
+              = fa_icon 'refresh fw'
               Automated Results Update
         .row
           .medium-8.columns.right
             = link_to new_match_path, class: 'button small expand' do
-              = icon 'calendar fa-fw'
+              = fa_icon 'calendar fw'
               New Match
 
 - if @matches.present?

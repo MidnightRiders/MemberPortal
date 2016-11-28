@@ -25,5 +25,5 @@
       .actions.text-right
         = link_to 'Back', matches_path(date: @match.kickoff.to_date)
         = f.button :submit, class: 'button' do
-          = icon 'check'
+          = fa_icon 'check'
           = f.object.new_record? ? 'Vote' : 'Update'

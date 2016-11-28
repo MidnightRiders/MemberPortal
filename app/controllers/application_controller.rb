@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_filter :set_next_revs_match
   before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_paper_trail_whodunnit
 
   before_filter do
     resource = controller_name.singularize.to_sym
@@ -16,6 +17,10 @@ class ApplicationController < ActionController::Base
     Rails.logger.debug "Access denied on #{exception.action} #{exception.subject.inspect}" if Rails.env.development?
     flash[:error] = exception.message
     redirect_to root_url
+  end
+
+  def current_ability
+    @current_ability ||= Spree::Ability.new(current_user)
   end
 
   protected

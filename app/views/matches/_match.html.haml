@@ -4,7 +4,7 @@
   %time{ datetime: match.kickoff.xmlschema }
     = link_to match do
       = match.kickoff.strftime('%_m.%-d %l:%M%P')
-      = icon 'arrow-circle-right fa-fw'
+      = fa_icon 'arrow-circle-right fw'
   .score
     - unless match.in_future?
       = match.home_team.abbrv if match.complete?

@@ -15,11 +15,11 @@
   %section.medium-6.columns
     -#- if current_user.current_member? && Time.current < Time.zone.local(2016,1,15,17)
     -#  = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
-    -#    = icon 'check-circle'
+    -#    = fa_icon 'check-circle'
     -#    Vote for 2016’s Scarf
     - if current_user.current_member? && current_user.current_membership.is_a?(Family)
       = link_to user_membership_path(current_user, current_user.current_membership), class: 'button large expand' do
-        = icon 'users fa-fw'
+        = fa_icon 'users fw'
         Manage Family Membership
     .row.show-for-medium-up= render 'shared/next_last_games', last_match: revs.last_match, next_match: revs.next_match
     = render 'static_pages/events', events: @events

@@ -23,8 +23,8 @@
           %small
             %time= membership.created_at.strftime('%m-%d-%Y %I:%M%P')
         %td
-          = icon 'repeat fa-fw' if membership.is_subscription?
-          = icon 'credit-card fa-fw' if membership.stripe_charge_id
+          = fa_icon 'repeat fw' if membership.is_subscription?
+          = fa_icon 'credit-card fw' if membership.stripe_charge_id
           = membership.type
           - if membership.is_a? Family
             %br
@@ -43,9 +43,9 @@
         %td.text-right
           - if can?(:cancel, membership) && membership.refunded.nil?
             = link_to cancel_user_membership_path(membership.user, membership), class: 'button tiny alert', title: 'Cancel', data: { method: :patch, confirm: "Cancel #{membership.user.username}'s Membership?" } do
-              = icon 'ban'
+              = fa_icon 'ban'
           - if can?(:refund, membership) && membership.refunded.nil? && membership.stripe_charge_id.present?
             = link_to cancel_user_membership_path(membership.user, membership, refund: true), class: 'button tiny alert', title: 'Cancel and Refund', data: { method: :patch, confirm: "Cancel and Refund #{membership.user.username}'s Membership?" }  do
-              = icon 'undo'
+              = fa_icon 'undo'
 .text-right
   = will_paginate(@transactions, previous_label: 'Newer', next_label: 'Older', params: { view: params[:view] })

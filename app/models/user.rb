@@ -26,9 +26,12 @@
 #  last_sign_in_ip        :string(255)
 #
 
-class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+class User < Spree::Base
+  include Spree::UserAddress
+  include Spree::UserMethods
+  include Spree::UserPaymentSource
+
+  self.table_name = :users
   delegate :can?, :cannot?, to: :ability
 
   default_scope { includes(:memberships) }
@@ -63,6 +66,12 @@ class User < ActiveRecord::Base
     where.not(id: joins(:memberships).members(year).select('id'))
   }
 
+  scope :with_privileges, -> (year = Date.current.year, privileges) {
+    where(memberships: { year: year }).where('memberships.privileges::jsonb ?| array[:privileges]', privileges: [privileges].flatten)
+  }
+
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
@@ -72,6 +81,8 @@ class User < ActiveRecord::Base
   has_many :rev_guesses
   has_many :pick_ems
 
+  before_validation :set_login
+
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
@@ -79,7 +90,21 @@ class User < ActiveRecord::Base
 
   has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
 
-  # Returns +privileges+ from current +Membership+
+  roles_table_name = Spree::Role.table_name
+
+  scope :admin, -> { includes(:spree_roles).where("#{roles_table_name}.name": :admin) }
+
+  # Returns *Boolean*. Spree-specific class method.
+  def self.admin_created?
+    User.admin.exists?
+  end
+
+  # Returns *Boolean*. Spree-specific instance method. Checks for +Spree::Role+ of "admin".
+  def admin?
+    has_spree_role?('admin')
+  end
+
+  # Returns *Boolean*. Returns +privileges+ from current +Membership+
   def current_privileges
     current_membership.try(:privileges) || []
   end
@@ -246,7 +271,17 @@ class User < ActiveRecord::Base
   end
 
   def ability
-    @ability ||= Ability.new(self)
+    @ability ||= Spree::Ability.new(self)
   end
 
+  protected
+  def password_required?
+    !persisted? || password.present? || password_confirmation.present?
+  end
+
+  private
+
+  def set_login
+    @login ||= self.username
+  end
 end

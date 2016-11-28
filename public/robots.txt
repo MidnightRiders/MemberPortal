@@ -3,3 +3,11 @@
 # To ban all spiders from the entire site uncomment the next two lines:
 # User-agent: *
 # Disallow: /
+User-agent: *
+Disallow: /shop/checkout
+Disallow: /shop/cart
+Disallow: /shop/orders
+Disallow: /shop/user
+Disallow: /shop/account
+Disallow: /shop/api
+Disallow: /shop/password

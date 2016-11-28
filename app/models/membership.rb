@@ -219,7 +219,7 @@ class Membership < ActiveRecord::Base
     end
 
     def able_to_change_privileges
-      ability = Ability.new(user)
+      ability = Spree::Ability.new(user)
       errors.add(:privileges, 'cannot be changed in this way by this user') if privileges.changed? and ability.cannot?(:grant_privileges, Membership)
     end
 

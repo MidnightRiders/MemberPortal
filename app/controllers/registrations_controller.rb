@@ -1,5 +1,5 @@
 # Controller for Devise Registrations.
-class RegistrationsController < Devise::RegistrationsController
+class RegistrationsController < Spree::UserRegistrationsController
 
   def new
     build_resource({ email: params[:email] })

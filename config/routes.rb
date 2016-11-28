@@ -47,5 +47,7 @@ MidnightRiders::Application.routes.draw do
   get 'faq', to: 'static_pages#faq'
   get 'contact', to: 'static_pages#contact'
 
+  mount Spree::Core::Engine, at: '/shop'
+
   root to: 'static_pages#home'
 end

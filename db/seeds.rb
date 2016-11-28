@@ -21,4 +21,8 @@ unless Rails.env.test?
     Player.unscoped.find_or_initialize_by(first_name: player[:first_name], last_name: player[:last_name]).update_attributes(p.to_h.merge({ club_id: ne_id }))
   end
   puts ' done.'
+
+  Spree::Core::Engine.load_seed if defined?(Spree::Core)
+  Spree::Auth::Engine.load_seed if defined?(Spree::Auth)
 end
+

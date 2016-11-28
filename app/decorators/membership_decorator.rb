@@ -23,15 +23,15 @@ class MembershipDecorator < Draper::Decorator
   end
 
   def refund_icon(refund = true)
-    h.icon('times-circle') + ' ' +
+    h.fa_icon('times-circle') + ' ' +
     if model.is_subscription? && refund
-      h.icon('credit-card') + ' ' + h.icon('calendar')
+      h.fa_icon('credit-card') + ' ' + h.fa_icon('calendar')
     elsif model.is_subscription?
-      h.icon 'calendar'
+      h.fa_icon 'calendar'
     elsif model.stripe_charge_id
-      h.icon 'credit-card'
+      h.fa_icon 'credit-card'
     elsif model.override
-      h.icon 'bolt'
+      h.fa_icon 'bolt'
     end
   end
 

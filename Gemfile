@@ -43,7 +43,7 @@ gem 'stripe'
 
 # Shop
 gem 'spree', '~> 3.1.0'
-gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: 'master'
+# gem 'spree_auth_devise', github: 'spree/spree_auth_devise', branch: 'master'
 gem 'spree_gateway', '~> 3.1.0'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder

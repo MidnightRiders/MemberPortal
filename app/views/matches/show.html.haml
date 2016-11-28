@@ -2,14 +2,14 @@
   .small-4.medium-3.large-2.columns
     - if @order_point.previous(false)
       = link_to @order_point.previous(false), class: "button small expand primary-bg #{@order_point.previous(false).home_team.abbrv.downcase}" do
-        = icon 'arrow-left'
+        = fa_icon 'arrow-left'
         = @order_point.previous(false).home_team.abbrv
         v
         = @order_point.previous(false).away_team.abbrv
         = @order_point.previous(false).kickoff.strftime('%_m.%-d')
   .small-4.medium-6.large-8.columns.text-center
     = link_to matches_path(date: @match.kickoff.to_date), class: 'button small' do
-      = icon 'calendar fa-fw'
+      = fa_icon 'calendar fw'
       Back
   .small-4.medium-3.large-2.columns.right
     - if @order_point.next(false)
@@ -18,7 +18,7 @@
         v
         = @order_point.next(false).away_team.abbrv
         = @order_point.next(false).kickoff.strftime('%_m.%-d')
-        = icon 'arrow-right'
+        = fa_icon 'arrow-right'
 .row.collapse
   .medium-5.large-5.columns
     %h2.primary-bg.secondary-border.border-bottom.thick.text-right{ class: @match.home_team.abbrv.downcase }
@@ -40,16 +40,16 @@
     - if @match.teams.include?(revs)
       - if @match.kickoff.future?
         = link_to rev_guess_path_for(@match), class: 'button small' do
-          = icon 'question'
+          = fa_icon 'question'
           RevGuess
       - elsif @match.kickoff + 45.minutes < Time.current && @match.teams.include?(revs)
         = link_to mot_m_path_for(@match), class: 'button small' do
-          = icon 'list-ol'
+          = fa_icon 'list-ol'
           = (mot_m_for(@match) ? 'Change' : 'Cast')
           MotM Vote
     - if can? :edit, @match
       = link_to edit_match_path(@match), class: 'button secondary small' do
-        = icon 'pencil'
+        = fa_icon 'pencil'
         Edit
 
 

@@ -57,8 +57,8 @@
     .column.text-right
       = f.button :submit, class: 'button' do
         - if f.object.new_record?
-          = icon 'check fa-fw'
+          = fa_icon 'check fw'
           Create
         - else
-          = icon 'save fa-fw'
+          = fa_icon 'save fw'
           Save

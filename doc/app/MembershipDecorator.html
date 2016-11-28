@@ -181,15 +181,15 @@
           <div class="method-source-code" id="refund_icon-source">
             <pre><span class="ruby-comment"># File app/decorators/membership_decorator.rb, line 25</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">refund_icon</span>(<span class="ruby-identifier">refund</span> = <span class="ruby-keyword">true</span>)
-  <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;times-circle&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39; &#39;</span> <span class="ruby-operator">+</span>
+  <span class="ruby-identifier">h</span>.<span class="ruby-identifier">fa_icon</span>(<span class="ruby-string">&#39;times-circle&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39; &#39;</span> <span class="ruby-operator">+</span>
   <span class="ruby-keyword">if</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">is_subscription?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">refund</span>
-    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;credit-card&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39; &#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span>(<span class="ruby-string">&#39;calendar&#39;</span>)
+    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">fa_icon</span>(<span class="ruby-string">&#39;credit-card&#39;</span>) <span class="ruby-operator">+</span> <span class="ruby-string">&#39; &#39;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">fa_icon</span>(<span class="ruby-string">&#39;calendar&#39;</span>)
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">is_subscription?</span>
-    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span> <span class="ruby-string">&#39;calendar&#39;</span>
+    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">fa_icon</span> <span class="ruby-string">&#39;calendar&#39;</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">stripe_charge_id</span>
-    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span> <span class="ruby-string">&#39;credit-card&#39;</span>
+    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">fa_icon</span> <span class="ruby-string">&#39;credit-card&#39;</span>
   <span class="ruby-keyword">elsif</span> <span class="ruby-identifier">model</span>.<span class="ruby-identifier">override</span>
-    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">icon</span> <span class="ruby-string">&#39;bolt&#39;</span>
+    <span class="ruby-identifier">h</span>.<span class="ruby-identifier">fa_icon</span> <span class="ruby-string">&#39;bolt&#39;</span>
   <span class="ruby-keyword">end</span>
 <span class="ruby-keyword">end</span></pre>
           </div>
