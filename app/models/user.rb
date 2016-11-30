@@ -274,6 +274,18 @@ class User < Spree::Base
     @ability ||= Spree::Ability.new(self)
   end
 
+  def self.find(*usernames)
+    usernames = [usernames].flatten
+    users = where(username: usernames)
+    if usernames.length > 1
+      return users if users.length == usernames.length
+      raise ActiveRecord::RecordNotFound.new("Couldn't find all Users with 'username': (#{usernames.join(', ')})")
+    else
+      return users[0] unless users[0].nil?
+      raise ActiveRecord::RecordNotFound.new("Couldn't find User with 'username'=#{usernames[0]}")
+    end
+  end
+
   protected
   def password_required?
     !persisted? || password.present? || password_confirmation.present?

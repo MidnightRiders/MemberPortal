@@ -30,8 +30,8 @@ require 'spec_helper'
 
 describe User do
   describe 'abilities' do
-    subject(:ability) { Spree::Ability.new(user) }
     let(:user) { nil }
+    subject { Spree::Ability.new(user) }
     context 'for admin user' do
       let(:user) { FactoryGirl.create(:user,:admin) }
       it{ should be_able_to(:manage,[Match,User,Player,Club])}

@@ -5,7 +5,7 @@ class MrAbility
   def initialize(user)
     alias_action :create, :read, :update, :destroy, to: :crud
 
-    if user
+    if user.persisted?
       can :home, [ User ]
       can :manage, user
       if user.current_member?
