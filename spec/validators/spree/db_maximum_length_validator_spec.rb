@@ -17,6 +17,6 @@ describe DbMaximumLengthValidator, type: :model do
 
   it 'should maximum validate slug' do
     product.valid?
-    expect(product.errors[:slug]).to include(I18n.t("errors.messages.too_long", count: limit_for_slug))
+    expect(product.errors[:slug]).to include(I18n.t('errors.messages.too_long', count: limit_for_slug))
   end
 end

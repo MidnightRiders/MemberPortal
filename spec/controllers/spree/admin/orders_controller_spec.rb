@@ -13,11 +13,11 @@ end
 
 describe Spree::Admin::OrdersController, type: :controller do
 
-  context "with authorization" do
+  context 'with authorization' do
     stub_authorization!
 
     before do
-      request.env["HTTP_REFERER"] = "http://localhost:3000"
+      request.env['HTTP_REFERER'] = 'http://localhost:3000'
 
       # ensure no respond_overrides are in effect
       if Spree::BaseController.spree_responders[:OrdersController].present?
@@ -42,32 +42,32 @@ describe Spree::Admin::OrdersController, type: :controller do
       allow(Spree::Order).to receive_message_chain(:friendly, :find).and_return(order)
     end
 
-    context "#approve" do
-      it "approves an order" do
+    context '#approve' do
+      it 'approves an order' do
         expect(order).to receive(:approved_by).with(controller.try_spree_current_user)
         spree_put :approve, id: order.number
         expect(flash[:success]).to eq Spree.t(:order_approved)
       end
     end
 
-    context "#cancel" do
-      it "cancels an order" do
+    context '#cancel' do
+      it 'cancels an order' do
         expect(order).to receive(:canceled_by).with(controller.try_spree_current_user)
         spree_put :cancel, id: order.number
         expect(flash[:success]).to eq Spree.t(:order_canceled)
       end
     end
 
-    context "#resume" do
-      it "resumes an order" do
+    context '#resume' do
+      it 'resumes an order' do
         expect(order).to receive(:resume!)
         spree_put :resume, id: order.number
         expect(flash[:success]).to eq Spree.t(:order_resumed)
       end
     end
 
-    context "pagination" do
-      it "can page through the orders" do
+    context 'pagination' do
+      it 'can page through the orders' do
         spree_get :index, page: 2, per_page: 10
         expect(assigns[:orders].offset_value).to eq(10)
         expect(assigns[:orders].limit_value).to eq(10)
@@ -75,22 +75,22 @@ describe Spree::Admin::OrdersController, type: :controller do
     end
 
     # Test for #3346
-    context "#new" do
-      it "a new order has the current user assigned as a creator" do
+    context '#new' do
+      it 'a new order has the current user assigned as a creator' do
         spree_get :new
         expect(assigns[:order].created_by).to eq(controller.try_spree_current_user)
       end
     end
 
     # Regression test for #3684
-    context "#edit" do
-      it "does not refresh rates if the order is completed" do
+    context '#edit' do
+      it 'does not refresh rates if the order is completed' do
         allow(order).to receive_messages completed?: true
         expect(order).not_to receive :refresh_shipment_rates
         spree_get :edit, id: order.number
       end
 
-      it "does refresh the rates if the order is incomplete" do
+      it 'does refresh the rates if the order is incomplete' do
         allow(order).to receive_messages completed?: false
         expect(order).to receive :refresh_shipment_rates
         spree_get :edit, id: order.number
@@ -98,7 +98,7 @@ describe Spree::Admin::OrdersController, type: :controller do
     end
 
     # Test for #3919
-    context "search" do
+    context 'search' do
       let(:user) { create(:user) }
 
       before do
@@ -126,7 +126,7 @@ describe Spree::Admin::OrdersController, type: :controller do
       end
     end
 
-    context "#open_adjustments" do
+    context '#open_adjustments' do
       let(:closed) { double('closed_adjustments') }
 
       before do
@@ -134,24 +134,24 @@ describe Spree::Admin::OrdersController, type: :controller do
         allow(closed).to receive(:update_all)
       end
 
-      it "changes all the closed adjustments to open" do
+      it 'changes all the closed adjustments to open' do
         expect(adjustments).to receive(:closed).and_return(closed)
         expect(closed).to receive(:update_all).with(state: 'open')
         spree_post :open_adjustments, id: order.number
       end
 
-      it "sets the flash success message" do
+      it 'sets the flash success message' do
         spree_post :open_adjustments, id: order.number
         expect(flash[:success]).to eql('All adjustments successfully opened!')
       end
 
-      it "redirects back" do
+      it 'redirects back' do
         spree_post :open_adjustments, id: order.number
         expect(response).to redirect_to(:back)
       end
     end
 
-    context "#close_adjustments" do
+    context '#close_adjustments' do
       let(:open) { double('open_adjustments') }
 
       before do
@@ -159,18 +159,18 @@ describe Spree::Admin::OrdersController, type: :controller do
         allow(open).to receive(:update_all)
       end
 
-      it "changes all the open adjustments to closed" do
+      it 'changes all the open adjustments to closed' do
         expect(adjustments).to receive(:open).and_return(open)
         expect(open).to receive(:update_all).with(state: 'closed')
         spree_post :close_adjustments, id: order.number
       end
 
-      it "sets the flash success message" do
+      it 'sets the flash success message' do
         spree_post :close_adjustments, id: order.number
         expect(flash[:success]).to eql('All adjustments successfully closed!')
       end
 
-      it "redirects back" do
+      it 'redirects back' do
         spree_post :close_adjustments, id: order.number
         expect(response).to redirect_to(:back)
       end
@@ -242,10 +242,10 @@ describe Spree::Admin::OrdersController, type: :controller do
     end
   end
 
-  context "order number not given" do
+  context 'order number not given' do
     stub_authorization!
 
-    it "raise active record not found" do
+    it 'raise active record not found' do
       expect {
         spree_get :edit, id: 99999999
       }.to raise_error ActiveRecord::RecordNotFound

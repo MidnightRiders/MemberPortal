@@ -13,17 +13,17 @@ describe Spree::StockItem, type: :model do
     expect(subject.variant_name).to eq(subject.variant.name)
   end
 
-  context "available to be included in shipment" do
-    context "has stock" do
+  context 'available to be included in shipment' do
+    context 'has stock' do
       it { expect(subject).to be_available }
     end
 
-    context "backorderable" do
+    context 'backorderable' do
       before { subject.backorderable = true }
       it { expect(subject).to be_available }
     end
 
-    context "no stock and not backorderable" do
+    context 'no stock and not backorderable' do
       before do
         subject.backorderable = false
         allow(subject).to receive_messages(count_on_hand: 0)
@@ -54,7 +54,7 @@ describe Spree::StockItem, type: :model do
      end
   end
 
-  context "adjust count_on_hand" do
+  context 'adjust count_on_hand' do
     let!(:current_on_hand) { subject.count_on_hand }
 
     it 'is updated pessimistically' do
@@ -68,7 +68,7 @@ describe Spree::StockItem, type: :model do
       expect(copy.count_on_hand).to eq(current_on_hand + 10)
     end
 
-    context "item out of stock (by two items)" do
+    context 'item out of stock (by two items)' do
       let(:inventory_unit) { double('InventoryUnit') }
       let(:inventory_unit_2) { double('InventoryUnit2') }
 
@@ -78,7 +78,7 @@ describe Spree::StockItem, type: :model do
       end
 
       # Regression test for #3755
-      it "processes existing backorders, even with negative stock" do
+      it 'processes existing backorders, even with negative stock' do
         expect(inventory_unit).to receive(:fill_backorder)
         expect(inventory_unit_2).not_to receive(:fill_backorder)
         subject.adjust_count_on_hand(1)
@@ -86,17 +86,17 @@ describe Spree::StockItem, type: :model do
       end
 
       # Test for #3755
-      it "does not process backorders when stock is adjusted negatively" do
+      it 'does not process backorders when stock is adjusted negatively' do
         expect(inventory_unit).not_to receive(:fill_backorder)
         expect(inventory_unit_2).not_to receive(:fill_backorder)
         subject.adjust_count_on_hand(-1)
         expect(subject.count_on_hand).to eq(-3)
       end
 
-      context "adds new items" do
+      context 'adds new items' do
         before { allow(subject).to receive_messages(backordered_inventory_units: [inventory_unit, inventory_unit_2]) }
 
-        it "fills existing backorders" do
+        it 'fills existing backorders' do
           expect(inventory_unit).to receive(:fill_backorder)
           expect(inventory_unit_2).to receive(:fill_backorder)
 
@@ -107,7 +107,7 @@ describe Spree::StockItem, type: :model do
     end
   end
 
-  context "set count_on_hand" do
+  context 'set count_on_hand' do
     let!(:current_on_hand) { subject.count_on_hand }
 
     it 'is updated pessimistically' do
@@ -121,7 +121,7 @@ describe Spree::StockItem, type: :model do
       expect(copy.count_on_hand).to eq(current_on_hand)
     end
 
-    context "item out of stock (by two items)" do
+    context 'item out of stock (by two items)' do
       let(:inventory_unit) { double('InventoryUnit') }
       let(:inventory_unit_2) { double('InventoryUnit2') }
 
@@ -131,10 +131,10 @@ describe Spree::StockItem, type: :model do
         expect(subject).not_to receive(:backordered_inventory_units)
       end
 
-      context "adds new items" do
+      context 'adds new items' do
         before { allow(subject).to receive_messages(backordered_inventory_units: [inventory_unit, inventory_unit_2]) }
 
-        it "fills existing backorders" do
+        it 'fills existing backorders' do
           expect(inventory_unit).to receive(:fill_backorder)
           expect(inventory_unit_2).to receive(:fill_backorder)
 
@@ -145,24 +145,24 @@ describe Spree::StockItem, type: :model do
     end
   end
 
-  context "with stock movements" do
+  context 'with stock movements' do
     before { Spree::StockMovement.create(stock_item: subject, quantity: 1) }
 
-    it "doesnt raise ReadOnlyRecord error" do
+    it 'doesnt raise ReadOnlyRecord error' do
       expect { subject.destroy }.not_to raise_error
     end
   end
 
-  context "destroyed" do
+  context 'destroyed' do
     before { subject.destroy }
 
-    it "recreates stock item just fine" do
+    it 'recreates stock item just fine' do
       expect {
         stock_location.stock_items.create!(variant: subject.variant)
       }.not_to raise_error
     end
 
-    it "doesnt allow recreating more than one stock item at once" do
+    it 'doesnt allow recreating more than one stock item at once' do
       stock_location.stock_items.create!(variant: subject.variant)
 
       expect {
@@ -171,22 +171,22 @@ describe Spree::StockItem, type: :model do
     end
   end
 
-  describe "#after_save" do
+  describe '#after_save' do
     before do
       subject.variant.update_column(:updated_at, 1.day.ago)
     end
 
-    context "binary_inventory_cache is set to false (default)" do
-      context "in_stock? changes" do
-        it "touches its variant" do
+    context 'binary_inventory_cache is set to false (default)' do
+      context 'in_stock? changes' do
+        it 'touches its variant' do
           expect do
             subject.adjust_count_on_hand(subject.count_on_hand * -1)
           end.to change { subject.variant.reload.updated_at }
         end
       end
 
-      context "in_stock? does not change" do
-        it "touches its variant" do
+      context 'in_stock? does not change' do
+        it 'touches its variant' do
           expect do
             subject.adjust_count_on_hand((subject.count_on_hand * -1) + 1)
           end.to change { subject.variant.reload.updated_at }
@@ -194,26 +194,26 @@ describe Spree::StockItem, type: :model do
       end
     end
 
-    context "binary_inventory_cache is set to true" do
+    context 'binary_inventory_cache is set to true' do
       before { Spree::Config.binary_inventory_cache = true }
-      context "in_stock? changes" do
-        it "touches its variant" do
+      context 'in_stock? changes' do
+        it 'touches its variant' do
           expect do
             subject.adjust_count_on_hand(subject.count_on_hand * -1)
           end.to change { subject.variant.reload.updated_at }
         end
       end
 
-      context "in_stock? does not change" do
-        it "does not touch its variant" do
+      context 'in_stock? does not change' do
+        it 'does not touch its variant' do
           expect do
             subject.adjust_count_on_hand((subject.count_on_hand * -1) + 1)
           end.not_to change { subject.variant.reload.updated_at }
         end
       end
 
-      context "when a new stock location is added" do
-        it "touches its variant" do
+      context 'when a new stock location is added' do
+        it 'touches its variant' do
           expect do
             create(:stock_location)
           end.to change { subject.variant.reload.updated_at }
@@ -222,8 +222,8 @@ describe Spree::StockItem, type: :model do
     end
   end
 
-  describe "#after_touch" do
-    it "touches its variant" do
+  describe '#after_touch' do
+    it 'touches its variant' do
       expect do
         subject.touch
       end.to change { subject.variant.updated_at }
@@ -231,8 +231,8 @@ describe Spree::StockItem, type: :model do
   end
 
   # Regression test for #4651
-  context "variant" do
-    it "can be found even if the variant is deleted" do
+  context 'variant' do
+    it 'can be found even if the variant is deleted' do
       subject.variant.destroy
       expect(subject.reload.variant).not_to be_nil
     end

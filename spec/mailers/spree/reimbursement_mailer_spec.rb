@@ -7,14 +7,14 @@ describe Spree::ReimbursementMailer, type: :mailer do
 
   let(:reimbursement) { create(:reimbursement) }
 
-  context ":from not set explicitly" do
-    it "falls back to spree config" do
+  context ':from not set explicitly' do
+    it 'falls back to spree config' do
       message = Spree::ReimbursementMailer.reimbursement_email(reimbursement)
       expect(message.from).to eq [Spree::Store.current.mail_from_address]
     end
   end
 
-  it "accepts a reimbursement id as an alternative to a Reimbursement object" do
+  it 'accepts a reimbursement id as an alternative to a Reimbursement object' do
     expect(Spree::Reimbursement).to receive(:find).with(reimbursement.id).and_return(reimbursement)
 
     expect {
@@ -22,9 +22,9 @@ describe Spree::ReimbursementMailer, type: :mailer do
     }.not_to raise_error
   end
 
-  context "emails must be translatable" do
-    context "reimbursement_email" do
-      context "pt-BR locale" do
+  context 'emails must be translatable' do
+    context 'reimbursement_email' do
+      context 'pt-BR locale' do
         before do
           I18n.enforce_available_locales = false
           pt_br_shipped_email = { spree: { reimbursement_mailer: { reimbursement_email: { dear_customer: 'Caro Cliente,' } } } }
@@ -39,7 +39,7 @@ describe Spree::ReimbursementMailer, type: :mailer do
 
         specify do
           reimbursement_email = Spree::ReimbursementMailer.reimbursement_email(reimbursement)
-          expect(reimbursement_email.body).to include("Caro Cliente,")
+          expect(reimbursement_email.body).to include('Caro Cliente,')
         end
       end
     end

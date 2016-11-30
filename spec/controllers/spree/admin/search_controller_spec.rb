@@ -4,8 +4,8 @@ describe Spree::Admin::SearchController, type: :controller do
   stub_authorization!
   # Regression test for ernie/ransack#176
 
-  describe "users" do
-    let(:user) { create(:user, email: "spree_commerce@example.com") }
+  describe 'users' do
+    let(:user) { create(:user, email: 'spree_commerce@example.com') }
 
     before do
       user.ship_address = create(:address)
@@ -13,7 +13,7 @@ describe Spree::Admin::SearchController, type: :controller do
       user.save
     end
 
-    it "can find a user by their email "do
+    it 'can find a user by their email 'do
       spree_xhr_get :users, q: user.email
       expect(assigns[:users]).to include(user)
     end
@@ -39,15 +39,15 @@ describe Spree::Admin::SearchController, type: :controller do
     end
   end
 
-  describe "products" do
-    let(:product) { create(:product, name: "Example Product") }
+  describe 'products' do
+    let(:product) { create(:product, name: 'Example Product') }
 
-    it "can find a product by its name "do
+    it 'can find a product by its name 'do
       spree_xhr_get :products, q: product.name
       expect(assigns[:products]).to include(product)
     end
 
-    it "can find a product by its slug "do
+    it 'can find a product by its slug 'do
       spree_xhr_get :products, q: product.slug
       expect(assigns[:products]).to include(product)
     end

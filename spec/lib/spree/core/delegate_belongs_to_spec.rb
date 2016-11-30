@@ -6,14 +6,14 @@ require 'spec_helper'
 # loaded) and adding a column here might make the test even crazy so here we go
 module Spree
   class DelegateBelongsToStubModel < Spree::Base
-    self.table_name = "spree_payment_methods"
+    self.table_name = 'spree_payment_methods'
     belongs_to :product
     delegate_belongs_to :product, :name
   end
 
   describe DelegateBelongsToStubModel do
-    context "model has column attr delegated to associated object" do
-      it "doesnt touch the associated object" do
+    context 'model has column attr delegated to associated object' do
+      it 'doesnt touch the associated object' do
         expect(subject).not_to receive(:product)
         subject.name
       end

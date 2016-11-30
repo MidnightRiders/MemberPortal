@@ -9,7 +9,7 @@ module Spree
 
       subject { InventoryUnitBuilder.new(order) }
 
-      describe "#units" do
+      describe '#units' do
         it "returns an inventory unit for each quantity for the order's line items" do
           units = subject.units
           expect(units.count).to eq 3
@@ -23,11 +23,11 @@ module Spree
           expect(units[2].variant).to eq line_item_2.variant
         end
 
-        it "builds the inventory units as pending" do
+        it 'builds the inventory units as pending' do
           expect(subject.units.map(&:pending).uniq).to eq [true]
         end
 
-        it "associates the inventory units to the order" do
+        it 'associates the inventory units to the order' do
           expect(subject.units.map(&:order).uniq).to eq [order]
         end
 

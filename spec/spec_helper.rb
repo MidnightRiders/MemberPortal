@@ -99,7 +99,7 @@ module Spree
       def assert_flash_success(flash)
         flash = convert_flash(flash)
 
-        within(".alert-success") do
+        within('.alert-success') do
           expect(page).to have_content(flash)
         end
       end

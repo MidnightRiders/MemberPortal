@@ -10,12 +10,12 @@ describe 'orders', type: :feature do
     allow_any_instance_of(Spree::OrdersController).to receive_messages(try_spree_current_user: user)
   end
 
-  it "can visit an order" do
+  it 'can visit an order' do
     # Regression test for current_user call on orders/show
     expect { visit spree.order_path(order) }.not_to raise_error
   end
 
-  it "should display line item price" do
+  it 'should display line item price' do
     # Regression test for #2772
     line_item = order.line_items.first
     line_item.target_shipment = create(:shipment)
@@ -26,28 +26,28 @@ describe 'orders', type: :feature do
 
     # Tests view spree/shared/_order_details
     within 'td.price' do
-      expect(page).to have_content "19.00"
+      expect(page).to have_content '19.00'
     end
   end
 
-  it "should have credit card info if paid with credit card" do
+  it 'should have credit card info if paid with credit card' do
     create(:payment, order: order)
     visit spree.order_path(order)
     within '.payment-info' do
-      expect(page).to have_content "Ending in 1111"
+      expect(page).to have_content 'Ending in 1111'
     end
   end
 
-  it "should have payment method name visible if not paid with credit card" do
+  it 'should have payment method name visible if not paid with credit card' do
     create(:check_payment, order: order)
     visit spree.order_path(order)
     within '.payment-info' do
-      expect(page).to have_content "Check"
+      expect(page).to have_content 'Check'
     end
   end
 
   # Regression test for #2282
-  context "can support a credit card with blank information" do
+  context 'can support a credit card with blank information' do
     before do
       credit_card = create(:credit_card)
       credit_card.update_column(:cc_type, '')
@@ -59,12 +59,12 @@ describe 'orders', type: :feature do
     specify do
       visit spree.order_path(order)
       within '.payment-info' do
-        expect { find("img") }.to raise_error(Capybara::ElementNotFound)
+        expect { find('img') }.to raise_error(Capybara::ElementNotFound)
       end
     end
   end
 
-  it "should return the correct title when displaying a completed order" do
+  it 'should return the correct title when displaying a completed order' do
     visit spree.order_path(order)
 
     within '#order_summary' do
