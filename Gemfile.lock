@@ -1,6 +1,7 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    abstract_type (0.0.7)
     actionmailer (4.2.7.1)
       actionpack (= 4.2.7.1)
       actionview (= 4.2.7.1)
@@ -44,9 +45,17 @@ GEM
       tzinfo (~> 1.1)
     acts_as_list (0.7.2)
       activerecord (>= 3.0)
+    adamantium (0.2.0)
+      ice_nine (~> 0.11.0)
+      memoizable (~> 0.4.0)
     addressable (2.5.0)
       public_suffix (~> 2.0, >= 2.0.2)
+    anima (0.3.0)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2)
+      equalizer (~> 0.0.11)
     arel (6.0.3)
+    ast (2.3.0)
     autoprefixer-rails (6.5.3)
       execjs
     awesome_nested_set (3.0.3)
@@ -98,6 +107,9 @@ GEM
       execjs
     coffee-script-source (1.11.1)
     colorize (0.8.1)
+    concord (0.1.5)
+      adamantium (~> 0.2.0)
+      equalizer (~> 0.0.9)
     concurrent-ruby (1.0.2)
     css_parser (1.4.6)
       addressable
@@ -128,6 +140,11 @@ GEM
       activemodel (>= 3.0)
       activesupport (>= 3.0)
       request_store (~> 1.0)
+    email_spec (2.1.0)
+      htmlentities (~> 4.3.3)
+      launchy (~> 2.1)
+      mail (~> 2.6.3)
+    equalizer (0.0.11)
     erubis (2.7.0)
     eventmachine (1.2.1)
     execjs (2.7.0)
@@ -170,6 +187,7 @@ GEM
       domain_name (~> 0.5)
     i18n (0.7.0)
     icalendar (2.4.1)
+    ice_nine (0.11.2)
     iconv (1.0.4)
     jbuilder (1.5.3)
       activesupport (>= 3.0.0)
@@ -191,6 +209,8 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    memoizable (0.4.2)
+      thread_safe (~> 0.3, >= 0.3.1)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -203,7 +223,35 @@ GEM
     money (6.7.1)
       i18n (>= 0.6.4, <= 0.7.0)
       sixarm_ruby_unaccent (>= 1.1.1, < 2)
+    morpher (0.2.6)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2.0)
+      anima (~> 0.3.0)
+      ast (~> 2.2)
+      concord (~> 0.1.5)
+      equalizer (~> 0.0.9)
+      ice_nine (~> 0.11.0)
+      procto (~> 0.0.2)
     multi_json (1.12.1)
+    mutant (0.8.12)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2.0)
+      anima (~> 0.3.0)
+      ast (~> 2.2)
+      concord (~> 0.1.5)
+      diff-lcs (~> 1.2)
+      equalizer (~> 0.0.9)
+      ice_nine (~> 0.11.1)
+      memoizable (~> 0.4.2)
+      morpher (~> 0.2.6)
+      parallel (~> 1.3)
+      parser (~> 2.3.1, >= 2.3.1.4)
+      procto (~> 0.0.2)
+      regexp_parser (~> 0.3.6)
+      unparser (~> 0.2.5)
+    mutant-rspec (0.8.11)
+      mutant (~> 0.8.11)
+      rspec-core (>= 3.4.0, < 3.6.0)
     netrc (0.11.0)
     nokogiri (1.6.8.1)
       mini_portile2 (~> 2.1.0)
@@ -220,8 +268,11 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (= 0.3.0)
+    parallel (1.10.0)
     paranoia (2.1.5)
       activerecord (~> 4.0)
+    parser (2.3.3.0)
+      ast (~> 2.2)
     pg (0.19.0)
     poltergeist (1.11.0)
       capybara (~> 2.1)
@@ -236,6 +287,7 @@ GEM
     premailer-rails (1.9.4)
       actionmailer (>= 3, < 6)
       premailer (~> 1.7, >= 1.7.9)
+    procto (0.0.3)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -282,6 +334,7 @@ GEM
       i18n
       polyamorous (~> 1.1)
     rdoc (4.3.0)
+    regexp_parser (0.3.6)
     request_store (1.3.1)
     responders (2.3.0)
       railties (>= 4.2.0, < 5.1)
@@ -292,11 +345,20 @@ GEM
     roo (2.5.1)
       nokogiri (~> 1)
       rubyzip (~> 1.1, < 2.0.0)
+    rspec-activemodel-mocks (1.0.3)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      rspec-mocks (>= 2.99, < 4.0)
+    rspec-collection_matchers (1.1.2)
+      rspec-expectations (>= 2.99.0.beta1)
     rspec-core (3.5.4)
       rspec-support (~> 3.5.0)
     rspec-expectations (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
     rspec-mocks (3.5.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.5.0)
@@ -325,6 +387,10 @@ GEM
     select2-rails (3.5.9.1)
       thor (~> 0.14)
     sexp_processor (4.7.0)
+    shoulda-callback-matchers (1.1.4)
+      activesupport (>= 3)
+    shoulda-matchers (3.1.1)
+      activesupport (>= 4.0.0)
     sixarm_ruby_unaccent (1.1.1)
     slop (3.6.0)
     spree (3.1.2)
@@ -402,6 +468,8 @@ GEM
     stringex (2.6.1)
     stripe (1.57.0)
       rest-client (>= 1.4, < 4.0)
+    test_after_commit (1.1.0)
+      activerecord (>= 3.2)
     thin (1.7.0)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
@@ -409,6 +477,7 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.5)
+    timecop (0.8.1)
     truncate_html (0.9.3)
     twitter_cldr (3.6.0)
       camertron-eprun
@@ -421,6 +490,14 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    unparser (0.2.5)
+      abstract_type (~> 0.0.7)
+      adamantium (~> 0.2.0)
+      concord (~> 0.1.5)
+      diff-lcs (~> 1.2.5)
+      equalizer (~> 0.0.9)
+      parser (~> 2.3.0)
+      procto (~> 0.0.2)
     versioncake (2.3.1)
       actionpack (>= 3.2)
       activesupport (>= 3.2)
@@ -432,6 +509,8 @@ GEM
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     will_paginate (3.1.5)
+    with_model (1.2.1)
+      activerecord (>= 3.0)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -452,6 +531,7 @@ DEPENDENCIES
   devise (~> 4.0.0)
   dotenv-rails (~> 2.1, >= 2.1.1)
   draper
+  email_spec
   factory_girl_rails
   ffaker
   fivemat
@@ -464,6 +544,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   launchy
+  mutant-rspec
   order_query
   paper_trail
   paperclip (~> 4.3.0)
@@ -473,17 +554,25 @@ DEPENDENCIES
   pry-rails
   rails (~> 4.2.7)
   roo
+  rspec-activemodel-mocks (~> 1.0.2)
+  rspec-collection_matchers
+  rspec-its
   rspec-rails
   sass
   sass-rails
   sdoc
+  shoulda-callback-matchers (~> 1.1)
+  shoulda-matchers (~> 3.1)
   spree (~> 3.1.0)
   spree_gateway (~> 3.1.0)
   spring-commands-rspec
   stripe
+  test_after_commit
   thin
+  timecop
   uglifier
   will_paginate
+  with_model
 
 RUBY VERSION
    ruby 2.3.1p112

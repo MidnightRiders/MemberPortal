@@ -72,8 +72,18 @@ group :test do
   gem 'capybara-webkit'
   gem 'capybara-screenshot'
   gem 'database_cleaner'
+  gem 'email_spec'
   gem 'launchy'
+  gem 'mutant-rspec'
   gem 'poltergeist'
+  gem 'timecop'
+  gem 'rspec-activemodel-mocks', '~> 1.0.2'
+  gem 'rspec-collection_matchers'
+  gem 'rspec-its'
+  gem 'shoulda-matchers', '~> 3.1'
+  gem 'shoulda-callback-matchers', '~> 1.1'
+  gem 'test_after_commit'
+  gem 'with_model'
 end
 
 # Use ActiveModel has_secure_password
