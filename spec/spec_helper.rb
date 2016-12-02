@@ -73,7 +73,7 @@ RSpec.configure do |config|
 
   config.backtrace_exclusion_patterns = [/gems\/activesupport/, /gems\/actionpack/, /gems\/rspec/]
   config.color = true
-  config.fail_fast = ENV['FAIL_FAST'] || false
+  config.fail_fast = ENV['FAIL_FAST']&.to_i || false
   config.infer_spec_type_from_file_location!
   config.mock_with :rspec
 

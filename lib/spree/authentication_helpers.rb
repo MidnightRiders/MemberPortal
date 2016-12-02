@@ -28,4 +28,3 @@ end
 Spree::BaseController.send      :include, Spree::AuthenticationHelpers
 Spree::Api::BaseController.send :include, Spree::AuthenticationHelpers
 ApplicationController.send      :include, Spree::AuthenticationHelpers
-

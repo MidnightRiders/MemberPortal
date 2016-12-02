@@ -51,7 +51,11 @@ describe Spree::Core::ControllerHelpers::Auth, type: :controller do
 
   describe '#store_location' do
     it 'sets session return url' do
-      allow(controller).to receive_messages(request: double(fullpath: '/redirect'))
+      allow(controller).to receive_messages(
+        spree_signup_path: '',
+        spree_login_path: '',
+        spree_logout_path: '',
+        request: double(fullpath: '/redirect'))
       controller.store_location
       expect(session[:spree_user_return_to]).to eq '/redirect'
     end
@@ -60,10 +64,6 @@ describe Spree::Core::ControllerHelpers::Auth, type: :controller do
   describe '#try_spree_current_user' do
     it 'calls spree_current_user when define spree_current_user method' do
       expect(controller).to receive(:spree_current_user)
-      controller.try_spree_current_user
-    end
-    it 'calls current_spree_user when define current_spree_user method' do
-      expect(controller).to receive(:current_spree_user)
       controller.try_spree_current_user
     end
     it 'returns nil' do
@@ -89,14 +89,9 @@ describe Spree::Core::ControllerHelpers::Auth, type: :controller do
         allow(controller).to receive_messages(try_spree_current_user: nil)
       end
       it 'redirects login path' do
-        allow(controller).to receive_messages(spree_login_path: '/login')
+        allow(controller).to receive_messages(spree_login_path: new_user_session_path)
         get :index
-        expect(response).to redirect_to('/login')
-      end
-      it 'redirects root path' do
-        allow(controller).to receive_message_chain(:spree, :root_path).and_return('/root_path')
-        get :index
-        expect(response).to redirect_to('/root_path')
+        expect(response).to redirect_to(new_user_session_path)
       end
     end
   end
