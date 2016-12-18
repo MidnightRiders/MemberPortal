@@ -29,7 +29,8 @@ class BlogRss
       rescue => e
         Rails.logger.error 'Blog error for ' + self.url
         Rails.logger.error e
-        Rails.logger.info 'RSS: ' + rss
+        Rails.logger.info 'RSS:'
+        Rails.logger.info rss
       end
       rss ||= []
       if rss.is_a?(Array) && rss.present?
