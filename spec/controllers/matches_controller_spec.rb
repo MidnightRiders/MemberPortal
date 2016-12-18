@@ -65,7 +65,7 @@ describe MatchesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
         post :create, {match: { home_team_id:  'invalid value' }}, valid_session
-        expect(response).to render_template("new")
+        expect(response).to render_template('new')
       end
     end
   end
@@ -78,8 +78,8 @@ describe MatchesController do
         # specifies that the Match created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        expect(Match.any_instance).to_receive(:update).with({ home_team_id:  "1" })
-        put :update, {id: match.to_param, match: { home_team_id:  "1" }}, valid_session
+        expect(Match.any_instance).to_receive(:update).with({ home_team_id:  '1' })
+        put :update, {id: match.to_param, match: { home_team_id:  '1' }}, valid_session
       end
 
       it 'assigns the requested match as @match' do
@@ -109,7 +109,7 @@ describe MatchesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
         put :update, {id: match.to_param, match: { home_team_id:  'invalid value' }}, valid_session
-        expect(response).to render_template("edit")
+        expect(response).to render_template('edit')
       end
     end
   end
