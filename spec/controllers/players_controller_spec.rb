@@ -25,7 +25,7 @@ describe PlayersController do
     end
     it 'accepts #update' do
       p = FactoryGirl.create(:player)
-      new_name = Faker::Name.first_name
+      new_name = FFaker::Name.first_name
       expect{
         patch :update, id: p, player: { first_name: new_name }
         p.reload
@@ -70,7 +70,7 @@ describe PlayersController do
     end
     it 'accepts #update' do
       p = FactoryGirl.create(:player)
-      new_name = Faker::Name.first_name
+      new_name = FFaker::Name.first_name
       expect{
         patch :update, id: p, player: { first_name: new_name }
         p.reload
