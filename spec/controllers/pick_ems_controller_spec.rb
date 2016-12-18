@@ -6,7 +6,7 @@ describe PickEmsController do
   # This should return the minimal set of attributes required to create a valid
   # PickEm. As you add validations to PickEm, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { match:  "" } }
+  let(:valid_attributes) { { match:  '' } }
 
   skip 'GET index' do
     it 'assigns all pick_ems as @pick_ems' do
@@ -71,7 +71,7 @@ describe PickEmsController do
         # Trigger the behavior that occurs when invalid params are submitted
         PickEm.any_instance.stub(:save).and_return(false)
         post :create, {pick_em: { match:  'invalid value' }}
-        expect(response).to render_template("new")
+        expect(response).to render_template('new')
       end
     end
   end
@@ -84,8 +84,8 @@ describe PickEmsController do
         # specifies that the PickEm created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        expect(PickEm.any_instance).to_receive(:update).with({ match:  "" })
-        put :update, {id: pick_em.to_param, pick_em: { match:  "" }}
+        expect(PickEm.any_instance).to_receive(:update).with({ match:  '' })
+        put :update, {id: pick_em.to_param, pick_em: { match:  '' }}
       end
 
       it 'assigns the requested pick_em as @pick_em' do
@@ -115,7 +115,7 @@ describe PickEmsController do
         # Trigger the behavior that occurs when invalid params are submitted
         PickEm.any_instance.stub(:save).and_return(false)
         put :update, {id: pick_em.to_param, pick_em: { match:  'invalid value' }}
-        expect(response).to render_template("edit")
+        expect(response).to render_template('edit')
       end
     end
   end
