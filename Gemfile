@@ -28,12 +28,12 @@ gem 'date_time_attribute'
 
 gem 'will_paginate'
 
-gem 'paperclip'
+gem 'paperclip', '~>4.3.0'
 gem 'aws-sdk'
 
 # Users/auth
-gem 'devise'
-gem 'cancancan'
+gem 'devise', '~>4.0.0'
+gem 'cancancan', '~>1.10.1'
 gem 'paper_trail'
 
 # Payments
@@ -57,15 +57,16 @@ group :development, :test do
   gem 'capybara'
   gem 'faker'
   gem 'fivemat'
-  gem 'poltergeist'
   gem 'thin'
-  gem 'launchy'
   gem 'active_record_query_trace'
 end
 
 group :test do
-  gem 'database_cleaner'
   gem 'capybara-webkit'
+  gem 'capybara-screenshot'
+  gem 'database_cleaner'
+  gem 'launchy'
+  gem 'poltergeist'
 end
 
 # Use ActiveModel has_secure_password
