@@ -55,7 +55,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-nav'
   gem 'capybara'
-  gem 'faker'
+  gem 'ffaker'
   gem 'fivemat'
   gem 'thin'
   gem 'active_record_query_trace'
