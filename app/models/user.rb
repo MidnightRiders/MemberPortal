@@ -29,6 +29,8 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+  SESSION_LIMIT = 3
+
   delegate :can?, :cannot?, to: :ability
 
   default_scope { includes(:memberships) }
@@ -71,6 +73,8 @@ class User < ActiveRecord::Base
   has_many :mot_ms
   has_many :rev_guesses
   has_many :pick_ems
+
+  has_many :sessions, class_name: :'Api::V1::Session'
 
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false

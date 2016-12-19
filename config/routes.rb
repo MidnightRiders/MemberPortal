@@ -36,6 +36,12 @@ MidnightRiders::Application.routes.draw do
     end
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :sessions, only: %w(create destroy)
+    end
+  end
+
   get 'downloads/:filename', to: 'downloads#show', as: :download
 
   match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: :cancel_user_membership, via: [ :put, :patch ]
