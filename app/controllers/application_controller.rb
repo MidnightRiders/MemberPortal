@@ -44,8 +44,8 @@ class ApplicationController < ActionController::Base
     def slack_notify_membership(membership, user, family=nil)
       relevant_memberships = Membership.where(year: membership.year, refunded: [nil, false]).where.not(user_id: nil)
       count = relevant_memberships.size
-      breakdown = relevant_memberships.group(:type).count
-      breakdown = %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[type]}" }.join(' | ')
+      breakdown = relevant_memberships.group(:year, :type).count
+      breakdown = %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[[membership.year, type]] || 0}" }.join(' | ')
       SlackBot.post_message("New #{membership.type} Membership!\n*#{membership.year} Total: #{count}* | #{breakdown}", '#general')
       if family.present?
         SlackBot.post_message("#{user.first_name} #{user.last_name} (@#{user.username}) has accepted *#{family.user.first_name} #{family.user.last_name}’s Family Membership invitation*:\n#{user_url(user)}.\nThere are now *#{count} registered #{membership.year} Memberships.*\n#{breakdown}", 'membership')
