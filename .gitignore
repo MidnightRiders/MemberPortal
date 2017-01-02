@@ -24,3 +24,5 @@
 
 # Sensitive ENV variables
 .env*
+
+config/secrets.yml
