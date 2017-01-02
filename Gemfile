@@ -36,6 +36,8 @@ gem 'devise', '~>4.0.0'
 gem 'cancancan', '~>1.10.1'
 gem 'paper_trail'
 
+gem 'dotenv', '~> 2.1', '>= 2.1.1'
+
 # Payments
 gem 'stripe'
 

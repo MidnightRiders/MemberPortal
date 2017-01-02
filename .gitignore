@@ -21,3 +21,6 @@
 .idea
 .idea/
 .idea/*
+
+# Sensitive ENV variables
+.env*
