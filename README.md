@@ -1,3 +1,5 @@
+![](https://circleci.com/gh/MidnightRiders/MemberPortal.svg?style=shield)
+
 # Midnight Riders Member Portal
 
 The Midnight Riders Member Portal is a membership database for current Riders. It allows Riders
