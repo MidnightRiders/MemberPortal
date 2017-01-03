@@ -1,4 +1,0 @@
-machine:
-  environment:
-    CIRCLECI: true
-    SECRET_KEY_BASE: 3b3dd236f988ca054cb8be32c7d45e168f1bd90759647371c69b212ff5241adef4b4c5aa1390c97d4f31558fff6a95430c79f9600f01e93bbaf833ed3a9e1736
