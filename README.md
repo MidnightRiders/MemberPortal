@@ -60,15 +60,15 @@ conventions of the repo and mimick the styles you see. For example: single quote
 
 ## Models
 
-[`Ability`](#markdown-header-ability)
-[`Club`](#markdown-header-club)
-[`Match`](#markdown-header-match)
-[`Membership`](#markdown-header-membership)
-[`MotM`](#markdown-header-motm)
-[`PickEm`](#markdown-header-pickem)
-[`Player`](#markdown-header-player)
-[`RevGuess`](#markdown-header-revguess)
-[`User`](#markdown-header-user)
+[`Ability`](#ability)
+[`Club`](#club)
+[`Match`](#match)
+[`Membership`](#membership)
+[`MotM`](#motm)
+[`PickEm`](#pickem)
+[`Player`](#player)
+[`RevGuess`](#revguess)
+[`User`](#user)
 
 ### Ability
 
@@ -114,10 +114,11 @@ the calendar import (see `matches_controller#import`).
     created_at              :datetime
     updated_at              :datetime
     uid                     :string(255)
+    season                  :integer
 
 ### Membership
 
-**Under development.** One `Membership` per `User`, per year.
+One `Membership` per `User`, per year.
 
 **Attributes:**
 
@@ -126,9 +127,11 @@ the calendar import (see `matches_controller#import`).
     year                    :integer
     info                    :hstore
     privileges              :json
-    type                    :string
+    type                    :string           STI column: can be Individual, Family, Relative
     created_at              :datetime
     updated_at              :datetime
+    family_id               :integer
+    refunded                :text             Can be true, nil, or contain comment or Stripe code
 
 ### MotM
 
@@ -219,3 +222,5 @@ Score predictions for Revs games. One per user per `Match`.
     last_sign_in_at        :datetime
     current_sign_in_ip     :string(255)
     last_sign_in_ip        :string(255)
+    stripe_customer_token  :string(255)
+    country                :string(255)
