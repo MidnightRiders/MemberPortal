@@ -10,6 +10,54 @@ instead of Google Drive.
 
 ----
 
+## Configuration
+
+### Environment Variables
+This project uses [dotenv-rails](https://github.com/bkeepers/dotenv) to obscure sensitive env variables.
+A `.env` file is needed to run the application. The full `.env` file for development looks like below:
+
+```bash
+SECRET_KEY_BASE=[RAILS SECRET KEY BASE]
+STRIPE_PUBLIC_KEY=[STRIPE PUBLIC KEY]
+STRIPE_SECRET_KEY=[STRIPE SECRET KEY]
+S3_BUCKET_NAME=[NAME OF AMAZON BUCKET]
+AWS_ACCESS_KEY_ID=[AWS ACCESS KEY]
+AWS_SECRET_ACCESS_KEY=[AWS SECRET KEY]
+```
+
+The Stripe and AWS credentials are unnecessary for a large portion of the project, and all you'll really
+need is the `SECRET_KEY_BASE`, which can be generated for your local environment with `rake secret`.
+
+Access to the development credentials for Stripe and AWS can be obtained as needed by contacting
+Midnight Riders Web Chair [@bensaufley](https://github.com/bensaufley) at
+[webczar@midnightriders.com](mailto:webczar@midnightriders.com).
+
+### Dependencies
+**`postgresql`** is used for the database. I've used [Postgres.app](https://postgresapp.com/documentation/install.html)
+for Mac, which is pretty plug-and-play. You'll need a `root` user with broad privileges.
+
+**`qmake`** is required for the `capybara-webkit` gem. It can be installed in iOS using Homebrew with
+`brew install qt5 --with-qtwebkit` (note: **this can take several hours** so be prepared to set it
+and leave it for a while). You may need to link with `brew link --force qt5` after installation completes.
+
+**`phantomjs`** is also required to run spec, and can also be installed using Homebrew:
+`brew install phantomjs`.
+
+Other dependencies are outlined in the Gemfile.
+
+----
+
+## Contributing
+
+This repo is open to contribution by anyone interested in lending a hand. Simply fork the repo and, when ready,
+submit a Pull Request. Make sure RSpec passes before submitting, and any new functionality is covered by tests. In your PR, explain
+your changes and post screenshots if there's anything relevant to show.
+
+Linter configurations will become a part of this project soon, but in the meantime, please adhere to the _de facto_
+conventions of the repo and mimick the styles you see. For example: single quotes except for interpolation, JSON-style hashes, etc.
+
+----
+
 ## Models
 
 [`Ability`](#markdown-header-ability)
