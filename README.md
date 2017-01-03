@@ -36,7 +36,7 @@ Midnight Riders Web Chair [@bensaufley](https://github.com/bensaufley) at
 **`postgresql`** is used for the database. I've used [Postgres.app](https://postgresapp.com/documentation/install.html)
 for Mac, which is pretty plug-and-play. You'll need a `root` user with broad privileges.
 
-**`qmake`** is required for the `capybara-webkit` gem. It can be installed in iOS using Homebrew with
+**`qmake`** is required for the `capybara-webkit` gem. It can be installed in macOS using Homebrew with
 `brew install qt5 --with-qtwebkit` (note: **this can take several hours** so be prepared to set it
 and leave it for a while). You may need to link with `brew link --force qt5` after installation completes.
 
