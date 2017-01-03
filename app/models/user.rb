@@ -24,6 +24,8 @@
 #  last_sign_in_at        :datetime
 #  current_sign_in_ip     :string(255)
 #  last_sign_in_ip        :string(255)
+#  stripe_customer_token  :string(255)
+#  country                :string(255)
 #
 
 class User < ActiveRecord::Base

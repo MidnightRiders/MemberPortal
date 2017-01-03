@@ -13,6 +13,8 @@
 #  refunded   :string
 #  created_at :datetime
 #  updated_at :datetime
+#  family_id  :integer
+#  refunded   :text
 #
 
 class Membership < ActiveRecord::Base

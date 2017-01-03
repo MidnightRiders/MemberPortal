@@ -12,6 +12,7 @@
 #  created_at   :datetime
 #  updated_at   :datetime
 #  uid          :string(255)
+#  season       :integer
 #
 
 class Match < ActiveRecord::Base
