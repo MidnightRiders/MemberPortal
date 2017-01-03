@@ -1,5 +1,5 @@
 - content_for :head do
-  %meta{ name: 'stripe-public-key', content: ENV['STRIPE_PUBLIC_KEY']
+  %meta{ name: 'stripe-public-key', content: ENV['STRIPE_PUBLIC_KEY'] }
 - enqueue_javascript 'https://js.stripe.com/v2/'
 
 = form_for [@user, @membership.becomes(Membership)], html: { autocomplete: 'on' } do |f|

@@ -19,7 +19,7 @@ development:
   encoding: unicode
   database: MLS_Pick_Em_development
   pool: 5
-  username: bensaufley
+  username: root
   password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
@@ -48,7 +48,7 @@ test:
   encoding: unicode
   database: MLS_Pick_Em_test
   pool: 5
-  username: bensaufley
+  username: root
   password:
 
 production:
@@ -56,5 +56,5 @@ production:
   encoding: unicode
   database: MLS_Pick_Em_production
   pool: 5
-  username: bensaufley
+  username: root
   password:
