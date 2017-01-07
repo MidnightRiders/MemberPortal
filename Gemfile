@@ -69,6 +69,8 @@ group :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'poltergeist'
+
+  gem 'simplecov', require: false
 end
 
 # Use ActiveModel has_secure_password
