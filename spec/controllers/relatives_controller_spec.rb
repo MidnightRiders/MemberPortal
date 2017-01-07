@@ -36,22 +36,6 @@ RSpec.describe RelativesController, type: :controller do
   # RelativesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  skip 'GET index' do
-    it 'assigns all relatives as @relatives' do
-      relative = Relative.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:relatives)).to eq([relative])
-    end
-  end
-
-  skip 'GET show' do
-    it 'assigns the requested relative as @relative' do
-      relative = Relative.create! valid_attributes
-      get :show, {id: relative.to_param}, valid_session
-      expect(assigns(:relative)).to eq(relative)
-    end
-  end
-
   skip 'GET new' do
     it 'assigns a new relative as @relative' do
       get :new, {}, valid_session
@@ -100,45 +84,7 @@ RSpec.describe RelativesController, type: :controller do
     end
   end
 
-  skip 'PUT update' do
-    skip 'with valid params' do
-      let(:new_attributes) {
-        skip('Add a hash of attributes valid for your model')
-      }
-
-      it 'updates the requested relative' do
-        relative = Relative.create! valid_attributes
-        put :update, {id: relative.to_param, relative: new_attributes}, valid_session
-        relative.reload
-        skip('Add assertions for updated state')
-      end
-
-      it 'assigns the requested relative as @relative' do
-        relative = Relative.create! valid_attributes
-        put :update, {id: relative.to_param, relative: valid_attributes}, valid_session
-        expect(assigns(:relative)).to eq(relative)
-      end
-
-      it 'redirects to the relative' do
-        relative = Relative.create! valid_attributes
-        put :update, {id: relative.to_param, relative: valid_attributes}, valid_session
-        expect(response).to redirect_to(relative)
-      end
-    end
-
-    skip 'with invalid params' do
-      it 'assigns the relative as @relative' do
-        relative = Relative.create! valid_attributes
-        put :update, {id: relative.to_param, relative: invalid_attributes}, valid_session
-        expect(assigns(:relative)).to eq(relative)
-      end
-
-      it "re-renders the 'edit' template" do
-        relative = Relative.create! valid_attributes
-        put :update, {id: relative.to_param, relative: invalid_attributes}, valid_session
-        expect(response).to render_template('edit')
-      end
-    end
+  skip 'POST accept_invitation' do
   end
 
   skip 'DELETE destroy' do
