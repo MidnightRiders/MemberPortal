@@ -2,6 +2,8 @@ class Relative < Membership
   belongs_to :family
   accepts_nested_attributes_for :user
 
+  before_validation :strip_invited_email
+
   validate :has_good_family
   validate :no_time_traveling
 
@@ -10,6 +12,10 @@ class Relative < Membership
   end
 
   private
+
+    def strip_invited_email
+      info.dig(:invited_email)&.strip!
+    end
 
     def has_good_family
       errors.add(:family_id, 'must have a family association') if family_id.nil?
