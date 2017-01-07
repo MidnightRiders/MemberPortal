@@ -195,11 +195,7 @@ class Membership < ActiveRecord::Base
   end
 
   def info
-    if read_attribute(:info).nil?
-      {}
-    else
-      super
-    end
+    (self[:info] || {}).with_indifferent_access
   end
 
   def can_have_relatives?
