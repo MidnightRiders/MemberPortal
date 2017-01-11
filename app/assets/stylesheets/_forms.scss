@@ -26,6 +26,11 @@ form {
     white-space: nowrap;
   }
 }
+
+.split.button.expand {
+  padding-left: $button-med; // overriding some dumb Foundation thing that hard-sets this to 2rem
+}
+
 .actions {
   text-align: right;
   a:link, a:visited {
