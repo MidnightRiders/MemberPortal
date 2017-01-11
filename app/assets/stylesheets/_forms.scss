@@ -26,6 +26,11 @@ form {
     white-space: nowrap;
   }
 }
+
+.split.button.expand {
+  padding-left: $button-med; // overriding some dumb Foundation thing that hard-sets this to 2rem
+}
+
 .actions {
   text-align: right;
   a:link, a:visited {
@@ -48,6 +53,9 @@ form {
 }
 
 #scarf-vote-modal {
+  max-width: rem-calc(800);
+  width: auto;
+
   ul,
   li {
     list-style: none;
@@ -57,7 +65,8 @@ form {
   .scarf {
     width: 100%;
 
-    [type=radio] {
+    [type=radio],
+    [type=checkbox] {
       float: left;
       height: 0;
       overflow: hidden;
@@ -67,9 +76,15 @@ form {
 
       + label {
         display: block;
+        font-weight: bold;
         margin: 0 0 .75em;
         padding: 1em;
         position: relative;
+        text-align: center;
+
+        img {
+          display: inline-block;
+        }
 
         &:hover {
           background-color: transparentize($maroon, .5);
@@ -95,6 +110,11 @@ form {
         &,
         &:hover {
           background-color: $maroon;
+          color: #fff;
+
+          img {
+            background: rgba(255, 255, 255, .85);
+          }
         }
       }
     }
@@ -106,5 +126,10 @@ form {
       pointer-events: none;
       position: relative;
     }
+  }
+
+  .form-error-message,
+  .form-button-error {
+    @include alert($alert-color);
   }
 }
