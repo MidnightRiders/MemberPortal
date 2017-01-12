@@ -89,8 +89,8 @@ class UsersController < ApplicationController
   # Accepts +:file+ to import new +Users+.
   def import
     raise 'No file was selected' unless params[:file]
-    file = CSV.read(params[:file].path.to_s, headers: true, converters: :numeric, header_converters: :symbol).map(&:to_h)
-    users = User.import(file, [], current_user.id)
+    file = CSV.read(params[:file].path.to_s, headers: true, header_converters: :symbol).map(&:to_h)
+    users = User.import(file, override_id: current_user.id)
     redirect_to users_path, notice: "#{users.size} #{'user'.pluralize(users.size)} imported."
   rescue => e
     Rails.logger.warn e.message

@@ -68,4 +68,28 @@ describe User do
       expect(user).to be_valid
     end
   end
+  describe 'class methods' do
+    describe 'import' do
+
+      let(:users_hash) {
+        [{ first_name: 'Quentin', last_name: 'Coldwater', email: 'fillory.fan@gmail.com', membership_type: 'Individual', address: %{123 Test Ln\nApt 412}, city: 'Brooklyn', state: 'NY', postal_code: '11201' },
+          { first_name: 'Alice', last_name: 'Quinn', email: 'niffin@yahoo.com', membership_type: 'Family', address: '12 Blah Ct', city: 'Brooklyn', state: 'NY', postal_code: '11202' },
+          { first_name: 'Eliot', last_name: 'Waugh', email: 'high.king@brakebills.com', membership_type: 'Relative', address: '143b Fliff', city: 'Flatbush', state: 'NY', postal_code: '11203' }]
+      }
+      let!(:admin_user) { FactoryGirl.create(:user, :admin) }
+
+      it 'imports Individual and Family users' do
+        expect { User.import(users_hash) }.to change(User, :count).by(2)
+      end
+      it 'grants memberships to members without' do
+        expect { User.import(users_hash, override_id: admin_user.id) }.to change(Membership, :count).by(2)
+      end
+      it 'doesn\'t grant memberships to members with' do
+        user = users_hash.select { |u| u[:membership_type] != 'Relative' }.sample
+        FactoryGirl.create(:user).tap { |u| u.email = user[:email] }.save
+
+        expect { User.import(users_hash, override_id: admin_user.id) }.to change(Membership, :count).by(1)
+      end
+    end
+  end
 end

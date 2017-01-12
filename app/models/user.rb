@@ -29,6 +29,7 @@
 #
 
 class User < ActiveRecord::Base
+  IMPORTABLE_ATTRIBUTES = %i(last_name first_name last_name address city state postal_code phone email member_since username).freeze
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, to: :ability
@@ -149,72 +150,24 @@ class User < ActiveRecord::Base
     'https://gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/, '@')) + '?d=mm'
   end
 
-  # TODO: Clean the shit out of this import. Stabilize it.
-
-  # User import script. Needs work.
-  def self.import(import_users, privileges = [], override_id)
-    allowed_attributes = %i(last_name first_name last_name address city state postal_code phone email member_since username)
-    imported_users = []
-
-    import_users.each do |import_user|
-      next if import_user[:membership_type] == 'Relative' # TODO: Allow Relative input
-
-      if import_user[:email].blank?
-        logger.error "No email for #{import_user[:first_name]} #{import_user[:last_name]}"
-        next
-      end
-
-      user = User.where(email: import_user[:email].strip.downcase).first_or_initialize
-      if user.new_record?
-        original_uname = import_user[:username] = "#{import_user[:first_name]}#{import_user[:last_name]}".downcase.gsub(/[^a-z]/,'')
-        i = 0
-        until User.find_by(username: import_user[:username]).nil?
-          i += 1
-          import_user[:username] = "#{original_uname}#{i}"
-        end
-      end
-      user.attributes = import_user.select { |x| allowed_attributes.include? x.to_sym  }
-      pass = false
-      if user.new_record?
-        logger.info "Adding #{import_user[:first_name]} #{import_user[:last_name]}…"
-        user.password = (pass = rand(36**10).to_s(36))
-      else
-        logger.info "Updating #{import_user[:first_name]} #{import_user[:last_name]}…"
-        if user.changed?
-          logger.info "  Changed: #{user.changes.keys.to_sentence}"
-        else
-          logger.info '  No changes' unless user.changed?
-        end
-      end
-      if user.save
-        m = user.memberships.where(year: Time.current.year).first_or_initialize
-        if m.new_record?
-          m.info = { override: override_id }
-          m.privileges = privileges
-          m.type = import_user[:membership_type].titleize || 'Individual'
-          logger.info "#{m.year} #{m.type} Membership created for #{user.first_name} #{user.last_name} (#{user.username})" if m.save
-        end
-        imported_users << user
-        UserMailer.new_user_creation_email(user, pass).deliver_now if pass
-      else
-        logger.error "  Could not save user #{import_user[:first_name]} #{import_user[:last_name]}:\n  " + user.errors.to_hash.map{|k,v| "#{k}: #{v.to_sentence}"}.join("\n  ")
-      end
+  # Generates tedsmith1-style usernames to prevent conflicts
+  def generate_username!
+    original_uname = self.username = "#{first_name}#{last_name}".downcase.gsub(/[^a-z]/,'')
+    i = 0
+    until User.find_by(username: username).nil?
+      i += 1
+      self.username = "#{original_uname}#{i}"
     end
-
-    imported_users
   end
 
-  # Outputs CSV
-  def self.to_csv
-    filtered_columns = %w(created_at updated_at encrypted_password reset_password_token reset_password_sent_at remember_created_at current_sign_in_at sign_in_count current_sign_in_ip last_sign_in_ip stripe_customer_token)
-    columns_to_use = column_names - filtered_columns
-
-    CSV.generate do |csv|
-      csv << (columns_to_use + %w(current_member membership_type)).map(&:titleize)
-      all.find_each do |user|
-        csv << user.attributes.values_at(*columns_to_use) + [user.current_membership.present?, user.current_membership.try(:type)]
-      end
-    end
+  # Grants a +Membership+ for the current year. Part of import.
+  def grant_membership(type, privileges, granted_by)
+    return unless User.find(granted_by)&.leadership_or_admin?
+    memberships.where(year: Time.current.year).first_or_initialize.tap do |m|
+      m.info = { override: granted_by }
+      m.privileges = privileges
+      m.type = type.titleize || 'Individual'
+    end.save!
   end
 
   # Converts the phone to *Integer* for storage.
@@ -248,4 +201,46 @@ class User < ActiveRecord::Base
     @ability ||= Ability.new(self)
   end
 
+  # User import script. Needs work.
+  def self.import(users, privileges: [], override_id: nil)
+    imported_users = []
+
+    users.each do |import_user|
+      begin
+        imported_users << user_with_membership_from_hash(import_user, privileges: privileges, override_id: override_id)
+      rescue => e
+        Rails.logger.warn e.message
+      end
+    end
+
+    imported_users
+  end
+
+  # Outputs CSV
+  def self.to_csv
+    filtered_columns = %w(created_at updated_at encrypted_password reset_password_token reset_password_sent_at remember_created_at current_sign_in_at sign_in_count current_sign_in_ip last_sign_in_ip stripe_customer_token)
+    columns_to_use = column_names - filtered_columns
+
+    CSV.generate do |csv|
+      csv << (columns_to_use + %w(current_member membership_type)).map(&:titleize)
+      all.each do |user|
+        csv << user.attributes.values_at(*columns_to_use) + [ user.current_membership.present?, user.current_membership.try(:type) ]
+      end
+    end
+  end
+
+  def self.user_with_membership_from_hash(user_hash, privileges: [], override_id: nil)
+    raise 'Not importing Relatives yet' if user_hash[:membership_type] == 'Relative' # TODO: Allow Relative input
+    raise "No email for #{user_hash[:first_name]} #{user_hash[:last_name]}" if user_hash[:email].blank?
+
+    user = User.where(email: user_hash[:email].strip.downcase).first_or_initialize
+    user.assign_attributes(user_hash.select { |x| IMPORTABLE_ATTRIBUTES.include? x.to_sym  })
+    user.generate_username! if user.new_record?
+    pass = false
+    user.password = (pass = rand(36**10).to_s(36)) if user.new_record?
+    user.save!
+    user.grant_membership(user_hash[:membership_type], privileges, override_id)
+    UserMailer.new_user_creation_email(user, pass).deliver_now if pass
+    user
+  end
 end
