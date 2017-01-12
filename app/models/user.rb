@@ -195,7 +195,7 @@ class User < ActiveRecord::Base
           logger.info "#{m.year} #{m.type} Membership created for #{user.first_name} #{user.last_name} (#{user.username})" if m.save
         end
         imported_users << user
-        UserMailer.new_user_creation_email(user, pass).deliver if pass
+        UserMailer.new_user_creation_email(user, pass).deliver_now if pass
       else
         logger.error "  Could not save user #{import_user[:first_name]} #{import_user[:last_name]}:\n  " + user.errors.to_hash.map{|k,v| "#{k}: #{v.to_sentence}"}.join("\n  ")
       end
