@@ -76,7 +76,7 @@ class PickEmsController < ApplicationController
   def destroy
     @pick_em.destroy
     respond_to do |format|
-      format.html do redirect_to pick_ems_url end
+      format.html { redirect_to pick_ems_url }
       format.json { head :no_content }
     end
   end

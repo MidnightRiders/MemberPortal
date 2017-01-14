@@ -10,7 +10,8 @@ class PlayersController < ApplicationController
 
   # GET /players/1
   # GET /players/1.json
-  def show; end
+  def show
+  end
 
   # GET /players/new
   def new
@@ -18,7 +19,8 @@ class PlayersController < ApplicationController
   end
 
   # GET /players/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /players
   # POST /players.json
@@ -27,10 +29,10 @@ class PlayersController < ApplicationController
 
     respond_to do |format|
       if @player.save
-        format.html do redirect_to @player, notice: 'Player was successfully created.' end
+        format.html { redirect_to @player, notice: 'Player was successfully created.' }
         format.json { render action: 'show', status: :created, location: @player }
       else
-        format.html do render action: 'new' end
+        format.html { render action: 'new' }
         format.json { render json: @player.errors, status: :unprocessable_entity }
       end
     end
@@ -41,13 +43,13 @@ class PlayersController < ApplicationController
   def update
     respond_to do |format|
       if @player.update(player_params)
-        format.html do redirect_to @player, notice: 'Player was successfully updated.' end
+        format.html { redirect_to @player, notice: 'Player was successfully updated.' }
         format.json {
           @players = Player.all
           render json: { selector: '#content', html: render_to_string(action: 'index', layout: false, formats: [:html]) }
         }
       else
-        format.html do render action: 'edit' end
+        format.html { render action: 'edit' }
         format.json { render json: @player.errors, status: :unprocessable_entity }
       end
     end
@@ -58,7 +60,7 @@ class PlayersController < ApplicationController
   def destroy
     @player.destroy
     respond_to do |format|
-      format.html do redirect_to players_url end
+      format.html { redirect_to players_url }
       format.json { head :no_content }
     end
   end

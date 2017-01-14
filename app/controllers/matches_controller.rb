@@ -118,7 +118,8 @@ class MatchesController < ApplicationController
   end
 
   # GET /matches/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /matches
   # POST /matches.json
@@ -127,10 +128,10 @@ class MatchesController < ApplicationController
 
     respond_to do |format|
       if @match.save
-        format.html do redirect_to @match, notice: 'Match was successfully created.' end
+        format.html { redirect_to @match, notice: 'Match was successfully created.' }
         format.json { render action: 'show', status: :created, location: @match }
       else
-        format.html do render action: 'new' end
+        format.html { render action: 'new' }
         format.json { render json: @match.errors, status: :unprocessable_entity }
       end
     end
@@ -141,10 +142,10 @@ class MatchesController < ApplicationController
   def update
     respond_to do |format|
       if @match.update(match_params)
-        format.html do redirect_to matches_path(date: @match.kickoff.to_date), notice: 'Match was successfully updated.' end
+        format.html { redirect_to matches_path(date: @match.kickoff.to_date), notice: 'Match was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html do render action: 'edit' end
+        format.html { render action: 'edit' }
         format.json { render json: @match.errors, status: :unprocessable_entity }
       end
     end
@@ -155,7 +156,7 @@ class MatchesController < ApplicationController
   def destroy
     @match.destroy
     respond_to do |format|
-      format.html do redirect_to matches_url end
+      format.html { redirect_to matches_url }
       format.json { head :no_content }
     end
   end

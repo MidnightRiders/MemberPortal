@@ -26,7 +26,8 @@ class UsersController < ApplicationController
 
   # GET /users/1
   # GET /users/1.json
-  def show; end
+  def show
+  end
 
   # GET /home
   def home
@@ -49,10 +50,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.update(user_params)
         flash.now[:success] = 'Thank you for updating your information!'
-        format.html do redirect_to @user end
+        format.html { redirect_to @user }
         format.json { render json: { json: flash, flash: render_to_string(partial: 'layouts/notifications', formats: [:html], locals: { flash: flash }) } }
       else
-        format.html do render action: 'edit' end
+        format.html { render action: 'edit' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -75,10 +76,10 @@ class UsersController < ApplicationController
     respond_to do |format|
       if @user.save
         UserMailer.new_user_creation_email(@user, pass)
-        format.html do redirect_to @user, notice: 'User was successfully created.' end
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
-        format.html do render action: 'new' end
+        format.html { render action: 'new' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end

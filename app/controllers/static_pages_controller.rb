@@ -9,12 +9,14 @@ class StaticPagesController < ApplicationController
   end
 
   # Frequently Asked Questions
-  def faq; end
+  def faq
+  end
 
   # TODO: Fill out Contact
 
   # Basic contact information
-  def contact; end
+  def contact
+  end
 
   # Shows standings for Pick 'Em and RevGuess.
   def standings
@@ -41,7 +43,7 @@ class StaticPagesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html do render view end
+      format.html { render view }
       format.js { render json: @transactions }
     end
   end

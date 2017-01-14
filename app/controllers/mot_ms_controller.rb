@@ -37,7 +37,8 @@ class MotMsController < ApplicationController
   end
 
   # GET /mot_ms/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /mot_ms
   # POST /mot_ms.json
@@ -46,10 +47,10 @@ class MotMsController < ApplicationController
 
     respond_to do |format|
       if @mot_m.save
-        format.html do redirect_to matches_path, notice: 'Your vote was successfully cast.' end
+        format.html { redirect_to matches_path, notice: 'Your vote was successfully cast.' }
         format.json { render action: 'show', status: :created, location: @mot_m }
       else
-        format.html do render action: 'new' end
+        format.html { render action: 'new' }
         format.json { render json: @mot_m.errors, status: :unprocessable_entity }
       end
     end
@@ -60,10 +61,10 @@ class MotMsController < ApplicationController
   def update
     respond_to do |format|
       if @mot_m.update(mot_m_params)
-        format.html do redirect_to matches_path, notice: 'Your vote was successfully updated.' end
+        format.html { redirect_to matches_path, notice: 'Your vote was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html do render action: 'edit' end
+        format.html { render action: 'edit' }
         format.json { render json: @mot_m.errors, status: :unprocessable_entity }
       end
     end
@@ -74,7 +75,7 @@ class MotMsController < ApplicationController
   def destroy
     @mot_m.destroy
     respond_to do |format|
-      format.html do redirect_to matches_url end
+      format.html { redirect_to matches_url }
       format.json { head :no_content }
     end
   end

@@ -9,7 +9,8 @@ class RevGuessesController < ApplicationController
   end
 
   # GET /rev_guesses/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /rev_guesses
   # POST /rev_guesses.json
@@ -18,10 +19,10 @@ class RevGuessesController < ApplicationController
 
     respond_to do |format|
       if @rev_guess.save
-        format.html do redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully created.' end
+        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully created.' }
         format.json { render action: 'show', status: :created, location: @rev_guess }
       else
-        format.html do render action: 'new' end
+        format.html { render action: 'new' }
         format.json { render json: @rev_guess.errors, status: :unprocessable_entity }
       end
     end
@@ -32,10 +33,10 @@ class RevGuessesController < ApplicationController
   def update
     respond_to do |format|
       if @rev_guess.update(rev_guess_params)
-        format.html do redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully updated.' end
+        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html do render action: 'edit' end
+        format.html { render action: 'edit' }
         format.json { render json: @rev_guess.errors, status: :unprocessable_entity }
       end
     end
@@ -46,7 +47,7 @@ class RevGuessesController < ApplicationController
   def destroy
     @rev_guess.destroy
     respond_to do |format|
-      format.html do redirect_to rev_guesses_url end
+      format.html { redirect_to rev_guesses_url }
       format.json { head :no_content }
     end
   end

@@ -40,7 +40,8 @@ class MembershipsController < ApplicationController
   end
 
   # GET /users/:user_id/memberships/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /users/:user_id/memberships
   # POST /users/:user_id/memberships.json
@@ -74,10 +75,10 @@ class MembershipsController < ApplicationController
   def update
     respond_to do |format|
       if @membership.update(membership_params)
-        format.html do redirect_to get_user_path, notice: 'Membership was successfully updated.' end
+        format.html { redirect_to get_user_path, notice: 'Membership was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html do render action: 'edit' end
+        format.html { render action: 'edit' }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -93,10 +94,10 @@ class MembershipsController < ApplicationController
           MembershipMailer.membership_cancellation_alert(@user, @membership).deliver
           MembershipMailer.membership_refund_email(@user, @membership).deliver
         end
-        format.html do redirect_to get_user_path, notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." end
+        format.html { redirect_to get_user_path, notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." }
         format.json { render json: { notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." }, status: :ok }
       else
-        format.html do redirect_to get_user_path, alert: @membership.errors.messages.map(&:last).join('\n') end
+        format.html { redirect_to get_user_path, alert: @membership.errors.messages.map(&:last).join('\n') }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -107,7 +108,7 @@ class MembershipsController < ApplicationController
   def destroy
     @membership.destroy
     respond_to do |format|
-      format.html do redirect_to @user end
+      format.html { redirect_to @user }
       format.json { head :no_content }
     end
   end

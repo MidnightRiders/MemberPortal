@@ -10,7 +10,8 @@ class ClubsController < ApplicationController
 
   # GET /clubs/1
   # GET /clubs/1.json
-  def show; end
+  def show
+  end
 
   # GET /clubs/new
   def new
@@ -18,7 +19,8 @@ class ClubsController < ApplicationController
   end
 
   # GET /clubs/1/edit
-  def edit; end
+  def edit
+  end
 
   # POST /clubs
   # POST /clubs.json
@@ -27,10 +29,10 @@ class ClubsController < ApplicationController
 
     respond_to do |format|
       if @club.save
-        format.html do redirect_to @club, notice: 'Club was successfully created.' end
+        format.html { redirect_to @club, notice: 'Club was successfully created.' }
         format.json { render action: 'show', status: :created, location: @club }
       else
-        format.html do render action: 'new' end
+        format.html { render action: 'new' }
         format.json { render json: @club.errors, status: :unprocessable_entity }
       end
     end
@@ -41,10 +43,10 @@ class ClubsController < ApplicationController
   def update
     respond_to do |format|
       if @club.update(club_params)
-        format.html do redirect_to @club, notice: 'Club was successfully updated.' end
+        format.html { redirect_to @club, notice: 'Club was successfully updated.' }
         format.json { head :no_content }
       else
-        format.html do render action: 'edit' end
+        format.html { render action: 'edit' }
         format.json { render json: @club.errors, status: :unprocessable_entity }
       end
     end
@@ -55,7 +57,7 @@ class ClubsController < ApplicationController
   def destroy
     @club.destroy
     respond_to do |format|
-      format.html do redirect_to clubs_url end
+      format.html { redirect_to clubs_url }
       format.json { head :no_content }
     end
   end
