@@ -30,7 +30,7 @@
 
 class User < ActiveRecord::Base
   IMPORTABLE_ATTRIBUTES = %i(last_name first_name last_name address city state postal_code phone email member_since username).freeze
-  CSV_ATTRIBUTES = %w(created_at updated_at encrypted_password reset_password_token reset_password_sent_at remember_created_at current_sign_in_at sign_in_count current_sign_in_ip last_sign_in_ip stripe_customer_token).freeze
+  CSV_ATTRIBUTES = %w(id last_name first_name address city state postal_code phone email username member_since last_sign_in_at country).freeze
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

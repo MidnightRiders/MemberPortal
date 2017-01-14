@@ -34,22 +34,44 @@ describe User do
     let(:user) { nil }
     context 'for admin user' do
       let(:user) { FactoryGirl.create(:user, :admin) }
-      it { should be_able_to(:manage, [Match, User, Player, Club]) }
-      it { should be_able_to(:create, User) }
+      it 'can manage Matches, Users, Players, Clubs' do
+        expect(ability).to be_able_to(:manage, [Match, User, Player, Club])
+      end
+      it 'can create Users' do
+        expect(ability).to be_able_to(:create, User)
+      end
     end
     context 'for normal user' do
       let(:user) { FactoryGirl.create(:user) }
-      it { should be_able_to(:manage, user) }
-      it { should_not be_able_to(:manage, FactoryGirl.create(:user)) }
-      it { should be_able_to(:show, FactoryGirl.create(:user)) }
-      it { should_not be_able_to(:manage, [Club, Player, Match]) }
-      it { should be_able_to(:index, Match) }
-      it { should_not be_able_to(:index, [Player, Club, User]) }
+      it 'can manage itself' do
+        expect(ability).to be_able_to(:manage, user)
+      end
+      it 'can\'t manage another user' do
+        expect(ability).not_to be_able_to(:manage, FactoryGirl.create(:user))
+      end
+      it 'can show another user' do
+        expect(ability).to be_able_to(:show, FactoryGirl.create(:user))
+      end
+      it 'can\'t manage Clubs, Players, Matches' do
+        expect(ability).not_to be_able_to(:manage, [Club, Player, Match])
+      end
+      it 'can index Matches' do
+        expect(ability).to be_able_to(:index, Match)
+      end
+      it 'can\'t index Players, Clubs, or Users' do
+        expect(ability).not_to be_able_to(:index, [Player, Club, User])
+      end
     end
     context 'for no user' do
-      it { should be_able_to(:create, :Registration) }
-      it { should_not be_able_to(:view, FactoryGirl.create(:user)) }
-      it { should_not be_able_to(:index, [Match, User, Player, Club]) }
+      it 'can\'t create a Registration' do
+        expect(ability).to be_able_to(:create, :Registration)
+      end
+      it 'can\'t view any user' do
+        expect(ability).not_to be_able_to(:view, FactoryGirl.create(:user))
+      end
+      it 'can\'t index Matches, Users, Players, Clubs' do
+        expect(ability).not_to be_able_to(:index, [Match, User, Player, Club])
+      end
     end
   end
   describe 'validation' do
