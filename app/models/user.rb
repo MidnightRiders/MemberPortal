@@ -30,6 +30,8 @@
 
 class User < ActiveRecord::Base
   IMPORTABLE_ATTRIBUTES = %i(last_name first_name last_name address city state postal_code phone email member_since username).freeze
+  CSV_ATTRIBUTES = %w(created_at updated_at encrypted_password reset_password_token reset_password_sent_at remember_created_at current_sign_in_at sign_in_count current_sign_in_ip last_sign_in_ip stripe_customer_token).freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, to: :ability
@@ -152,7 +154,7 @@ class User < ActiveRecord::Base
 
   # Generates tedsmith1-style usernames to prevent conflicts
   def generate_username!
-    original_uname = self.username = "#{first_name}#{last_name}".downcase.gsub(/[^a-z]/,'')
+    original_uname = self.username = "#{first_name}#{last_name}".downcase.gsub(/[^a-z]/, '')
     i = 0
     until User.find_by(username: username).nil?
       i += 1
@@ -218,13 +220,10 @@ class User < ActiveRecord::Base
 
   # Outputs CSV
   def self.to_csv
-    filtered_columns = %w(created_at updated_at encrypted_password reset_password_token reset_password_sent_at remember_created_at current_sign_in_at sign_in_count current_sign_in_ip last_sign_in_ip stripe_customer_token)
-    columns_to_use = column_names - filtered_columns
-
     CSV.generate do |csv|
-      csv << (columns_to_use + %w(current_member membership_type)).map(&:titleize)
-      all.each do |user|
-        csv << user.attributes.values_at(*columns_to_use) + [ user.current_membership.present?, user.current_membership.try(:type) ]
+      csv << (CSV_COLUMNS + %w(current_member membership_type)).map(&:titleize)
+      all.find_each do |user|
+        csv << user.attributes.values_at(*CSV_COLUMNS) + [user.current_membership.present?, user.current_membership.try(:type)]
       end
     end
   end
@@ -234,7 +233,7 @@ class User < ActiveRecord::Base
     raise "No email for #{user_hash[:first_name]} #{user_hash[:last_name]}" if user_hash[:email].blank?
 
     user = User.where(email: user_hash[:email].strip.downcase).first_or_initialize
-    user.assign_attributes(user_hash.select { |x| IMPORTABLE_ATTRIBUTES.include? x.to_sym  })
+    user.assign_attributes(user_hash.select { |x| IMPORTABLE_ATTRIBUTES.include? x.to_sym })
     user.generate_username! if user.new_record?
     pass = false
     user.password = (pass = rand(36**10).to_s(36)) if user.new_record?

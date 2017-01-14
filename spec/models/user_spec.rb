@@ -72,9 +72,11 @@ describe User do
     describe 'import' do
 
       let(:users_hash) {
-        [{ first_name: 'Quentin', last_name: 'Coldwater', email: 'fillory.fan@gmail.com', membership_type: 'Individual', address: %{123 Test Ln\nApt 412}, city: 'Brooklyn', state: 'NY', postal_code: '11201' },
+        [
+          { first_name: 'Quentin', last_name: 'Coldwater', email: 'fillory.fan@gmail.com', membership_type: 'Individual', address: %(123 Test Ln\nApt 412), city: 'Brooklyn', state: 'NY', postal_code: '11201' },
           { first_name: 'Alice', last_name: 'Quinn', email: 'niffin@yahoo.com', membership_type: 'Family', address: '12 Blah Ct', city: 'Brooklyn', state: 'NY', postal_code: '11202' },
-          { first_name: 'Eliot', last_name: 'Waugh', email: 'high.king@brakebills.com', membership_type: 'Relative', address: '143b Fliff', city: 'Flatbush', state: 'NY', postal_code: '11203' }]
+          { first_name: 'Eliot', last_name: 'Waugh', email: 'high.king@brakebills.com', membership_type: 'Relative', address: '143b Fliff', city: 'Flatbush', state: 'NY', postal_code: '11203' }
+        ]
       }
       let!(:admin_user) { FactoryGirl.create(:user, :admin) }
 
