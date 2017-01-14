@@ -185,4 +185,36 @@ class Match < ActiveRecord::Base
     season ||= kickoff.year
   end
 
+  def self.import_ics(document)
+    calendar = Icalendar::Calendar.parse(document).first
+    raise 'No events' unless calendar&.events.present?
+    calendar.events.map { |event|
+      begin
+        from_ics_event(event)
+      rescue => e
+        logger.warn(e)
+      end
+    }.select(&:present?)
+  end
+
+  def self.from_ics_event(event)
+    kickoff = event.dtstart.value
+    home_team, away_team = teams_from_event_summary(event.summary)
+    match = where(uid: event.uid.to_s, season: kickoff.year).first_or_initialize
+    match.assign_attributes(
+      location: event.location.value,
+      home_team: home_team,
+      away_team: away_team,
+      kickoff: kickoff
+    )
+    match if (match.new_record? || match.changed?) && match.save!
+  end
+
+  def self.teams_from_event_summary(summary)
+    teams = summary.force_encoding('utf-8')
+      .split(/\bvs\.\b*/)
+      .map { |name| Club.from_string(name) }.select(&:present?).uniq
+    raise 'Not enough teams' unless teams.length == 2
+    teams
+  end
 end
