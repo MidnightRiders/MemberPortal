@@ -16,7 +16,7 @@ describe PlayersController do
       expect(response).to redirect_to root_path
     end
     it 'rejects #create' do
-      expect{ post :create, player: FactoryGirl.attributes_for(:player) }.not_to change(Player, :count)
+      expect { post :create, player: FactoryGirl.attributes_for(:player) }.not_to change(Player, :count)
       expect(response).to redirect_to root_path
     end
     it 'rejects #edit' do
@@ -26,10 +26,10 @@ describe PlayersController do
     it 'accepts #update' do
       p = FactoryGirl.create(:player)
       new_name = FFaker::Name.first_name
-      expect{
+      expect {
         patch :update, id: p, player: { first_name: new_name }
         p.reload
-      }.not_to change(p,:first_name)
+      }.not_to change(p, :first_name)
     end
   end
   context 'when signed out' do
@@ -66,15 +66,15 @@ describe PlayersController do
       expect(assigns(:player)).to eq player
     end
     it 'accepts #create' do
-      expect{ post :create, player: FactoryGirl.attributes_for(:player) }.to change(Player, :count)
+      expect { post :create, player: FactoryGirl.attributes_for(:player) }.to change(Player, :count)
     end
     it 'accepts #update' do
       p = FactoryGirl.create(:player)
       new_name = FFaker::Name.first_name
-      expect{
+      expect {
         patch :update, id: p, player: { first_name: new_name }
         p.reload
-      }.to change(p,:first_name).to(new_name)
+      }.to change(p, :first_name).to(new_name)
     end
   end
 end

@@ -5,7 +5,7 @@ describe MatchesController do
   skip 'GET index' do
     it 'assigns a new match as @match' do
       match = Match.create! valid_attributes
-      get :index, {}, valid_session
+      get :index, headers: valid_session
       expect(assigns(:matches)).to eq([match])
     end
   end
@@ -13,14 +13,14 @@ describe MatchesController do
   skip 'GET show' do
     it 'assigns a new match as @match' do
       match = Match.create! valid_attributes
-      get :show, {id: match.to_param}, valid_session
+      get :show, id: match.to_param, headers: valid_session
       expect(assigns(:match)).to eq(match)
     end
   end
 
   skip 'GET new' do
     it 'assigns a new match as @match' do
-      get :new, {}, valid_session
+      get :new, headers: valid_session
       expect(assigns(:match)).to be_a_new(Match)
     end
   end
@@ -28,7 +28,7 @@ describe MatchesController do
   skip 'GET edit' do
     it 'assigns the requested match as @match' do
       match = Match.create! valid_attributes
-      get :edit, {id: match.to_param}, valid_session
+      get :edit, id: match.to_param, headers: valid_session
       expect(assigns(:match)).to eq(match)
     end
   end
@@ -37,18 +37,18 @@ describe MatchesController do
     skip 'with valid params' do
       it 'creates a new Match' do
         expect {
-          post :create, {match: valid_attributes}, valid_session
+          post :create, match: valid_attributes, headers: valid_session
         }.to change(Match, :count).by(1)
       end
 
       it 'assigns a newly created match as @match' do
-        post :create, {match: valid_attributes}, valid_session
+        post :create, match: valid_attributes, headers: valid_session
         expect(assigns(:match)).to be_a(Match)
         expect(assigns(:match)).to be_persisted
       end
 
       it 'redirects to the created match' do
-        post :create, {match: valid_attributes}, valid_session
+        post :create, match: valid_attributes, headers: valid_session
         expect(response).to redirect_to(Match.last)
       end
     end
@@ -57,14 +57,14 @@ describe MatchesController do
       it 'assigns a newly created but unsaved match as @match' do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
-        post :create, {match: { home_team_id:  'invalid value' }}, valid_session
+        post :create, match: { home_team_id: 'invalid value' }, headers: valid_session
         expect(assigns(:match)).to be_a_new(Match)
       end
 
       it 're-renders the "new" template' do
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
-        post :create, {match: { home_team_id:  'invalid value' }}, valid_session
+        post :create, match: { home_team_id: 'invalid value' }, headers: valid_session
         expect(response).to render_template('new')
       end
     end
@@ -78,19 +78,19 @@ describe MatchesController do
         # specifies that the Match created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        expect(Match.any_instance).to_receive(:update).with({ home_team_id:  '1' })
-        put :update, {id: match.to_param, match: { home_team_id:  '1' }}, valid_session
+        expect(Match.any_instance).to_receive(:update).with(home_team_id: '1')
+        put :update, id: match.to_param, match: { home_team_id: '1' }, headers: valid_session
       end
 
       it 'assigns the requested match as @match' do
         match = Match.create! valid_attributes
-        put :update, {id: match.to_param, match: valid_attributes}, valid_session
+        put :update, id: match.to_param, match: valid_attributes, headers: valid_session
         expect(assigns(:match)).to eq(match)
       end
 
       it 'redirects to the match' do
         match = Match.create! valid_attributes
-        put :update, {id: match.to_param, match: valid_attributes}, valid_session
+        put :update, id: match.to_param, match: valid_attributes, headers: valid_session
         expect(response).to redirect_to(match)
       end
     end
@@ -100,7 +100,7 @@ describe MatchesController do
         match = Match.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
-        put :update, {id: match.to_param, match: { home_team_id:  'invalid value' }}, valid_session
+        put :update, id: match.to_param, match: { home_team_id: 'invalid value' }, headers: valid_session
         expect(assigns(:match)).to eq(match)
       end
 
@@ -108,7 +108,7 @@ describe MatchesController do
         match = Match.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Match.any_instance.stub(:save).and_return(false)
-        put :update, {id: match.to_param, match: { home_team_id:  'invalid value' }}, valid_session
+        put :update, id: match.to_param, match: { home_team_id: 'invalid value' }, headers: valid_session
         expect(response).to render_template('edit')
       end
     end
@@ -118,13 +118,13 @@ describe MatchesController do
     it 'destroys the requested match' do
       match = Match.create! valid_attributes
       expect {
-        delete :destroy, {id: match.to_param}, valid_session
+        delete :destroy, id: match.to_param, headers: valid_session
       }.to change(Match, :count).by(-1)
     end
 
     it 'redirects to the matches list' do
       match = Match.create! valid_attributes
-      delete :destroy, {id: match.to_param}, valid_session
+      delete :destroy, id: match.to_param, headers: valid_session
       expect(response).to redirect_to(matches_url)
     end
   end

@@ -39,7 +39,7 @@ class Player < ActiveRecord::Base
     'LW' => 14,
     'RW' => 15,
     'FW' => 16
-  }
+  }.freeze
   validates :first_name, :last_name, :position, :number, :club, presence: true
   validates :position, inclusion: POSITIONS.keys
 
@@ -64,8 +64,8 @@ class Player < ActiveRecord::Base
   end
 
   # Rewrites sorting to default to position-based sorting, from GK to FW
-  def <=> (other)
-    POSITIONS[self.position] <=> POSITIONS[other.position]
+  def <=>(other)
+    POSITIONS[position] <=> POSITIONS[other.position]
   end
 
   def self.mot_ms_for(matches)

@@ -11,7 +11,7 @@ module RevGuessesHelper
   # if it does.
   def rev_guess_path_for(match)
     if rev_guess_for(match)
-      edit_match_rev_guess_path(match,match.rev_guesses.find_by(user_id: current_user.id))
+      edit_match_rev_guess_path(match, match.rev_guesses.find_by(user_id: current_user.id))
     else
       new_match_rev_guess_path(match)
     end

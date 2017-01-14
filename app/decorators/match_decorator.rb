@@ -5,7 +5,7 @@ class MatchDecorator < Draper::Decorator
   # Returns <tt>a.button.secondary</tt> for +RevGuess+ for given match.
   # +size+ defaults to 'small'. If +o+ (for opponent) is true, the button includes match
   # opponent information.
-  def rev_guess_button(size='small', o = false)
+  def rev_guess_button(size = 'small', o = false)
     h.link_to h.rev_guess_path_for(model), class: "button secondary #{size}" do
       opp = o ? opponent : ''
       h.icon('question fa-fw') + ' RevGuess ' + opp + (": #{h.rev_guess_for(model)}" if h.rev_guess_for(model))
@@ -15,7 +15,7 @@ class MatchDecorator < Draper::Decorator
   # Returns <tt>a.button.secondary</tt> for +MotM+ for given match.
   # +size+ defaults to 'tiny'. If +o+ (for opponent) is true, the button includes match
   # opponent information.
-  def mot_m_button(size='small', o = false)
+  def mot_m_button(size = 'small', o = false)
     opp = o ? opponent : ''
     h.link_to h.mot_m_path_for(model), class: "button secondary #{size}", title: "Man of the Match #{opp}" do
       h.icon('list-ol fa-fw') + ' MotM ' + opp + (h.icon('check fa-fw') if h.mot_m_for(model))
@@ -38,7 +38,7 @@ class MatchDecorator < Draper::Decorator
   def pick_em_button(pick, *args)
     opts = args.extract_options!
     user = opts[:user] || h.current_user
-    team = model.send("#{pick}_team") if pick.in? [:home, :away]
+    team = model.send("#{pick}_team") if pick.in? %i(home away)
     html_classes = ['choice', pick == :draw ? ['secondary'] : ['primary-bg', team.abbrv.downcase]].flatten
     user_pick = user.pick_for(model)
     html_classes << user_pick.try(:correct?) ? 'correct' : 'actual' if model.result == pick
@@ -55,7 +55,7 @@ class MatchDecorator < Draper::Decorator
     end
 
     if model.in_past?
-       h.content_tag(:div, content, class: html_classes.join(' '))
+      h.content_tag(:div, content, class: html_classes.join(' '))
     else
       h.link_to(
         content,
@@ -81,24 +81,23 @@ class MatchDecorator < Draper::Decorator
   def pick_em_sub
     h.content_tag :div, class: 'row collapse pick-em-sub' do
       h.concat h.content_tag :div, model.home_team.decorate.formatted_record(true), class: 'small-4 columns text-center'
-      h.concat(h.content_tag :div, admin_controls, class: 'small-4 columns text-center') if h.can?(:manage, model)
+      h.concat(h.content_tag(:div, admin_controls, class: 'small-4 columns text-center')) if h.can?(:manage, model)
       h.concat h.content_tag :div, model.away_team.decorate.formatted_record(true), class: 'small-4 columns right text-center'
     end
   end
-
 
   # Returns buttons for editing/deleting a match
   def admin_controls
     h.capture do
       h.concat h.link_to(h.icon('pencil fa-fw'), h.edit_match_path(model), title: 'Edit') if h.can? :edit, model
-      h.concat h.link_to(h.icon('trash-o fa-fw'),  model, method: :delete, data: { confirm: 'Are you sure?' }, title: 'Destroy') if h.can? :destroy, model
+      h.concat h.link_to(h.icon('trash-o fa-fw'), model, method: :delete, data: { confirm: 'Are you sure?' }, title: 'Destroy') if h.can? :destroy, model
     end
   end
 
   private
 
-    # Determines opponent and returns 'v' or '@' depending on home/away status.
-    def opponent
-      (model.home_team == h.revs ? 'v ' : '@ ')+  (model.teams - [h.revs])[0].abbrv
-    end
+  # Determines opponent and returns 'v' or '@' depending on home/away status.
+  def opponent
+    (model.home_team == h.revs ? 'v ' : '@ ') + (model.teams - [h.revs])[0].abbrv
+  end
 end

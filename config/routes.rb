@@ -1,9 +1,8 @@
 MidnightRiders::Application.routes.draw do
-
   get 'stylesheets/club', constraints: { format: :css }
   resources :players
 
-  resources :mot_ms, path: 'motm', only: [ :index ]
+  resources :mot_ms, path: 'motm', only: [:index]
 
   resources :matches do
     collection do
@@ -11,9 +10,9 @@ MidnightRiders::Application.routes.draw do
       post :bulk_update
       get :auto_update
     end
-    resources :mot_ms, path: 'motm', except: [ :index, :show ]
-    resources :rev_guesses, path: 'revguess', except: [ :index, :show ]
-    resources :pick_ems, path: 'pickem', except: [ :new, :edit, :show, :create, :update ] do
+    resources :mot_ms, path: 'motm', except: %i(index show)
+    resources :rev_guesses, path: 'revguess', except: %i(index show)
+    resources :pick_ems, path: 'pickem', except: %i(new edit show create update) do
       collection { post :vote }
     end
   end
@@ -28,7 +27,7 @@ MidnightRiders::Application.routes.draw do
     end
     resources :memberships, controller: 'memberships', type: 'Individual'
     resources :memberships, controller: 'memberships', type: 'Family' do
-      resources :relatives, type: 'Relative', only: [ :new, :create, :destroy ] do
+      resources :relatives, type: 'Relative', only: %i(new create destroy) do
         member do
           post :accept_invitation, as: :accept_invitation_for
         end
@@ -38,7 +37,7 @@ MidnightRiders::Application.routes.draw do
 
   get 'downloads/:filename', to: 'downloads#show', as: :download
 
-  match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: :cancel_user_membership, via: [ :put, :patch ]
+  match 'users/:user_id/memberships/:id/cancel', to: 'memberships#cancel', as: :cancel_user_membership, via: %i(put patch)
 
   get 'home', to: 'users#home', as: :user_home
 

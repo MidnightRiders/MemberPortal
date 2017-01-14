@@ -10,8 +10,7 @@ class ClubsController < ApplicationController
 
   # GET /clubs/1
   # GET /clubs/1.json
-  def show
-  end
+  def show; end
 
   # GET /clubs/new
   def new
@@ -19,8 +18,7 @@ class ClubsController < ApplicationController
   end
 
   # GET /clubs/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /clubs
   # POST /clubs.json
@@ -29,10 +27,10 @@ class ClubsController < ApplicationController
 
     respond_to do |format|
       if @club.save
-        format.html { redirect_to @club, notice: 'Club was successfully created.' }
+        format.html do redirect_to @club, notice: 'Club was successfully created.' end
         format.json { render action: 'show', status: :created, location: @club }
       else
-        format.html { render action: 'new' }
+        format.html do render action: 'new' end
         format.json { render json: @club.errors, status: :unprocessable_entity }
       end
     end
@@ -43,10 +41,10 @@ class ClubsController < ApplicationController
   def update
     respond_to do |format|
       if @club.update(club_params)
-        format.html { redirect_to @club, notice: 'Club was successfully updated.' }
+        format.html do redirect_to @club, notice: 'Club was successfully updated.' end
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html do render action: 'edit' end
         format.json { render json: @club.errors, status: :unprocessable_entity }
       end
     end
@@ -57,15 +55,15 @@ class ClubsController < ApplicationController
   def destroy
     @club.destroy
     respond_to do |format|
-      format.html { redirect_to clubs_url }
+      format.html do redirect_to clubs_url end
       format.json { head :no_content }
     end
   end
 
   private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def club_params
-      params.require(:club).permit(:name, :conference, :primary_color, :secondary_color, :accent_color, :abbrv, :crest)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def club_params
+    params.require(:club).permit(:name, :conference, :primary_color, :secondary_color, :accent_color, :abbrv, :crest)
+  end
 end

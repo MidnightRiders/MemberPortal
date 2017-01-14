@@ -9,8 +9,7 @@ class RevGuessesController < ApplicationController
   end
 
   # GET /rev_guesses/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /rev_guesses
   # POST /rev_guesses.json
@@ -19,10 +18,10 @@ class RevGuessesController < ApplicationController
 
     respond_to do |format|
       if @rev_guess.save
-        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully created.' }
+        format.html do redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully created.' end
         format.json { render action: 'show', status: :created, location: @rev_guess }
       else
-        format.html { render action: 'new' }
+        format.html do render action: 'new' end
         format.json { render json: @rev_guess.errors, status: :unprocessable_entity }
       end
     end
@@ -33,10 +32,10 @@ class RevGuessesController < ApplicationController
   def update
     respond_to do |format|
       if @rev_guess.update(rev_guess_params)
-        format.html { redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully updated.' }
+        format.html do redirect_to matches_url(date: @match.kickoff.to_date), notice: 'RevGuess was successfully updated.' end
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html do render action: 'edit' end
         format.json { render json: @rev_guess.errors, status: :unprocessable_entity }
       end
     end
@@ -47,19 +46,20 @@ class RevGuessesController < ApplicationController
   def destroy
     @rev_guess.destroy
     respond_to do |format|
-      format.html { redirect_to rev_guesses_url }
+      format.html do redirect_to rev_guesses_url end
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_match
-      @match = Match.with_clubs.find(params[:match_id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def rev_guess_params
-      params.require(:rev_guess).permit(:match_id, :user_id, :home_goals, :away_goals, :comment)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_match
+    @match = Match.with_clubs.find(params[:match_id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def rev_guess_params
+    params.require(:rev_guess).permit(:match_id, :user_id, :home_goals, :away_goals, :comment)
+  end
 end

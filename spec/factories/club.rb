@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :club do
     name { FFaker::Address.city + ' FC' }
-    abbrv { name.gsub(/\W/,'').upcase[0,[2,3].sample] }
+    abbrv { name.gsub(/\W/, '').upcase[0, [2, 3].sample] }
     primary_color { (Random.rand * 'ffffff'.to_i(16)).to_i.to_s(16) }
     secondary_color { (Random.rand * 'ffffff'.to_i(16)).to_i.to_s(16) }
     accent_color { (Random.rand * 'ffffff'.to_i(16)).to_i.to_s(16) }

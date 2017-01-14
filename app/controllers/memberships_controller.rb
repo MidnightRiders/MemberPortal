@@ -2,10 +2,10 @@
 
 # Controller for +Membership+ model.
 class MembershipsController < ApplicationController
-  before_action :get_membership, except: [ :new, :create, :webhooks ]
-  load_and_authorize_resource except: [ :webhooks ]
-  before_action :get_user, except: [ :webhooks ]
-  skip_before_action :verify_authenticity_token, only: [ :webhooks ]
+  before_action :get_membership, except: %i(new create webhooks)
+  load_and_authorize_resource except: [:webhooks]
+  before_action :get_user, except: [:webhooks]
+  skip_before_action :verify_authenticity_token, only: [:webhooks]
 
   # GET /users/:user_id/memberships
   # GET /users/:user_id/memberships.json
@@ -40,8 +40,7 @@ class MembershipsController < ApplicationController
   end
 
   # GET /users/:user_id/memberships/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /users/:user_id/memberships
   # POST /users/:user_id/memberships.json
@@ -58,13 +57,13 @@ class MembershipsController < ApplicationController
         end
         format.json { render action: 'show', status: :created, location: @membership }
       else
-        format.html {
+        format.html do
           @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
           if (customer = @user.stripe_customer).present?
             @cards = customer.cards.data
           end
           render action: 'new'
-        }
+        end
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -75,10 +74,10 @@ class MembershipsController < ApplicationController
   def update
     respond_to do |format|
       if @membership.update(membership_params)
-        format.html { redirect_to get_user_path, notice: 'Membership was successfully updated.' }
+        format.html do redirect_to get_user_path, notice: 'Membership was successfully updated.' end
         format.json { head :no_content }
       else
-        format.html { render action: 'edit' }
+        format.html do render action: 'edit' end
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -94,10 +93,10 @@ class MembershipsController < ApplicationController
           MembershipMailer.membership_cancellation_alert(@user, @membership).deliver
           MembershipMailer.membership_refund_email(@user, @membership).deliver
         end
-        format.html { redirect_to get_user_path, notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." }
-        format.json { render json: { notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}."}, status: :ok }
+        format.html do redirect_to get_user_path, notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." end
+        format.json { render json: { notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." }, status: :ok }
       else
-        format.html { redirect_to get_user_path, alert: @membership.errors.messages.map(&:last).join('\n') }
+        format.html do redirect_to get_user_path, alert: @membership.errors.messages.map(&:last).join('\n') end
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -108,7 +107,7 @@ class MembershipsController < ApplicationController
   def destroy
     @membership.destroy
     respond_to do |format|
-      format.html { redirect_to @user }
+      format.html do redirect_to @user end
       format.json { head :no_content }
     end
   end
@@ -125,7 +124,7 @@ class MembershipsController < ApplicationController
     if customer_token
       unless accepted_webhooks.include? event[:type]
         logger.warn "Stripe::Event type #{event[:type]} not in accepted webhooks. Returning 200."
-        render(nothing: true, status: 200) and return
+        render nothing: true, status: 200 and return
       end
 
       user = User.find_by(stripe_customer_token: customer_token)
@@ -149,7 +148,7 @@ class MembershipsController < ApplicationController
             m = user.memberships.find_by(year: year)
             if m.present?
               logger.info "Duplicate #{year} membership for #{user.username} (#{m.stripe_subscription_id}/#{subscription.id})"
-              render(nothing: true, status: 200) and return
+              render nothing: true, status: 200 and return
             end
             membership = user.memberships.new(
               year: year,
@@ -166,7 +165,7 @@ class MembershipsController < ApplicationController
             else
               logger.error "Error when saving membership: #{membership.errors.messages}"
               logger.info membership
-              render(nothing: true, status: 500) and return
+              render nothing: true, status: 500 and return
             end
           end
         end
@@ -189,25 +188,25 @@ class MembershipsController < ApplicationController
 
   private
 
-    # Define +@user+ based on route +:user_id+
-    def get_user
-      @user = User.find_by(username: params[:user_id])
-    end
+  # Define +@user+ based on route +:user_id+
+  def get_user
+    @user = User.find_by(username: params[:user_id])
+  end
 
-    # Define +@membership+ based on route +:id+
-    def get_membership
-      @membership = Membership.unscoped.find(params[:id] || params[:membership_id])
-    end
+  # Define +@membership+ based on route +:id+
+  def get_membership
+    @membership = Membership.unscoped.find(params[:id] || params[:membership_id])
+  end
 
-    # Determine where to redirect after success
-    def get_user_path
-      @user == current_user ? user_home_path : user_path(@user)
-    end
+  # Determine where to redirect after success
+  def get_user_path
+    @user == current_user ? user_home_path : user_path(@user)
+  end
 
-    # Strong params for +Membership+
-    def membership_params
-      params.require(:membership).permit(:user_id, :year, :type, :stripe_card_token, :subscription, privileges: []).tap do |whitelisted|
-        whitelisted[:info] = params[:membership][:info]
-      end
+  # Strong params for +Membership+
+  def membership_params
+    params.require(:membership).permit(:user_id, :year, :type, :stripe_card_token, :subscription, privileges: []).tap do |whitelisted|
+      whitelisted[:info] = params[:membership][:info]
     end
+  end
 end
