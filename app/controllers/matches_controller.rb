@@ -29,64 +29,13 @@ class MatchesController < ApplicationController
 
   # Imports matches from MLS Calendar.
   def import
-    url = URI.parse(params[:url])
-    team_hash = {
-      :'Chicago' => Club.find_by(abbrv: 'CHI'),
-      :'Colorado' => Club.find_by(abbrv: 'COL'),
-      :'Columbus' => Club.find_by(abbrv: 'CLB'),
-      :'United' => Club.find_by(abbrv: 'DC'),
-      :'Dallas' => Club.find_by(abbrv: 'DAL'),
-      :'Houston' => Club.find_by(abbrv: 'HOU'),
-      :'Montr' => Club.find_by(abbrv: 'MTL'),
-      :'Galaxy' => Club.find_by(abbrv: 'LA'),
-      :'Revolution' => Club.find_by(abbrv: 'NE'),
-      :'New York City' => Club.find_by(abbrv: 'NYC'),
-      :'NYC' => Club.find_by(abbrv: 'NYC'),
-      :'Red Bull' => Club.find_by(abbrv: 'NY'),
-      :'Redbull' => Club.find_by(abbrv: 'NY'),
-      :'Orlando' => Club.find_by(abbrv: 'ORL'),
-      :'Philadelphia' => Club.find_by(abbrv: 'PHI'),
-      :'Portland' => Club.find_by(abbrv: 'POR'),
-      :'Salt Lake' => Club.find_by(abbrv: 'RSL'),
-      :'Earthquakes' => Club.find_by(abbrv: 'SJ'),
-      :'Seattle' => Club.find_by(abbrv: 'SEA'),
-      :'Sporting' => Club.find_by(abbrv: 'SKC'),
-      :'Toronto' => Club.find_by(abbrv: 'TOR'),
-      :'Vancouver' => Club.find_by(abbrv: 'VAN')
-    }
-    begin
-      req = Net::HTTP::Get.new(url.path)
-      response = Net::HTTP.start(url.host, url.port){ |http| http.request(req) }
-      if response.code_type.in? [ Net::HTTPRedirection, Net::HTTPFound ]
-        response = Net::HTTP.get(URI(response['location']))
-      else
-        response = response.body
-      end
-    rescue SocketError => e
-      logger.error "SocketError during Match import: #{e}"
-      redirect_to matches_path, alert: e and return
-    end
-    cals = Icalendar.parse(response)
-    cal = cals.first
-    count = 0
-    team_regexp = Regexp.new(team_hash.keys.join('|'))
-    cal.events.each do |m|
-      match = Match.where(uid: m.uid.to_s).first_or_initialize
-      teams = m.summary.force_encoding('utf-8').scan(team_regexp)
-      match.location = m.location.to_s
-      match.home_team = team_hash[teams[0].try(:to_sym)]
-      match.away_team = team_hash[teams[1].try(:to_sym)]
-      match.kickoff = m.dtstart.to_time
-      match.season = match.kickoff.year
-      count_it = match.new_record? || match.changed?
-      if match.save
-        count += 1 if count_it
-      else
-        logger.error "Could not save #{m.summary}: #{match.errors.to_hash}"
-      end
-    end
-    flash[:success] = "#{count} Matches were saved or updated."
-    redirect_to matches_path
+    calendar = retrieve_document(params[:url])
+    count = Match.import_ics(calendar).size
+    redirect_to matches_path, success: "#{count} Matches were saved or updated."
+  rescue => e
+    logger.error "Error during Match import: #{e.message}"
+    logger.info e.backtrace&.join("\n")
+    redirect_to matches_path, alert: e.message and return
   end
 
   # GET /matches/auto_update
@@ -214,31 +163,42 @@ class MatchesController < ApplicationController
 
   private
 
-    # Use callbacks to share common setup or constraints between actions.
-    def set_match
-      @match = Match.with_clubs.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_match
+    @match = Match.with_clubs.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def match_params
-      params.require(:match).permit(:home_team_id, :away_team_id, :kickoff, :kickoff_date, :kickoff_time, :location, :home_goals, :away_goals)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def match_params
+    params.require(:match).permit(:home_team_id, :away_team_id, :kickoff, :kickoff_date, :kickoff_time, :location, :home_goals, :away_goals)
+  end
 
-    def scrape_all_results_for_week(html)
-      matches = html.css('.ml-link')
-      matches.map { |match| scrape_single_result(match) }
-    end
+  def scrape_all_results_for_week(html)
+    matches = html.css('.ml-link')
+    matches.map { |match| scrape_single_result(match) }
+  end
 
-    def scrape_single_result(match)
-      return {} unless match.at_css('.sb-match-date').try(:content).present?
-      result = { date: match.at_css('.sb-match-date').content.to_date }
-      %w(home away).each do |team|
-        data = match.at_css(".sb-#{team}")
-        result[team.to_sym] = {
-          team: data.at_css('.sb-club-name-short').content,
-          goals: data.at_css('.sb-score').present? ? data.at_css('.sb-score').content.to_i : nil
-        }
-      end
-      result
+  def scrape_single_result(match)
+    return {} unless match.at_css('.sb-match-date').try(:content).present?
+    result = { date: match.at_css('.sb-match-date').content.to_date }
+    %w(home away).each do |team|
+      data = match.at_css(".sb-#{team}")
+      result[team.to_sym] = {
+        team: data.at_css('.sb-club-name-short').content,
+        goals: data.at_css('.sb-score').present? ? data.at_css('.sb-score').content.to_i : nil
+      }
     end
+    result
+  end
+
+  # For use in +import+
+  def retrieve_document(url)
+    uri = URI(url)
+    req = Net::HTTP::Get.new(uri.path)
+    response = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
+    if response.code_type.in? [Net::HTTPRedirection, Net::HTTPFound]
+      response = Net::HTTP.get(URI(response['location']))
+    end
+    response.body
+  end
 end

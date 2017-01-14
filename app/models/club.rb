@@ -128,4 +128,10 @@ class Club < ActiveRecord::Base
   def dark_compliment
     secondary_color == 'ffffff' ? accent_color : secondary_color
   end
+
+  def self.from_string(name)
+    return find_by(abbrv: 'NYC') if name =~ /New ?York ?City/i
+
+    FuzzyMatch.new(all, read: :name).find(name)
+  end
 end
