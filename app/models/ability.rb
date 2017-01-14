@@ -31,7 +31,7 @@ class Ability
     alias_action :create, :read, :update, :destroy, to: :crud
 
     if user
-      can :home, [ User ]
+      can :home, [User]
       can :manage, user
       if user.current_member?
         can :show, :download
@@ -42,25 +42,25 @@ class Ability
           # can :refund, Membership, year: (Date.current.year..Date.current.year + 1)
           # can :grant_privileges, Membership
         elsif user.privilege? 'executive_board'
-          can :manage, [ User, Membership, Club, Match, Player, RevGuess ]
-          cannot :destroy, [ Club, Player ]
-          can :create, [ User, Membership ]
+          can :manage, [User, Membership, Club, Match, Player, RevGuess]
+          cannot :destroy, [Club, Player]
+          can :create, [User, Membership]
           can :read, :all
           can :index, MotM
           can :transactions, :static_page
         else
-          can :show, [ User, Club, Match ]
+          can :show, [User, Club, Match]
           can :index, Match
-          can :manage, [ user.current_membership, user.mot_ms, user.rev_guesses, user.pick_ems ]
-          can :create, [ MotM, RevGuess ], user_id: user.id
+          can :manage, [user.current_membership, user.mot_ms, user.rev_guesses, user.pick_ems]
+          can :create, [MotM, RevGuess], user_id: user.id
           can :vote, PickEm, user_id: user.id
           cannot :manage, Relative
           if user.current_membership.is_a? Family
             can :invite_relative, Membership
             can :manage, Relative, family_id: user.current_membership.id
-            can :manage, [ user.current_membership.relatives, user.current_membership.relatives.map(&:user) ]
+            can :manage, [user.current_membership.relatives, user.current_membership.relatives.map(&:user)]
           end
-          cannot :index, [ Club, Membership, Player, User, MotM, Relative, Family ]
+          cannot :index, [Club, Membership, Player, User, MotM, Relative, Family]
           cannot :refund, Membership
           cannot :grant_privileges, Membership
         end

@@ -16,7 +16,7 @@ require 'spec_helper'
 
 describe RevGuess do
   let (:user) { FactoryGirl.create(:user) }
-  let (:revs) { Club.find_by(abbrv: 'NE') || FactoryGirl.create(:club,:ne) }
+  let (:revs) { Club.find_by(abbrv: 'NE') || FactoryGirl.create(:club, :ne) }
   let (:rev_guess) { FactoryGirl.build(:rev_guess) }
 
   before :each do
@@ -42,9 +42,9 @@ describe RevGuess do
     end
     it 'does not allow guesses on non-Revs games' do
       if rev_guess.match.home_team == revs
-        rev_guess.match.home_team = Club.find_by('abbrv NOT IN (?)', ['NE',rev_guess.match.away_team.abbrv])
+        rev_guess.match.home_team = Club.find_by('abbrv NOT IN (?)', ['NE', rev_guess.match.away_team.abbrv])
       else
-        rev_guess.match.away_team = Club.find_by('abbrv NOT IN (?)', ['NE',rev_guess.match.home_team.abbrv])
+        rev_guess.match.away_team = Club.find_by('abbrv NOT IN (?)', ['NE', rev_guess.match.home_team.abbrv])
       end
       expect(rev_guess).to_not be_valid
       expect(rev_guess.errors).to include(:match_id)

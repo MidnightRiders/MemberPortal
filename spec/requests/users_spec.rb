@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Users' do
   describe 'GET /users/user' do
-    let(:user){ FactoryGirl.create(:user)}
+    let(:user) { FactoryGirl.create(:user) }
     it 'rejects signed-out users' do
       get user_path(user)
       expect(response).to redirect_to(root_path)
@@ -26,7 +26,7 @@ describe 'Users' do
     end
   end
   describe 'GET /users/user.json' do
-    let(:user){ FactoryGirl.create(:user)}
+    let(:user) { FactoryGirl.create(:user) }
     it 'rejects signed-out users' do
       get user_path(user, format: :json)
       expect(response).to redirect_to(root_path)

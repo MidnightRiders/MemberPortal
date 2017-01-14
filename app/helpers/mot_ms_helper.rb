@@ -10,7 +10,7 @@ module MotMsHelper
   # edit if it does.
   def mot_m_path_for(match)
     if mot_m_for(match)
-      edit_match_mot_m_path(match,mot_m_for(match))
+      edit_match_mot_m_path(match, mot_m_for(match))
     else
       new_match_mot_m_path(match)
     end

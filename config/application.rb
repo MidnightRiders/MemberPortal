@@ -23,7 +23,7 @@ module MidnightRiders
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     # config.time_zone = 'Central Time (US & Canada)'
     config.time_zone = 'Eastern Time (US & Canada)'
-    #config.active_record.default_timezone = 'Eastern Time (US & Canada)'
+    # config.active_record.default_timezone = 'Eastern Time (US & Canada)'
 
     config.week_start = :monday
 

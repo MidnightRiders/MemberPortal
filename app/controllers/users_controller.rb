@@ -31,9 +31,9 @@ class UsersController < ApplicationController
 
   # GET /home
   def home
-    @articles = RidersBlog.articles.sort_by{|x| x['pubDate'].to_date }.last(2).reverse if RidersBlog.articles
-    @events = FacebookApi.events['data'].try(:select){|x| x['start_time'] >= Time.current - 1.week } if FacebookApi.events
-    @revs_matches = [ revs.last_match, revs.next_matches(2) ].flatten.reject(&:nil?)
+    @articles = RidersBlog.articles.sort_by { |x| x['pubDate'].to_date }.last(2).reverse if RidersBlog.articles
+    @events = FacebookApi.events['data'].try(:select) { |x| x['start_time'] >= Time.current - 1.week } if FacebookApi.events
+    @revs_matches = [revs.last_match, revs.next_matches(2)].flatten.reject(&:nil?)
   end
 
   # GET /users/1/edit
@@ -68,7 +68,6 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-
     u = user_params
     u[:password] = (pass = rand(36**10).to_s(36))
 
@@ -76,7 +75,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        UserMailer.new_user_creation_email(@user,pass)
+        UserMailer.new_user_creation_email(@user, pass)
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render action: 'show', status: :created, location: @user }
       else
@@ -90,7 +89,7 @@ class UsersController < ApplicationController
   # Accepts +:file+ to import new +Users+.
   def import
     if params[:file]
-      User.import(params[:file],[],current_user.id)
+      User.import(params[:file], [], current_user.id)
       redirect_to users_path, notice: 'Users imported.'
     else
       redirect_to users_path, alert: 'No file was selected'
@@ -99,8 +98,8 @@ class UsersController < ApplicationController
 
   private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def user_params
-      params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :country, :phone, :email, :member_since, :username)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def user_params
+    params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :country, :phone, :email, :member_since, :username)
+  end
 end

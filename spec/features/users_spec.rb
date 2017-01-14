@@ -29,7 +29,7 @@ feature 'User privileges and security' do
   end
   context 'admin user logged in' do
     before :each do
-      login_as(FactoryGirl.create(:user,:admin))
+      login_as(FactoryGirl.create(:user, :admin))
       visit user_path(user)
     end
     it { expect(current_path).to eq user_path(user) }
