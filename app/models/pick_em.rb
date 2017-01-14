@@ -12,7 +12,7 @@
 #
 
 class PickEm < ActiveRecord::Base
-  default_scope do includes(:match) end
+  default_scope { includes(:match) }
 
   # Possible PickEm/Match results and their corresponding integer values.
   RESULTS = { home: 1, draw: 0, away: -1 }.freeze

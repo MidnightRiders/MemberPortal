@@ -24,13 +24,13 @@ class Club < ActiveRecord::Base
   CONFERENCES = %w(east west).freeze
 
   has_attached_file :crest,
-                    storage: :s3,
-                    path: '/:class/:attachment/:id/:style_:filename',
-                    default_style: :standard,
-                    styles: {
-                      thumb: '100x100>',
-                      standard: '250x250>'
-                    }
+    storage: :s3,
+    path: '/:class/:attachment/:id/:style_:filename',
+    default_style: :standard,
+    styles: {
+      thumb: '100x100>',
+      standard: '250x250>'
+    }
 
   validates :name, :abbrv, :primary_color, :secondary_color, :accent_color, presence: true
   validates :name, :abbrv, uniqueness: true
@@ -51,11 +51,13 @@ class Club < ActiveRecord::Base
       format: :raw
     }.deep_merge(options)
     clubs = Club.includes(:home_matches, :away_matches).where.not(matches: { id: nil }).map { |c|
-      c.attributes.symbolize_keys.merge(wins: c.wins.size,
-                                        draws: c.draws.size,
-                                        losses: c.losses.size,
-                                        points: c.wins.size * 3 + c.draws.size,
-                                        ppg: ((c.wins.size * 3 + c.draws.size).to_f / c.matches.completed.size).round(opts[:float]))
+      c.attributes.symbolize_keys.merge(
+        wins: c.wins.size,
+        draws: c.draws.size,
+        losses: c.losses.size,
+        points: c.wins.size * 3 + c.draws.size,
+        ppg: ((c.wins.size * 3 + c.draws.size).to_f / c.matches.completed.size).round(opts[:float])
+      )
     }.sort_by { |c| [c[:points], c[:ppg]] }.reverse
     case opts[:format]
     when :text

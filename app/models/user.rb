@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, to: :ability
 
-  default_scope do includes(:memberships) end
+  default_scope { includes(:memberships) }
 
   scope :scores, ->(season = Date.current.year) {
     unscoped.select('*',

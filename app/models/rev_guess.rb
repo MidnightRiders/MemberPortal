@@ -17,7 +17,7 @@ class RevGuess < ActiveRecord::Base
   belongs_to :match, -> { unscope(where: :season).all_seasons }
   belongs_to :user
 
-  default_scope do includes(:match) end
+  default_scope { includes(:match) }
 
   validates :user, :match, :home_goals, :away_goals, presence: true
   validates :match_id, uniqueness: { scope: :user_id, message: 'has already been voted on by this user.' }

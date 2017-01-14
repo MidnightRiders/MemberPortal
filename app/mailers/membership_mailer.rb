@@ -70,11 +70,7 @@ class MembershipMailer < ActionMailer::Base
   private
 
   def styled_link_to(name = nil, options = nil, html_options = nil, &block)
-    if block_given?
-      html_options = options
-      options = name
-      name = block
-      end
+    html_options, options, name = options, name, block if block_given?
     options ||= {}
 
     html_options = convert_options_to_data_attributes(options, html_options)
