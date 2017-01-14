@@ -40,28 +40,28 @@ class User < ActiveRecord::Base
       "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND matches.season = #{season}) AS correct_pick_ems",
       "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = #{season}) AS total_pick_ems",
       "(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_score",
-      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_count" )
+      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_count")
   }
 
   scope :rev_guess_scores, ->(season = Date.current.year) {
     unscoped.select('*',
       "(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_score",
-      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_count" )
+      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_count")
   }
 
   scope :pick_em_scores, ->(season = Date.current.year) {
     unscoped.select('*',
       "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND matches.season = #{season}) AS correct_pick_ems",
-      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = #{season}) AS total_pick_ems" )
+      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = #{season}) AS total_pick_ems")
   }
 
   # Get all current members, or members for specified year
-  scope :members, ->(year = (Date.today.year..Date.today.year+1)) {
+  scope :members, ->(year = (Date.today.year..Date.today.year + 1)) {
     where(memberships: { year: year })
   }
 
   # Get non-members
-  scope :non_members, -> (year = (Date.today.year..Date.today.year+1)) {
+  scope :non_members, ->(year = (Date.today.year..Date.today.year + 1)) {
     where.not(id: joins(:memberships).members(year).select('id'))
   }
 
@@ -79,7 +79,7 @@ class User < ActiveRecord::Base
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
   validates :member_since, numericality: { less_than_or_equal_to: Date.today.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
 
-  has_paper_trail only: [ :username, :email, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :member_since ]
+  has_paper_trail only: %i(username email first_name last_name address city state postal_code phone member_since)
 
   # Returns +privileges+ from current +Membership+
   def current_privileges
@@ -94,7 +94,7 @@ class User < ActiveRecord::Base
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
   def list_current_privileges(verbose = false, no_admin = false)
     ps = current_privileges.map(&:titleize)
-    ps = ps.reject{ |v| v == 'admin' } if no_admin
+    ps = ps.reject { |v| v == 'admin' } if no_admin
     if ps.empty?
       'None'
     elsif verbose
@@ -146,15 +146,15 @@ class User < ActiveRecord::Base
 
   # Returns *String*. URL for Gravatar based on email.
   def gravatar
-    'https://gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/,'@')) + '?d=mm'
+    'https://gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/, '@')) + '?d=mm'
   end
 
   # TODO: Clean the shit out of this import. Stabilize it.
 
   # User import script. Needs work.
   def self.import(file, privileges = [], override_id)
-    allowed_attributes = [:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :phone, :email, :member_since, :username]
-    spreadsheet = Roo::Spreadsheet.open(file.path.to_s,extension: 'csv')
+    allowed_attributes = %i(last_name first_name last_name address city state postal_code phone email member_since username)
+    spreadsheet = Roo::Spreadsheet.open(file.path.to_s, extension: 'csv')
     header = spreadsheet.row(1)
     (2..spreadsheet.last_row).each do |i|
       row = Hash[[header, spreadsheet.row(i)].transpose]
@@ -168,14 +168,14 @@ class User < ActiveRecord::Base
 
       user = User.where(email: row['email'].strip.downcase).first_or_initialize
       if user.new_record?
-        original_uname = row['username'] = "#{row['first_name']}#{row['last_name']}".downcase.gsub(/[^a-z]/,'')
+        original_uname = row['username'] = "#{row['first_name']}#{row['last_name']}".downcase.gsub(/[^a-z]/, '')
         i = 0
         until User.find_by(username: row['username']).nil?
           i += 1
           row['username'] = "#{original_uname}#{i}"
         end
       end
-      user.attributes = row.to_hash.select { |x| allowed_attributes.include? x.to_sym  }
+      user.attributes = row.to_hash.select { |x| allowed_attributes.include? x.to_sym }
       pass = false
       if user.new_record?
         logger.info "Adding #{row['first_name']} #{row['last_name']}…"
@@ -183,9 +183,9 @@ class User < ActiveRecord::Base
       else
         logger.info "Updating #{row['first_name']} #{row['last_name']}…"
         if user.changed?
-           logger.info "  Changed: #{user.changes.keys.to_sentence}"
+          logger.info "  Changed: #{user.changes.keys.to_sentence}"
         else
-           logger.info '  No changes' unless user.changed?
+          logger.info '  No changes' unless user.changed?
         end
       end
       if user.save
@@ -196,9 +196,9 @@ class User < ActiveRecord::Base
           m.type = row['membership_type'].titleize || 'Individual'
           logger.info "#{m.year} #{m.type} Membership created for #{user.first_name} #{user.last_name} (#{user.username})" if m.save
         end
-        UserMailer.new_user_creation_email(user,pass).deliver if pass
+        UserMailer.new_user_creation_email(user, pass).deliver if pass
       else
-        logger.error "  Could not save user #{row['first_name']} #{row['last_name']}:\n  " + user.errors.to_hash.map{|k,v| "#{k}: #{v.to_sentence}"}.join("\n  ")
+        logger.error "  Could not save user #{row['first_name']} #{row['last_name']}:\n  " + user.errors.to_hash.map { |k, v| "#{k}: #{v.to_sentence}" }.join("\n  ")
       end
     end
   end
@@ -210,15 +210,15 @@ class User < ActiveRecord::Base
 
     CSV.generate do |csv|
       csv << (columns_to_use + %w(current_member membership_type)).map(&:titleize)
-      all.each do |user|
-        csv << user.attributes.values_at(*columns_to_use) + [ user.current_membership.present?, user.current_membership.try(:type) ]
+      all.find_each do |user|
+        csv << user.attributes.values_at(*columns_to_use) + [user.current_membership.present?, user.current_membership.try(:type)]
       end
     end
   end
 
   # Converts the phone to *Integer* for storage.
-  def phone= value
-    value.gsub!(/\D/,'') if value.is_a? String
+  def phone=(value)
+    value.gsub!(/\D/, '') if value.is_a? String
     super(value)
   end
 
@@ -238,11 +238,7 @@ class User < ActiveRecord::Base
 
   # Retrieve Stripe customer object
   def stripe_customer
-    if stripe_customer_token
-      Stripe::Customer.retrieve(stripe_customer_token)
-    else
-      nil
-    end
+    Stripe::Customer.retrieve(stripe_customer_token) if stripe_customer_token
   rescue Stripe::InvalidRequestError => e
     logger.error "Stripe::InvalidRequestError: #{e}"
   end

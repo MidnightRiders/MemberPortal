@@ -1,7 +1,7 @@
 # Controller for static pages – home, faq, contact. Only visible
 class StaticPagesController < ApplicationController
 
-  authorize_resource class: false, only: [:standings, :transactions]
+  authorize_resource class: false, only: %i(standings transactions)
 
   # Root path. Shows sign_in if not signed in, user_home if signed in
   def home
@@ -29,17 +29,17 @@ class StaticPagesController < ApplicationController
   def transactions
     view = 'memberships'
     case params[:view]
-      when 'detailed'
-        require 'will_paginate/array'
-        @transactions = stripe_events.paginate(per_page: 25, page: params[:page])
-        @users = Hash[User.where(stripe_customer_token: @transactions.map{|e| e.data.object.object == 'customer' ? e.data.object.id : e.data.object.customer}.reject(&:nil?)).map{|u| [u.stripe_customer_token, u] }]
-        view = 'transactions'
-      when 'all'
-        @transactions = Membership.unscoped.includes(:user).where.not(type: 'Relative').order(created_at: :desc).paginate(per_page: 25, page: params[:page])
-      when 'refunded'
-        @transactions = Membership.refunds.includes(:user).where.not(type: 'Relative').reorder(created_at: :desc).paginate(per_page: 25, page: params[:page])
-      else
-        @transactions = Membership.includes(:user).where.not(type: 'Relative').reorder(created_at: :desc).paginate(per_page: 25, page: params[:page])
+    when 'detailed'
+      require 'will_paginate/array'
+      @transactions = stripe_events.paginate(per_page: 25, page: params[:page])
+      @users = Hash[User.where(stripe_customer_token: @transactions.map { |e| e.data.object.object == 'customer' ? e.data.object.id : e.data.object.customer }.reject(&:nil?)).map { |u| [u.stripe_customer_token, u] }]
+      view = 'transactions'
+    when 'all'
+      @transactions = Membership.unscoped.includes(:user).where.not(type: 'Relative').order(created_at: :desc).paginate(per_page: 25, page: params[:page])
+    when 'refunded'
+      @transactions = Membership.refunds.includes(:user).where.not(type: 'Relative').reorder(created_at: :desc).paginate(per_page: 25, page: params[:page])
+    else
+      @transactions = Membership.includes(:user).where.not(type: 'Relative').reorder(created_at: :desc).paginate(per_page: 25, page: params[:page])
     end
 
     respond_to do |format|
@@ -50,15 +50,15 @@ class StaticPagesController < ApplicationController
 
   private
 
-    def stripe_events
-      if params[:refresh] || @stripe_events.nil?
-        @stripe_events = []
-        100.times do
-          capture = Stripe::Event.all(limit: 100, starting_after: @stripe_events.last.try(:id))
-          @stripe_events += capture.data
-          break unless capture.has_more
-        end
+  def stripe_events
+    if params[:refresh] || @stripe_events.nil?
+      @stripe_events = []
+      100.times do
+        capture = Stripe::Event.all(limit: 100, starting_after: @stripe_events.last.try(:id))
+        @stripe_events += capture.data
+        break unless capture.has_more
       end
-      @stripe_events
     end
+    @stripe_events
+  end
 end

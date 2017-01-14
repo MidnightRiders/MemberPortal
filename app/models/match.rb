@@ -22,8 +22,8 @@ class Match < ActiveRecord::Base
   belongs_to :away_team, class_name: 'Club'
 
   order_query :order_selected,
-              [ :kickoff, :asc ],
-              [ :location, :asc ]
+              %i(kickoff asc),
+              %i(location asc)
 
   default_scope -> {
     where(season: Date.current.year)
@@ -32,7 +32,7 @@ class Match < ActiveRecord::Base
     unscope(where: :season)
   }
   scope :with_clubs, -> {
-    includes(:home_team,:away_team)
+    includes(:home_team, :away_team)
   }
   scope :completed, -> {
     where.not(home_goals: nil, away_goals: nil)
@@ -129,7 +129,7 @@ class Match < ActiveRecord::Base
 
   # Returns *Array* with both teams: <tt>[ home_team, away_team ]</tt>
   def teams
-    [ home_team, away_team ]
+    [home_team, away_team]
   end
 
   # Returns +Match+. Retrieves match immediately after the given match.
@@ -144,9 +144,9 @@ class Match < ActiveRecord::Base
 
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
   # Retrieves previous +n+ matches from <tt>Time.current</tt>.
-  def self.previous(n=1)
+  def self.previous(n = 1)
     ms = where('kickoff < ?', Time.current).order(kickoff: :desc)
-    if n==1
+    if n == 1
       ms.first
     else
       ms.first(n)
@@ -155,9 +155,9 @@ class Match < ActiveRecord::Base
 
   # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
   # Retrieves next +n+ matches from <tt>Time.current</tt>.
-  def self.next(n=1)
+  def self.next(n = 1)
     ms = upcoming.order(kickoff: :desc)
-    if n==1
+    if n == 1
       ms.first
     else
       ms.first(n)

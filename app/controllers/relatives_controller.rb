@@ -20,7 +20,7 @@ class RelativesController < ApplicationController
     if @relative_user.current_member?
       redirect_to new_user_membership_relative_path(@family.user, @family), flash: { error: 'There is already a user with a current membership for that email.' }
     else
-      if Devise::email_regexp =~ @relative_user.email
+      if Devise.email_regexp =~ @relative_user.email
         @relative = Relative.new(year: @family.year, family_id: @family.id, info: { pending_approval: true, invited_email: @relative_user.email })
         @relative.save(validate: false)
         if @relative_user.persisted?
@@ -56,14 +56,14 @@ class RelativesController < ApplicationController
     @relative_user = @relative.user
     name = @relative_user.present? ? "#{@relative_user.first_name} #{@relative_user.last_name}" : @relative.invited_email
     @relative.destroy
-    unless current_user.in? [ @user, @relative_user ].reject(&:nil?)
+    unless current_user.in? [@user, @relative_user].reject(&:nil?)
       Rails.logger.info "current_user: #{current_user}\n@user: #{@user}\n@relative_user: #{@relative_user}"
       raise 'current_user is neither @user nor @relative'
     end
     respond_to do |format|
       format.html do
         if @relative_user.present? && current_user == @relative_user
-          redirect_to user_home_path(@relative_user), flash: { success: "Your Relative membership with #{@user.first_name} #{@user.last_name} has been destroyed."}
+          redirect_to user_home_path(@relative_user), flash: { success: "Your Relative membership with #{@user.first_name} #{@user.last_name} has been destroyed." }
         else
           redirect_to user_membership_path(@user, @family), flash: { success: "#{name} was successfully removed from your membership." }
         end
@@ -73,19 +73,20 @@ class RelativesController < ApplicationController
   end
 
   private
-    # Get +User+ and +Membership+ records for Relative. Then
-    # redirect to home unless +Membership+ is family
-    def get_user_family
-      @user = User.find_by(username: params[:user_id])
-      @family = @user.memberships.find(params[:membership_id])
 
-      redirect_to user_home_path, notice: 'Your account type does not permit relatives.' unless @family.is_a? Family
-    end
+  # Get +User+ and +Membership+ records for Relative. Then
+  # redirect to home unless +Membership+ is family
+  def get_user_family
+    @user = User.find_by(username: params[:user_id])
+    @family = @user.memberships.find(params[:membership_id])
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def relative_params
-      r = params.require(:relative).permit(user_attributes: [ :email ])
-      r[:user_attributes][:email].downcase! if r[:user_attributes].try(:[], :email)
-      r
-    end
+    redirect_to user_home_path, notice: 'Your account type does not permit relatives.' unless @family.is_a? Family
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def relative_params
+    r = params.require(:relative).permit(user_attributes: [:email])
+    r[:user_attributes][:email].downcase! if r[:user_attributes].try(:[], :email)
+    r
+  end
 end

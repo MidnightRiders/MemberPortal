@@ -19,24 +19,24 @@ class BlogRss
 
   protected
 
-    # Retrieves articles from url.
-    def self.get_articles
-      uri = URI(url)
-      begin
-        rss = Net::HTTP.get(uri)
-        rss_parsed = Hash.from_xml(rss)
-        rss = rss_parsed['rss']['channel']['item'] if rss_parsed
-      rescue => e
-        Rails.logger.error 'Blog error for ' + self.url
-        Rails.logger.error e
-        Rails.logger.info 'RSS: ' + rss
-      end
-      rss ||= []
-      if rss.is_a?(Array) && rss.present?
-        @last_retrieved = Time.now
-        rss
-      else
-        @articles || []
-      end
+  # Retrieves articles from url.
+  def self.get_articles
+    uri = URI(url)
+    begin
+      rss = Net::HTTP.get(uri)
+      rss_parsed = Hash.from_xml(rss)
+      rss = rss_parsed['rss']['channel']['item'] if rss_parsed
+    rescue => e
+      Rails.logger.error 'Blog error for ' + url
+      Rails.logger.error e
+      Rails.logger.info 'RSS: ' + rss
     end
+    rss ||= []
+    if rss.is_a?(Array) && rss.present?
+      @last_retrieved = Time.now
+      rss
+    else
+      @articles || []
+    end
+  end
 end

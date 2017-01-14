@@ -3,7 +3,7 @@ module ApplicationHelper
 
   # Returns *ActiveRecord Object* for the Revolution.
   def revs
-    Club.includes(:home_matches,:away_matches).find_by(abbrv: 'NE')
+    Club.includes(:home_matches, :away_matches).find_by(abbrv: 'NE')
   end
 
   # Outputs a +<small/>+ with errors if errors are present on the object
@@ -15,7 +15,7 @@ module ApplicationHelper
 
   # Receives JavaScript for output
   def enqueue_javascript(*files)
-    @javascript_files = ((@javascript_files || []) + [ files ]).flatten.uniq
+    @javascript_files = ((@javascript_files || []) + [files]).flatten.uniq
   end
 
   # Outputs JavaScript

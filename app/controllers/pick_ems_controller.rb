@@ -15,14 +15,14 @@ class PickEmsController < ApplicationController
     p = params[:pick_em]
     @pick_em = PickEm.find_or_initialize_by(user_id: p[:user_id], match_id: p[:match_id])
     @pick_em.attributes = p
-    if @pick_em.new_record? || @pick_em.changed?
+    response = if @pick_em.new_record? || @pick_em.changed?
       if @pick_em.save
-        response = { status: :success, notice: 'Your vote was cast', pick_em: @pick_em, result: PickEm::RESULTS.key(@pick_em.result) }
+        { status: :success, notice: 'Your vote was cast', pick_em: @pick_em, result: PickEm::RESULTS.key(@pick_em.result) }
       else
-        response = { errors: @pick_em.errors, status: :unprocessable_entity }
+        { errors: @pick_em.errors, status: :unprocessable_entity }
       end
     else
-      response = { status: :success, notice: 'No changes necessary' }
+      { status: :success, notice: 'No changes necessary' }
     end
     render json: response
   end
@@ -45,7 +45,7 @@ class PickEmsController < ApplicationController
   # POST /pick_ems.json
   # def create
   #   @pick_em = PickEm.new(pick_em_params)
-#
+  #
   #   respond_to do |format|
   #     if @pick_em.save
   #       format.html { redirect_to @pick_em, notice: 'Pick em was successfully created.' }
@@ -83,13 +83,13 @@ class PickEmsController < ApplicationController
 
   private
 
-    # Sets +@match+ based on route's +:match_id+.
-    def set_match
-      @match = Match.with_clubs.find(params[:match_id])
-    end
+  # Sets +@match+ based on route's +:match_id+.
+  def set_match
+    @match = Match.with_clubs.find(params[:match_id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def pick_em_params
-      params.require(:pick_em).permit(:match_id, :user_id, :result)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def pick_em_params
+    params.require(:pick_em).permit(:match_id, :user_id, :result)
+  end
 end

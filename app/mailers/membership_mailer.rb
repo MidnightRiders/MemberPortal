@@ -69,19 +69,19 @@ class MembershipMailer < ActionMailer::Base
 
   private
 
-    def styled_link_to(name = nil, options = nil, html_options = nil, &block)
-      html_options, options, name = options, name, block if block_given?
-      options ||= {}
+  def styled_link_to(name = nil, options = nil, html_options = nil, &block)
+    html_options, options, name = options, name, block if block_given?
+    options ||= {}
 
-      html_options = convert_options_to_data_attributes(options, html_options)
+    html_options = convert_options_to_data_attributes(options, html_options)
 
-      url = url_for(options)
-      html_options['href'] ||= url
+    url = url_for(options)
+    html_options['href'] ||= url
 
-      html_options['style'] ||= ''
-      html_options['style'] = 'color:#881144;text-decoration:none;border-bottom:1px dashed #881144;margin-bottom:-1px;'
+    html_options['style'] ||= ''
+    html_options['style'] = 'color:#881144;text-decoration:none;border-bottom:1px dashed #881144;margin-bottom:-1px;'
 
-      content_tag(:a, name || url, html_options, &block)
-    end
-    helper_method :styled_link_to
+    content_tag(:a, name || url, html_options, &block)
+  end
+  helper_method :styled_link_to
 end

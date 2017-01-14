@@ -32,7 +32,7 @@ FactoryGirl.define do
   factory :user do
     first_name { FFaker::Name.first_name }
     last_name { FFaker::Name.last_name }
-    username { "#{first_name}#{last_name}".gsub(/\W/,'') }
+    username { "#{first_name}#{last_name}".gsub(/\W/, '') }
     address { FFaker::AddressUS.street_address }
     city { FFaker::AddressUS.city }
     state { FFaker::AddressUS.state_abbr }
@@ -40,8 +40,8 @@ FactoryGirl.define do
     country { FFaker::AddressUS.country('US') }
     phone { FFaker::PhoneNumber.phone_number }
     email { FFaker::Internet.email }
-    member_since { (Random.rand*(Date.today.year-1995)).to_i+1995 }
-    password { FFaker::Lorem.characters(Random.rand*12 + 8) }
+    member_since { (Random.rand * (Date.today.year - 1995)).to_i + 1995 }
+    password { FFaker::Lorem.characters(Random.rand * 12 + 8) }
     after :create do |u|
       FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample)
     end

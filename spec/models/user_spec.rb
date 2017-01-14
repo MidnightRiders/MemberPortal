@@ -33,23 +33,23 @@ describe User do
     subject(:ability) { Ability.new(user) }
     let(:user) { nil }
     context 'for admin user' do
-      let(:user) { FactoryGirl.create(:user,:admin) }
-      it{ should be_able_to(:manage,[Match,User,Player,Club])}
-      it{ should be_able_to(:create,User) }
+      let(:user) { FactoryGirl.create(:user, :admin) }
+      it { should be_able_to(:manage, [Match, User, Player, Club]) }
+      it { should be_able_to(:create, User) }
     end
     context 'for normal user' do
       let(:user) { FactoryGirl.create(:user) }
-      it{ should be_able_to(:manage,user) }
-      it{ should_not be_able_to(:manage, FactoryGirl.create(:user) ) }
-      it{ should be_able_to(:show,FactoryGirl.create(:user) ) }
-      it{ should_not be_able_to(:manage, [Club,Player,Match] ) }
-      it{ should be_able_to(:index,Match) }
-      it{ should_not be_able_to(:index,[Player,Club,User]) }
+      it { should be_able_to(:manage, user) }
+      it { should_not be_able_to(:manage, FactoryGirl.create(:user)) }
+      it { should be_able_to(:show, FactoryGirl.create(:user)) }
+      it { should_not be_able_to(:manage, [Club, Player, Match]) }
+      it { should be_able_to(:index, Match) }
+      it { should_not be_able_to(:index, [Player, Club, User]) }
     end
     context 'for no user' do
-      it{ should be_able_to(:create,:Registration) }
-      it{ should_not be_able_to(:view,FactoryGirl.create(:user)) }
-      it{ should_not be_able_to(:index,[Match,User,Player,Club]) }
+      it { should be_able_to(:create, :Registration) }
+      it { should_not be_able_to(:view, FactoryGirl.create(:user)) }
+      it { should_not be_able_to(:index, [Match, User, Player, Club]) }
     end
   end
   describe 'validation' do

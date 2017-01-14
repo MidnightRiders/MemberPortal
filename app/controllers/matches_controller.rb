@@ -22,7 +22,7 @@ class MatchesController < ApplicationController
   # GET /matches/1.json
   def show
     @order_point = @match.order_selected(Match.all_seasons)
-    @mot_m_players = Player.includes(:mot_m_firsts,:mot_m_seconds,:mot_m_thirds).select{|x| x.mot_m_total(match_id: @match.id) && x.mot_m_total(match_id: @match.id) > 0 }.sort_by{|x| x.mot_m_total(match_id: @match.id)}.reverse if @match.teams.include? revs
+    @mot_m_players = Player.includes(:mot_m_firsts, :mot_m_seconds, :mot_m_thirds).select { |x| x.mot_m_total(match_id: @match.id) && x.mot_m_total(match_id: @match.id) > 0 }.sort_by { |x| x.mot_m_total(match_id: @match.id) }.reverse if @match.teams.include? revs
   end
 
   # TODO: Allow updated URLs and/or alternate sources
@@ -50,15 +50,15 @@ class MatchesController < ApplicationController
       html = Nokogiri::HTML(Net::HTTP.get(uri))
       matches.each do |match|
         Rails.logger.info match
-        match_html = html.xpath('//*[contains(@class,"ml-link") and ' +
-          ".//*[contains(@class, 'sb-home')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.home_team.abbrv}')] and " +
+        match_html = html.xpath('//*[contains(@class,"ml-link") and ' \
+          ".//*[contains(@class, 'sb-home')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.home_team.abbrv}')] and " \
           ".//*[contains(@class, 'sb-away')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.away_team.abbrv}')]]").try(:first)
         next unless match_html.present?
         if (match_info = scrape_single_result(match_html))[:date] == match.kickoff.to_date
           if match_info[:home][:goals].present? && match_info[:away][:goals].present?
             if match.update_attributes(
-                home_goals: match_info[:home][:goals],
-                away_goals: match_info[:away][:goals]
+              home_goals: match_info[:home][:goals],
+              away_goals: match_info[:away][:goals]
               )
               successes += 1
             else
@@ -83,9 +83,9 @@ class MatchesController < ApplicationController
     else
       flash[:success] = "#{successes} of #{finished_matches.size} #{'Match'.pluralize(finished_matches.size)} were updated."
       if failures.any?
-        flash[:success] += '<br><ul><li>' + failures.map do |m, e|
+        flash[:success] += '<br><ul><li>' + failures.map { |m, e|
           "#{view_context.link_to "#{m.home_team.abbrv} v #{m.away_team.abbrv}", m}: #{e}"
-        end.join('</li><li>') + '</li></ul>'
+        }.join('</li><li>') + '</li></ul>'
       end
     end
     redirect_to matches_path
@@ -102,7 +102,7 @@ class MatchesController < ApplicationController
     matches = CSV.table(params[:file].path.to_s)
     matches.each do |m|
       d = m[:date].to_date.beginning_of_day
-      match = Match.find_by(kickoff: (d..d+1.day), home_team: Club.find_by(abbrv: m[:home]), away_team: Club.find_by(abbrv: m[:away]), home_goals: nil, away_goals: nil)
+      match = Match.find_by(kickoff: (d..d + 1.day), home_team: Club.find_by(abbrv: m[:home]), away_team: Club.find_by(abbrv: m[:away]), home_goals: nil, away_goals: nil)
       if match.present?
         updated += 1 if match.update_attributes(home_goals: m[:hg], away_goals: m[:ag])
       else

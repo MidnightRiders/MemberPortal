@@ -4,10 +4,10 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  if Rails.env.production?
-    config.secret_key = ENV['devise_secret_key']
+  config.secret_key = if Rails.env.production?
+    ENV['devise_secret_key']
   else
-    config.secret_key = '75a8d97f5118c0b1b26b08f4814a041a4a77446e5617352da45af49f31d4c109f7c23dce6e21f92a0ad96331e884488b749fd436e1e010865086e89f8ad1ddd3'
+    '75a8d97f5118c0b1b26b08f4814a041a4a77446e5617352da45af49f31d4c109f7c23dce6e21f92a0ad96331e884488b749fd436e1e010865086e89f8ad1ddd3'
   end
 
   # ==> Mailer Configuration
@@ -33,7 +33,7 @@ Devise.setup do |config|
   # session. If you need permissions, you should implement that in a before filter.
   # You can also supply a hash where the value is a boolean determining whether
   # or not authentication should be aborted when the value is not present.
-  config.authentication_keys = [ :username ]
+  config.authentication_keys = [:username]
 
   # Configure parameters from the request object used for authentication. Each entry
   # given should be a request method and it will automatically be passed to the
@@ -45,12 +45,12 @@ Devise.setup do |config|
   # Configure which authentication keys should be case-insensitive.
   # These keys will be downcased upon creating or modifying a user and when used
   # to authenticate or find a user. Default is :email.
-  config.case_insensitive_keys = [ :email, :username ]
+  config.case_insensitive_keys = %i(email username)
 
   # Configure which authentication keys should have whitespace stripped.
   # These keys will have whitespace before and after removed upon creating or
   # modifying a user and when used to authenticate or find a user. Default is :email.
-  config.strip_whitespace_keys = [ :email, :username ]
+  config.strip_whitespace_keys = %i(email username)
 
   # Tell if authentication through request.params is enabled. True by default.
   # It can be set to an array that will enable params authentication only for the

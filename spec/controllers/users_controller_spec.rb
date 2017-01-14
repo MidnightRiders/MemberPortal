@@ -23,13 +23,13 @@ describe UsersController do
     end
     context 'authorized access' do
       it 'for admin users' do
-        sign_in FactoryGirl.create(:user,:admin)
+        sign_in FactoryGirl.create(:user, :admin)
         get :index
         expect(response).to be_success
         expect(assigns(:users)).to match_array(User.all)
       end
       it 'for Executive Board users' do
-        sign_in FactoryGirl.create(:user,:executive_board)
+        sign_in FactoryGirl.create(:user, :executive_board)
         get :index
         expect(response).to be_success
         expect(assigns(:users)).to match_array(User.all)
@@ -54,7 +54,7 @@ describe UsersController do
     end
   end
   describe '#edit' do
-    let(:user){ FactoryGirl.create :user }
+    let(:user) { FactoryGirl.create :user }
     it 'rejects logged-out users' do
       get :edit, id: user
       expect(response).to redirect_to root_path

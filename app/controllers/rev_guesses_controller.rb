@@ -53,13 +53,14 @@ class RevGuessesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_match
-      @match = Match.with_clubs.find(params[:match_id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def rev_guess_params
-      params.require(:rev_guess).permit(:match_id, :user_id, :home_goals, :away_goals, :comment)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_match
+    @match = Match.with_clubs.find(params[:match_id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def rev_guess_params
+    params.require(:rev_guess).permit(:match_id, :user_id, :home_goals, :away_goals, :comment)
+  end
 end

@@ -19,9 +19,9 @@
 
 class Membership < ActiveRecord::Base
   store_accessor :privileges
-  TYPES = %w( Individual Family Relative )
-  COSTS = { Individual: '1061', Family: '2091' }
-  PRIVILEGES = %w( admin executive_board at_large_board )
+  TYPES = %w(Individual Family Relative).freeze
+  COSTS = { Individual: '1061', Family: '2091' }.freeze
+  PRIVILEGES = %w(admin executive_board at_large_board).freeze
 
   attr_accessor :stripe_card_token, :subscription
 
@@ -40,16 +40,16 @@ class Membership < ActiveRecord::Base
 
   before_validation :remove_blank_privileges
 
-  validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year+1) }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }
+  validates :year, presence: true, inclusion: { in: (Date.today.year..Date.today.year + 1) }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
   validate :accepted_privileges
   validate :stripe_info_is_unique?
   validate :is_paid_membership
 
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
-  def list_privileges(verbose=false, no_admin = false)
+  def list_privileges(verbose = false, no_admin = false)
     ps = privileges.map(&:titleize)
-    ps = ps.reject{ |v| v == 'admin' } if no_admin
+    ps = ps.reject { |v| v == 'admin' } if no_admin
     if privileges.empty?
       'None'
     elsif verbose
@@ -60,7 +60,7 @@ class Membership < ActiveRecord::Base
   end
 
   def privileges
-    read_attribute(:privileges) || []
+    self[:privileges] || []
   end
 
   def overriding_admin
@@ -128,17 +128,17 @@ class Membership < ActiveRecord::Base
           self.stripe_subscription_id = subscription.id
         end
         charge = Stripe::Charge.create(
-            customer: customer.id,
-            description: "Midnight Riders #{year} #{type.titleize} Membership",
-            metadata: {
-              year: year,
-              type: type.titleize
-            },
-            receipt_email: user.email,
-            amount: COSTS[type.to_sym],
-            currency: 'usd',
-            statement_descriptor: "MRiders #{year} #{type.to_s[0..2].titleize} Mem",
-            source: card_id
+          customer: customer.id,
+          description: "Midnight Riders #{year} #{type.titleize} Membership",
+          metadata: {
+            year: year,
+            type: type.titleize
+          },
+          receipt_email: user.email,
+          amount: COSTS[type.to_sym],
+          currency: 'usd',
+          statement_descriptor: "MRiders #{year} #{type.to_s[0..2].titleize} Mem",
+          source: card_id
         )
         self.stripe_charge_id = charge.id
       end
@@ -153,7 +153,7 @@ class Membership < ActiveRecord::Base
   # Cancel current subscription
   def cancel(provide_refund = false)
     if is_subscription?
-      user.stripe_customer.subscriptions.retrieve(self.stripe_subscription_id).delete
+      user.stripe_customer.subscriptions.retrieve(stripe_subscription_id).delete
       self.stripe_subscription_id = nil
     else
       self.refunded = 'canceled'
@@ -174,9 +174,7 @@ class Membership < ActiveRecord::Base
     if (customer = user.stripe_customer).present?
       if stripe_charge_id && (charge = customer.charges.retrieve(stripe_charge_id)).present?
         refund = charge.refunds.create
-        if refund
-          self.refunded = refund.id
-        end
+        self.refunded = refund.id if refund
       else
         logger.error "Stripe Customer #{user.stripe_customer_token} does not have a charge associated"
       end
@@ -208,27 +206,27 @@ class Membership < ActiveRecord::Base
 
   private
 
-    def remove_blank_privileges
-      privileges.try(:reject!, &:blank?)
-    end
+  def remove_blank_privileges
+    privileges.try(:reject!, &:blank?)
+  end
 
-    def accepted_privileges
-      errors.add(:privileges, 'include unaccepted values') if privileges && (privileges-PRIVILEGES).present?
-    end
+  def accepted_privileges
+    errors.add(:privileges, 'include unaccepted values') if privileges && (privileges - PRIVILEGES).present?
+  end
 
-    def able_to_change_privileges
-      ability = Ability.new(user)
-      errors.add(:privileges, 'cannot be changed in this way by this user') if privileges.changed? and ability.cannot?(:grant_privileges, Membership)
-    end
+  def able_to_change_privileges
+    ability = Ability.new(user)
+    errors.add(:privileges, 'cannot be changed in this way by this user') if privileges.changed? && ability.cannot?(:grant_privileges, Membership)
+  end
 
-    def is_paid_membership
-      unless is_a?(Relative)
-        errors.add(:base, 'must be paid for') unless info[:stripe_charge_id] || info[:stripe_subscription_id] || stripe_card_token || user.stripe_customer_token || overriding_admin
-      end
+  def is_paid_membership
+    unless is_a?(Relative)
+      errors.add(:base, 'must be paid for') unless info[:stripe_charge_id] || info[:stripe_subscription_id] || stripe_card_token || user.stripe_customer_token || overriding_admin
     end
+  end
 
-    def stripe_info_is_unique?
-      errors.add(:info, 'contains a redundant Stripe Subscription ID') unless Membership.where.not(id: id).with_stripe_subscription_id(info[:stripe_subscription_id]).empty?
-      errors.add(:info, 'contains a redundant Stripe Charge ID') unless Membership.where.not(id: id).with_stripe_charge_id(info[:stripe_charge_id]).empty?
-    end
+  def stripe_info_is_unique?
+    errors.add(:info, 'contains a redundant Stripe Subscription ID') unless Membership.where.not(id: id).with_stripe_subscription_id(info[:stripe_subscription_id]).empty?
+    errors.add(:info, 'contains a redundant Stripe Charge ID') unless Membership.where.not(id: id).with_stripe_charge_id(info[:stripe_charge_id]).empty?
+  end
 end

@@ -128,3 +128,6 @@ Style/SymbolArray:
 Style/VariableName:
   EnforcedStyle: snake_case
   Enabled: true
+
+Rails/HttpPositionalArguments:
+  Enabled: false

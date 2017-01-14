@@ -18,7 +18,7 @@ unless Rails.env.test?
   print 'Seeding players…'
   ne_id = Club.find_by(abbrv: 'NE').id
   CSV.foreach(Rails.root.join('lib/assets/players.csv'), headers: true, header_converters: :symbol) do |player|
-    Player.unscoped.find_or_initialize_by(first_name: player[:first_name], last_name: player[:last_name]).update_attributes(p.to_h.merge({ club_id: ne_id }))
+    Player.unscoped.find_or_initialize_by(first_name: player[:first_name], last_name: player[:last_name]).update_attributes(p.to_h.merge(club_id: ne_id))
   end
   puts ' done.'
 end
