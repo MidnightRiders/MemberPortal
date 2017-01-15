@@ -24,9 +24,9 @@ class RelativesController < ApplicationController
         @relative = Relative.new(year: @family.year, family_id: @family.id, info: { pending_approval: true, invited_email: @relative_user.email })
         @relative.save(validate: false)
         if @relative_user.persisted?
-          MembershipMailer.invite_existing_user_to_family(@relative_user, @family, @relative).deliver
+          MembershipMailer.invite_existing_user_to_family(@relative_user, @family, @relative).deliver_now
         else
-          MembershipMailer.invite_new_user_to_family(@relative_user, @family, @relative).deliver
+          MembershipMailer.invite_new_user_to_family(@relative_user, @family, @relative).deliver_now
         end
         redirect_to user_membership_path(@user, @family), flash: { success: "#{@relative_user.email} has been invited to join your family membership." }
       else

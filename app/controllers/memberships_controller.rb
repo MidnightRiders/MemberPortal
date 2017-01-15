@@ -49,8 +49,8 @@ class MembershipsController < ApplicationController
     respond_to do |format|
       if @membership.save_with_payment(params[:card_id])
         if @membership.stripe_charge_id
-          MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver
-          MembershipMailer.new_membership_alert(@user, @membership).deliver
+          MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver_now
+          MembershipMailer.new_membership_alert(@user, @membership).deliver_now
           slack_notify_membership(@membership, @user)
           format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
         else
@@ -91,8 +91,8 @@ class MembershipsController < ApplicationController
       refund = params.fetch(:refund, false).in? [true, 'true']
       if @membership.cancel(refund)
         if refund
-          MembershipMailer.membership_cancellation_alert(@user, @membership).deliver
-          MembershipMailer.membership_refund_email(@user, @membership).deliver
+          MembershipMailer.membership_cancellation_alert(@user, @membership).deliver_now
+          MembershipMailer.membership_refund_email(@user, @membership).deliver_now
         end
         format.html { redirect_to get_user_path, notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." }
         format.json { render json: { notice: "Membership was successfully canceled#{" and #{'marked as' if @membership.override.present?} refunded" if refund}." }, status: :ok }
@@ -162,7 +162,7 @@ class MembershipsController < ApplicationController
             if membership.save
               logger.info "#{Time.at(subscription.current_period_start).year} Membership created for #{user.first_name} #{user.last_name}"
               slack_notify_membership(membership, user)
-              MembershipMailer.membership_subscription_confirmation_email(user, membership).deliver
+              MembershipMailer.membership_subscription_confirmation_email(user, membership).deliver_now
             else
               logger.error "Error when saving membership: #{membership.errors.messages}"
               logger.info membership

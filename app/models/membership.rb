@@ -64,7 +64,7 @@ class Membership < ActiveRecord::Base
   end
 
   def overriding_admin
-    Membership.includes(:user).find_by(users: { id: override }, year: year).try(:user)
+    Membership.includes(:user).find_by(users: { id: override }, year: year)&.user
   end
 
   def is_subscription?
