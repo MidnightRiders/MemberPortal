@@ -29,7 +29,7 @@
 #
 
 class User < ActiveRecord::Base
-  IMPORTABLE_ATTRIBUTES = %i(last_name first_name last_name address city state postal_code phone email member_since username).freeze
+  IMPORTABLE_ATTRIBUTES = %w(last_name first_name last_name address city state postal_code phone email member_since username).freeze
   CSV_ATTRIBUTES = %w(id last_name first_name address city state postal_code phone email username member_since last_sign_in_at country).freeze
 
   # Include default devise modules. Others available are:
@@ -154,6 +154,7 @@ class User < ActiveRecord::Base
 
   # Generates tedsmith1-style usernames to prevent conflicts
   def generate_username!
+    return unless new_record?
     original_uname = self.username = "#{first_name}#{last_name}".downcase.gsub(/[^a-z]/, '')
     i = 0
     until User.find_by(username: username).nil?
@@ -162,14 +163,20 @@ class User < ActiveRecord::Base
     end
   end
 
+  def generate_temporary_password!
+    return unless new_record?
+    self.password = rand(36**10).to_s(36)
+  end
+
   # Grants a +Membership+ for the current year. Part of import.
-  def grant_membership(type, privileges, granted_by)
-    return unless User.find(granted_by)&.leadership_or_admin?
-    memberships.where(year: Time.current.year).first_or_initialize.tap do |m|
-      m.info = { override: granted_by }
-      m.privileges = privileges
-      m.type = type.titleize || 'Individual'
-    end.save!
+  def grant_membership!(type: 'Individual', privileges: [], granted_by: nil, family_id: nil)
+    membership = memberships.where(year: Time.current.year).first_or_initialize
+    membership.override ||= granted_by
+    membership.privileges = privileges
+    membership.type ||= type.titleize
+    membership.family_id ||= family_id if type == 'Relative'
+    membership.save!
+    self
   end
 
   # Converts the phone to *Integer* for storage.
@@ -203,19 +210,39 @@ class User < ActiveRecord::Base
     @ability ||= Ability.new(self)
   end
 
-  # User import script. Needs work.
   def self.import(users, privileges: [], override_id: nil)
     imported_users = []
+    family_id = nil
 
-    users.each do |import_user|
+    users.each do |user_info|
       begin
-        imported_users << user_with_membership_from_hash(import_user, privileges: privileges, override_id: override_id)
+        type = user_info[:membership_type]
+        raise 'No Family for Relative' if family_id.nil? && type == 'Relative'
+        user = from_hash(user_info).grant_membership!(type: type, privileges: privileges, granted_by: override_id, family_id: family_id)
+        family_id = user.current_membership.id if type == 'Family'
+        family_id = nil if type == 'Individual'
+        imported_users << user
       rescue => e
         Rails.logger.warn e.message
+        Rails.logger.info e.backtrace.join("\n")
       end
     end
 
     imported_users
+  end
+
+  # Import single user from hash
+  def self.from_hash(user_hash)
+    user_hash = user_hash.with_indifferent_access
+    user = User.where(email: user_hash[:email]&.strip&.downcase).first_or_initialize
+
+    user.assign_attributes(user_hash.select { |x| IMPORTABLE_ATTRIBUTES.include? x })
+    user.generate_username!
+    pass = user.generate_temporary_password!
+
+    user.save!
+    UserMailer.new_user_creation_email(user, pass).deliver_now if pass
+    user
   end
 
   # Outputs CSV
@@ -226,20 +253,5 @@ class User < ActiveRecord::Base
         csv << user.attributes.values_at(*CSV_COLUMNS) + [user.current_membership.present?, user.current_membership.try(:type)]
       end
     end
-  end
-
-  def self.user_with_membership_from_hash(user_hash, privileges: [], override_id: nil)
-    raise 'Not importing Relatives yet' if user_hash[:membership_type] == 'Relative' # TODO: Allow Relative input
-    raise "No email for #{user_hash[:first_name]} #{user_hash[:last_name]}" if user_hash[:email].blank?
-
-    user = User.where(email: user_hash[:email].strip.downcase).first_or_initialize
-    user.assign_attributes(user_hash.select { |x| IMPORTABLE_ATTRIBUTES.include? x.to_sym })
-    user.generate_username! if user.new_record?
-    pass = false
-    user.password = (pass = rand(36**10).to_s(36)) if user.new_record?
-    user.save!
-    user.grant_membership(user_hash[:membership_type], privileges, override_id)
-    UserMailer.new_user_creation_email(user, pass).deliver_now if pass
-    user
   end
 end

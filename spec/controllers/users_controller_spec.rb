@@ -127,17 +127,16 @@ describe UsersController do
       it 'imports Individual and Family users' do
         expect {
           post :import, file: fixture_file_upload('files/user-import.csv')
-        }.to change(User, :count).by(2)
+        }.to change(User, :count).by(3)
       end
       it 'emails new users' do
-        expect(UserMailer).to receive(:new_user_creation_email).and_return(double(deliver_now: true)).twice
+        expect(UserMailer).to receive(:new_user_creation_email).and_return(double(deliver_now: true)).exactly(3).times
 
         post :import, file: fixture_file_upload('files/user-import.csv')
       end
       it 'doesn\'t email existing users' do
         user_file = CSV.read(Rails.root.join('spec', 'fixtures', 'files', 'user-import.csv'), headers: true, header_converters: :symbol).map(&:to_h)
         user_file.each do |u|
-          next if u[:membership_type] == 'Relative'
           FactoryGirl.build(:user).tap { |user|
             user.email = u[:email]
           }.save
