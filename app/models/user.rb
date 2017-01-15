@@ -29,6 +29,9 @@
 #
 
 class User < ActiveRecord::Base
+  IMPORTABLE_ATTRIBUTES = %w(last_name first_name last_name address city state postal_code phone email member_since username).freeze
+  CSV_ATTRIBUTES = %w(id last_name first_name address city state postal_code phone email username member_since last_sign_in_at country).freeze
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, to: :ability
@@ -149,71 +152,31 @@ class User < ActiveRecord::Base
     'https://gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/, '@')) + '?d=mm'
   end
 
-  # TODO: Clean the shit out of this import. Stabilize it.
-
-  # User import script. Needs work.
-  def self.import(file, privileges = [], override_id)
-    allowed_attributes = %i(last_name first_name last_name address city state postal_code phone email member_since username)
-    spreadsheet = Roo::Spreadsheet.open(file.path.to_s, extension: 'csv')
-    header = spreadsheet.row(1)
-    (2..spreadsheet.last_row).each do |i|
-      row = Hash[[header, spreadsheet.row(i)].transpose]
-
-      next if row['type'] == 'Relative' # TODO: Allow Relative input
-
-      if row['email'].blank?
-        logger.error "No email for #{row['first_name']} #{row['last_name']}"
-        next
-      end
-
-      user = User.where(email: row['email'].strip.downcase).first_or_initialize
-      if user.new_record?
-        original_uname = row['username'] = "#{row['first_name']}#{row['last_name']}".downcase.gsub(/[^a-z]/, '')
-        i = 0
-        until User.find_by(username: row['username']).nil?
-          i += 1
-          row['username'] = "#{original_uname}#{i}"
-        end
-      end
-      user.attributes = row.to_hash.select { |x| allowed_attributes.include? x.to_sym }
-      pass = false
-      if user.new_record?
-        logger.info "Adding #{row['first_name']} #{row['last_name']}…"
-        user.password = (pass = rand(36**10).to_s(36))
-      else
-        logger.info "Updating #{row['first_name']} #{row['last_name']}…"
-        if user.changed?
-          logger.info "  Changed: #{user.changes.keys.to_sentence}"
-        else
-          logger.info '  No changes' unless user.changed?
-        end
-      end
-      if user.save
-        m = user.memberships.where(year: Time.current.year).first_or_initialize
-        if m.new_record?
-          m.info = { override: override_id }
-          m.privileges = privileges
-          m.type = row['membership_type'].titleize || 'Individual'
-          logger.info "#{m.year} #{m.type} Membership created for #{user.first_name} #{user.last_name} (#{user.username})" if m.save
-        end
-        UserMailer.new_user_creation_email(user, pass).deliver if pass
-      else
-        logger.error "  Could not save user #{row['first_name']} #{row['last_name']}:\n  " + user.errors.to_hash.map { |k, v| "#{k}: #{v.to_sentence}" }.join("\n  ")
-      end
+  # Generates tedsmith1-style usernames to prevent conflicts
+  def generate_username!
+    return unless new_record?
+    original_uname = self.username = "#{first_name}#{last_name}".downcase.gsub(/[^a-z]/, '')
+    i = 0
+    until User.find_by(username: username).nil?
+      i += 1
+      self.username = "#{original_uname}#{i}"
     end
   end
 
-  # Outputs CSV
-  def self.to_csv
-    filtered_columns = %w(created_at updated_at encrypted_password reset_password_token reset_password_sent_at remember_created_at current_sign_in_at sign_in_count current_sign_in_ip last_sign_in_ip stripe_customer_token)
-    columns_to_use = column_names - filtered_columns
+  def generate_temporary_password!
+    return unless new_record?
+    self.password = rand(36**10).to_s(36)
+  end
 
-    CSV.generate do |csv|
-      csv << (columns_to_use + %w(current_member membership_type)).map(&:titleize)
-      all.find_each do |user|
-        csv << user.attributes.values_at(*columns_to_use) + [user.current_membership.present?, user.current_membership.try(:type)]
-      end
-    end
+  # Grants a +Membership+ for the current year. Part of import.
+  def grant_membership!(type: 'Individual', privileges: [], granted_by: nil, family_id: nil)
+    membership = memberships.where(year: Time.current.year).first_or_initialize
+    membership.override ||= granted_by
+    membership.privileges = privileges
+    membership.type ||= type.titleize
+    membership.family_id ||= family_id if type == 'Relative'
+    membership.save!
+    self
   end
 
   # Converts the phone to *Integer* for storage.
@@ -247,4 +210,48 @@ class User < ActiveRecord::Base
     @ability ||= Ability.new(self)
   end
 
+  def self.import(users, privileges: [], override_id: nil)
+    imported_users = []
+    family_id = nil
+
+    users.each do |user_info|
+      begin
+        type = user_info[:membership_type]
+        raise 'No Family for Relative' if family_id.nil? && type == 'Relative'
+        user = from_hash(user_info).grant_membership!(type: type, privileges: privileges, granted_by: override_id, family_id: family_id)
+        family_id = user.current_membership.id if type == 'Family'
+        family_id = nil if type == 'Individual'
+        imported_users << user
+      rescue => e
+        Rails.logger.warn e.message
+        Rails.logger.info e.backtrace.join("\n")
+      end
+    end
+
+    imported_users
+  end
+
+  # Import single user from hash
+  def self.from_hash(user_hash)
+    user_hash = user_hash.with_indifferent_access
+    user = User.where(email: user_hash[:email]&.strip&.downcase).first_or_initialize
+
+    user.assign_attributes(user_hash.select { |x| IMPORTABLE_ATTRIBUTES.include? x })
+    user.generate_username!
+    pass = user.generate_temporary_password!
+
+    user.save!
+    UserMailer.new_user_creation_email(user, pass).deliver_now if pass
+    user
+  end
+
+  # Outputs CSV
+  def self.to_csv
+    CSV.generate do |csv|
+      csv << (CSV_COLUMNS + %w(current_member membership_type)).map(&:titleize)
+      all.find_each do |user|
+        csv << user.attributes.values_at(*CSV_COLUMNS) + [user.current_membership.present?, user.current_membership.try(:type)]
+      end
+    end
+  end
 end

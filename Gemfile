@@ -19,7 +19,6 @@ gem 'jquery-rails'
 gem 'foundation-rails', '<6.0'
 gem 'font-awesome-sass'
 
-gem 'roo' # For imports
 gem 'iconv'
 gem 'icalendar'
 gem 'draper'

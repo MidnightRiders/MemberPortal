@@ -53,6 +53,7 @@ describe UsersController do
       expect(assigns(:user)).to eq user
     end
   end
+
   describe '#edit' do
     let(:user) { FactoryGirl.create :user }
     it 'rejects logged-out users' do
@@ -73,6 +74,78 @@ describe UsersController do
       sign_in user
       get :edit, id: user
       expect(response).to redirect_to(edit_user_registration_path(user))
+    end
+  end
+
+  describe '#import' do
+    let(:file) { Rails.root.join('spec', 'data', 'user-import.csv') }
+    context 'logged out' do
+      it 'redirects users' do
+        post :import, file: fixture_file_upload('files/user-import.csv')
+
+        expect(response).to redirect_to root_path
+      end
+      it 'does not accept files' do
+        expect {
+          post :import, file: fixture_file_upload('files/user-import.csv')
+        }.not_to change(User, :count)
+      end
+    end
+    context 'logged in as regular user' do
+      before(:each) { sign_in FactoryGirl.create(:user) }
+      it 'redirects users' do
+        post :import, file: fixture_file_upload('files/user-import.csv')
+
+        expect(response).to redirect_to root_path
+      end
+      it 'does not accept files' do
+        expect {
+          post :import, file: fixture_file_upload('files/user-import.csv')
+        }.not_to change(User, :count)
+      end
+    end
+    context 'logged in as at-large board user' do
+      before(:each) { sign_in FactoryGirl.create(:user, :at_large_board) }
+      it 'redirects users' do
+        post :import, file: fixture_file_upload('files/user-import.csv')
+
+        expect(response).to redirect_to root_path
+      end
+      it 'does not accept files' do
+        expect {
+          post :import, file: fixture_file_upload('files/user-import.csv')
+        }.not_to change(User, :count)
+      end
+    end
+    context 'logged in as admin' do
+      before(:each) { sign_in FactoryGirl.create(:user, :admin) }
+      it 'rejects if file missing' do
+        post :import
+
+        expect(flash[:alert]).to eq('No file was selected')
+      end
+      it 'imports Individual and Family users' do
+        expect {
+          post :import, file: fixture_file_upload('files/user-import.csv')
+        }.to change(User, :count).by(3)
+      end
+      it 'emails new users' do
+        expect(UserMailer).to receive(:new_user_creation_email).and_return(double(deliver_now: true)).exactly(3).times
+
+        post :import, file: fixture_file_upload('files/user-import.csv')
+      end
+      it 'doesn\'t email existing users' do
+        user_file = CSV.read(Rails.root.join('spec', 'fixtures', 'files', 'user-import.csv'), headers: true, header_converters: :symbol).map(&:to_h)
+        user_file.each do |u|
+          FactoryGirl.build(:user).tap { |user|
+            user.email = u[:email]
+          }.save
+        end
+
+        expect(UserMailer).not_to receive(:new_user_creation_email)
+
+        post :import, file: fixture_file_upload('files/user-import.csv')
+      end
     end
   end
 
