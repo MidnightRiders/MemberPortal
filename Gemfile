@@ -28,7 +28,7 @@ gem 'date_time_attribute'
 gem 'will_paginate'
 
 gem 'paperclip', '~>4.3.0'
-gem 'aws-sdk'
+gem 'aws-sdk', '~> 1.6'
 
 # Users/auth
 gem 'devise', '~>4.0.0'

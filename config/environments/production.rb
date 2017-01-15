@@ -42,6 +42,7 @@ MidnightRiders::Application.configure do
   # Set to :debug to see everything in the log.
   config.logger = Logger.new(STDOUT)
   config.logger.level = ENV['LOG_LEVEL'] ? Logger.class_eval(ENV['LOG_LEVEL']) : Logger::INFO
+  config.log_level = ENV['LOG_LEVEL']&.downcase&.to_sym || :info
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
