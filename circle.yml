@@ -1,0 +1,3 @@
+test:
+  post:
+    - "bundle exec codeclimate-test-reporter $CIRCLE_ARTIFACTS/coverage/.resultset.json"

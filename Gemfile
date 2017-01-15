@@ -72,6 +72,7 @@ group :test do
   gem 'poltergeist'
 
   gem 'simplecov', require: false
+  gem 'codeclimate-test-reporter', '~> 1.0.0', require: false
 end
 
 # Use ActiveModel has_secure_password

@@ -1,5 +1,8 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter '/vendor/'
+  add_filter '/public/'
+end
 
 # save to CircleCI's artifacts directory if we're on CircleCI
 if ENV['CIRCLE_ARTIFACTS']
