@@ -32,6 +32,7 @@ describe User do
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
     let(:user) { nil }
+
     context 'for admin user' do
       let(:user) { FactoryGirl.create(:user, :admin) }
       it 'can manage Matches, Users, Players, Clubs' do
@@ -41,6 +42,7 @@ describe User do
         expect(ability).to be_able_to(:create, User)
       end
     end
+
     context 'for normal user' do
       let(:user) { FactoryGirl.create(:user) }
       it 'can manage itself' do
@@ -62,6 +64,7 @@ describe User do
         expect(ability).not_to be_able_to(:index, [Player, Club, User])
       end
     end
+
     context 'for no user' do
       it 'can\'t create a Registration' do
         expect(ability).to be_able_to(:create, :Registration)
@@ -74,6 +77,12 @@ describe User do
       end
     end
   end
+
+  describe 'scopes' do
+    skip 'members'
+    skip 'non_members'
+  end
+
   describe 'validation' do
     subject(:user) { User.new }
     it 'should not be valid with missing fields' do

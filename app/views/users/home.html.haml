@@ -3,9 +3,9 @@
 = render partial: 'users/update_prompt'
 = render partial: 'users/address_prompt'
 
-= render 'register_now', user: current_user unless current_user.current_member? || current_user.has_family_invitation?
+= render 'register_now', user: current_user unless current_user.current_member? || current_user.invited_to_family?
 
-= render 'accept_family_invitation', user: current_user if current_user.has_family_invitation?
+= render 'accept_family_invitation', user: current_user if current_user.invited_to_family?
 
 -#= render 'static_pages/jotform' if current_user.current_member? #&& Time.current < Time.zone.local(2016,1,15,17)
 

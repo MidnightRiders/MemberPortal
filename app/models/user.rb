@@ -38,33 +38,13 @@ class User < ActiveRecord::Base
 
   default_scope { includes(:memberships) }
 
-  scope :scores, ->(season = Date.current.year) {
-    unscoped.select('*',
-      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND matches.season = #{season}) AS correct_pick_ems",
-      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = #{season}) AS total_pick_ems",
-      "(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_score",
-      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_count")
-  }
-
-  scope :rev_guess_scores, ->(season = Date.current.year) {
-    unscoped.select('*',
-      "(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_score",
-      "(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = #{season}) AS rev_guesses_count")
-  }
-
-  scope :pick_em_scores, ->(season = Date.current.year) {
-    unscoped.select('*',
-      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND matches.season = #{season}) AS correct_pick_ems",
-      "(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = #{season}) AS total_pick_ems")
-  }
-
   # Get all current members, or members for specified year
-  scope :members, ->(year = (Date.today.year..Date.today.year + 1)) {
+  scope :members, lambda { |year = (Date.current.year..Date.current.year + 1)|
     where(memberships: { year: year })
   }
 
   # Get non-members
-  scope :non_members, ->(year = (Date.today.year..Date.today.year + 1)) {
+  scope :non_members, lambda { |year = (Date.current.year..Date.current.year + 1)|
     where.not(id: joins(:memberships).members(year).select('id'))
   }
 
@@ -80,7 +60,7 @@ class User < ActiveRecord::Base
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
-  validates :member_since, numericality: { less_than_or_equal_to: Date.today.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
+  validates :member_since, numericality: { less_than_or_equal_to: Date.current.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
 
   has_paper_trail only: %i(username email first_name last_name address city state postal_code phone member_since)
 
@@ -114,7 +94,7 @@ class User < ActiveRecord::Base
 
   # Returns +Membership+ for current year.
   def current_membership
-    memberships.where(year: (Date.today.year..Date.today.year + 1)).order(year: :asc).first
+    memberships.where(year: (Date.current.year..Date.current.year + 1)).order(year: :asc).first
   end
 
   # Returns +Family+ +Membership+ for current year, if applicable
@@ -133,7 +113,7 @@ class User < ActiveRecord::Base
   end
 
   # Returns *Boolean* based on +family_invitation+
-  def has_family_invitation?
+  def invited_to_family?
     !current_member? && family_invitation.present?
   end
 
@@ -243,6 +223,26 @@ class User < ActiveRecord::Base
     user.save!
     UserMailer.new_user_creation_email(user, pass).deliver_now if pass
     user
+  end
+
+  def self.pick_em_scores(season = Date.current.year)
+    unscoped.select('*',
+      sanitize_sql_array(['(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND matches.season = %s) AS correct_pick_ems', season]),
+      sanitize_sql_array(['(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = %s) AS total_pick_ems', season]))
+  end
+
+  def self.rev_guess_scores(season = Date.current.year)
+    unscoped.select('*',
+      sanitize_sql_array(['(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = %s) AS rev_guesses_score', season]),
+      sanitize_sql_array(['(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = %s) AS rev_guesses_count', season]))
+  end
+
+  def self.scores(season = Date.current.year)
+    unscoped.select('*',
+      sanitize_sql_array(['(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct AND matches.season = %s) AS correct_pick_ems', season]),
+      sanitize_sql_array(['(SELECT COUNT(pick_ems.id) FROM pick_ems LEFT JOIN matches ON matches.id = pick_ems.match_id WHERE pick_ems.user_id = users.id AND pick_ems.correct IS NOT NULL AND matches.season = %s) AS total_pick_ems', season]),
+      sanitize_sql_array(['(SELECT SUM(rev_guesses.score) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = %s) AS rev_guesses_score', season]),
+      sanitize_sql_array(['(SELECT COUNT(rev_guesses.id) FROM rev_guesses LEFT JOIN matches ON matches.id = rev_guesses.match_id WHERE rev_guesses.user_id = users.id AND rev_guesses.score IS NOT NULL AND matches.season = %s) AS rev_guesses_count', season]))
   end
 
   # Outputs CSV
