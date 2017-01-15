@@ -1,5 +1,7 @@
 scss_files: 'app/assets/stylesheets/**/*.scss'
-exclude: 'vendor/assets/stylesheets/**'
+exclude:
+  - 'vendor/assets/stylesheets/**'
+  - 'doc/**/*.css'
 
 linters:
   BangFormat:
