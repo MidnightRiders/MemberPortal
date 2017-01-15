@@ -5,34 +5,34 @@ ruby '2.3.1'
 gem 'rails', '~> 4.2.7'
 
 # Use postgresql as the database for Active Record
-gem 'pg'
 gem 'hstore_accessor'
 gem 'order_query'
+gem 'pg'
 
-gem 'haml-rails'
-gem 'sass-rails'
-gem 'sass'
 gem 'autoprefixer-rails'
-gem 'uglifier'
 gem 'coffee-rails'
-gem 'jquery-rails'
-gem 'foundation-rails', '<6.0'
 gem 'font-awesome-sass'
+gem 'foundation-rails', '<6.0'
+gem 'haml-rails'
+gem 'jquery-rails'
+gem 'sass'
+gem 'sass-rails'
+gem 'uglifier'
 
-gem 'iconv'
-gem 'icalendar'
 gem 'draper'
+gem 'icalendar'
+gem 'iconv'
 
 gem 'date_time_attribute'
 
 gem 'will_paginate'
 
-gem 'paperclip', '~>4.3.0'
 gem 'aws-sdk', '~> 1.6'
+gem 'paperclip', '~>4.3.0'
 
 # Users/auth
-gem 'devise', '~>4.0.0'
 gem 'cancancan', '~>1.10.1'
+gem 'devise', '~>4.0.0'
 gem 'paper_trail'
 
 gem 'fuzzy_match', '~> 2.1'
@@ -52,27 +52,27 @@ end
 
 group :development, :test do
   # Testing
-  gem 'rspec-rails'
-  gem 'spring-commands-rspec'
-  gem 'factory_girl_rails'
-  gem 'pry-rails'
-  gem 'pry-nav'
+  gem 'active_record_query_trace'
   gem 'capybara'
+  gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'fivemat'
+  gem 'pry-nav'
+  gem 'pry-rails'
+  gem 'rspec-rails'
+  gem 'spring-commands-rspec'
   gem 'thin'
-  gem 'active_record_query_trace'
 end
 
 group :test do
-  gem 'capybara-webkit'
   gem 'capybara-screenshot'
+  gem 'capybara-webkit'
   gem 'database_cleaner'
   gem 'launchy'
   gem 'poltergeist'
 
-  gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', '~> 1.0.0', require: false
+  gem 'simplecov', require: false
 end
 
 # Use ActiveModel has_secure_password
