@@ -68,7 +68,7 @@ class Ability
         can :show, user.current_membership
         cannot :cancel_subscription, Membership
         can :cancel_subscription, user.current_membership if user.current_membership.is_subscription?
-      elsif user.has_family_invitation?
+      elsif user.invited_to_family?
         can :manage, user.family_invitation
         can :create, Membership, user_id: user.id
       else
