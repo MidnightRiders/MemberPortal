@@ -208,7 +208,7 @@ class Membership < ActiveRecord::Base
   end
 
   def notify_slack
-    SlackBot.post_message("New #{type} Membership for #{user.first_name} #{user.last_name} (<#{user_url(user)}|@#{user.username}>):\n*#{year} Total: #{for_year(year).count}* | #{Membership.breakdown(year)}", 'membership')
+    SlackBot.post_message("New #{type} Membership for #{user.first_name} #{user.last_name} (<#{url_helpers.user_url(user)}|@#{user.username}>):\n*#{year} Total: #{Membership.for_year(year).count}* | #{Membership.breakdown(year)}", 'membership')
   end
 
   def previous
