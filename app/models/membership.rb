@@ -18,6 +18,8 @@
 #
 
 class Membership < ActiveRecord::Base
+  delegate :url_helpers, to: 'Rails.application.routes'
+
   store_accessor :privileges
   TYPES = %w(Individual Family Relative).freeze
   COSTS = { Individual: '1061', Family: '2091' }.freeze
@@ -36,7 +38,8 @@ class Membership < ActiveRecord::Base
 
   default_scope -> { where(refunded: nil).order(year: :asc) }
   scope :refunds, -> { unscoped.where.not(refunded: nil).order(year: :asc) }
-  scope :current, -> { includes(:user).where(year: Date.current.year).where.not(users: { id: nil }) }
+  scope :current, ->(year = Date.current.year) { includes(:user).where(year: year, refunded: [nil, false]).where.not(user_id: nil) }
+  scope :for_year, ->(year = nil) { current(year) }
 
   before_validation :remove_blank_privileges
 
@@ -202,6 +205,19 @@ class Membership < ActiveRecord::Base
 
   def has_relatives?
     can_have_relatives? && relatives.present?
+  end
+
+  def notify_slack
+    SlackBot.post_message("New #{type} Membership for #{user.first_name} #{user.last_name} (<#{user_url(user)}|@#{user.username}>):\n*#{year} Total: #{for_year(year).count}* | #{Membership.breakdown(year)}", 'membership')
+  end
+
+  def previous
+    @previous ||= user.memberships.find_by(year: year)
+  end
+
+  def self.breakdown(season = Date.current.year)
+    breakdown = for_year(season).group(:year, :type).count
+    %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[[season, type]] || 0}" }.join(' | ')
   end
 
   private

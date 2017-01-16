@@ -34,7 +34,6 @@
         %th.small-4 Actions
   %tbody
     - user.memberships.reverse.each do |membership|
-      - membership = membership.decorate
       %tr{ class: ('highlight' if membership == user.current_membership)}
         %td
           %strong= membership.year
