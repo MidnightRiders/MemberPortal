@@ -51,7 +51,7 @@ class MembershipsController < ApplicationController
         if @membership.stripe_charge_id
           MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver_now
           MembershipMailer.new_membership_alert(@user, @membership).deliver_now
-          slack_notify_membership(@membership, @user)
+          slack_notify_membership(@membership)
           format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
         else
           format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
@@ -161,7 +161,7 @@ class MembershipsController < ApplicationController
             )
             if membership.save
               logger.info "#{Time.at(subscription.current_period_start).year} Membership created for #{user.first_name} #{user.last_name}"
-              slack_notify_membership(membership, user)
+              slack_notify_membership(membership)
               MembershipMailer.membership_subscription_confirmation_email(user, membership).deliver_now
             else
               logger.error "Error when saving membership: #{membership.errors.messages}"
