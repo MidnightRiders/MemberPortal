@@ -12,9 +12,7 @@ MidnightRiders::Application.routes.draw do
     end
     resources :mot_ms, path: 'motm', except: %i(index show)
     resources :rev_guesses, path: 'revguess', except: %i(index show)
-    resources :pick_ems, path: 'pickem', except: %i(new edit show create update) do
-      collection { post :vote }
-    end
+    post 'pick_ems/vote', to: 'pick_ems#vote', as: :pick_em_vote
   end
 
   resources :clubs

@@ -59,7 +59,7 @@ class MatchDecorator < Draper::Decorator
     else
       h.link_to(
         content,
-        h.vote_match_pick_ems_path(model),
+        h.match_pick_em_vote_path(model),
         data: {
           remote: true,
           method: :post,
