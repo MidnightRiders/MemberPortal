@@ -1,6 +1,9 @@
 MidnightRiders::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  Rails.application.routes.default_url_options[:host] = 'members.midnightriders.com'
+  Rails.application.routes.default_url_options[:protocol] = 'https'
+
   config.action_mailer.default_url_options = { host: 'members.midnightriders.com', protocol: 'https' }
   config.action_mailer.asset_host = 'https://members.midnightriders.com'
 
