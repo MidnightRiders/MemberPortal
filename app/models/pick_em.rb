@@ -35,6 +35,10 @@ class PickEm < ActiveRecord::Base
     incorrect?
   end
 
+  def result_key
+    RESULTS.key(result)
+  end
+
   # Returns *Integer*
   def self.score
     where(correct: true).size
