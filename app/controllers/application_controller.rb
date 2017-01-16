@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   end
 
   def slack_notify_membership(membership)
-    SlackBot.post_message("New #{membership.type} Membership!\n*#{membership.year} Total: #{count}* | #{breakdown}", '#general')
+    SlackBot.post_message("New #{membership.type} Membership!\n*#{membership.year} Total: #{Membership.for_year(membership.year).count}* | #{Membership.breakdown(membership.year)}", '#general')
     membership.notify_slack
   end
 end
