@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   before_action do
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"
-    params[resource] &&= send(method) if respond_to?(method, true)
+    params[resource] &&= __send__(method) if respond_to?(method, true)
   end
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -43,16 +43,8 @@ class ApplicationController < ActionController::Base
     @revs ||= Club.includes(:home_matches, :away_matches).find_by(abbrv: 'NE')
   end
 
-  def slack_notify_membership(membership, user, family = nil)
-    relevant_memberships = Membership.where(year: membership.year, refunded: [nil, false]).where.not(user_id: nil)
-    count = relevant_memberships.size
-    breakdown = relevant_memberships.group(:year, :type).count
-    breakdown = %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[[membership.year, type]] || 0}" }.join(' | ')
+  def slack_notify_membership(membership)
     SlackBot.post_message("New #{membership.type} Membership!\n*#{membership.year} Total: #{count}* | #{breakdown}", '#general')
-    if family.present?
-      SlackBot.post_message("#{user.first_name} #{user.last_name} (@#{user.username}) has accepted *#{family.user.first_name} #{family.user.last_name}’s Family Membership invitation*:\n#{user_url(user)}.\nThere are now *#{count} registered #{membership.year} Memberships.*\n#{breakdown}", 'membership')
-    else
-      SlackBot.post_message("New #{membership.type} Membership for #{user.first_name} #{user.last_name} (<#{user_url(user)}|@#{user.username}>):\n*#{membership.year} Total: #{count}* | #{breakdown}", 'membership')
-    end
+    membership.notify_slack
   end
 end
