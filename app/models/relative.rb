@@ -25,6 +25,10 @@ class Relative < Membership
     logger.info invalid.record.to_yaml
   end
 
+  def notify_slack
+    SlackBot.post_message("#{user.first_name} #{user.last_name} (<#{url_helpers.user_url(user)}|@#{user.username}>) has accepted *#{family.user.first_name} #{family.user.last_name}’s Family Membership invitation*:\nThere are now *#{Membership.for_year(year).size} registered #{year} Memberships.*\n#{Membership.breakdown(year)}", 'membership')
+  end
+
   private
 
   def strip_invited_email
@@ -38,9 +42,5 @@ class Relative < Membership
 
   def no_time_traveling
     errors.add(:year, 'is not the same year as family membership') if year != family.try(:year)
-  end
-
-  def notify_slack
-    SlackBot.post_message("#{user.first_name} #{user.last_name} (<#{user_url(user)}|@#{user.username}>) has accepted *#{family.user.first_name} #{family.user.last_name}’s Family Membership invitation*:\nThere are now *#{for_year(year).size} registered #{year} Memberships.*\n#{Membership.breakdown(year)}", 'membership')
   end
 end
