@@ -36,7 +36,7 @@ class MatchesController < ApplicationController
     redirect_to matches_path, success: "#{count} Matches were saved or updated."
   rescue => e
     logger.error "Error during Match import: #{e.message}"
-    logger.info e.backtrace&.join("\n")
+    logger.info e.backtrace&.to_yaml
     redirect_to matches_path, alert: e.message and return
   end
 

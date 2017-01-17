@@ -142,11 +142,76 @@ class User < ActiveRecord::Base
     username
   end
 
-  # Retrieve Stripe customer object
+  # Create Stripe customer
+  def create_stripe_customer(stripe_card_token: nil)
+    @customer = Stripe::Customer.create(stripe_customer_info.merge(card: stripe_card_token))
+    update_attribute(:stripe_customer_token, @customer.id)
+  end
+
+  # @return [Stripe::Customer, nil] Stripe customer associated with User
   def stripe_customer
-    Stripe::Customer.retrieve(stripe_customer_token) if stripe_customer_token
+    return unless stripe_customer_token
+    @customer ||= Stripe::Customer.retrieve(stripe_customer_token)
   rescue Stripe::InvalidRequestError => e
     logger.error "Stripe::InvalidRequestError: #{e}"
+  end
+
+  # @return [Hash] Standard and Meta information for Stripe
+  def stripe_customer_info
+    {
+      description: "#{first_name} #{last_name}",
+      email: email,
+      metadata: stripe_metadata
+    }
+  end
+
+  # @return [Hash] Extra information for Stripe
+  def stripe_metadata
+    {
+      first_name: first_name,
+      last_name: last_name,
+      address: "#{address}\n#{city}, #{state} #{postal_code}",
+      phone: phone
+    }
+  end
+
+  # @param [String] stripe_card_token
+  # @return [Stripe::Card]
+  def update_payment_method(stripe_card_token)
+    card = stripe_customer.sources.create(source: stripe_card_token)
+    stripe_customer.default_source = card.id
+    stripe_customer.save
+    stripe_customer.sources.data.select { |c| c != card }.each(&:delete)
+    card
+  end
+
+  # Syncs local data to data in Stripe.
+  # @return [Stripe::Customer]
+  def update_stripe_customer
+    stripe_customer_info.except(:metadata).each do |key, value|
+      stripe_customer.public_send("#{key}=", value)
+    end
+
+    stripe_customer.metadata = stripe_customer.metadata.to_h.merge(stripe_customer_info[:metadata])
+
+    stripe_customer.save
+  end
+
+  def subscribe_to_membership(membership, card_id = stripe_customer.default_source)
+    stripe_customer.subscriptions.create(
+      plan: membership.type.downcase,
+      trial_end: 1.year.from_now.beginning_of_year.to_i,
+      source: card_id
+    )
+  end
+
+  def create_or_update_stripe_customer(stripe_card_token = nil)
+    if stripe_customer.present?
+      update_payment_method(stripe_card_token).id if stripe_card_token
+      update_stripe_customer
+    else
+      create_stripe_customer(stripe_card_token: stripe_card_token)
+    end
   end
 
   def ability
@@ -176,7 +241,7 @@ class User < ActiveRecord::Base
         imported_users << user
       rescue => e
         Rails.logger.warn e.message
-        Rails.logger.info e.backtrace.join("\n")
+        Rails.logger.info e.backtrace.to_yaml
       end
     end
 

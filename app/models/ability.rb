@@ -42,7 +42,7 @@ class Ability
         can :nominate, :static_page
         can :show, user.current_membership
         cannot :cancel_subscription, Membership
-        can :cancel_subscription, user.current_membership if user.current_membership.is_subscription?
+        can :cancel_subscription, user.current_membership if user.current_membership.subscription?
       elsif user.invited_to_family?
         can :manage, user.family_invitation
         can :create, Membership, user_id: user.id
