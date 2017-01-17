@@ -94,7 +94,7 @@ class UsersController < ApplicationController
     redirect_to users_path, notice: "#{users.size} #{'user'.pluralize(users.size)} imported."
   rescue => e
     Rails.logger.warn e.message
-    Rails.logger.info e.backtrace.join("\n")
+    Rails.logger.info e.backtrace.to_yaml
     redirect_to users_path, alert: e.message
   end
 

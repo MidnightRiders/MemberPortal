@@ -32,8 +32,8 @@
           = errors_for(f.object, :type)
       .row
         .medium-8.columns.right
-          = f.check_box :subscription
-          = f.label :subscription, 'Sign up for automatic yearly renewal'
+          = f.check_box :subscribe
+          = f.label :subscribe, 'Sign up for automatic yearly renewal'
       
       - if can? :grant_privileges, Membership
         .row
