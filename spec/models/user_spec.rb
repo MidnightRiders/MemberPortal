@@ -188,5 +188,36 @@ describe User do
         expect { User.from_hash(hash) }.to change { user.reload.last_name }
       end
     end
+
+    describe 'to_csv' do
+      before(:each) {
+        User.create(
+          [
+            { username: 'quentin', password: 'password', first_name: 'Quentin', last_name: 'Coldwater', email: 'fillory.fan@gmail.com', address: %(123 Test Ln\nApt 412), city: 'Brooklyn', state: 'NY', postal_code: '11201' },
+            { username: 'alice', password: 'password', first_name: 'Alice', last_name: 'Quinn', email: 'niffin@yahoo.com', address: '12 Blah Ct', city: 'Brooklyn', state: 'NY', postal_code: '11202' },
+            { username: 'eliot', password: 'password', first_name: 'Eliot', last_name: 'Waugh', email: 'high.king@brakebills.com', address: '143b Fliff', city: 'Flatbush', state: 'NY', postal_code: '11203' }
+          ]
+        )
+      }
+
+      let(:csv) { User.all.to_csv }
+
+      it 'outputs headers' do
+        expect(csv.split("\n").first).to eq('Id,Last Name,First Name,Address,City,State,Postal Code,Phone,Email,Username,Member Since,Last Sign In At,Country,Current Member,Membership Type')
+      end
+
+      it 'outputs users' do
+        expect(csv).to include("Coldwater,Quentin,\"123 Test Ln\nApt 412\",Brooklyn,NY")
+        expect(csv).to include('Quinn,Alice,12 Blah Ct,Brooklyn,NY')
+        expect(csv).to include('Waugh,Eliot,143b Fliff,Flatbush,NY')
+      end
+
+      it 'only outputs selected users' do
+        brooklyn_csv = User.where(city: 'Brooklyn').to_csv
+        expect(brooklyn_csv).to include('Coldwater,Quentin')
+        expect(brooklyn_csv).to include('Quinn,Alice')
+        expect(brooklyn_csv).not_to include('Waugh,Eliot')
+      end
+    end
   end
 end
