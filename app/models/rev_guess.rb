@@ -21,12 +21,12 @@ class RevGuess < ActiveRecord::Base
 
   validates :user, :match, :home_goals, :away_goals, presence: true
   validates :match_id, uniqueness: { scope: :user_id, message: 'has already been voted on by this user.' }
-  validate :is_revs_match
+  validate :revs_match?
 
   # Returns *String*. Provides predicted score, if available.
   # Otherwise string is empty.
   def to_s
-    predicted_score || ''
+    predicted_score&.to_s
   end
 
   # Returns *String* or +nil+. Formatted 'Home – Away'.
@@ -36,19 +36,18 @@ class RevGuess < ActiveRecord::Base
 
   # Returns *Symbol* or +nil+: +:home+, +:away+, or +:draw+.
   def result
-    unless home_goals.nil? || away_goals.nil?
-      if home_goals > away_goals
-        :home
-      elsif away_goals > home_goals
-        :away
-      else
-        :draw
-      end
+    return if home_goals.nil? || away_goals.nil?
+    if home_goals > away_goals
+      :home
+    elsif away_goals > home_goals
+      :away
+    else
+      :draw
     end
   end
 
   # Validates that one of the teams is the Revs.
-  def is_revs_match
+  def revs_match?
     errors.add(:match_id, 'is not a Revolution match') unless match.teams.map(&:abbrv).include? 'NE'
   end
 

@@ -132,38 +132,6 @@ class Match < ActiveRecord::Base
     [home_team, away_team]
   end
 
-  # Returns +Match+. Retrieves match immediately after the given match.
-  # def next
-  #   Match.with_clubs.where('kickoff >= ?', kickoff).order('kickoff ASC, id ASC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id < id || x.kickoff > kickoff) }.first
-  # end
-  #
-  # # Returns +Match+. Retrieves match immediately before the given match.
-  # def previous
-  #   Match.with_clubs.where('kickoff <= ?', kickoff).order('kickoff DESC, id DESC').select{|x| [x.home_team_id,x.away_team_id] != [home_team_id,away_team_id] && (x.id > id || x.kickoff < kickoff) }.first
-  # end
-
-  # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
-  # Retrieves previous +n+ matches from <tt>Time.current</tt>.
-  def self.previous(n = 1)
-    ms = where('kickoff < ?', Time.current).order(kickoff: :desc)
-    if n == 1
-      ms.first
-    else
-      ms.first(n)
-    end
-  end
-
-  # If n is 1 (default), returns +Match+. Otherwise, returns *Array* of +Matches+.
-  # Retrieves next +n+ matches from <tt>Time.current</tt>.
-  def self.next(n = 1)
-    ms = upcoming.order(kickoff: :desc)
-    if n == 1
-      ms.first
-    else
-      ms.first(n)
-    end
-  end
-
   # Updates the picking games on save so that they don't have to pull in +Match+ data
   # any and every time they need to evaluate scores
   def update_games

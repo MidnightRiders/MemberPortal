@@ -21,15 +21,6 @@ class MotMsController < ApplicationController
     @mot_ms_for_yr = Player.mot_ms_for(yr_matches)
   end
 
-  # GET /mot_ms/1
-  # GET /mot_ms/1.json
-  # def show
-  #   respond_to do |format|
-  #     format.html { redirect_to matches_path }
-  #     format.json
-  #   end
-  # end
-
   # GET /mot_ms/new
   def new
     redirect_to edit_match_mot_m_url(@match, @mot_m) if @mot_m = @match.mot_ms.find_by(user_id: @current_user)

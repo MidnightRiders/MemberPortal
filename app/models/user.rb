@@ -74,6 +74,7 @@ class User < ActiveRecord::Base
     current_privileges.include? r
   end
 
+  # TODO: Move to Decorator
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
   def list_current_privileges(verbose = false, no_admin = false)
     ps = current_privileges.map(&:titleize)
@@ -87,7 +88,7 @@ class User < ActiveRecord::Base
     end
   end
 
-  # A test that comes up a lost
+  # A test that comes up a lot
   def leadership_or_admin?
     privilege?('admin') || privilege?('executive_board')
   end
@@ -127,6 +128,7 @@ class User < ActiveRecord::Base
     pick_for(match).try(:result)
   end
 
+  # TODO: Move to Decorator
   # Returns *String*. URL for Gravatar based on email.
   def gravatar
     'https://gravatar.com/avatar/' + Digest::MD5.hexdigest(email.downcase.sub(/\+.+@/, '@')) + '?d=mm'
@@ -170,15 +172,6 @@ class User < ActiveRecord::Base
     username
   end
 
-  # Quick semi-full-text search for Users.
-  def self.text_search(query)
-    if query.present?
-      where 'username ilike :q or first_name ilike :q or last_name ilike :q or email ilike :q', q: "%#{query}%"
-    else
-      all
-    end
-  end
-
   # Retrieve Stripe customer object
   def stripe_customer
     Stripe::Customer.retrieve(stripe_customer_token) if stripe_customer_token
@@ -188,6 +181,15 @@ class User < ActiveRecord::Base
 
   def ability
     @ability ||= Ability.new(self)
+  end
+
+  # Quick semi-full-text search for Users.
+  def self.text_search(query)
+    if query.present?
+      where 'username ilike :q or first_name ilike :q or last_name ilike :q or email ilike :q', q: "%#{query}%"
+    else
+      all
+    end
   end
 
   def self.import(users, privileges: [], override_id: nil)
