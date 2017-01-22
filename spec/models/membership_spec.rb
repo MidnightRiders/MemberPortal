@@ -5,9 +5,9 @@ describe Membership do
   let(:membership) { FactoryGirl.create(:membership) }
 
   describe 'scopes' do
-    skip 'refunds'
-    skip 'current'
-    skip 'for_year'
+    pending 'refunds'
+    pending 'current'
+    pending 'for_year'
   end
 
   # TODO: Specs. Membership being refactored; leaving alone here.

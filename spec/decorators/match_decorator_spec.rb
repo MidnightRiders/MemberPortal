@@ -5,27 +5,27 @@ describe MatchDecorator do
   before(:each) { sign_in FactoryGirl.create(:user) }
 
   describe 'rev_guess_button' do
-    skip
+    pending
   end
 
   describe 'mot_m_button' do
-    skip
+    pending
   end
 
   describe 'pick_em_buttons' do
-    skip
+    pending
   end
 
   describe 'pick_em_button' do
-    skip
+    pending
   end
 
   describe 'pick_em_sub' do
-    skip
+    pending
   end
 
   describe 'admin_controls' do
-    skip
+    pending
   end
 
 end

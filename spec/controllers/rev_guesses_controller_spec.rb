@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe RevGuessesController do
-  skip 'get #new'
-  skip 'post #create'
-  skip 'get #edit'
-  skip 'patch #update'
+  pending 'get #new'
+  pending 'post #create'
+  pending 'get #edit'
+  pending 'patch #update'
 end

@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe MembershipsController do
-  skip 'get #index'
-  skip 'get #show'
-  skip 'get #new'
-  skip 'get #edit'
-  skip 'post #create'
-  skip 'patch #update'
-  skip 'patch #cancel'
-  skip 'delete #destroy'
-  skip 'any #webhooks'
+  pending 'get #index'
+  pending 'get #show'
+  pending 'get #new'
+  pending 'get #edit'
+  pending 'post #create'
+  pending 'patch #update'
+  pending 'patch #cancel'
+  pending 'delete #destroy'
+  pending 'any #webhooks'
 end

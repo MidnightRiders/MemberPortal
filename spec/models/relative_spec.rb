@@ -13,11 +13,11 @@ describe Relative do
   end
 
   describe 'relatives' do
-    skip 'returns array with Family & other relatives but not self'
+    pending 'returns array with Family & other relatives but not self'
   end
 
   describe 're_up_for' do
-    skip 'creates new Relative for given year with same info'
+    pending 'creates new Relative for given year with same info'
   end
 
   describe 'notify_slack' do

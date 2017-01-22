@@ -3,7 +3,7 @@ require 'spec_helper'
 describe StaticPagesController do
   describe 'GET "home"' do
     context 'signed in' do
-      skip 'shows users/home'
+      pending 'shows users/home'
     end
 
     context 'signed out' do

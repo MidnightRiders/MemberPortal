@@ -1,6 +1,6 @@
 require 'spec_helper'
 
 describe 'Matches' do
-  skip 'get /matches'
-  skip 'get /matches/:id'
+  pending 'get /matches'
+  pending 'get /matches/:id'
 end
