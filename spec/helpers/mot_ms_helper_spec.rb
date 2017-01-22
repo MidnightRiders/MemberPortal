@@ -12,11 +12,11 @@ require 'spec_helper'
 # end
 describe MotMsHelper do
   describe 'mot_m_for' do
-    skip 'returns MotM'
+    pending 'returns MotM'
   end
 
   describe 'mot_m_path_for' do
     skip 'returns #new path if MotM doesn\'t exist'
-    skip 'returns #edit path if MotM exists'
+    pending 'returns #edit path if MotM exists'
   end
 end

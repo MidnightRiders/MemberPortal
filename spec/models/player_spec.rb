@@ -19,13 +19,13 @@ describe Player do
   end
 
   describe 'mot_m_total' do
-    skip 'returns total MotM votes for player'
-    skip 'returns total for previous year'
+    pending 'returns total MotM votes for player'
+    pending 'returns total for previous year'
   end
 
   describe 'class methods' do
     describe 'mot_ms_for' do
-      skip 'returns hash of players with MotM votes'
+      pending 'returns hash of players with MotM votes'
     end
   end
 end

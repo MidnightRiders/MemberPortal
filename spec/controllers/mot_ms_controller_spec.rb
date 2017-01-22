@@ -58,7 +58,7 @@ describe MotMsController do
         get :index
         expect(assigns(:mot_ms)).to eq Player.includes(:mot_m_firsts, :mot_m_seconds, :mot_m_thirds).select { |x| x.mot_m_total > 0 }
       end
-      skip 'ranks mot_ms properly'
+      pending 'ranks mot_ms properly'
     end
   end
 end

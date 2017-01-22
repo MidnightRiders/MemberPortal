@@ -10,19 +10,19 @@ describe RevGuess do
   end
 
   describe 'predicted_score' do
-    skip 'returns String with "# - #" style score if present'
-    skip 'returns nil if blank'
+    pending 'returns String with "# - #" style score if present'
+    pending 'returns nil if blank'
   end
 
   describe 'result' do
-    skip 'returns :home if home_team predicted to win'
-    skip 'returns :away if away_team predicted to win'
-    skip 'returns :draw if goals even'
-    skip 'returns nil if goals blank'
+    pending 'returns :home if home_team predicted to win'
+    pending 'returns :away if away_team predicted to win'
+    pending 'returns :draw if goals even'
+    pending 'returns nil if goals blank'
   end
 
   describe 'revs_match?' do
-    skip 'invalidates model if neither team is the Revs'
+    pending 'invalidates model if neither team is the Revs'
     skip 'does nothing if one team is the Revs'
   end
 
@@ -59,7 +59,7 @@ describe RevGuess do
 
   describe 'class methods' do
     describe 'score' do
-      skip
+      pending
     end
   end
 end

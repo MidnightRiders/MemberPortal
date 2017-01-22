@@ -5,65 +5,65 @@ describe Match do
   include RSpec::Matchers.clone
 
   describe 'score' do
-    skip 'returns # - # for completed games'
-    skip 'returns – for incomplete games'
+    pending 'returns # - # for completed games'
+    pending 'returns – for incomplete games'
   end
 
   describe 'complete?' do
-    skip 'returns whether scoring information has been filled in'
+    pending 'returns whether scoring information has been filled in'
   end
 
   describe 'result' do
-    skip 'returns :home for games where home team won'
-    skip 'returns :away for games where away team won'
-    skip 'returns :draw for games where neither team won'
-    skip 'returns nil if game not complete'
+    pending 'returns :home for games where home team won'
+    pending 'returns :away for games where away team won'
+    pending 'returns :draw for games where neither team won'
+    pending 'returns nil if game not complete'
   end
 
   describe 'winner' do
-    skip 'returns Club for home_team if home team won'
-    skip 'returns Club for away_team if away team won'
-    skip 'returns nil if not complete'
-    skip 'returns nil if draw'
+    pending 'returns Club for home_team if home team won'
+    pending 'returns Club for away_team if away team won'
+    pending 'returns nil if not complete'
+    pending 'returns nil if draw'
   end
 
   describe 'loser' do
-    skip 'returns Club for home_team if home team lost'
-    skip 'returns Club for away_team if away team lost'
-    skip 'returns nil if not complete'
-    skip 'returns nil if draw'
+    pending 'returns Club for home_team if home team lost'
+    pending 'returns Club for away_team if away team lost'
+    pending 'returns nil if not complete'
+    pending 'returns nil if draw'
   end
 
   describe 'voteable?' do
-    skip 'returns true if MotM voting may begin'
-    skip 'returns false if MotM voting may not begin'
+    pending 'returns true if MotM voting may begin'
+    pending 'returns false if MotM voting may not begin'
   end
 
   describe 'in_future?' do
-    skip 'returns whether the kickoff is in the future'
+    pending 'returns whether the kickoff is in the future'
   end
 
   describe 'in_past?' do
-    skip 'returns inverse of in_future?'
+    pending 'returns inverse of in_future?'
   end
 
   describe 'teams' do
-    skip 'returns an Array with [home_team, away_team]'
+    pending 'returns an Array with [home_team, away_team]'
   end
 
   describe 'update_games' do
-    skip 'updates counters for Games'
+    pending 'updates counters for Games'
   end
 
   describe 'check_for_season' do
-    skip 'sets season to kickoff year if season not present'
+    pending 'sets season to kickoff year if season not present'
   end
 
   describe 'scopes' do
-    skip 'all_seasons'
-    skip 'with_clubs'
-    skip 'completed'
-    skip 'upcoming'
+    pending 'all_seasons'
+    pending 'with_clubs'
+    pending 'completed'
+    pending 'upcoming'
   end
 
   describe 'class methods' do

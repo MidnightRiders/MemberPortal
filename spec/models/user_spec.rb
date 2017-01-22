@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe User do
   describe 'scopes' do
-    skip 'members'
-    skip 'non_members'
+    pending 'members'
+    pending 'non_members'
   end
 
   describe 'validation' do
@@ -98,23 +98,23 @@ describe User do
     end
   end
 
-  skip 'current_privileges'
-  skip 'privilege?'
-  skip 'list_current_privileges'
-  skip 'leadership_or_admin?'
-  skip 'current_membership'
-  skip 'current_family'
-  skip 'current_member?'
-  skip 'family_invitation'
-  skip 'invited_to_family?'
-  skip 'pick_for'
-  skip 'pick_result'
-  skip 'gravatar'
-  skip 'generate_username!'
-  skip 'grant_membership!'
-  skip 'phone='
-  skip 'to_param'
-  skip 'stripe_customer'
+  pending 'current_privileges'
+  pending 'privilege?'
+  pending 'list_current_privileges'
+  pending 'leadership_or_admin?'
+  pending 'current_membership'
+  pending 'current_family'
+  pending 'current_member?'
+  pending 'family_invitation'
+  pending 'invited_to_family?'
+  pending 'pick_for'
+  pending 'pick_result'
+  pending 'gravatar'
+  pending 'generate_username!'
+  pending 'grant_membership!'
+  pending 'phone='
+  pending 'to_param'
+  pending 'stripe_customer'
 
   describe 'class methods' do
     describe 'import' do
