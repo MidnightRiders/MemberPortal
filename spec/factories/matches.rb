@@ -1,21 +1,3 @@
-# == Schema Information
-#
-# Table name: matches
-#
-#  id           :integer          not null, primary key
-#  home_team_id :integer
-#  away_team_id :integer
-#  kickoff      :datetime
-#  location     :string(255)
-#  home_goals   :integer
-#  away_goals   :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#  uid          :string(255)
-#
-
-# Read about factories at https://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :match do
     home_team { Club.all.sample || FactoryGirl.create(:club) }
