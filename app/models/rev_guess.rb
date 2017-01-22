@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: rev_guesses
-#
-#  id         :integer          not null, primary key
-#  match_id   :integer
-#  user_id    :integer
-#  home_goals :integer
-#  away_goals :integer
-#  comment    :string(255)
-#  score      :integer
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 class RevGuess < ActiveRecord::Base
   belongs_to :match, -> { unscope(where: :season).all_seasons }
   belongs_to :user
