@@ -9,7 +9,7 @@ RSpec.describe RelativesController, type: :controller do
   end
 
   context 'with Individual membership' do
-    skip 'rejects #new with "Your account type does not permit relatives."'
+    pending 'rejects #new with "Your account type does not permit relatives."'
     pending 'rejects #create'
     pending 'rejects #destroy'
     pending 'rejects #accept_invitation'

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe ClubsController do
 
-  skip 'GET index' do
+  pending 'GET index' do
     it 'assigns all clubs as @clubs' do
       club = Club.create! valid_attributes
       get :index, {}, valid_session
@@ -10,7 +10,7 @@ describe ClubsController do
     end
   end
 
-  skip 'GET show' do
+  pending 'GET show' do
     it 'assigns the requested club as @club' do
       club = Club.create! valid_attributes
       get :show, { id: club.to_param }, valid_session
@@ -18,14 +18,14 @@ describe ClubsController do
     end
   end
 
-  skip 'GET new' do
+  pending 'GET new' do
     it 'assigns a new club as @club' do
       get :new, {}, valid_session
       expect(assigns(:club)).to be_a_new(Club)
     end
   end
 
-  skip 'GET edit' do
+  pending 'GET edit' do
     it 'assigns the requested club as @club' do
       club = Club.create! valid_attributes
       get :edit, { id: club.to_param }, valid_session
@@ -33,8 +33,8 @@ describe ClubsController do
     end
   end
 
-  skip 'POST create' do
-    skip 'with valid params' do
+  pending 'POST create' do
+    pending 'with valid params' do
       it 'creates a new Club' do
         expect {
           post :create, { club: valid_attributes }, valid_session
@@ -53,7 +53,7 @@ describe ClubsController do
       end
     end
 
-    skip 'with invalid params' do
+    pending 'with invalid params' do
       it 'assigns a newly created but unsaved club as @club' do
         # Trigger the behavior that occurs when invalid params are submitted
         Club.any_instance.stub(:save).and_return(false)
@@ -70,8 +70,8 @@ describe ClubsController do
     end
   end
 
-  skip 'PUT update' do
-    skip 'with valid params' do
+  pending 'PUT update' do
+    pending 'with valid params' do
       it 'updates the requested club' do
         club = Club.create! valid_attributes
         # Assuming there are no other clubs in the database, this
@@ -95,7 +95,7 @@ describe ClubsController do
       end
     end
 
-    skip 'with invalid params' do
+    pending 'with invalid params' do
       it 'assigns the club as @club' do
         club = Club.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
@@ -114,7 +114,7 @@ describe ClubsController do
     end
   end
 
-  skip 'DELETE destroy' do
+  pending 'DELETE destroy' do
     it 'destroys the requested club' do
       club = Club.create! valid_attributes
       expect {
