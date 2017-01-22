@@ -23,8 +23,8 @@ MidnightRiders::Application.routes.draw do
     collection do
       post :import
     end
-    resources :memberships, controller: 'memberships', type: 'Individual'
-    resources :memberships, controller: 'memberships', type: 'Family' do
+    resources :memberships, controller: 'memberships', type: 'Individual', only: %i(index show new create destroy)
+    resources :memberships, controller: 'memberships', type: 'Family', only: %i(index show new create destroy) do
       resources :relatives, type: 'Relative', only: %i(new create destroy) do
         member do
           post :accept_invitation, as: :accept_invitation_for

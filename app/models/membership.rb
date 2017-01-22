@@ -29,8 +29,9 @@ class Membership < ActiveRecord::Base
   validates :year, presence: true, inclusion: { in: (Date.current.year..Date.current.year + 1) }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
   validate :accepted_privileges
-  validate :stripe_info_is_unique?
-  validate :paid_for
+  validate :stripe_subscription_is_unique?
+  validate :stripe_charge_is_unique?
+  validate :paid_for?
 
   # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
   def list_privileges(verbose = false, no_admin = false)
@@ -55,45 +56,52 @@ class Membership < ActiveRecord::Base
   end
 
   def subscription?
-    info[:stripe_subscription_id].present?
+    stripe_subscription_id.present?
   end
 
   def cost
-    cost = COSTS[type.to_sym].to_f / 100
-    if override.present?
-      cost.floor
-    else
-      cost
-    end
+    cost = self.class.price.to_f / 100
+    override.present? ? cost.floor : cost
   end
 
   # Save with Stripe payment if applicable
   def save_with_payment(card_id = nil)
-    return if !valid? || overriding_admin || is_a?(Relative)
+    return unless ready_to_pay?
 
     user.create_or_update_stripe_customer(stripe_card_token)
 
-    self.stripe_subscription_id = user.subscribe_to(self).id if subscribe?
+    user.subscribe_to_membership(self) if subscribe?
+    make_stripe_charge(card_id)
 
+    save
+  end
+
+  def make_stripe_charge(card_id = nil)
     self.stripe_charge_id = Stripe::Charge.create(charge_information(card_id)).id
-    save!
   rescue Stripe::StripeError => e
     logger.error "Stripe error while saving membership with payment: #{e.message}"
-    errors.add :base, 'There was a problem with your credit card: ' + e.message
-    false
+    errors.add :base, "There was a problem with your credit card: #{e.message}"
   end
 
   def charge_information(card_id = nil)
     {
       customer: user.stripe_customer.id,
-      description: "Midnight Riders #{year} #{type.titleize} Membership",
+      description: stripe_description,
       metadata: stripe_metadata,
       receipt_email: user.email,
-      amount: COSTS[type.to_sym],
+      amount: self.class.price,
       currency: 'usd',
-      statement_descriptor: "MRiders #{year} #{type.to_s[0..2].titleize} Mem",
+      statement_descriptor: stripe_statement_descriptor,
       source: card_id || user.stripe_customer.default_source
     }
+  end
+
+  def stripe_description
+    "Midnight Riders #{year} #{type.titleize} Membership"
+  end
+
+  def stripe_statement_descriptor
+    "MRiders #{year} #{type.to_s[0..2].titleize} Mem"
   end
 
   def stripe_metadata
@@ -120,17 +128,10 @@ class Membership < ActiveRecord::Base
     self.stripe_subscription_id = nil
   end
 
-  # Refund payment if possible and destroy Membership
+  # Refund payment if possible
   def refund
-    if user.stripe_customer.present?
-      stripe_refund
-    elsif override
-      self.refunded = 'true'
-    else
-      logger.error 'There is no Stripe customer'
-      errors.add :base, 'No customer token was found on the membership.'
-    end
-    errors.add :base, 'No action was successfully taken' if refunded.nil?
+    stripe_refund if user.stripe_customer.present?
+    self.refunded ||= 'true'
     save
   rescue Stripe::StripeError => e
     logger.error "Stripe error while refunding customer: #{e.message}"
@@ -140,10 +141,14 @@ class Membership < ActiveRecord::Base
 
   def stripe_refund
     return unless stripe_charge_id
-    self.refunded = user.stripe_customer.charges.retrieve(stripe_charge_id).refunds.create.id
+    self.refunded = stripe_charge&.refunds&.create.id
   rescue => e
     logger.error "Stripe Refund error: #{e.message}"
     logger.info e.backtrace.to_yaml
+  end
+
+  def stripe_charge
+    user.stripe_customer.charges.retrieve(stripe_charge_id)
   end
 
   def info
@@ -169,7 +174,7 @@ class Membership < ActiveRecord::Base
   def subscribe
     @subscribe ||= false
   end
-  alias_method :subscribe?, :subscribe
+  alias subscribe? subscribe
 
   def subscribe=(value)
     @subscribe = value.to_i == 1
@@ -180,7 +185,15 @@ class Membership < ActiveRecord::Base
     %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[[season, type]] || 0}" }.join(' | ')
   end
 
+  def self.price
+    '1061'
+  end
+
   private
+
+  def ready_to_pay?
+    valid? && !overriding_admin && !is_a?(Relative)
+  end
 
   def remove_blank_privileges
     privileges.try(:reject!, &:blank?)
@@ -195,13 +208,19 @@ class Membership < ActiveRecord::Base
     errors.add(:privileges, 'cannot be changed in this way by this user') if privileges.changed? && ability.cannot?(:grant_privileges, Membership)
   end
 
-  def paid_for
+  def paid_for?
     return if is_a?(Relative)
-    errors.add(:base, 'must be paid for') unless info[:stripe_charge_id] || info[:stripe_subscription_id] || stripe_card_token || user.stripe_customer_token || overriding_admin
+    errors.add(:base, 'must be paid for') unless stripe_charge_id || # Charge gone through
+      stripe_card_token || # To keep model valid before charge
+      user.stripe_customer_token || # To keep model valid before charge
+      overriding_admin # Paid for in person; override recorded
   end
 
-  def stripe_info_is_unique?
-    errors.add(:info, 'contains a redundant Stripe Subscription ID') unless Membership.where.not(id: id).with_stripe_subscription_id(info[:stripe_subscription_id]).empty?
-    errors.add(:info, 'contains a redundant Stripe Charge ID') unless Membership.where.not(id: id).with_stripe_charge_id(info[:stripe_charge_id]).empty?
+  def stripe_subscription_is_unique?
+    errors.add(:info, 'contains a redundant Stripe Subscription ID') if Membership.where.not(id: id).with_stripe_subscription_id(stripe_subscription_id).present?
+  end
+
+  def stripe_charge_is_unique?
+    errors.add(:info, 'contains a redundant Stripe Charge ID') if Membership.where.not(id: id).with_stripe_charge_id(stripe_charge_id).present?
   end
 end

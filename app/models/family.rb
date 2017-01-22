@@ -3,6 +3,10 @@ class Family < Membership
 
   after_create :re_up_relatives
 
+  def self.price
+    '2091'
+  end
+
   private
 
   def re_up_relatives

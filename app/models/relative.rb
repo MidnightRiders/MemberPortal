@@ -29,6 +29,10 @@ class Relative < Membership
     SlackBot.post_message("#{user.first_name} #{user.last_name} (<#{url_helpers.user_url(user)}|@#{user.username}>) has accepted *#{family.user.first_name} #{family.user.last_name}’s Family Membership invitation*:\nThere are now *#{Membership.for_year(year).size} registered #{year} Memberships.*\n#{Membership.breakdown(year)}", 'membership')
   end
 
+  def self.price
+    nil
+  end
+
   private
 
   def strip_invited_email
