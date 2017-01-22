@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe PickEm do
-  skip 'does not allow multiples from a user on a match'
-  skip 'does not allow votes after kickoff'
+  pending 'does not allow multiples from a user on a match'
+  pending 'does not allow votes after kickoff'
 
   describe 'incorrect?' do
     pending 'returns true if correct is false'

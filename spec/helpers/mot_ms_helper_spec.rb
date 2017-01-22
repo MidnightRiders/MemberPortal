@@ -6,7 +6,7 @@ describe MotMsHelper do
   end
 
   describe 'mot_m_path_for' do
-    skip 'returns #new path if MotM doesn\'t exist'
+    pending 'returns #new path if MotM doesn\'t exist'
     pending 'returns #edit path if MotM exists'
   end
 end

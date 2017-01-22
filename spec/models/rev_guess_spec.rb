@@ -23,7 +23,7 @@ describe RevGuess do
 
   describe 'revs_match?' do
     pending 'invalidates model if neither team is the Revs'
-    skip 'does nothing if one team is the Revs'
+    pending 'does nothing if one team is the Revs'
   end
 
   describe 'guessing' do
