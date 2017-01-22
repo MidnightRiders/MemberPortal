@@ -11,7 +11,7 @@ MidnightRiders::Application.routes.draw do
       get :auto_update
     end
     resources :mot_ms, path: 'motm', except: %i(index show)
-    resources :rev_guesses, path: 'revguess', except: %i(index show)
+    resources :rev_guesses, path: 'revguess', except: %i(index show destroy)
     post 'pick_ems/vote', to: 'pick_ems#vote', as: :pick_em_vote
   end
 

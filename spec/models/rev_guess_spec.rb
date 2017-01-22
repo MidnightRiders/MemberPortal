@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: rev_guesses
-#
-#  id         :integer          not null, primary key
-#  match_id   :integer
-#  user_id    :integer
-#  home_goals :integer
-#  away_goals :integer
-#  comment    :string(255)
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 require 'spec_helper'
 
 describe RevGuess do
@@ -23,11 +9,29 @@ describe RevGuess do
     rev_guess.match.home_team = revs unless rev_guess.match.teams.include? revs
   end
 
+  describe 'predicted_score' do
+    pending 'returns String with "# - #" style score if present'
+    pending 'returns nil if blank'
+  end
+
+  describe 'result' do
+    pending 'returns :home if home_team predicted to win'
+    pending 'returns :away if away_team predicted to win'
+    pending 'returns :draw if goals even'
+    pending 'returns nil if goals blank'
+  end
+
+  describe 'revs_match?' do
+    pending 'invalidates model if neither team is the Revs'
+    pending 'does nothing if one team is the Revs'
+  end
+
   describe 'guessing' do
     it 'accepts valid guesses' do
       rev_guess.user = user
       expect(rev_guess).to be_valid
     end
+
     it 'does not allow multiples from a user on a match' do
       rev_guess.user = user
       rev_guess.save
@@ -36,10 +40,12 @@ describe RevGuess do
       rev_guess2.user = user
       expect(rev_guess2).to_not be_valid
     end
+
     it 'does not accept blank fields' do
       rev_guess.home_goals = nil
       expect(rev_guess).to_not be_valid
     end
+
     it 'does not allow guesses on non-Revs games' do
       if rev_guess.match.home_team == revs
         rev_guess.match.home_team = Club.find_by('abbrv NOT IN (?)', ['NE', rev_guess.match.away_team.abbrv])
@@ -48,6 +54,12 @@ describe RevGuess do
       end
       expect(rev_guess).to_not be_valid
       expect(rev_guess.errors).to include(:match_id)
+    end
+  end
+
+  describe 'class methods' do
+    describe 'score' do
+      pending
     end
   end
 end

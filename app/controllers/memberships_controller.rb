@@ -34,11 +34,6 @@ class MembershipsController < ApplicationController
     @membership = @user.memberships.new(year: @year, privileges: privileges)
   end
 
-  # GET /users/:user_id/memberships/1/invite
-  def invite_relative
-    # Nothing really goes here?
-  end
-
   # GET /users/:user_id/memberships/1/edit
   def edit
   end

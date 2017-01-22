@@ -12,6 +12,14 @@ describe Relative do
     end
   end
 
+  describe 'relatives' do
+    pending 'returns array with Family & other relatives but not self'
+  end
+
+  describe 're_up_for' do
+    pending 'creates new Relative for given year with same info'
+  end
+
   describe 'notify_slack' do
     let!(:admin) { FactoryGirl.create(:user, :admin) }
     let(:relative) { FactoryGirl.create(:membership, :relative).becomes(Relative) }

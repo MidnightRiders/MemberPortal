@@ -1,20 +1,16 @@
-# == Schema Information
-#
-# Table name: memberships
-#
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  year       :integer
-#  info       :hstore
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 require 'spec_helper'
 
 describe Membership do
   let!(:admin) { FactoryGirl.create(:user, :admin) }
   let(:membership) { FactoryGirl.create(:membership) }
+
+  describe 'scopes' do
+    pending 'refunds'
+    pending 'current'
+    pending 'for_year'
+  end
+
+  # TODO: Specs. Membership being refactored; leaving alone here.
 
   describe 'notify_slack' do
     it 'generates the proper message for SlackBot' do
