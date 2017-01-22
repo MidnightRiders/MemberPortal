@@ -42,16 +42,6 @@ class RevGuessesController < ApplicationController
     end
   end
 
-  # DELETE /rev_guesses/1
-  # DELETE /rev_guesses/1.json
-  def destroy
-    @rev_guess.destroy
-    respond_to do |format|
-      format.html { redirect_to rev_guesses_url }
-      format.json { head :no_content }
-    end
-  end
-
   private
 
   # Use callbacks to share common setup or constraints between actions.

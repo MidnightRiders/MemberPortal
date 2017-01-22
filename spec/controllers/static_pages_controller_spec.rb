@@ -1,11 +1,16 @@
 require 'spec_helper'
 
 describe StaticPagesController do
-
   describe 'GET "home"' do
-    it 'returns http success' do
-      get 'home'
-      expect(response).to redirect_to new_user_session_path
+    context 'signed in' do
+      skip 'shows users/home'
+    end
+
+    context 'signed out' do
+      it 'redirects to sign in' do
+        get 'home'
+        expect(response).to redirect_to new_user_session_path
+      end
     end
   end
 
@@ -31,6 +36,7 @@ describe StaticPagesController do
         expect(response).to be_success
       end
     end
+
     context 'signed out' do
       it 'should redirect' do
         get 'standings'
@@ -38,5 +44,4 @@ describe StaticPagesController do
       end
     end
   end
-
 end

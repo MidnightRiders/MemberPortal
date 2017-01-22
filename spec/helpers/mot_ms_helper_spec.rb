@@ -11,5 +11,12 @@ require 'spec_helper'
 #   end
 # end
 describe MotMsHelper do
-  skip "add some examples to (or delete) #{__FILE__}"
+  describe 'mot_m_for' do
+    skip 'returns MotM'
+  end
+
+  describe 'mot_m_path_for' do
+    skip 'returns #new path if MotM doesn\'t exist'
+    skip 'returns #edit path if MotM exists'
+  end
 end
