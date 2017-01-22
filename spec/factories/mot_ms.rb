@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: mot_ms
-#
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  match_id   :integer
-#  first_id   :integer
-#  second_id  :integer
-#  third_id   :integer
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 FactoryGirl.define do
   factory :mot_m do
     match_id { (Match.where(kickoff: Time.now - 2.weeks..Time.now - 2.hours).order(kickoff: :asc).last || FactoryGirl.create(:match, kickoff: Time.now - 2.hours)).id }
