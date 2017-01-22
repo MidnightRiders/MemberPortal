@@ -87,6 +87,7 @@ Style/MultilineMethodCallIndentation:
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
   Enabled: true
+  IndentationWidth: 0
 
 Style/PredicateName:
   # Predicate name prefixes.

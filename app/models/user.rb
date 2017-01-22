@@ -154,6 +154,7 @@ class User < ActiveRecord::Base
     @customer ||= Stripe::Customer.retrieve(stripe_customer_token)
   rescue Stripe::InvalidRequestError => e
     logger.error "Stripe::InvalidRequestError: #{e}"
+    nil
   end
 
   # @return [Hash] Standard and Meta information for Stripe
@@ -198,11 +199,12 @@ class User < ActiveRecord::Base
   end
 
   def subscribe_to_membership(membership, card_id = stripe_customer.default_source)
-    stripe_customer.subscriptions.create(
+    subscription = stripe_customer.subscriptions.create(
       plan: membership.type.downcase,
       trial_end: 1.year.from_now.beginning_of_year.to_i,
       source: card_id
     )
+    membership.stripe_subscription_id = subscription.id
   end
 
   def create_or_update_stripe_customer(stripe_card_token = nil)

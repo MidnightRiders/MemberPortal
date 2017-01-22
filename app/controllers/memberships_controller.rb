@@ -28,14 +28,8 @@ class MembershipsController < ApplicationController
   def new
     privileges = @user.memberships.last.try(:privileges)
     @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
-    if (customer = @user.stripe_customer).present?
-      @cards = customer.cards.data
-    end
+    @cards = @user.stripe_customer.cards.data if @user.stripe_customer.present?
     @membership = @user.memberships.new(year: @year, privileges: privileges)
-  end
-
-  # GET /users/:user_id/memberships/1/edit
-  def edit
   end
 
   # POST /users/:user_id/memberships
@@ -55,25 +49,9 @@ class MembershipsController < ApplicationController
       else
         format.html do
           @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
-          if (customer = @user.stripe_customer).present?
-            @cards = customer.cards.data
-          end
+          @cards = @user.stripe_customer.cards.data if @user.stripe_customer.present?
           render action: 'new'
         end
-        format.json { render json: @membership.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /users/:user_id/memberships/1
-  # PATCH/PUT /users/:user_id/memberships/1.json
-  def update
-    respond_to do |format|
-      if @membership.update(membership_params)
-        format.html { redirect_to get_user_path, notice: 'Membership was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
         format.json { render json: @membership.errors, status: :unprocessable_entity }
       end
     end
@@ -198,6 +176,8 @@ class MembershipsController < ApplicationController
   def get_user_path
     @user == current_user ? user_home_path : user_path(@user)
   end
+
+  #
 
   # Strong params for +Membership+
   def membership_params
