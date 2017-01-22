@@ -1,22 +1,3 @@
-# == Schema Information
-#
-# Table name: clubs
-#
-#  id                 :integer          not null, primary key
-#  name               :string(255)
-#  conference         :string(255)
-#  primary_color      :integer
-#  secondary_color    :integer
-#  accent_color       :integer
-#  abbrv              :string(255)
-#  created_at         :datetime
-#  updated_at         :datetime
-#  crest_file_name    :string(255)
-#  crest_content_type :string(255)
-#  crest_file_size    :integer
-#  crest_updated_at   :datetime
-#
-
 class Club < ActiveRecord::Base
 
   # Only two conferences right now. No need for database records, so

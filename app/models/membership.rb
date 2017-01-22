@@ -1,22 +1,5 @@
 # Model belonging to +User+ containing membership information for a given year.
 #
-# == Schema Information
-#
-# Table name: memberships
-#
-#  id         :integer          not null, primary key
-#  user_id    :integer
-#  year       :integer
-#  info       :hstore
-#  privileges :json
-#  type       :string
-#  refunded   :string
-#  created_at :datetime
-#  updated_at :datetime
-#  family_id  :integer
-#  refunded   :text
-#
-
 class Membership < ActiveRecord::Base
   delegate :url_helpers, to: 'Rails.application.routes'
 

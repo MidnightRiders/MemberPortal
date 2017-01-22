@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: pick_ems
-#
-#  id         :integer          not null, primary key
-#  match_id   :integer
-#  user_id    :integer
-#  result     :integer
-#  correct    :boolean
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 class PickEm < ActiveRecord::Base
   default_scope { includes(:match) }
 
