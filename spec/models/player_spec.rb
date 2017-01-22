@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: players
-#
-#  id         :integer          not null, primary key
-#  first_name :string(255)
-#  last_name  :string(255)
-#  club_id    :integer
-#  position   :string(255)
-#  created_at :datetime
-#  updated_at :datetime
-#  number     :integer
-#  active     :boolean          default(TRUE)
-#
-
 require 'spec_helper'
 
 describe Player do
@@ -30,6 +15,17 @@ describe Player do
     it 'validates proper record' do
       subject = FactoryGirl.build(:player)
       expect(subject).to be_valid
+    end
+  end
+
+  describe 'mot_m_total' do
+    skip 'returns total MotM votes for player'
+    skip 'returns total for previous year'
+  end
+
+  describe 'class methods' do
+    describe 'mot_ms_for' do
+      skip 'returns hash of players with MotM votes'
     end
   end
 end

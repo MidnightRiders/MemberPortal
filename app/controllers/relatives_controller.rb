@@ -2,18 +2,13 @@ class RelativesController < ApplicationController
   load_and_authorize_resource
   before_action :get_user_family
 
-  # GET /users/memberships/relatives/new
+  # GET /users/:username/memberships/:membership_id/relatives/new
   def new
     @relative = @family.relatives.new
     @relative_user = @relative.user = User.new
   end
 
-  # GET /users/memberships/relatives/1/edit
-  def edit
-    @relative_user = @relative.user
-  end
-
-  # POST /users/memberships/relatives
+  # POST /users/:username/memberships/:membership_id/relatives
   def create
     @relative_user = User.find_or_initialize_by(relative_params[:user_attributes])
 
@@ -36,22 +31,8 @@ class RelativesController < ApplicationController
     end
   end
 
-  # POST /users/:username/memberships/relatives/1/accept_invitation
-  def accept_invitation
-    if @relative.pending_approval
-      if (@relative_user = User.find_by(email: @relative.invited_email)).present? && @relative.update_attributes(user_id: @relative_user.id, info: @relative.info.with_indifferent_access.except(:pending_approval, :invited_email))
-        slack_notify_membership(@relative)
-        redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
-      else
-        redirect_to user_home_path, flash: { error: @relative.errors.to_sentence }
-      end
-    else
-      redirect_to user_home_path, flash: { error: 'This membership is not eligible to accept a family membership.' }
-    end
-  end
-
-  # DELETE /users/memberships/relatives/1
-  # DELETE /users/memberships/relatives/1.json
+  # DELETE /users/:username/memberships/:membership_id/relatives/1
+  # DELETE /users/:username/memberships/:membership_id/relatives/1.json
   def destroy
     @relative_user = @relative.user
     name = @relative_user.present? ? "#{@relative_user.first_name} #{@relative_user.last_name}" : @relative.invited_email
@@ -69,6 +50,20 @@ class RelativesController < ApplicationController
         end
       end
       format.json { head :no_content }
+    end
+  end
+
+  # POST /users/:username/memberships/:membership_id/relatives//accept_invitation
+  def accept_invitation
+    if @relative.pending_approval
+      if (@relative_user = User.find_by(email: @relative.invited_email)).present? && @relative.update_attributes(user_id: @relative_user.id, info: @relative.info.with_indifferent_access.except(:pending_approval, :invited_email))
+        slack_notify_membership(@relative)
+        redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
+      else
+        redirect_to user_home_path, flash: { error: @relative.errors.to_sentence }
+      end
+    else
+      redirect_to user_home_path, flash: { error: 'This membership is not eligible to accept a family membership.' }
     end
   end
 

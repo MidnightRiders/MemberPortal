@@ -1,34 +1,28 @@
-# == Schema Information
-#
-# Table name: users
-#
-#  id                     :integer          not null, primary key
-#  last_name              :string(255)
-#  first_name             :string(255)
-#  address                :string(255)
-#  city                   :string(255)
-#  state                  :string(255)
-#  postal_code            :string(255)
-#  phone                  :integer
-#  email                  :string(255)      default(""), not null
-#  username               :string(255)      default(""), not null
-#  member_since           :integer
-#  created_at             :datetime
-#  updated_at             :datetime
-#  encrypted_password     :string(255)      default(""), not null
-#  reset_password_token   :string(255)
-#  reset_password_sent_at :datetime
-#  remember_created_at    :datetime
-#  sign_in_count          :integer          default(0), not null
-#  current_sign_in_at     :datetime
-#  last_sign_in_at        :datetime
-#  current_sign_in_ip     :string(255)
-#  last_sign_in_ip        :string(255)
-#
-
 require 'spec_helper'
 
 describe User do
+  describe 'scopes' do
+    skip 'members'
+    skip 'non_members'
+  end
+
+  describe 'validation' do
+    subject(:user) { User.new }
+    it 'should not be valid with missing fields' do
+      expect(subject).to_not be_valid
+      expect(subject.errors).to include(:first_name, :last_name, :username, :password)
+    end
+    it 'should not accept an invalid member_since year' do
+      user = FactoryGirl.build(:user)
+      user.member_since = 1990
+      expect(user).to_not be_valid
+      user.member_since = Date.current.year + 1
+      expect(user).to_not be_valid
+      user.member_since = Date.current.year
+      expect(user).to be_valid
+    end
+  end
+
   describe 'abilities' do
     subject(:ability) { Ability.new(user) }
     let(:user) { nil }
@@ -78,28 +72,6 @@ describe User do
     end
   end
 
-  describe 'scopes' do
-    skip 'members'
-    skip 'non_members'
-  end
-
-  describe 'validation' do
-    subject(:user) { User.new }
-    it 'should not be valid with missing fields' do
-      expect(subject).to_not be_valid
-      expect(subject.errors).to include(:first_name, :last_name, :username, :password)
-    end
-    it 'should not accept an invalid member_since year' do
-      user = FactoryGirl.build(:user)
-      user.member_since = 1990
-      expect(user).to_not be_valid
-      user.member_since = Date.current.year + 1
-      expect(user).to_not be_valid
-      user.member_since = Date.current.year
-      expect(user).to be_valid
-    end
-  end
-
   describe 'generate_temporary_password!' do
     context 'new user' do
       let(:user) { FactoryGirl.build(:user).tap { |u| u.password = nil } }
@@ -125,6 +97,24 @@ describe User do
       end
     end
   end
+
+  skip 'current_privileges'
+  skip 'privilege?'
+  skip 'list_current_privileges'
+  skip 'leadership_or_admin?'
+  skip 'current_membership'
+  skip 'current_family'
+  skip 'current_member?'
+  skip 'family_invitation'
+  skip 'invited_to_family?'
+  skip 'pick_for'
+  skip 'pick_result'
+  skip 'gravatar'
+  skip 'generate_username!'
+  skip 'grant_membership!'
+  skip 'phone='
+  skip 'to_param'
+  skip 'stripe_customer'
 
   describe 'class methods' do
     describe 'import' do

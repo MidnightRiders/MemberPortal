@@ -11,5 +11,12 @@ require 'spec_helper'
 #   end
 # end
 describe RevGuessesHelper do
-  skip "add some examples to (or delete) #{__FILE__}"
+  describe 'rev_guess_for' do
+    skip 'returns RevGuess for given match'
+  end
+
+  describe 'rev_guess_path_for' do
+    skip 'returns #new path if no record exists'
+    skip 'returns #edit path if record exists'
+  end
 end

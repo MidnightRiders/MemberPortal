@@ -1,8 +1,10 @@
+require 'net/http'
+require 'nokogiri'
+
 # Controller for +Match+ model.
 class MatchesController < ApplicationController
-  load_and_authorize_resource
-  require 'net/http'
-  require 'nokogiri'
+  authorize_resource
+  before_action :set_match, only: %i(show edit update destroy)
 
   # GET /matches
   # GET /matches.json
@@ -165,7 +167,7 @@ class MatchesController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_match
-    @match = Match.with_clubs.find(params[:id])
+    @match = Match.all_seasons.with_clubs.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
