@@ -1,4 +1,6 @@
 require 'spec_helper'
+require 'support/shared_examples/purchasable'
+require 'support/shared_examples/subscribable'
 
 describe Membership do
   let!(:admin) { FactoryGirl.create(:user, :admin) }
@@ -10,7 +12,8 @@ describe Membership do
     pending 'for_year'
   end
 
-  # TODO: Specs. Membership being refactored; leaving alone here.
+  it_behaves_like 'Commerce::Purchasable'
+  it_behaves_like 'Commerce::Subscribable'
 
   describe 'notify_slack' do
     it 'generates the proper message for SlackBot' do

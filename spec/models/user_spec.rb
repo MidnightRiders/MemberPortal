@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'support/shared_examples/purchaser'
 
 describe User do
   describe 'scopes' do
@@ -98,9 +99,11 @@ describe User do
     end
   end
 
+
+  it_behaves_like 'Commerce::Purchaser'
+
   pending 'current_privileges'
   pending 'privilege?'
-  pending 'list_current_privileges'
   pending 'leadership_or_admin?'
   pending 'current_membership'
   pending 'current_family'
@@ -114,7 +117,6 @@ describe User do
   pending 'grant_membership!'
   pending 'phone='
   pending 'to_param'
-  pending 'stripe_customer'
 
   describe 'class methods' do
     describe 'import' do

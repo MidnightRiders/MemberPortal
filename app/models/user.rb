@@ -1,4 +1,6 @@
 class User < ActiveRecord::Base
+  include Commerce::Purchaser
+
   IMPORTABLE_ATTRIBUTES = %w(last_name first_name last_name address city state postal_code phone email member_since username).freeze
   CSV_ATTRIBUTES = %w(id last_name first_name address city state postal_code phone email username member_since last_sign_in_at country).freeze
 
@@ -6,7 +8,9 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable
   delegate :can?, :cannot?, to: :ability
 
-  default_scope { includes(:memberships) }
+  default_scope do
+    includes(:memberships)
+  end
 
   # Get all current members, or members for specified year
   scope :members, lambda { |year = (Date.current.year..Date.current.year + 1)|
@@ -44,20 +48,6 @@ class User < ActiveRecord::Base
     current_privileges.include? r
   end
 
-  # TODO: Move to Decorator
-  # Returns *String*. Lists all privileges, comma-separated or in plain english if +verbose+ is true.
-  def list_current_privileges(verbose = false, no_admin = false)
-    ps = current_privileges.map(&:titleize)
-    ps = ps.reject { |v| v == 'admin' } if no_admin
-    if ps.empty?
-      'None'
-    elsif verbose
-      ps.to_sentence
-    else
-      ps.join(', ')
-    end
-  end
-
   # A test that comes up a lot
   def leadership_or_admin?
     privilege?('admin') || privilege?('executive_board')
@@ -80,7 +70,7 @@ class User < ActiveRecord::Base
 
   # Returns +Relative+ +Membership+ if invited to join +Family+
   def family_invitation
-    Membership.with_invited_email(email).first
+    Relative.with_invited_email(email).first
   end
 
   # Returns *Boolean* based on +family_invitation+
@@ -142,21 +132,6 @@ class User < ActiveRecord::Base
     username
   end
 
-  # Create Stripe customer
-  def create_stripe_customer(stripe_card_token: nil)
-    @customer = Stripe::Customer.create(stripe_customer_info.merge(card: stripe_card_token))
-    update_attribute(:stripe_customer_token, @customer.id)
-  end
-
-  # @return [Stripe::Customer, nil] Stripe customer associated with User
-  def stripe_customer
-    return unless stripe_customer_token
-    @customer ||= Stripe::Customer.retrieve(stripe_customer_token)
-  rescue Stripe::InvalidRequestError => e
-    logger.error "Stripe::InvalidRequestError: #{e}"
-    nil
-  end
-
   # @return [Hash] Standard and Meta information for Stripe
   def stripe_customer_info
     {
@@ -176,46 +151,6 @@ class User < ActiveRecord::Base
     }
   end
 
-  # @param [String] stripe_card_token
-  # @return [Stripe::Card]
-  def update_payment_method(stripe_card_token)
-    card = stripe_customer.sources.create(source: stripe_card_token)
-    stripe_customer.default_source = card.id
-    stripe_customer.save
-    stripe_customer.sources.data.select { |c| c != card }.each(&:delete)
-    card
-  end
-
-  # Syncs local data to data in Stripe.
-  # @return [Stripe::Customer]
-  def update_stripe_customer
-    stripe_customer_info.except(:metadata).each do |key, value|
-      stripe_customer.public_send("#{key}=", value)
-    end
-
-    stripe_customer.metadata = stripe_customer.metadata.to_h.merge(stripe_customer_info[:metadata])
-
-    stripe_customer.save
-  end
-
-  def subscribe_to_membership(membership, card_id = stripe_customer.default_source)
-    subscription = stripe_customer.subscriptions.create(
-      plan: membership.type.downcase,
-      trial_end: 1.year.from_now.beginning_of_year.to_i,
-      source: card_id
-    )
-    membership.stripe_subscription_id = subscription.id
-  end
-
-  def create_or_update_stripe_customer(stripe_card_token = nil)
-    if stripe_customer.present?
-      update_payment_method(stripe_card_token).id if stripe_card_token
-      update_stripe_customer
-    else
-      create_stripe_customer(stripe_card_token: stripe_card_token)
-    end
-  end
-
   def ability
     @ability ||= Ability.new(self)
   end
@@ -230,10 +165,9 @@ class User < ActiveRecord::Base
   end
 
   def self.import(users, privileges: [], override_id: nil)
-    imported_users = []
     family_id = nil
 
-    users.each do |user_info|
+    users.each.with_object([]) do |user_info, imported_users|
       begin
         type = user_info[:membership_type]
         raise 'No Family for Relative' if family_id.nil? && type == 'Relative'
@@ -246,8 +180,6 @@ class User < ActiveRecord::Base
         Rails.logger.info e.backtrace.to_yaml
       end
     end
-
-    imported_users
   end
 
   # Import single user from hash
