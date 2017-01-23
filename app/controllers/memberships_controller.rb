@@ -105,7 +105,7 @@ class MembershipsController < ApplicationController
 
       if user
         if object[:object] == 'charge'
-          membership = Membership.with_stripe_charge_id(object[:id]).first
+          membership = Membership.find_by(stripe_charge_id: object[:id])
           # charge.succeeded is handled immediately - no webhook
           if membership.present?
             if event[:type] == 'charge.refunded'
@@ -127,10 +127,8 @@ class MembershipsController < ApplicationController
             membership = user.memberships.new(
               year: year,
               type: subscription.plan.id.titleize,
-              info: {
-                stripe_subscription_id: subscription.id,
-                stripe_charge_id: object[:charge]
-              }
+              stripe_subscription_id: subscription.id,
+              stripe_charge_id: object[:charge]
             )
             if membership.save
               logger.info "#{Time.at(subscription.current_period_start).year} Membership created for #{user.first_name} #{user.last_name}"

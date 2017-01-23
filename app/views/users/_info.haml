@@ -33,7 +33,7 @@
       - if can? :show, user.current_membership
         %th.small-4 Actions
   %tbody
-    - user.memberships.reverse.each do |membership|
+    - user.memberships.decorate.reverse.each do |membership|
       %tr{ class: ('highlight' if membership == user.current_membership)}
         %td
           %strong= membership.year
@@ -107,4 +107,4 @@
       .medium-4.large-2.columns
         %label Privileges:
       .medium-8.large-10.columns
-        %p= user.list_current_privileges
+        %p= user.current_membership&.decorate&.list_privileges
