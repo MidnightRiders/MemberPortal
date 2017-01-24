@@ -3,7 +3,7 @@ module Commerce
     extend ActiveSupport::Concern
 
     included do
-      validates :stripe_charge_id, uniqueness: true, allow_nil: true
+      validates :stripe_subscription_id, uniqueness: { scope: :year }, allow_nil: true
     end
 
     # Cancel current subscription

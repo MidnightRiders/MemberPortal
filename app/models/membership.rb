@@ -105,12 +105,12 @@ class Membership < ActiveRecord::Base
   private
 
   def paid_for?
-    return true if is_a?(Relative)
+    return true if is_a?(Relative) || overriding_admin.present?
     super
   end
 
   def ready_to_pay?
-    super && !overriding_admin
+    !is_a?(Relative) && !overriding_admin && super
   end
 
   def remove_blank_privileges
