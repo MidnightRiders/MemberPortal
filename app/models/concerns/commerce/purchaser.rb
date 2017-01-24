@@ -17,6 +17,11 @@ module Commerce
       end
     end
 
+    def refund(purchase)
+      return unless purchase.stripe_charge_id.present?
+      stripe_customer.charges.retrieve(purchase.stripe_charge_id).refunds.create
+    end
+
     # @return [Stripe::Customer, nil] Stripe customer associated with User
     def stripe_customer
       return unless stripe_customer_token
@@ -24,6 +29,14 @@ module Commerce
     rescue Stripe::InvalidRequestError => e
       logger.error "Stripe::InvalidRequestError: #{e}"
       nil
+    end
+
+    def stripe_customer_info
+      {}
+    end
+
+    def stripe_metadata
+      {}
     end
 
     def subscribe_to(product, card_id = stripe_customer.default_source)
@@ -55,14 +68,6 @@ module Commerce
       stripe_customer.metadata = stripe_customer.metadata.to_h.merge(stripe_customer_info[:metadata])
 
       stripe_customer.save
-    end
-
-    def stripe_customer_info
-      {}
-    end
-
-    def stripe_metadata
-      {}
     end
   end
 end
