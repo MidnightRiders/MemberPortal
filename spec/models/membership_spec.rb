@@ -15,7 +15,10 @@ describe Membership do
   it_behaves_like 'Commerce::Purchasable' do
     let(:product) { FactoryGirl.create(:membership).tap { |m| m.update_attribute(:info, {}) } }
   end
-  it_behaves_like 'Commerce::Subscribable'
+
+  it_behaves_like 'Commerce::Subscribable' do
+    let(:product) { FactoryGirl.create(:membership).tap { |m| m.update_attribute(:info, {}) } }
+  end
 
   describe 'notify_slack' do
     it 'generates the proper message for SlackBot' do
