@@ -99,7 +99,6 @@ describe User do
     end
   end
 
-
   it_behaves_like 'Commerce::Purchaser'
 
   pending 'current_privileges'

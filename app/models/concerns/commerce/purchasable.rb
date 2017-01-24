@@ -39,7 +39,7 @@ module Commerce
 
       purchaser.create_or_update_stripe_customer(stripe_card_token)
 
-      purchaser.subscribe_to(self) if self.class.include?(::Subscribable) && subscribe?
+      purchaser.subscribe_to(self) if self.class.include?(Subscribable) && subscribe?
       make_stripe_charge(card_id)
 
       save
@@ -59,25 +59,12 @@ module Commerce
 
     # Refund payment if possible
     def refund
-      stripe_refund if purchaser.stripe_customer.present?
-      self.refunded ||= 'true'
+      self.refunded = purchaser&.refund(self).try(:id) || 'true'
       save
     rescue Stripe::StripeError => e
       logger.error "Stripe error while refunding customer: #{e.message}"
       errors.add :base, 'There was a problem refunding the transaction.'
       false
-    end
-
-    def stripe_refund
-      return unless stripe_charge_id.present?
-      self.refunded = stripe_charge&.refunds&.create.id
-    rescue => e
-      logger.error "Stripe Refund error: #{e.message}"
-      logger.info e.backtrace.to_yaml
-    end
-
-    def stripe_charge
-      purchaser.stripe_customer.charges.retrieve(stripe_charge_id)
     end
 
     private
