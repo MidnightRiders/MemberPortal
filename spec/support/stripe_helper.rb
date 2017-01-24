@@ -20,6 +20,10 @@ class StripeHelper
       're_' + chars
     end
 
+    def subscription_id
+      'sub_' + chars(23)
+    end
+
     def chars(n = 24)
       FFaker::Lorem.characters(n)
     end
