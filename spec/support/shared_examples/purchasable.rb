@@ -1,6 +1,8 @@
+require 'support/stripe_helper'
+
 shared_examples_for 'Commerce::Purchasable' do
   it 'validates unique stripe charge' do
-    product.update_attributes(stripe_charge_id: 'ch_' + FFaker::Lorem.characters(24))
+    product.update_attributes(stripe_charge_id: StripeHelper.charge_id)
     new_product = product.dup
 
     expect(new_product).not_to be_valid
@@ -13,22 +15,22 @@ shared_examples_for 'Commerce::Purchasable' do
     end
 
     it 'does not add an error if stripe_card_token is present' do
-      product.stripe_card_token = 'tok_' + FFaker::Lorem.characters(24)
+      product.stripe_card_token = StripeHelper.card_token
 
       expect { product.__send__(:paid_for?) }.not_to change { product.errors.messages }
     end
 
     it 'does not add an error if purchaser\'s stripe_customer_token is present' do
-      product.purchaser.update_attribute(:stripe_customer_token, 'cus_' + FFaker::Lorem.characters(24))
+      product.purchaser.update_attribute(:stripe_customer_token, StripeHelper.customer_token)
 
       expect { product.__send__(:paid_for?) }.not_to change { product.errors.messages }
     end
   end
 
   describe 'charge_information' do
-    let(:default_source) { 'ca_' + FFaker::Lorem.characters(24) }
+    let(:default_source) { StripeHelper.card_id }
     before(:each) do
-      product.user.update_attribute(:stripe_customer_token, 'cus_' + FFaker::Lorem.characters(24))
+      product.user.update_attribute(:stripe_customer_token, StripeHelper.customer_token)
       stripe_customer = double('Stripe::Customer', default_source: default_source, id: product.user.stripe_customer_token)
       allow(Stripe::Customer).to receive(:retrieve).and_return(stripe_customer)
     end
@@ -42,7 +44,7 @@ shared_examples_for 'Commerce::Purchasable' do
     end
 
     it 'returns the card token as source when it is passed' do
-      card_token = 'tok_' + FFaker::Lorem.characters(24)
+      card_token = StripeHelper.card_token
 
       expect(product.charge_information(card_token)[:source]).to eq card_token
     end
@@ -50,7 +52,7 @@ shared_examples_for 'Commerce::Purchasable' do
 
   describe 'make_stripe_charge' do
     it 'sets stripe_charge_id' do
-      charge_id = 'cha_' + FFaker::Lorem.characters(24)
+      charge_id = StripeHelper.charge_id
       allow(product).to receive(:charge_information).and_return({})
       allow(Stripe::Charge).to receive(:create).and_return(double('Stripe::Charge', id: charge_id))
 
@@ -58,11 +60,11 @@ shared_examples_for 'Commerce::Purchasable' do
     end
 
     it 'passes the card_id to Stripe::Charge if present' do
-      product.user.update_attribute(:stripe_customer_token, 'cus_' + FFaker::Lorem.characters(24))
+      product.user.update_attribute(:stripe_customer_token, StripeHelper.customer_token)
       stripe_customer = double('Stripe::Customer', id: product.user.stripe_customer_token)
       allow(Stripe::Customer).to receive(:retrieve).and_return(stripe_customer)
 
-      card_id = 'ca_' + FFaker::Lorem.characters(24)
+      card_id = StripeHelper.card_id
 
       expect(Stripe::Charge).to receive(:create).with(hash_including(source: card_id)).and_return(double('Stripe::Charge', id: ''))
 
@@ -78,11 +80,11 @@ shared_examples_for 'Commerce::Purchasable' do
   end
 
   describe 'save_with_payment' do
-    let(:stripe_card_token) { 'ca_' + FFaker::Lorem.characters(24) }
+    let(:stripe_card_token) { StripeHelper.card_token }
 
     before(:each) do
-      default_source = 'ca_' + FFaker::Lorem.characters(24)
-      product.user.update_attribute(:stripe_customer_token, 'cus_' + FFaker::Lorem.characters(24))
+      default_source = StripeHelper.card_id
+      product.user.update_attribute(:stripe_customer_token, StripeHelper.customer_token)
       stripe_customer = double('Stripe::Customer', default_source: default_source, id: product.user.stripe_customer_token)
       allow(Stripe::Customer).to receive(:retrieve).and_return(stripe_customer)
     end
@@ -112,7 +114,7 @@ shared_examples_for 'Commerce::Purchasable' do
 
     it 'makes stripe charge with card_id if passed' do
       product.stripe_card_token = stripe_card_token
-      card_id = 'ca_' + FFaker::Lorem.characters(24)
+      card_id = StripeHelper.card_id
 
       expect(product).to receive(:make_stripe_charge).with(card_id)
 
@@ -127,15 +129,15 @@ shared_examples_for 'Commerce::Purchasable' do
     end
 
     it 'saves the Stripe::Refund id to the refund attribute' do
-      product.update_attribute(:stripe_charge_id, 'cha_' + FFaker::Lorem.characters(24))
-      refund_id = 're_' + FFaker::Lorem.characters(24)
+      product.update_attribute(:stripe_charge_id, StripeHelper.charge_id)
+      refund_id = StripeHelper.refund_id
       allow(product.purchaser).to receive_message_chain('stripe_customer.charges.retrieve.refunds.create').and_return(double('Stripe::Refund', id: refund_id))
 
       expect { product.refund }.to change { product.refunded }.to refund_id
     end
 
     it 'adds an error to :base if there is a Stripe Error' do
-      product.update_attribute(:stripe_charge_id, 'cha_' + FFaker::Lorem.characters(24))
+      product.update_attribute(:stripe_charge_id, StripeHelper.charge_id)
       error_message = 'The expiration date on your card is not valid'
       allow(product.purchaser).to receive_message_chain('stripe_customer.charges.retrieve.refunds.create').and_raise(Stripe::StripeError.new(error_message))
 
