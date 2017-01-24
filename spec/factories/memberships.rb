@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :membership do
     user { FactoryGirl.build(:user) }
     year { Date.current.year }
-    info { { override: Membership.where("privileges::jsonb ? 'admin' AND year = :year", year: Date.current.year).first.user.id } }
+    info { { override: User.find_by(username: 'admin').id } }
     type :Individual
 
     trait :family do

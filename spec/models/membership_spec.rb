@@ -12,7 +12,9 @@ describe Membership do
     pending 'for_year'
   end
 
-  it_behaves_like 'Commerce::Purchasable'
+  it_behaves_like 'Commerce::Purchasable' do
+    let(:product) { FactoryGirl.create(:membership).tap { |m| m.update_attribute(:info, {}) } }
+  end
   it_behaves_like 'Commerce::Subscribable'
 
   describe 'notify_slack' do

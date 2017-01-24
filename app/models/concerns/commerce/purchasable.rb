@@ -83,14 +83,13 @@ module Commerce
     private
 
     def ready_to_pay?
-      valid? && !is_a?(Relative)
+      valid?
     end
 
     def paid_for?
       errors.add(:base, 'must be paid for') unless stripe_charge_id || # Charge gone through
         stripe_card_token || # To keep model valid before charge
-        purchaser.stripe_customer_token || # To keep model valid before charge
-        overriding_admin # Paid for in person; override recorded
+        purchaser.stripe_customer_token # To keep model valid before charge
     end
   end
 end
