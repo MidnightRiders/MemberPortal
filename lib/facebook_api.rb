@@ -29,7 +29,7 @@ module FacebookApi
 
   # Retrieves auth_token from API
   def self.get_auth_token
-    uri = URI('https://graph.facebook.com/oauth/access_token?client_id=560921750673121&client_secret=***REMOVED***&grant_type=client_credentials')
+    uri = URI("https://graph.facebook.com/oauth/access_token?client_id=560921750673121&client_secret=#{ENV['FACEBOOK_SECRET']}&grant_type=client_credentials")
     Net::HTTP.get(uri)
   rescue => e
     Rails.logger.warn 'FacebookApi Error:'
