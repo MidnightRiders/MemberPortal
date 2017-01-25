@@ -14,4 +14,16 @@ class UserMailer < ActionMailer::Base
     @temp_pass = temp_pass
     mail(to: @user.email, subject: @title)
   end
+
+  def new_board_nomination_email(user, nomination)
+    @user = user
+
+    nomination ||= {}
+    @nominee = nomination[:name]
+    @position = nomination[:position]
+    raise ArgumentError, 'Need all information for nominee.' unless @nominee.present? && @position.present?
+
+    @title = "#{@user.first_name} #{@user.last_name} has nominated #{@nominee} to the 2017 Board"
+    mail(to: 'secretary@midnightriders.com, info@midnightriders.com, webczar@midnightriders.com', subject: @title)
+  end
 end

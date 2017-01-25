@@ -39,6 +39,7 @@ class Ability
           cannot :grant_privileges, Membership
         end
         can :standings, :static_page
+        can :nominate, :static_page
         can :show, user.current_membership
         cannot :cancel_subscription, Membership
         can :cancel_subscription, user.current_membership if user.current_membership.is_subscription?
