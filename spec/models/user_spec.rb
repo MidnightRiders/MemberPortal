@@ -99,7 +99,9 @@ describe User do
     end
   end
 
-  it_behaves_like 'Commerce::Purchaser'
+  it_behaves_like 'Commerce::Purchaser' do
+    let(:purchaser) { FactoryGirl.create(:user) }
+  end
 
   pending 'current_privileges'
   pending 'privilege?'
