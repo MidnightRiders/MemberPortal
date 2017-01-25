@@ -2,6 +2,7 @@ require 'spec_helper'
 
 feature 'Board Nominations', type: :feature, js: true do
   let(:user) { FactoryGirl.create(:user) }
+  let(:positions) { %w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator) }
   before(:each) do
     login_as user
     visit user_home_path
@@ -16,6 +17,7 @@ feature 'Board Nominations', type: :feature, js: true do
   it 'accepts a completed form' do
     within '#nominate-modal' do
       fill_in 'nomination[name]', with: FFaker::Name.name
+      select positions.sample, from: 'nomination[position]'
       find('input[type=submit]').click
     end
 

@@ -27,9 +27,12 @@ class StaticPagesController < ApplicationController
 
   # Nominate board member
   def nominate
-    redirect_to user_home_path, flash: { error: 'Please provide a name to nominate.' } and return unless params.dig(:nomination, :name).present?
+    unless params.dig(:nomination, :name).present? && params.dig(:nomination, :position).present?
+      redirect_to user_home_path, flash: { error: 'Please provide a name to nominate.' }
+      return
+    end
 
-    UserMailer.new_board_nomination_email(current_user, params.dig(:nomination, :name)).deliver_now
+    UserMailer.new_board_nomination_email(current_user, params[:nomination]).deliver_now
     redirect_to user_home_path, notice: 'Thank you for your nomination.'
   end
 

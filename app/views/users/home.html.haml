@@ -19,6 +19,11 @@
         .large-8.columns
           = text_field :nomination, :name, placeholder: 'Name of Nominee'
       .row
+        .large-4.columns
+          = label :nomination, :position, 'Position'
+        .large-8.columns
+          = select :nomination, :position, options_for_select(%w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator).sort), include_blank: 'Please Select'
+      .row
         .large-8.large-offset-4.columns
           = submit_tag 'Submit Nomination', class: 'button expand'
 

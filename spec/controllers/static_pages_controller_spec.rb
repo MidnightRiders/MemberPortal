@@ -47,7 +47,8 @@ describe StaticPagesController do
 
   describe 'POST "nominate"' do
     let(:user) { FactoryGirl.create(:user) }
-    let(:nomination) { { name: FFaker::Name.name } }
+    let!(:positions) { %w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator) }
+    let(:nomination) { { name: FFaker::Name.name, position: positions.sample } }
 
     context 'signed out' do
       it 'should redirect to root without emailing' do
@@ -63,7 +64,7 @@ describe StaticPagesController do
         sign_in user
         mail_double = double
 
-        expect(UserMailer).to receive(:new_board_nomination_email).with(user, nomination[:name]).and_return(mail_double)
+        expect(UserMailer).to receive(:new_board_nomination_email).with(user, nomination).and_return(mail_double)
         expect(mail_double).to receive(:deliver_now)
 
         post 'nominate', nomination: nomination

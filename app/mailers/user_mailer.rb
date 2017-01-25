@@ -15,10 +15,11 @@ class UserMailer < ActionMailer::Base
     mail(to: @user.email, subject: @title)
   end
 
-  def new_board_nomination_email(user, nominated_name)
+  def new_board_nomination_email(user, nomination)
     @user = user
-    @nominated_name = nominated_name
-    @title = "#{@user.first_name} #{@user.last_name} has nominated #{@nominated_name} to the 2017 Board"
+    @nominee = nomination[:name]
+    @position = nomination[:position]
+    @title = "#{@user.first_name} #{@user.last_name} has nominated #{@nominee} to the 2017 Board"
     mail(to: 'secretary@midnightriders.com, info@midnightriders.com, webczar@midnightriders.com', subject: @title)
   end
 end
