@@ -2,6 +2,8 @@ coffeescript:
   enabled: true
 eslint:
   config_file: .eslintrc
+haml:
+  config_file: .haml-lint.yml
 jshint:
   enabled: false
 ruby:
