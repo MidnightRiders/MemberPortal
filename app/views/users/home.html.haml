@@ -9,12 +9,30 @@
 
 -#= render 'static_pages/jotform' if current_user.current_member? #&& Time.current < Time.zone.local(2016,1,15,17)
 
+- if current_user.current_member? && Time.current < Time.zone.local(2017,2,18,17) # Until 2/25 at 5pm
+  #nominate-modal.reveal-modal.medium{ data: { reveal: true } }
+    .close-reveal-modal &#215;
+    = form_tag '/nominate', method: :post do
+      .row
+        .large-4.columns
+          = label :nomination, :name, 'Name'
+        .large-8.columns
+          = text_field :nomination, :name, placeholder: 'Name of Nominee'
+      .row
+        .large-8.large-offset-4.columns
+          = submit_tag 'Submit Nomination', class: 'button expand'
+
 .row
   -#- if current_user.current_member? # && Time.current < Time.zone.local(2016,1,15,17)
   -#  .medium-6.columns.right
   -#    = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
   -#      = icon 'check-circle'
   -#      Vote for 2017’s Scarf
+  - if current_user.current_member? && Time.current < Time.zone.local(2017,2,18,17) # Until 2/25 at 5pm
+    .medium-6.columns.right
+      = link_to '#', class: 'button large expand', data: { reveal_id: 'nominate-modal' } do
+        = icon 'pencil-square-o'
+        Submit 2017 Board Nomination
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns

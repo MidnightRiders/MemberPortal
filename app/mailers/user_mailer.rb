@@ -14,4 +14,11 @@ class UserMailer < ActionMailer::Base
     @temp_pass = temp_pass
     mail(to: @user.email, subject: @title)
   end
+
+  def new_board_nomination_email(user, nominated_name)
+    @user = user
+    @nominated_name = nominated_name
+    @title = "#{@user.first_name} #{@user.last_name} has nominated #{@nominated_name} to the 2017 Board"
+    mail(to: 'secretary@midnightriders.com, info@midnightriders.com, webczar@midnightriders.com', subject: @title)
+  end
 end

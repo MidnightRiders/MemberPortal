@@ -44,5 +44,7 @@ MidnightRiders::Application.routes.draw do
   get 'faq', to: 'static_pages#faq'
   get 'contact', to: 'static_pages#contact'
 
+  post 'nominate', to: 'static_pages#nominate'
+
   root to: 'static_pages#home'
 end

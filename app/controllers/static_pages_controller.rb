@@ -1,7 +1,7 @@
 # Controller for static pages – home, faq, contact. Only visible
 class StaticPagesController < ApplicationController
 
-  authorize_resource class: false, only: %i(standings transactions)
+  authorize_resource class: false, only: %i(standings transactions nominate)
 
   # Root path. Shows sign_in if not signed in, user_home if signed in
   def home
@@ -23,6 +23,14 @@ class StaticPagesController < ApplicationController
     @season = params.fetch(:season, Date.current.year)
     @rev_guess_standings = User.rev_guess_scores(@season).where('(SELECT COUNT(*) FROM rev_guesses LEFT JOIN matches ON rev_guesses.match_id = matches.id WHERE rev_guesses.user_id = users.id AND EXTRACT(YEAR FROM matches.kickoff)=? AND rev_guesses.score IS NOT NULL) > 0', @season).order('rev_guesses_score DESC, rev_guesses_count ASC, username ASC').paginate(page: params[:rev_guess_p], per_page: 25)
     @pick_em_standings = User.pick_em_scores(@season).where('(SELECT COUNT(*) FROM pick_ems LEFT JOIN matches ON pick_ems.match_id = matches.id WHERE pick_ems.user_id = users.id AND EXTRACT(YEAR FROM matches.kickoff)=? AND pick_ems.correct IS NOT NULL) > 0', @season).order('correct_pick_ems DESC, total_pick_ems ASC, username ASC').paginate(page: params[:pick_em_p], per_page: 25)
+  end
+
+  # Nominate board member
+  def nominate
+    redirect_to user_home_path, flash: { error: 'Please provide a name to nominate.' } and return unless params.dig(:nomination, :name).present?
+
+    UserMailer.new_board_nomination_email(current_user, params.dig(:nomination, :name)).deliver_now
+    redirect_to user_home_path, notice: 'Thank you for your nomination.'
   end
 
   # Admin-only: view transactions

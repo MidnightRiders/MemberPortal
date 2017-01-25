@@ -44,4 +44,50 @@ describe StaticPagesController do
       end
     end
   end
+
+  describe 'POST "nominate"' do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:nomination) { { name: FFaker::Name.name } }
+
+    context 'signed out' do
+      it 'should redirect to root without emailing' do
+        post 'nominate', nomination: nomination
+
+        expect(UserMailer).not_to receive(:new_board_nomination_email)
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    context 'signed in' do
+      it 'should send New Board Nomination Email' do
+        sign_in user
+        mail_double = double
+
+        expect(UserMailer).to receive(:new_board_nomination_email).with(user, nomination[:name]).and_return(mail_double)
+        expect(mail_double).to receive(:deliver_now)
+
+        post 'nominate', nomination: nomination
+      end
+
+      it 'should redirect to user home' do
+        sign_in user
+
+        allow(UserMailer).to receive_message_chain('new_board_nomination_email.deliver_now')
+
+        post 'nominate', nomination: nomination
+
+        expect(response).to redirect_to(user_home_path)
+        expect(flash[:notice]).to eq 'Thank you for your nomination.'
+      end
+
+      it 'should redirect early if name not provided' do
+        sign_in user
+
+        post 'nominate'
+
+        expect(response).to redirect_to(user_home_path)
+        expect(flash[:error]).to eq 'Please provide a name to nominate.'
+      end
+    end
+  end
 end
