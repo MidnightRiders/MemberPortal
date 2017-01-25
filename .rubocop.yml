@@ -21,8 +21,8 @@ Lint/EndAlignment:
   Enabled: true
 
 Metrics/LineLength:
-  Max: 150
-  Enabled: false
+  Max: 140
+  Enabled: true
 
 Performance/StringReplacement:
   Enabled: false
