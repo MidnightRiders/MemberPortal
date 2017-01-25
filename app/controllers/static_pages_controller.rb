@@ -27,13 +27,10 @@ class StaticPagesController < ApplicationController
 
   # Nominate board member
   def nominate
-    unless params.dig(:nomination, :name).present? && params.dig(:nomination, :position).present?
-      redirect_to user_home_path, flash: { error: 'Please provide a name to nominate.' }
-      return
-    end
-
     UserMailer.new_board_nomination_email(current_user, params[:nomination]).deliver_now
     redirect_to user_home_path, notice: 'Thank you for your nomination.'
+  rescue ArgumentError => e
+    redirect_to user_home_path, flash: { error: e.message }
   end
 
   # Admin-only: view transactions

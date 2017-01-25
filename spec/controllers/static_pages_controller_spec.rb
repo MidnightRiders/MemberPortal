@@ -47,7 +47,10 @@ describe StaticPagesController do
 
   describe 'POST "nominate"' do
     let(:user) { FactoryGirl.create(:user) }
-    let!(:positions) { %w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator) }
+    let!(:positions) {
+      %w(At-Large\ Board President Treasurer Membership\ Secretary
+         Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator)
+    }
     let(:nomination) { { name: FFaker::Name.name, position: positions.sample } }
 
     context 'signed out' do
@@ -81,13 +84,13 @@ describe StaticPagesController do
         expect(flash[:notice]).to eq 'Thank you for your nomination.'
       end
 
-      it 'should redirect early if name not provided' do
+      it 'should redirect without sending if name not provided' do
         sign_in user
 
         post 'nominate'
 
         expect(response).to redirect_to(user_home_path)
-        expect(flash[:error]).to eq 'Please provide a name to nominate.'
+        expect(flash[:error]).to eq 'Need all information for nominee.'
       end
     end
   end
