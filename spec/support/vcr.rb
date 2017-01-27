@@ -1,6 +1,6 @@
 require 'vcr'
 
-VCR.config do |config|
+VCR.configure do |config|
   config.cassette_library_dir = Rails.root.join('spec', 'vcr')
   config.hook_into :webmock
 
@@ -11,7 +11,8 @@ end
 
 RSpec.configure do |config|
   config.around(:each, :vcr) do |example|
-    name = example.metadata[:full_description].split(/\s+/, 2).join('/').underscore.gsub(/[^\w\/]+/, '_')
+    spec_vcr_path = example.metadata[:file_path].sub(/.*\/?spec\/(.+)\.rb/, '\1')
+    name = File.join(spec_vcr_path, example.metadata[:description].underscore.gsub(/[^\w\/]+/, '_'))
     VCR.use_cassette(name) { example.call }
   end
 end

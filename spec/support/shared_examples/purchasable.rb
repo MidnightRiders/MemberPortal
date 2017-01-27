@@ -75,7 +75,9 @@ shared_examples_for 'Commerce::Purchasable' do
       allow(product).to receive(:charge_information).and_return({})
       allow(Stripe::Charge).to receive(:create).and_raise(Stripe::StripeError.new('Couldn\'t create charge'))
 
-      expect { product.make_stripe_charge }.to change { product.errors[:base] }.to(['There was a problem with your credit card: Couldn\'t create charge'])
+      expect { product.make_stripe_charge }
+        .to change { product.errors[:base] }
+        .to(['There was a problem with your credit card: Couldn\'t create charge'])
     end
   end
 
@@ -100,6 +102,7 @@ shared_examples_for 'Commerce::Purchasable' do
 
       expect(product.purchaser).to receive(:create_or_update_stripe_customer).with(stripe_card_token)
 
+      allow(Stripe::Charge).to receive(:create).and_return(double('Stripe::Charge', id: nil))
       product.save_with_payment
     end
 
@@ -131,7 +134,9 @@ shared_examples_for 'Commerce::Purchasable' do
     it 'saves the Stripe::Refund id to the refund attribute' do
       product.update_attribute(:stripe_charge_id, StripeHelper.charge_id)
       refund_id = StripeHelper.refund_id
-      allow(product.purchaser).to receive_message_chain('stripe_customer.charges.retrieve.refunds.create').and_return(double('Stripe::Refund', id: refund_id))
+      allow(product.purchaser)
+        .to receive_message_chain('stripe_customer.charges.retrieve.refunds.create')
+        .and_return(double('Stripe::Refund', id: refund_id))
 
       expect { product.refund }.to change { product.refunded }.to refund_id
     end
@@ -139,7 +144,9 @@ shared_examples_for 'Commerce::Purchasable' do
     it 'adds an error to :base if there is a Stripe Error' do
       product.update_attribute(:stripe_charge_id, StripeHelper.charge_id)
       error_message = 'The expiration date on your card is not valid'
-      allow(product.purchaser).to receive_message_chain('stripe_customer.charges.retrieve.refunds.create').and_raise(Stripe::StripeError.new(error_message))
+      allow(product.purchaser)
+        .to receive_message_chain('stripe_customer.charges.retrieve.refunds.create')
+        .and_raise(Stripe::StripeError.new(error_message))
 
       expect { product.refund }.to change { product.errors[:base] }.to(['There was a problem refunding the transaction.'])
     end

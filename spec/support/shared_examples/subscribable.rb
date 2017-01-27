@@ -75,7 +75,9 @@ shared_examples_for 'Commerce::Subscribable' do
       end
 
       it 'adds an error to base if Stripe::StripeError is raised while canceling' do
-        allow(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete').and_raise(Stripe::StripeError.new('Message'))
+        allow(product.purchaser)
+          .to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+          .and_raise(Stripe::StripeError.new('Message'))
 
         product.cancel
         expect(product.errors[:base]).to include('There was a problem while canceling your subscription: Message')
