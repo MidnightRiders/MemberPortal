@@ -1,5 +1,9 @@
 FactoryGirl.define do
   factory :user do
+    transient do
+      with_membership true
+    end
+
     first_name { FFaker::Name.first_name }
     last_name { FFaker::Name.last_name }
     username { "#{first_name}#{last_name}".gsub(/\W/, '') }
@@ -12,9 +16,15 @@ FactoryGirl.define do
     email { FFaker::Internet.email }
     member_since { (Random.rand * (Date.today.year - 1995)).to_i + 1995 }
     password { FFaker::Lorem.characters(Random.rand * 12 + 8) }
-    after :create do |u|
-      FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample)
+
+    trait :without_membership do
+      with_membership false
     end
+
+    after :create do |u, evaluator|
+      FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample) if evaluator.with_membership
+    end
+
     trait :admin do
       after :create do |u|
         u.current_membership.update_attribute(:privileges, u.current_membership.privileges + ['admin'])

@@ -70,6 +70,9 @@ group :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'poltergeist'
+  gem 'timecop'
+  gem 'vcr', '~>3.0'
+  gem 'webmock', '~>2.3'
 
   gem 'codeclimate-test-reporter', '~> 1.0.0', require: false
   gem 'simplecov', require: false

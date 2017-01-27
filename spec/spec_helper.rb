@@ -2,6 +2,7 @@ require 'simplecov'
 SimpleCov.start do
   add_filter '/vendor/'
   add_filter '/public/'
+  add_filter '/spec/vcr/'
 end
 
 # save to CircleCI's artifacts directory if we're on CircleCI
