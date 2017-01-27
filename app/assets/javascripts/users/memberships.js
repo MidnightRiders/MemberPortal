@@ -3,8 +3,8 @@
 
   stripeParams = {
     number: '#stripe_card_number',
-    expMonth: '#stripe_exp_month',
-    expYear: '#stripe_exp_year',
+    exp_month: '#stripe_exp_month',
+    exp_year: '#stripe_exp_year',
     cvc: '#stripe_cvc'
   };
 
