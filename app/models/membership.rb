@@ -26,7 +26,10 @@ class Membership < ActiveRecord::Base
 
   before_validation :remove_blank_privileges
 
-  validates :year, presence: true, inclusion: { in: (Date.current.year..Date.current.year + 1) }, uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) } }
+  validates :year, presence: true, inclusion: {
+    in: (Date.current.year..Date.current.year + 1) },
+    uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) }
+  }
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
   validate :accepted_privileges
 
