@@ -37,8 +37,6 @@ gem 'paper_trail'
 
 gem 'fuzzy_match', '~> 2.1'
 
-gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
-
 # Payments
 gem 'stripe'
 
@@ -54,6 +52,7 @@ group :development, :test do
   # Testing
   gem 'active_record_query_trace'
   gem 'capybara'
+  gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
   gem 'factory_girl_rails'
   gem 'ffaker'
   gem 'fivemat'
