@@ -81,7 +81,7 @@ shared_examples_for 'Commerce::Purchasable' do
     end
   end
 
-  describe 'save_with_payment' do
+  describe 'save_with_payment!' do
     let(:stripe_card_token) { StripeHelper.card_token }
 
     before(:each) do
@@ -94,7 +94,7 @@ shared_examples_for 'Commerce::Purchasable' do
     it 'returns nil if not valid' do
       allow(product).to receive(:valid?).and_return(false)
 
-      expect(product.save_with_payment).to be_nil
+      expect(product.save_with_payment!).to be_nil
     end
 
     it 'calls create_or_update_stripe_customer on the purchaser' do
@@ -103,7 +103,7 @@ shared_examples_for 'Commerce::Purchasable' do
       expect(product.purchaser).to receive(:create_or_update_stripe_customer).with(stripe_card_token)
 
       allow(Stripe::Charge).to receive(:create).and_return(double('Stripe::Charge', id: nil))
-      product.save_with_payment
+      product.save_with_payment!
     end
 
     it 'makes stripe charge' do
@@ -112,7 +112,7 @@ shared_examples_for 'Commerce::Purchasable' do
       expect(product).to receive(:make_stripe_charge).with(nil)
 
       allow(product.purchaser).to receive(:create_or_update_stripe_customer).and_return(double('Stripe::Customer'))
-      product.save_with_payment
+      product.save_with_payment!
     end
 
     it 'makes stripe charge with card_id if passed' do
@@ -122,7 +122,7 @@ shared_examples_for 'Commerce::Purchasable' do
       expect(product).to receive(:make_stripe_charge).with(card_id)
 
       allow(product.purchaser).to receive(:create_or_update_stripe_customer).and_return(double('Stripe::Customer'))
-      product.save_with_payment(card_id)
+      product.save_with_payment!(card_id)
     end
   end
 

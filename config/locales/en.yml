@@ -37,3 +37,6 @@ en:
   unauthorized:
     manage:
       all: This user is not authorized to perform that action.
+  memberships:
+    create:
+      payment_successful: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.'

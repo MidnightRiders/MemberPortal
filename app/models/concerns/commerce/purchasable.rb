@@ -34,7 +34,7 @@ module Commerce
     end
 
     # Save with Stripe payment if applicable
-    def save_with_payment(card_id = nil)
+    def save_with_payment!(card_id = nil)
       return unless ready_to_pay?
 
       purchaser.create_or_update_stripe_customer(stripe_card_token)
@@ -42,7 +42,7 @@ module Commerce
       purchaser.subscribe_to(self) if self.class.include?(Subscribable) && subscribe?
       make_stripe_charge(card_id)
 
-      save
+      save!
     end
 
     def stripe_description

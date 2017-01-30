@@ -16,7 +16,7 @@ That's it, welcome aboard, and see you in the Parking Lots!
 -----------------------------------------------------------
 PAYMENT CONFIRMATION
 
-We've received your payment of <%=number_to_currency(Membership::COSTS[@membership.type.to_sym].to_f / 100)%>.
+We've received your payment of <%=number_to_currency(@membership.cost)%>.
 Please keep this email for your financial records.
 
 Charge ID: <%=@membership.stripe_charge_id%>
