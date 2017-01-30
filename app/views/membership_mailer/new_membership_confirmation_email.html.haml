@@ -21,7 +21,7 @@
 %h4{ align: 'center', style: 'text-transform: uppercase;' } Payment Confirmation
 %p
   We've received your payment of
-  %strong #{number_to_currency(Membership::COSTS[@membership.type.to_sym].to_f / 100)}.
+  %strong #{number_to_currency(@membership.cost)}.
 %p Please keep this email for your financial records.
 %center
   %code Charge ID: #{@membership.stripe_charge_id}

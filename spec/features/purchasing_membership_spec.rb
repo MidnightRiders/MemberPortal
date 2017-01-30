@@ -46,10 +46,7 @@ describe 'Purchasing Membership', :js, type: :feature do
       select card.exp_date.year, from: 'stripe_exp_year'
       click_button 'Purchase Membership'
 
-      expect(page).to have_css(
-        '.alert-box.info',
-        text: I18n.t(:payment_successful, scope: %i(memberships create))
-      )
+      expect(page).to have_css('.alert-box.info', text: I18n.t(:payment_successful, scope: %i(memberships create)), wait: 10)
       expect(user.reload.current_member?).to be true
     end
 
@@ -61,7 +58,7 @@ describe 'Purchasing Membership', :js, type: :feature do
       select card.exp_date.year, from: 'stripe_exp_year'
       click_button 'Purchase Membership'
 
-      expect(page).to have_css('.alert-box.alert', text: 'Your card was declined.')
+      expect(page).to have_css('.alert-box.alert', text: 'Your card was declined.', wait: 10)
       expect(user.reload.current_member?).to be false
     end
   end

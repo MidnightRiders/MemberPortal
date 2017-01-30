@@ -3,7 +3,7 @@
 # Controller for +Membership+ model.
 class MembershipsController < ApplicationController
   before_action :get_membership, except: %i(new create webhooks)
-  load_and_authorize_resource except: [:webhooks]
+  authorize_resource except: [:webhooks]
   before_action :get_user, except: [:webhooks]
   skip_before_action :verify_authenticity_token, only: [:webhooks]
 
@@ -26,35 +26,27 @@ class MembershipsController < ApplicationController
 
   # GET /users/:user_id/memberships/new
   def new
-    privileges = @user.memberships.last.try(:privileges)
-    @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
-    @cards = @user.stripe_customer.cards.data if @user.stripe_customer.present?
-    @membership = @user.memberships.new(year: @year, privileges: privileges)
+    prepare_new_form
+    @membership = @user.memberships.new(
+      year: @year,
+      privileges: @user.memberships.last.try(:privileges)
+    )
   end
 
   # POST /users/:user_id/memberships
   # POST /users/:user_id/memberships.json
   def create
-    respond_to do |format|
-      if @membership.save_with_payment(params[:card_id])
-        if @membership.stripe_charge_id
-          MembershipMailer.new_membership_confirmation_email(@user, @membership).deliver_now
-          MembershipMailer.new_membership_alert(@user, @membership).deliver_now
-          slack_notify_membership(@membership)
-          format.html { redirect_to user_membership_path(@user, @membership), notice: 'Thank you for your payment. Your card has been charged the amount below. Please print this page for your records.' }
-        else
-          format.html { redirect_to get_user_path, notice: 'Membership was successfully created.' }
-        end
-        format.json { render action: 'show', status: :created, location: @membership }
-      else
-        format.html do
-          @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
-          @cards = @user.stripe_customer.cards.data if @user.stripe_customer.present?
-          render action: 'new'
-        end
-        format.json { render json: @membership.errors, status: :unprocessable_entity }
-      end
-    end
+    @membership = @user.memberships.new(membership_params)
+    admin_grant_membership and return unless @user == current_user
+
+    @membership.save_with_payment!(params[:card_id])
+    MembershipNotifier.new(user: @user, membership: @membership).notify_new
+
+    redirect_to user_membership_path(@user, @membership), notice: t('.payment_successful')
+  rescue => e
+    prepare_new_form
+    flash.now[:error] = e.message
+    render action: 'new'
   end
 
   # PATCH/PUT /users/:user_id/memberships/1/cancel
@@ -160,6 +152,14 @@ class MembershipsController < ApplicationController
 
   private
 
+  def admin_grant_membership
+    if @membership.save
+      redirect_to get_user_path, notice: 'Membership was successfully created.'
+    else
+      redirect_to new_user_membership_path(@user), flash: { error: @membership.errors.messages.to_sentence }
+    end
+  end
+
   # Define +@user+ based on route +:user_id+
   def get_user
     @user = User.find_by(username: params[:user_id])
@@ -175,7 +175,10 @@ class MembershipsController < ApplicationController
     @user == current_user ? user_home_path : user_path(@user)
   end
 
-  #
+  def prepare_new_form
+    @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
+    @cards = @user.stripe_customer.cards.data if @user.stripe_customer.present?
+  end
 
   # Strong params for +Membership+
   def membership_params
