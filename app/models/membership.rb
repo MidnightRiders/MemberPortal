@@ -26,10 +26,13 @@ class Membership < ActiveRecord::Base
 
   before_validation :remove_blank_privileges
 
-  validates :year, presence: true, inclusion: {
-    in: (Date.current.year..Date.current.year + 1) },
-    uniqueness: { scope: [:user_id], conditions: -> { where(refunded: nil) }
-  }
+  validates :year, presence: true,
+    inclusion: {
+      in: (Date.current.year..Date.current.year + 1)
+    },
+    uniqueness: {
+      scope: [:user_id], conditions: -> { where(refunded: nil) }
+    }
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
   validate :accepted_privileges
 
@@ -75,7 +78,8 @@ class Membership < ActiveRecord::Base
   end
 
   def notify_slack
-    SlackBot.post_message("New #{type} Membership for #{user.first_name} #{user.last_name} (<#{url_helpers.user_url(user)}|@#{user.username}>):\n" \
+    SlackBot.post_message("New #{type} Membership for #{user.first_name} #{user.last_name} " \
+      "(<#{url_helpers.user_url(user)}|@#{user.username}>):\n" \
       "*#{year} Total: #{Membership.for_year(year).count}* | #{Membership.breakdown(year)}", 'membership')
   end
 
@@ -125,6 +129,7 @@ class Membership < ActiveRecord::Base
   end
 
   def able_to_change_privileges
-    errors.add(:privileges, 'cannot be changed in this way by this user') if privileges.changed? && user.cannot?(:grant_privileges, Membership)
+    return unless privileges.changed? && user.cannot?(:grant_privileges, Membership)
+    errors.add(:privileges, 'cannot be changed in this way by this user')
   end
 end

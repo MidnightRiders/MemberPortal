@@ -98,8 +98,9 @@ class Club < ActiveRecord::Base
   # Sets color methods which return *String*s.
   %w(primary secondary accent).each do |x|
     define_method("#{x}_color=") do |val|
-      self["#{x}_color"] = val.to_i(16)
+      self["#{x}_color"] = val.to_s.to_i(16)
     end
+
     define_method("#{x}_color") do
       self["#{x}_color"].to_s(16).rjust(6, '0') unless self["#{x}_color"].nil?
     end

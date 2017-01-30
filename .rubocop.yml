@@ -16,6 +16,9 @@ AllCops:
 Rails:
   Enabled: true
 
+Style/AlignHash:
+  Enabled: false
+
 Lint/EndAlignment:
   AlignWith: variable
   Enabled: true

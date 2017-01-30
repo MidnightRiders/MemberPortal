@@ -20,7 +20,9 @@ RSpec.configure do |config|
   end
 
   def create_admin
-    admin = User.find_or_create_by(first_name: 'Admin', last_name: 'User', email: 'admin@test.com', username: 'admin') { |u| u.password = 'admin_password' }
+    admin = User.find_or_create_by(first_name: 'Admin', last_name: 'User', email: 'admin@test.com', username: 'admin') do |u|
+      u.password = 'admin_password'
+    end
     (1995..Date.current.year).each do |yr|
       admin_membership = Membership.find_or_initialize_by(year: yr, type: 'Individual', user_id: admin.id) do |m|
         m.privileges = %w(admin)
