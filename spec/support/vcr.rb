@@ -9,6 +9,13 @@ VCR.configure do |config|
   config.filter_sensitive_data('STRIPE_SECRET_KEY') { ENV['STRIPE_SECRET_KEY'] }
   config.filter_sensitive_data('AWS_SECRET_ACCESS_KEY') { ENV['AWS_SECRET_ACCESS_KEY'] }
   config.ignore_localhost = true
+
+  # config.ignore_hosts *%w(
+  #   fonts.googleapis.com
+  #   fonts.gstatic.com
+  #   gravatar.com
+  #   js.stripe.com
+  # )
 end
 
 # RSpec.configure do |config|

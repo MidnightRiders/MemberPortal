@@ -20,6 +20,10 @@ require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
+require 'webmock/rspec'
+
+WebMock.disable_net_connect!(allow_localhost: true)
+
 Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
