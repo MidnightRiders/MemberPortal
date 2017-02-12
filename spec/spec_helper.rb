@@ -16,11 +16,15 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'ffaker'
+require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
+require 'capybara-screenshot/rspec'
+
+Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
