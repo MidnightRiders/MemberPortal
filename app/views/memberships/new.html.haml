@@ -26,7 +26,7 @@
         .medium-4.columns
           = membership_form.label :type, class: 'inline'
         .medium-8.columns
-          = membership_form.select :type, Membership::COSTS.map{|type, cost| ["#{type}: #{number_to_currency(cost.to_f/100)}", type]}, {}
+          = membership_form.select :type, Membership::COSTS.map { |type, cost| ["#{type}: #{number_to_currency(cost.to_f/100)}", type] }, {}
           = errors_for(membership_form.object, :type)
       .row
         .medium-8.columns.right
@@ -38,7 +38,7 @@
           .medium-4.columns
             = membership_form.label :privileges, 'Privileges', class: 'inline'
           .medium-8.columns
-            = membership_form.select :privileges, Membership::PRIVILEGES.sort.map{|r| [r.titleize,r]}, {}, multiple: true, size: 3
+            = membership_form.select :privileges, Membership::PRIVILEGES.sort.map { |r| [r.titleize,r] }, {}, multiple: true, size: 3
             = errors_for(membership_form.object, :privileges)
         .row
           .medium-8.columns.right
@@ -59,7 +59,7 @@
               = link_to '(Change Card)', '#', id: 'show-credit-card-info'
 
             - if @cards.present?
-              = select_tag :card_id, options_for_select(@cards.map{|card| ["#{card.brand}: x#{card.last4} (exp #{card.exp_month}/#{card.exp_year})", card.id] })
+              = select_tag :card_id, options_for_select(@cards.map { |card| ["#{card.brand}: x#{card.last4} (exp #{card.exp_month}/#{card.exp_year})", card.id] })
 
       - unless membership_form.object.stripe_card_token
         #credit-card-info{ class: ('hide' if membership_form.object.user.stripe_customer_token && @cards.present?) }
@@ -83,7 +83,7 @@
                 .small-4.columns
                   = select_tag nil, options_for_select((1..12), Date.current.month), id: 'stripe_exp_month', disabled: (membership_form.object.user.stripe_customer_token && @cards.present?)
                 .small-4.columns
-                  = select_tag nil, options_for_select((Date.current.year..Date.current.year+10), Date.current.year), id: 'stripe_exp_year', disabled: (membership_form.object.user.stripe_customer_token && @cards.present?)
+                  = select_tag nil, options_for_select((Date.current.year..Date.current.year + 10), Date.current.year), id: 'stripe_exp_year', disabled: (membership_form.object.user.stripe_customer_token && @cards.present?)
                 .small-4.columns
                   = text_field_tag nil, '', id: 'stripe_cvc', placeholder: 'CVC', pattern: '[0-9]*', disabled: (membership_form.object.user.stripe_customer_token && @cards.present?)
           = membership_form.hidden_field :stripe_card_token, disabled: (membership_form.object.user.stripe_customer_token && @cards.present?)
