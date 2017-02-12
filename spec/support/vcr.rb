@@ -1,7 +1,7 @@
 require 'vcr'
 
 VCR.configure do |config|
-  config.default_cassette_options = { record: :once, re_record_interval: 1.day }
+  config.default_cassette_options = { record: :new_episodes }
   config.cassette_library_dir = Rails.root.join('spec', 'vcr')
   config.hook_into :webmock
   config.configure_rspec_metadata!
