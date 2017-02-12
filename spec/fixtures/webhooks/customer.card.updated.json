@@ -1,0 +1,42 @@
+{
+  "id": "evt_m5t6a9em1rx0x5fzyral6y4p",
+  "object": "event",
+  "api_version": "2014-12-22",
+  "created": 1486703121,
+  "data": {
+    "object": {
+      "id": "card_dvvas9wthyiprfv6grrz7kjs",
+      "object": "card",
+      "address_city": null,
+      "address_country": null,
+      "address_line1": null,
+      "address_line1_check": null,
+      "address_line2": null,
+      "address_state": null,
+      "address_zip": null,
+      "address_zip_check": null,
+      "brand": "Visa",
+      "country": "US",
+      "customer": "cus_lrvx4y1owdr0nr",
+      "cvc_check": "unchecked",
+      "dynamic_last4": null,
+      "exp_month": 8,
+      "exp_year": 2019,
+      "fingerprint": "dCLtMnczhLktSqMX",
+      "funding": "credit",
+      "last4": "1382",
+      "metadata": {
+      },
+      "name": null,
+      "tokenization_method": null
+    },
+    "previous_attributes": {
+      "cvc_check": "pass",
+      "exp_year": 2020
+    }
+  },
+  "livemode": true,
+  "pending_webhooks": 0,
+  "request": null,
+  "type": "customer.card.updated"
+}

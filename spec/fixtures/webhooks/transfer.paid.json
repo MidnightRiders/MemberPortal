@@ -1,0 +1,62 @@
+{
+  "id": "evt_eu24z4jg1jvbj6ltqmbh829s",
+  "object": "event",
+  "api_version": "2014-12-22",
+  "created": 1486689596,
+  "data": {
+    "object": {
+      "id": "tr_sp6jhtdkt4f4ympp2ds7ejod",
+      "object": "transfer",
+      "amount": 2000,
+      "amount_reversed": 0,
+      "application_fee": null,
+      "balance_transaction": "txn_1v1p6461azvjf83r78kk5nm5",
+      "bank_account": {
+        "id": "ba_pvvcncyilaif92addg9rsqkn",
+        "object": "bank_account",
+        "account_holder_name": null,
+        "account_holder_type": null,
+        "bank_name": "SAMPLE FINANCIAL INSTITUTION",
+        "country": "US",
+        "currency": "usd",
+        "fingerprint": null,
+        "last4": "1184",
+        "routing_number": "871128881",
+        "status": "new",
+        "name": null
+      },
+      "created": 1486623637,
+      "currency": "usd",
+      "date": 1486684800,
+      "description": "STRIPE TRANSFER",
+      "destination": "ba_pvvcncyilaif92addg9rsqkn",
+      "failure_code": null,
+      "failure_message": null,
+      "livemode": true,
+      "metadata": {
+      },
+      "method": "standard",
+      "recipient": null,
+      "reversals": {
+        "object": "list",
+        "data": [
+
+        ],
+        "has_more": false,
+        "total_count": 0,
+        "url": "/v1/transfers/tr_sp6jhtdkt4f4ympp2ds7ejod/reversals"
+      },
+      "reversed": false,
+      "source_transaction": null,
+      "source_type": "card",
+      "statement_descriptor": null,
+      "status": "paid",
+      "transfer_group": null,
+      "type": "bank_account"
+    }
+  },
+  "livemode": true,
+  "pending_webhooks": 0,
+  "request": null,
+  "type": "transfer.paid"
+}

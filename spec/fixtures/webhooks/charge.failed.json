@@ -1,0 +1,118 @@
+{
+  "id": "evt_lftxohasp5yzo1bjnh6khiya",
+  "object": "event",
+  "api_version": "2014-12-22",
+  "created": 1486854461,
+  "data": {
+    "object": {
+      "id": "ch_blesddpx7qzk1nw11ai7es69",
+      "object": "charge",
+      "amount": 1061,
+      "amount_refunded": 0,
+      "application": null,
+      "application_fee": null,
+      "balance_transaction": null,
+      "captured": false,
+      "card": {
+        "id": "card_7za1vks6ll3c9jpyngzb5s22",
+        "object": "card",
+        "address_city": null,
+        "address_country": null,
+        "address_line1": null,
+        "address_line1_check": null,
+        "address_line2": null,
+        "address_state": null,
+        "address_zip": null,
+        "address_zip_check": null,
+        "brand": "Visa",
+        "country": "US",
+        "customer": "cus_9elr2c72oj0jcd",
+        "cvc_check": null,
+        "dynamic_last4": null,
+        "exp_month": 3,
+        "exp_year": 2018,
+        "fingerprint": "rzpVMnfUVSrAPXHu",
+        "funding": "debit",
+        "last4": "1114",
+        "metadata": {
+        },
+        "name": null,
+        "tokenization_method": null
+      },
+      "created": 1486854460,
+      "currency": "usd",
+      "customer": "cus_9elr2c72oj0jcd",
+      "description": "Midnight Riders 2017 Individual Membership",
+      "destination": null,
+      "dispute": null,
+      "failure_code": "card_declined",
+      "failure_message": "Your card was declined.",
+      "fraud_details": {
+      },
+      "invoice": null,
+      "livemode": true,
+      "metadata": {
+        "year": "2017",
+        "type": "Individual"
+      },
+      "on_behalf_of": null,
+      "order": null,
+      "outcome": {
+        "network_status": "declined_by_network",
+        "reason": "do_not_try_again",
+        "risk_level": "normal",
+        "seller_message": "The bank returned the decline code `do_not_try_again`.",
+        "type": "issuer_declined"
+      },
+      "paid": false,
+      "receipt_email": "kathrin.cronin@swaniawskiparisian.us",
+      "receipt_number": null,
+      "refunded": false,
+      "refunds": {
+        "object": "list",
+        "data": [
+
+        ],
+        "has_more": false,
+        "total_count": 0,
+        "url": "/v1/charges/ch_blesddpx7qzk1nw11ai7es69/refunds"
+      },
+      "review": null,
+      "shipping": null,
+      "source": {
+        "id": "card_7za1vks6ll3c9jpyngzb5s22",
+        "object": "card",
+        "address_city": null,
+        "address_country": null,
+        "address_line1": null,
+        "address_line1_check": null,
+        "address_line2": null,
+        "address_state": null,
+        "address_zip": null,
+        "address_zip_check": null,
+        "brand": "Visa",
+        "country": "US",
+        "customer": "cus_9elr2c72oj0jcd",
+        "cvc_check": null,
+        "dynamic_last4": null,
+        "exp_month": 3,
+        "exp_year": 2018,
+        "fingerprint": "rzpVMnfUVSrAPXHu",
+        "funding": "debit",
+        "last4": "1114",
+        "metadata": {
+        },
+        "name": null,
+        "tokenization_method": null
+      },
+      "source_transfer": null,
+      "statement_descriptor": "MRiders 2017 Ind Mem",
+      "status": "failed",
+      "transfer_group": null
+    }
+  },
+  "livemode": true,
+  "pending_webhooks": 0,
+  "request": "req_p2opeb557u2zkq",
+  "type": "charge.failed"
+}

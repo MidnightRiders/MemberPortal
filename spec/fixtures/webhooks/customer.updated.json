@@ -1,0 +1,166 @@
+{
+  "id": "evt_p7m7xhs13gb39xkhnrf6z9cq",
+  "object": "event",
+  "api_version": "2014-12-22",
+  "created": 1486854488,
+  "data": {
+    "object": {
+      "id": "cus_9elr2c72oj0jcd",
+      "object": "customer",
+      "account_balance": 0,
+      "cards": {
+        "object": "list",
+        "data": [
+          {
+            "id": "card_sc2g284z1jjm66upw6h6mmyw",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "MasterCard",
+            "country": "US",
+            "customer": "cus_9elr2c72oj0jcd",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 11,
+            "exp_year": 2019,
+            "fingerprint": "veclwqzdWrvAVdhk",
+            "funding": "credit",
+            "last4": "1640",
+            "metadata": {
+            },
+            "name": null,
+            "tokenization_method": null
+          },
+          {
+            "id": "card_7za1vks6ll3c9jpyngzb5s22",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "Visa",
+            "country": "US",
+            "customer": "cus_9elr2c72oj0jcd",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 3,
+            "exp_year": 2018,
+            "fingerprint": "rzpVMnfUVSrAPXHu",
+            "funding": "debit",
+            "last4": "1114",
+            "metadata": {
+            },
+            "name": null,
+            "tokenization_method": null
+          }
+        ],
+        "has_more": false,
+        "total_count": 2,
+        "url": "/v1/customers/cus_9elr2c72oj0jcd/cards"
+      },
+      "created": 1431802548,
+      "currency": null,
+      "default_card": "card_sc2g284z1jjm66upw6h6mmyw",
+      "default_source": "card_sc2g284z1jjm66upw6h6mmyw",
+      "delinquent": false,
+      "description": "Catharine Marvin",
+      "discount": null,
+      "email": "kathrin.cronin@swaniawskiparisian.us",
+      "livemode": true,
+      "metadata": {
+        "first_name": "Catharine",
+        "last_name": "Marvin",
+        "address": "053 Dorcas Orchard",
+        "start_year": "2015"
+      },
+      "shipping": null,
+      "sources": {
+        "object": "list",
+        "data": [
+          {
+            "id": "card_sc2g284z1jjm66upw6h6mmyw",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "MasterCard",
+            "country": "US",
+            "customer": "cus_9elr2c72oj0jcd",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 11,
+            "exp_year": 2019,
+            "fingerprint": "veclwqzdWrvAVdhk",
+            "funding": "credit",
+            "last4": "1640",
+            "metadata": {
+            },
+            "name": null,
+            "tokenization_method": null
+          },
+          {
+            "id": "card_7za1vks6ll3c9jpyngzb5s22",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "Visa",
+            "country": "US",
+            "customer": "cus_9elr2c72oj0jcd",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 3,
+            "exp_year": 2018,
+            "fingerprint": "rzpVMnfUVSrAPXHu",
+            "funding": "debit",
+            "last4": "1114",
+            "metadata": {
+            },
+            "name": null,
+            "tokenization_method": null
+          }
+        ],
+        "has_more": false,
+        "total_count": 2,
+        "url": "/v1/customers/cus_9elr2c72oj0jcd/sources"
+      },
+      "subscriptions": {
+        "object": "list",
+        "data": [
+
+        ],
+        "has_more": false,
+        "total_count": 0,
+        "url": "/v1/customers/cus_9elr2c72oj0jcd/subscriptions"
+      }
+    },
+    "previous_attributes": {
+      "default_card": "card_7za1vks6ll3c9jpyngzb5s22",
+      "default_source": "card_7za1vks6ll3c9jpyngzb5s22"
+    }
+  },
+  "livemode": true,
+  "pending_webhooks": 0,
+  "request": "req_06af5r8ocekp3w",
+  "type": "customer.updated"
+}
