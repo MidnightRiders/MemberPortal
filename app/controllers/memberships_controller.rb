@@ -101,7 +101,7 @@ class MembershipsController < ApplicationController
           # charge.succeeded is handled immediately - no webhook
           if membership.present?
             if event[:type] == 'charge.refunded'
-              membership.update_attribute(:refunded, true)
+              membership.update_attribute(:refunded, 'true')
             end
           else
             logger.error "No membership associated with Stripe Charge #{object[:id]}."
@@ -122,15 +122,8 @@ class MembershipsController < ApplicationController
               stripe_subscription_id: subscription.id,
               stripe_charge_id: object[:charge]
             )
-            if membership.save
-              logger.info "#{Time.at(subscription.current_period_start).year} Membership created for #{user.first_name} #{user.last_name}"
-              slack_notify_membership(membership)
-              MembershipMailer.membership_subscription_confirmation_email(user, membership).deliver_now
-            else
-              logger.error "Error when saving membership: #{membership.errors.messages}"
-              logger.info membership
-              render nothing: true, status: 500 and return
-            end
+            membership.save!
+            MembershipNotifier.new(user: user, membership: membership).notify_renewal
           end
         end
         render nothing: true, status: 200
@@ -142,11 +135,9 @@ class MembershipsController < ApplicationController
       logger.error 'No Stripe::Customer attached to event.'
       render nothing: true, status: 200
     end
-  rescue Stripe::StripeError => e
-    logger.fatal "StripeError encountered: #{e}"
-    render nothing: true, status: 500
-  rescue => e
-    logger.fatal "Webhooks error encountered: #{e}"
+  rescue => err
+    logger.fatal "Webhooks error encountered: #{err}"
+    logger.debug err
     render nothing: true, status: 500
   end
 

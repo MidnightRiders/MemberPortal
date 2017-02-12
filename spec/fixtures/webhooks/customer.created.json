@@ -1,0 +1,110 @@
+{
+  "id": "evt_64tuzql0ur9qcgtc7pa6wpo0",
+  "object": "event",
+  "api_version": "2014-12-22",
+  "created": 1486854538,
+  "data": {
+    "object": {
+      "id": "cus_fj4et2pq80i5b4",
+      "object": "customer",
+      "account_balance": 0,
+      "cards": {
+        "object": "list",
+        "data": [
+          {
+            "id": "card_jt9mbdc7l8j6takdtm8tk818",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "MasterCard",
+            "country": "US",
+            "customer": "cus_fj4et2pq80i5b4",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 4,
+            "exp_year": 2018,
+            "fingerprint": "mEXIRfmqLDtqpRaY",
+            "funding": "debit",
+            "last4": "1495",
+            "metadata": {
+            },
+            "name": null,
+            "tokenization_method": null
+          }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "/v1/customers/cus_fj4et2pq80i5b4/cards"
+      },
+      "created": 1486854538,
+      "currency": null,
+      "default_card": "card_jt9mbdc7l8j6takdtm8tk818",
+      "default_source": "card_jt9mbdc7l8j6takdtm8tk818",
+      "delinquent": false,
+      "description": "Genie Howell",
+      "discount": null,
+      "email": "frankie@feest.co.uk",
+      "livemode": true,
+      "metadata": {
+        "first_name": "Genie",
+        "last_name": "Howell",
+        "address": "15318 Leandra Spurs",
+        "start_year": "2017"
+      },
+      "shipping": null,
+      "sources": {
+        "object": "list",
+        "data": [
+          {
+            "id": "card_jt9mbdc7l8j6takdtm8tk818",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "MasterCard",
+            "country": "US",
+            "customer": "cus_fj4et2pq80i5b4",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 4,
+            "exp_year": 2018,
+            "fingerprint": "mEXIRfmqLDtqpRaY",
+            "funding": "debit",
+            "last4": "1495",
+            "metadata": {
+            },
+            "name": null,
+            "tokenization_method": null
+          }
+        ],
+        "has_more": false,
+        "total_count": 1,
+        "url": "/v1/customers/cus_fj4et2pq80i5b4/sources"
+      },
+      "subscriptions": {
+        "object": "list",
+        "data": [
+
+        ],
+        "has_more": false,
+        "total_count": 0,
+        "url": "/v1/customers/cus_fj4et2pq80i5b4/subscriptions"
+      }
+    }
+  },
+  "livemode": true,
+  "pending_webhooks": 0,
+  "request": "req_npc7hqftlqwg3h",
+  "type": "customer.created"
+}

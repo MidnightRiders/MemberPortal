@@ -10,6 +10,12 @@ class MembershipNotifier
     slack_notify
   end
 
+  def notify_renewal
+    Rails.logger.info "#{@membership.year} Membership created for #{@user.first_name} #{@user.last_name}"
+    MembershipMailer.membership_subscription_confirmation_email(@user, @membership).deliver_now
+    slack_notify
+  end
+
   private
 
   def slack_notify
