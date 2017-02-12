@@ -26,7 +26,7 @@
         .medium-4.columns
           = membership_form.label :type, class: 'inline'
         .medium-8.columns
-          = membership_form.select :type, Membership::COSTS.map { |type, cost| ["#{type}: #{number_to_currency(cost.to_f/100)}", type] }, {}
+          = membership_form.select :type, Membership::COSTS.map { |type, cost| ["#{type}: #{number_to_currency(cost.to_f / 100)}", type] }, {}
           = errors_for(membership_form.object, :type)
       .row
         .medium-8.columns.right
@@ -38,7 +38,7 @@
           .medium-4.columns
             = membership_form.label :privileges, 'Privileges', class: 'inline'
           .medium-8.columns
-            = membership_form.select :privileges, Membership::PRIVILEGES.sort.map { |r| [r.titleize,r] }, {}, multiple: true, size: 3
+            = membership_form.select :privileges, Membership::PRIVILEGES.sort.map { |r| [r.titleize, r] }, {}, multiple: true, size: 3
             = errors_for(membership_form.object, :privileges)
         .row
           .medium-8.columns.right
