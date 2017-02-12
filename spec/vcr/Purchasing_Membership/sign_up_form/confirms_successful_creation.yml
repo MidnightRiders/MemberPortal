@@ -1,166 +1,6 @@
 ---
 http_interactions:
 - request:
-    method: post
-    uri: https://api.stripe.com/v1/charges
-    body:
-      encoding: UTF-8
-      string: amount=1061&customer=cus_A1V5isolY2UXD8&receipt_email=ofelia.west%40pfannerstill.info&description=Midnight+Riders+2017+Individual+Membership&metadata[year]=2017&metadata[type]=Individual&currency=usd&statement_descriptor=MRiders+2017+Ind+Mem&source=card_19hS5gE6uJpa1TKpX5wpGEqt
-    headers:
-      Accept:
-      - "*/*"
-      Accept-Encoding:
-      - gzip, deflate
-      User-Agent:
-      - Stripe/v1 RubyBindings/1.57.0
-      Authorization:
-      - Bearer STRIPE_SECRET_KEY
-      Content-Type:
-      - application/x-www-form-urlencoded
-      X-Stripe-Client-User-Agent:
-      - '{"bindings_version":"1.57.0","lang":"ruby","lang_version":"2.3.1 p112 (2016-04-26)","platform":"x86_64-darwin16","engine":"ruby","publisher":"stripe","uname":"Darwin
-        EQ-612.local 16.3.0 Darwin Kernel Version 16.3.0: Thu Nov 17 20:23:58 PST
-        2016; root:xnu-3789.31.2~1/RELEASE_X86_64 x86_64","hostname":"EQ-612.local"}'
-      Content-Length:
-      - '278'
-      Host:
-      - api.stripe.com
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - nginx
-      Date:
-      - Sun, 29 Jan 2017 23:28:14 GMT
-      Content-Type:
-      - application/json
-      Content-Length:
-      - '2486'
-      Connection:
-      - keep-alive
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Methods:
-      - GET, POST, HEAD, OPTIONS, DELETE
-      Access-Control-Allow-Origin:
-      - "*"
-      Access-Control-Max-Age:
-      - '300'
-      Cache-Control:
-      - no-cache, no-store
-      Request-Id:
-      - req_A1V5xKx1HZ0qzr
-      Stripe-Version:
-      - '2014-12-22'
-      Strict-Transport-Security:
-      - max-age=31556926; includeSubDomains
-    body:
-      encoding: UTF-8
-      string: |
-        {
-          "id": "ch_19hS5hE6uJpa1TKpgZVZuuoM",
-          "object": "charge",
-          "amount": 1061,
-          "amount_refunded": 0,
-          "application": null,
-          "application_fee": null,
-          "balance_transaction": "txn_19hS5hE6uJpa1TKpnfzPxf7a",
-          "captured": true,
-          "card": {
-            "id": "card_19hS5gE6uJpa1TKpX5wpGEqt",
-            "object": "card",
-            "address_city": null,
-            "address_country": null,
-            "address_line1": null,
-            "address_line1_check": null,
-            "address_line2": null,
-            "address_state": null,
-            "address_zip": null,
-            "address_zip_check": null,
-            "brand": "Visa",
-            "country": "US",
-            "customer": "cus_A1V5isolY2UXD8",
-            "cvc_check": "pass",
-            "dynamic_last4": null,
-            "exp_month": 7,
-            "exp_year": 2017,
-            "fingerprint": "4ukrR8IaMKCCR4ik",
-            "funding": "credit",
-            "last4": "4242",
-            "metadata": {},
-            "name": null,
-            "tokenization_method": null
-          },
-          "created": 1485732493,
-          "currency": "usd",
-          "customer": "cus_A1V5isolY2UXD8",
-          "description": "Midnight Riders 2017 Individual Membership",
-          "destination": null,
-          "dispute": null,
-          "failure_code": null,
-          "failure_message": null,
-          "fraud_details": {},
-          "invoice": null,
-          "livemode": false,
-          "metadata": {
-            "year": "2017",
-            "type": "Individual"
-          },
-          "order": null,
-          "outcome": {
-            "network_status": "approved_by_network",
-            "reason": null,
-            "risk_level": "normal",
-            "seller_message": "Payment complete.",
-            "type": "authorized"
-          },
-          "paid": true,
-          "receipt_email": "ofelia.west@pfannerstill.info",
-          "receipt_number": null,
-          "refunded": false,
-          "refunds": {
-            "object": "list",
-            "data": [],
-            "has_more": false,
-            "total_count": 0,
-            "url": "/v1/charges/ch_19hS5hE6uJpa1TKpgZVZuuoM/refunds"
-          },
-          "review": null,
-          "shipping": null,
-          "source": {
-            "id": "card_19hS5gE6uJpa1TKpX5wpGEqt",
-            "object": "card",
-            "address_city": null,
-            "address_country": null,
-            "address_line1": null,
-            "address_line1_check": null,
-            "address_line2": null,
-            "address_state": null,
-            "address_zip": null,
-            "address_zip_check": null,
-            "brand": "Visa",
-            "country": "US",
-            "customer": "cus_A1V5isolY2UXD8",
-            "cvc_check": "pass",
-            "dynamic_last4": null,
-            "exp_month": 7,
-            "exp_year": 2017,
-            "fingerprint": "4ukrR8IaMKCCR4ik",
-            "funding": "credit",
-            "last4": "4242",
-            "metadata": {},
-            "name": null,
-            "tokenization_method": null
-          },
-          "source_transfer": null,
-          "statement_descriptor": "MRiders 2017 Ind Mem",
-          "status": "paid"
-        }
-    http_version: 
-  recorded_at: Sun, 29 Jan 2017 23:28:14 GMT
-- request:
     method: get
     uri: https://api.stripe.com/v1/charges/ch_19hS5hE6uJpa1TKpgZVZuuoM
     body:
@@ -323,7 +163,7 @@ http_interactions:
     uri: https://api.stripe.com/v1/customers
     body:
       encoding: UTF-8
-      string: description=Luanna+Terry&email=dawn.senger%40wuckertpacocha.biz&metadata[first_name]=Luanna&metadata[last_name]=Terry&metadata[address]=9371+Tonja+Center%0APort+Marcelinotown%2C+WY+14189-4247&metadata[phone]=40558204342323&card=tok_19hSu6E6uJpa1TKp11QfTuLb
+      string: description=Stefani+Bosco&email=kermit%40welchwaters.info&metadata[first_name]=Stefani&metadata[last_name]=Bosco&metadata[address]=4047+Rolfson+Terrace%0ASouth+Mackshire%2C+NH+24993-8685&metadata[phone]=5584879820474&card=tok_19mFYvE6uJpa1TKpeapsd9yN
     headers:
       Accept:
       - "*/*"
@@ -337,10 +177,10 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"1.57.0","lang":"ruby","lang_version":"2.3.1 p112 (2016-04-26)","platform":"x86_64-darwin16","engine":"ruby","publisher":"stripe","uname":"Darwin
-        EQ-612.local 16.3.0 Darwin Kernel Version 16.3.0: Thu Nov 17 20:23:58 PST
-        2016; root:xnu-3789.31.2~1/RELEASE_X86_64 x86_64","hostname":"EQ-612.local"}'
+        Ben-Saufley-EQ.local 16.3.0 Darwin Kernel Version 16.3.0: Thu Nov 17 20:23:58
+        PST 2016; root:xnu-3789.31.2~1/RELEASE_X86_64 x86_64","hostname":"Ben-Saufley-EQ.local"}'
       Content-Length:
-      - '256'
+      - '250'
       Host:
       - api.stripe.com
   response:
@@ -351,11 +191,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Mon, 30 Jan 2017 00:20:19 GMT
+      - Sun, 12 Feb 2017 05:06:14 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '2511'
+      - '2505'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
@@ -369,7 +209,7 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Request-Id:
-      - req_A1Vv1gNRYF06TD
+      - req_A6STQbpuiqgtLH
       Stripe-Version:
       - '2014-12-22'
       Strict-Transport-Security:
@@ -378,14 +218,14 @@ http_interactions:
       encoding: UTF-8
       string: |
         {
-          "id": "cus_A1VvMn9lRxBBF3",
+          "id": "cus_A6STdW4NKTfpwe",
           "object": "customer",
           "account_balance": 0,
           "cards": {
             "object": "list",
             "data": [
               {
-                "id": "card_19hSu6E6uJpa1TKp8dDyvErO",
+                "id": "card_19mFYvE6uJpa1TKpMdXJ34HT",
                 "object": "card",
                 "address_city": null,
                 "address_country": null,
@@ -397,10 +237,10 @@ http_interactions:
                 "address_zip_check": null,
                 "brand": "Visa",
                 "country": "US",
-                "customer": "cus_A1VvMn9lRxBBF3",
+                "customer": "cus_A6STdW4NKTfpwe",
                 "cvc_check": "pass",
                 "dynamic_last4": null,
-                "exp_month": 7,
+                "exp_month": 8,
                 "exp_year": 2017,
                 "fingerprint": "4ukrR8IaMKCCR4ik",
                 "funding": "credit",
@@ -412,29 +252,29 @@ http_interactions:
             ],
             "has_more": false,
             "total_count": 1,
-            "url": "/v1/customers/cus_A1VvMn9lRxBBF3/cards"
+            "url": "/v1/customers/cus_A6STdW4NKTfpwe/cards"
           },
-          "created": 1485735618,
+          "created": 1486875974,
           "currency": null,
-          "default_card": "card_19hSu6E6uJpa1TKp8dDyvErO",
-          "default_source": "card_19hSu6E6uJpa1TKp8dDyvErO",
+          "default_card": "card_19mFYvE6uJpa1TKpMdXJ34HT",
+          "default_source": "card_19mFYvE6uJpa1TKpMdXJ34HT",
           "delinquent": false,
-          "description": "Luanna Terry",
+          "description": "Stefani Bosco",
           "discount": null,
-          "email": "dawn.senger@wuckertpacocha.biz",
+          "email": "kermit@welchwaters.info",
           "livemode": false,
           "metadata": {
-            "first_name": "Luanna",
-            "last_name": "Terry",
-            "address": "9371 Tonja Center\nPort Marcelinotown, WY 14189-4247",
-            "phone": "40558204342323"
+            "first_name": "Stefani",
+            "last_name": "Bosco",
+            "address": "4047 Rolfson Terrace\nSouth Mackshire, NH 24993-8685",
+            "phone": "5584879820474"
           },
           "shipping": null,
           "sources": {
             "object": "list",
             "data": [
               {
-                "id": "card_19hSu6E6uJpa1TKp8dDyvErO",
+                "id": "card_19mFYvE6uJpa1TKpMdXJ34HT",
                 "object": "card",
                 "address_city": null,
                 "address_country": null,
@@ -446,10 +286,10 @@ http_interactions:
                 "address_zip_check": null,
                 "brand": "Visa",
                 "country": "US",
-                "customer": "cus_A1VvMn9lRxBBF3",
+                "customer": "cus_A6STdW4NKTfpwe",
                 "cvc_check": "pass",
                 "dynamic_last4": null,
-                "exp_month": 7,
+                "exp_month": 8,
                 "exp_year": 2017,
                 "fingerprint": "4ukrR8IaMKCCR4ik",
                 "funding": "credit",
@@ -461,16 +301,338 @@ http_interactions:
             ],
             "has_more": false,
             "total_count": 1,
-            "url": "/v1/customers/cus_A1VvMn9lRxBBF3/sources"
+            "url": "/v1/customers/cus_A6STdW4NKTfpwe/sources"
           },
           "subscriptions": {
             "object": "list",
             "data": [],
             "has_more": false,
             "total_count": 0,
-            "url": "/v1/customers/cus_A1VvMn9lRxBBF3/subscriptions"
+            "url": "/v1/customers/cus_A6STdW4NKTfpwe/subscriptions"
           }
         }
     http_version: 
-  recorded_at: Mon, 30 Jan 2017 00:20:19 GMT
+  recorded_at: Sun, 12 Feb 2017 05:06:14 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/charges
+    body:
+      encoding: UTF-8
+      string: amount=1061&customer=cus_A6STdW4NKTfpwe&receipt_email=kermit%40welchwaters.info&description=Midnight+Riders+2017+Individual+Membership&metadata[year]=2017&metadata[type]=Individual&currency=usd&statement_descriptor=MRiders+2017+Ind+Mem&source=card_19mFYvE6uJpa1TKpMdXJ34HT
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Stripe/v1 RubyBindings/1.57.0
+      Authorization:
+      - Bearer STRIPE_SECRET_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"1.57.0","lang":"ruby","lang_version":"2.3.1 p112 (2016-04-26)","platform":"x86_64-darwin16","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Ben-Saufley-EQ.local 16.3.0 Darwin Kernel Version 16.3.0: Thu Nov 17 20:23:58
+        PST 2016; root:xnu-3789.31.2~1/RELEASE_X86_64 x86_64","hostname":"Ben-Saufley-EQ.local"}'
+      Content-Length:
+      - '272'
+      Host:
+      - api.stripe.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Sun, 12 Feb 2017 05:06:15 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2530'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Request-Id:
+      - req_A6STh9pMj9Z70F
+      Stripe-Version:
+      - '2014-12-22'
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "ch_19mFYxE6uJpa1TKpwASAf1iH",
+          "object": "charge",
+          "amount": 1061,
+          "amount_refunded": 0,
+          "application": null,
+          "application_fee": null,
+          "balance_transaction": "txn_19mFYxE6uJpa1TKptr6ufasj",
+          "captured": true,
+          "card": {
+            "id": "card_19mFYvE6uJpa1TKpMdXJ34HT",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "Visa",
+            "country": "US",
+            "customer": "cus_A6STdW4NKTfpwe",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 8,
+            "exp_year": 2017,
+            "fingerprint": "4ukrR8IaMKCCR4ik",
+            "funding": "credit",
+            "last4": "4242",
+            "metadata": {},
+            "name": null,
+            "tokenization_method": null
+          },
+          "created": 1486875975,
+          "currency": "usd",
+          "customer": "cus_A6STdW4NKTfpwe",
+          "description": "Midnight Riders 2017 Individual Membership",
+          "destination": null,
+          "dispute": null,
+          "failure_code": null,
+          "failure_message": null,
+          "fraud_details": {},
+          "invoice": null,
+          "livemode": false,
+          "metadata": {
+            "year": "2017",
+            "type": "Individual"
+          },
+          "on_behalf_of": null,
+          "order": null,
+          "outcome": {
+            "network_status": "approved_by_network",
+            "reason": null,
+            "risk_level": "normal",
+            "seller_message": "Payment complete.",
+            "type": "authorized"
+          },
+          "paid": true,
+          "receipt_email": "kermit@welchwaters.info",
+          "receipt_number": null,
+          "refunded": false,
+          "refunds": {
+            "object": "list",
+            "data": [],
+            "has_more": false,
+            "total_count": 0,
+            "url": "/v1/charges/ch_19mFYxE6uJpa1TKpwASAf1iH/refunds"
+          },
+          "review": null,
+          "shipping": null,
+          "source": {
+            "id": "card_19mFYvE6uJpa1TKpMdXJ34HT",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "Visa",
+            "country": "US",
+            "customer": "cus_A6STdW4NKTfpwe",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 8,
+            "exp_year": 2017,
+            "fingerprint": "4ukrR8IaMKCCR4ik",
+            "funding": "credit",
+            "last4": "4242",
+            "metadata": {},
+            "name": null,
+            "tokenization_method": null
+          },
+          "source_transfer": null,
+          "statement_descriptor": "MRiders 2017 Ind Mem",
+          "status": "paid",
+          "transfer_group": null
+        }
+    http_version: 
+  recorded_at: Sun, 12 Feb 2017 05:06:15 GMT
+- request:
+    method: get
+    uri: https://api.stripe.com/v1/charges/ch_19mFYxE6uJpa1TKpwASAf1iH
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - "*/*"
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Stripe/v1 RubyBindings/1.57.0
+      Authorization:
+      - Bearer STRIPE_SECRET_KEY
+      Content-Type:
+      - application/x-www-form-urlencoded
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version":"1.57.0","lang":"ruby","lang_version":"2.3.1 p112 (2016-04-26)","platform":"x86_64-darwin16","engine":"ruby","publisher":"stripe","uname":"Darwin
+        Ben-Saufley-EQ.local 16.3.0 Darwin Kernel Version 16.3.0: Thu Nov 17 20:23:58
+        PST 2016; root:xnu-3789.31.2~1/RELEASE_X86_64 x86_64","hostname":"Ben-Saufley-EQ.local"}'
+      Host:
+      - api.stripe.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Sun, 12 Feb 2017 05:06:16 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2530'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Request-Id:
+      - req_A6ST3xWlLJsE2w
+      Stripe-Version:
+      - '2014-12-22'
+      Strict-Transport-Security:
+      - max-age=31556926; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "id": "ch_19mFYxE6uJpa1TKpwASAf1iH",
+          "object": "charge",
+          "amount": 1061,
+          "amount_refunded": 0,
+          "application": null,
+          "application_fee": null,
+          "balance_transaction": "txn_19mFYxE6uJpa1TKptr6ufasj",
+          "captured": true,
+          "card": {
+            "id": "card_19mFYvE6uJpa1TKpMdXJ34HT",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "Visa",
+            "country": "US",
+            "customer": "cus_A6STdW4NKTfpwe",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 8,
+            "exp_year": 2017,
+            "fingerprint": "4ukrR8IaMKCCR4ik",
+            "funding": "credit",
+            "last4": "4242",
+            "metadata": {},
+            "name": null,
+            "tokenization_method": null
+          },
+          "created": 1486875975,
+          "currency": "usd",
+          "customer": "cus_A6STdW4NKTfpwe",
+          "description": "Midnight Riders 2017 Individual Membership",
+          "destination": null,
+          "dispute": null,
+          "failure_code": null,
+          "failure_message": null,
+          "fraud_details": {},
+          "invoice": null,
+          "livemode": false,
+          "metadata": {
+            "year": "2017",
+            "type": "Individual"
+          },
+          "on_behalf_of": null,
+          "order": null,
+          "outcome": {
+            "network_status": "approved_by_network",
+            "reason": null,
+            "risk_level": "normal",
+            "seller_message": "Payment complete.",
+            "type": "authorized"
+          },
+          "paid": true,
+          "receipt_email": "kermit@welchwaters.info",
+          "receipt_number": null,
+          "refunded": false,
+          "refunds": {
+            "object": "list",
+            "data": [],
+            "has_more": false,
+            "total_count": 0,
+            "url": "/v1/charges/ch_19mFYxE6uJpa1TKpwASAf1iH/refunds"
+          },
+          "review": null,
+          "shipping": null,
+          "source": {
+            "id": "card_19mFYvE6uJpa1TKpMdXJ34HT",
+            "object": "card",
+            "address_city": null,
+            "address_country": null,
+            "address_line1": null,
+            "address_line1_check": null,
+            "address_line2": null,
+            "address_state": null,
+            "address_zip": null,
+            "address_zip_check": null,
+            "brand": "Visa",
+            "country": "US",
+            "customer": "cus_A6STdW4NKTfpwe",
+            "cvc_check": "pass",
+            "dynamic_last4": null,
+            "exp_month": 8,
+            "exp_year": 2017,
+            "fingerprint": "4ukrR8IaMKCCR4ik",
+            "funding": "credit",
+            "last4": "4242",
+            "metadata": {},
+            "name": null,
+            "tokenization_method": null
+          },
+          "source_transfer": null,
+          "statement_descriptor": "MRiders 2017 Ind Mem",
+          "status": "paid",
+          "transfer_group": null
+        }
+    http_version: 
+  recorded_at: Sun, 12 Feb 2017 05:06:16 GMT
 recorded_with: VCR 3.0.3

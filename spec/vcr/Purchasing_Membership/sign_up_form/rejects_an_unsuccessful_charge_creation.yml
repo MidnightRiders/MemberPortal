@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.stripe.com/v1/customers
     body:
       encoding: UTF-8
-      string: description=Shawna+Cruickshank&email=rogelio%40schultz.ca&metadata[first_name]=Shawna&metadata[last_name]=Cruickshank&metadata[address]=3905+Littel+Glen%0AGoldnerstad%2C+FL+49609&metadata[phone]=2306675624&card=tok_19hS3LE6uJpa1TKpwlS6uTaE
+      string: description=Mercedes+Prosacco&email=rhoda%40lowe.biz&metadata[first_name]=Mercedes&metadata[last_name]=Prosacco&metadata[address]=09474+Gibson+Shores%0ABechtelarshire%2C+SC+41087&metadata[phone]=17297437558509&card=tok_19mFZDE6uJpa1TKp0CyuVCqN
     headers:
       Accept:
       - "*/*"
@@ -19,10 +19,10 @@ http_interactions:
       - application/x-www-form-urlencoded
       X-Stripe-Client-User-Agent:
       - '{"bindings_version":"1.57.0","lang":"ruby","lang_version":"2.3.1 p112 (2016-04-26)","platform":"x86_64-darwin16","engine":"ruby","publisher":"stripe","uname":"Darwin
-        EQ-612.local 16.3.0 Darwin Kernel Version 16.3.0: Thu Nov 17 20:23:58 PST
-        2016; root:xnu-3789.31.2~1/RELEASE_X86_64 x86_64","hostname":"EQ-612.local"}'
+        Ben-Saufley-EQ.local 16.3.0 Darwin Kernel Version 16.3.0: Thu Nov 17 20:23:58
+        PST 2016; root:xnu-3789.31.2~1/RELEASE_X86_64 x86_64","hostname":"Ben-Saufley-EQ.local"}'
       Content-Length:
-      - '239'
+      - '243'
       Host:
       - api.stripe.com
   response:
@@ -33,7 +33,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Sun, 29 Jan 2017 23:25:48 GMT
+      - Sun, 12 Feb 2017 05:06:33 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -51,7 +51,7 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Request-Id:
-      - req_A1V3BYhw1RiCvY
+      - req_A6SUZCnltikeV7
       Stripe-Version:
       - '2014-12-22'
     body:
@@ -67,5 +67,5 @@ http_interactions:
           }
         }
     http_version: 
-  recorded_at: Sun, 29 Jan 2017 23:25:48 GMT
+  recorded_at: Sun, 12 Feb 2017 05:06:33 GMT
 recorded_with: VCR 3.0.3
