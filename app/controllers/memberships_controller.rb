@@ -80,65 +80,8 @@ class MembershipsController < ApplicationController
 
   # ALL /memberships/webhooks
   def webhooks
-    accepted_webhooks = %w(charge.refunded invoice.payment_succeeded)
-
-    event = params
-    object = event[:data][:object]
-    logger.info event[:type]
-    logger.info object.to_yaml
-    customer_token = (object[:object] == 'customer' ? object[:id] : object[:customer])
-    if customer_token
-      unless accepted_webhooks.include? event[:type]
-        logger.warn "Stripe::Event type #{event[:type]} not in accepted webhooks. Returning 200."
-        render nothing: true, status: 200 and return
-      end
-
-      user = User.find_by(stripe_customer_token: customer_token)
-
-      if user
-        if object[:object] == 'charge'
-          membership = Membership.find_by(stripe_charge_id: object[:id])
-          # charge.succeeded is handled immediately - no webhook
-          if membership.present?
-            if event[:type] == 'charge.refunded'
-              membership.update_attribute(:refunded, 'true')
-            end
-          else
-            logger.error "No membership associated with Stripe Charge #{object[:id]}."
-          end
-        elsif object[:object] == 'invoice'
-          if event[:type] == 'invoice.payment_succeeded'
-            logger.info 'Creating new membership'
-            subscription = user.stripe_customer.subscriptions.retrieve(object[:subscription])
-            year = Time.at(subscription.current_period_start).year
-            m = user.memberships.find_by(year: year)
-            if m.present?
-              logger.info "Duplicate #{year} membership for #{user.username} (#{m.stripe_subscription_id}/#{subscription.id})"
-              render nothing: true, status: 200 and return
-            end
-            membership = user.memberships.new(
-              year: year,
-              type: subscription.plan.id.titleize,
-              stripe_subscription_id: subscription.id,
-              stripe_charge_id: object[:charge]
-            )
-            membership.save!
-            MembershipNotifier.new(user: user, membership: membership).notify_renewal
-          end
-        end
-        render nothing: true, status: 200
-      else
-        logger.error "No User could be found with Stripe ID #{customer_token}\n  Event ID: #{event[:id]}"
-        render nothing: true, status: 404
-      end
-    else
-      logger.error 'No Stripe::Customer attached to event.'
-      render nothing: true, status: 200
-    end
-  rescue => err
-    logger.fatal "Webhooks error encountered: #{err}"
-    logger.debug err
-    render nothing: true, status: 500
+    webhook = StripeWebhookService.new(params)
+    render webhook.process
   end
 
   private

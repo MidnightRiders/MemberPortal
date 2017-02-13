@@ -1,5 +1,5 @@
 shared_examples_for 'Ignored Webhooks' do |event_code|
-  let(:event) { JSON.load(Rails.root.join('spec/fixtures/webhooks', "#{event_code}.json")) }
+  let(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks', "#{event_code}.json"))) }
 
   it 'returns 200 with logger warning that it was ignored' do
     allow(Rails.logger).to receive(:info)
@@ -12,7 +12,7 @@ shared_examples_for 'Ignored Webhooks' do |event_code|
 end
 
 shared_examples_for 'Non-Customer Webhooks' do |event_code|
-  let(:event) { JSON.load(Rails.root.join('spec/fixtures/webhooks', "#{event_code}.json")) }
+  let(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks', "#{event_code}.json"))) }
 
   it 'returns 200 with logger error for no Stripe::Customer' do
     expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')

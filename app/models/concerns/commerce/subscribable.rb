@@ -35,5 +35,22 @@ module Commerce
     def subscription?
       stripe_subscription_id.present?
     end
+
+    class_methods do
+      def for_subscription(subscription_id, query = {})
+        query[:stripe_subscription_id] = subscription_id
+        where(query).order(created_at: :asc).last || raise(ActiveRecord::RecordNotFound,
+          "Could not find record to renew for Stripe::Subscription ID #{subscription_id}")
+      end
+
+      def re_up!(subscription, query_attributes = {}, update_attributes = {})
+        last_order = for_subscription(subscription, query_attributes)
+        new_order = last_order.dup
+        new_order.id = nil
+        new_order.assign_attributes(update_attributes) if update_attributes.present?
+        new_order.save!
+        new_order
+      end
+    end
   end
 end

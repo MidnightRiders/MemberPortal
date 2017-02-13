@@ -87,7 +87,7 @@ class Membership < ActiveRecord::Base
   alias purchaser user
 
   def previous
-    @previous ||= user.memberships.find_by(year: year)
+    @previous ||= user.memberships.where('year < ?', year).last
   end
 
   # For Stripe Subscriptions
