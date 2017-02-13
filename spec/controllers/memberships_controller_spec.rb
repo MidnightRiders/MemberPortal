@@ -52,7 +52,7 @@ describe MembershipsController do
       describe('failed') { it_behaves_like 'Ignored Webhooks', 'charge.failed' }
 
       describe 'charge.refunded' do
-        let!(:event) { JSON.load(Rails.root.join('spec/fixtures/webhooks/charge.refunded.json')).with_indifferent_access }
+        let!(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/charge.refunded.json'))).with_indifferent_access }
 
         context 'with valid user' do
           let!(:user) {
@@ -115,7 +115,7 @@ describe MembershipsController do
       describe('created') { it_behaves_like 'Ignored Webhooks', 'invoice.created' }
 
       describe 'payment_succeded' do
-        let!(:event) { JSON.load(Rails.root.join('spec/fixtures/webhooks/invoice.payment_succeeded.json')).with_indifferent_access }
+        let!(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/invoice.payment_succeeded.json'))).with_indifferent_access }
 
         context 'without valid user' do
           it 'logs an error for no corresponding user' do
@@ -131,21 +131,25 @@ describe MembershipsController do
           let!(:user) {
             FactoryGirl.create(:user, :without_membership).tap do |u|
               u.update_attribute(:stripe_customer_token, event[:data][:object][:customer])
+              u.memberships.new(
+                year: Time.zone.at(event[:created]).year - 1,
+                type: 'Individual',
+                stripe_subscription_id: event[:data][:object][:subscription]
+              ).save(validate: false)
             end
           }
 
-          before(:each) { Timecop.travel(Time.at(event[:created])) }
+          before(:each) { Timecop.travel(Time.zone.at(event[:created])) }
           after(:each) { Timecop.return }
 
           before :each do
             allow_any_instance_of(User).to receive_message_chain(:stripe_customer, :subscriptions, :retrieve) {
-              double('Stripe::Subscription', {
+              double(
+                'Stripe::Subscription',
                 id: event.dig(:data, :object, :subscription),
                 current_period_start: Time.current,
-                plan: double('Stripe::Plan', {
-                  id: 'individual'
-                })
-              })
+                plan: double('Stripe::Plan', id: 'individual')
+              )
             }
           end
 
@@ -162,10 +166,10 @@ describe MembershipsController do
           end
 
           it 'doesn\'t create a duplicate membership' do
-            user.memberships.create({ type: 'Individual', year: Date.current.year })
+            user.memberships.create(type: 'Individual', year: Date.current.year)
 
             allow(Rails.logger).to receive(:info)
-            expect(Rails.logger).to receive(:info).with(a_string_including('Duplicate'))
+            expect(Rails.logger).to receive(:info).with(a_string_including('duplicate Membership'))
             expect { post :webhooks, event }.not_to change(Membership, :count)
             expect(response).to have_http_status(:success)
           end
@@ -175,12 +179,12 @@ describe MembershipsController do
 
     describe 'non-customer events' do
       context 'transfer' do
-        describe('created') { it_behaves_like 'Non-Customer Webhooks', 'transfer.created' }
-        describe('paid') { it_behaves_like 'Non-Customer Webhooks', 'transfer.paid' }
+        describe('created') { it_behaves_like 'Ignored Webhooks', 'transfer.created' }
+        describe('paid') { it_behaves_like 'Ignored Webhooks', 'transfer.paid' }
       end
 
       context 'balance' do
-        describe('available') { it_behaves_like 'Non-Customer Webhooks', 'balance.available' }
+        describe('available') { it_behaves_like 'Ignored Webhooks', 'balance.available' }
       end
     end
   end
