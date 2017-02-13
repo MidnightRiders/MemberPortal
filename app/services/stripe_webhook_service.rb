@@ -30,7 +30,7 @@ class StripeWebhookService
     renew_subscription
     @response[:status] = 200
   rescue ActiveRecord::RecordInvalid => e
-    if e.record.errors.messages.keys == %i(year)
+    if e.record.errors.messages.keys.include? :year
       Rails.logger.info "Skipping duplicate Membership for #{object[:subscription]}"
       return @response[:status] = 200
     end
