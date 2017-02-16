@@ -23,9 +23,6 @@ module Commerce
 
     def make_stripe_charge(card_id = nil)
       self.stripe_charge_id = Stripe::Charge.create(charge_information(card_id)).id
-    rescue Stripe::StripeError => e
-      logger.error "Stripe error while saving #{self.class.name.humanize} with payment: #{e.message}"
-      errors.add :base, "There was a problem with your credit card: #{e.message}"
     end
 
     # Purchaser must be defined in model
@@ -37,6 +34,7 @@ module Commerce
     def save_with_payment!(card_id = nil)
       return unless ready_to_pay?
 
+      card_id = nil if stripe_card_token.present?
       purchaser.create_or_update_stripe_customer(stripe_card_token)
 
       purchaser.subscribe_to(self) if self.class.include?(Subscribable) && subscribe?

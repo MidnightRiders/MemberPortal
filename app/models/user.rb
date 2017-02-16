@@ -25,11 +25,11 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :memberships
+  has_many :memberships, autosave: false
 
-  has_many :mot_ms
-  has_many :rev_guesses
-  has_many :pick_ems
+  has_many :mot_ms, autosave: false
+  has_many :rev_guesses, autosave: false
+  has_many :pick_ems, autosave: false
 
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: true, case_sensitive: false

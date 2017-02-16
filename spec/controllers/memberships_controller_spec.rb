@@ -7,14 +7,34 @@ describe MembershipsController do
 
   describe 'post #create' do
     let!(:user) { FactoryGirl.create(:user, :without_membership) }
-    before(:each) do
-      sign_in user
 
-      allow(Stripe::Customer).to receive(:create).and_return(double('Stripe::Customer', id: StripeHelper.customer_token, default_source: StripeHelper.card_token))
-      allow(Stripe::Charge).to receive(:create).and_return(double('Stripe::Charge', id: StripeHelper.charge_id))
+    context 'with errors' do
+      before(:each) do
+        sign_in user
+      end
+
+      it 'catches a payment error' do
+        allow(Stripe::Customer).to receive(:create).and_return(double('Stripe::Customer', id: StripeHelper.customer_token, default_source: StripeHelper.card_token))
+        allow(Stripe::Charge).to receive(:create).and_raise(Stripe::StripeError, 'Something went wrong')
+
+        expect(Rails.logger).to receive(:error).with(a_string_including('Something went wrong'))
+        expect(subject).to receive(:prepare_new_form)
+
+        post :create, type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual }
+
+        expect(response).to have_http_status(:ok)
+        expect(flash.now[:error]).to eq('Something went wrong')
+      end
     end
 
     context 'with valid payment info' do
+      before(:each) do
+        sign_in user
+
+        allow(Stripe::Customer).to receive(:create).and_return(double('Stripe::Customer', id: StripeHelper.customer_token, default_source: StripeHelper.card_token))
+        allow(Stripe::Charge).to receive(:create).and_return(double('Stripe::Charge', id: StripeHelper.charge_id))
+      end
+
       it 'creates a new Membership' do
         expect {
           post :create, type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual }

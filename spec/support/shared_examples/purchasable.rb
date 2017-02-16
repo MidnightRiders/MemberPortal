@@ -70,15 +70,6 @@ shared_examples_for 'Commerce::Purchasable' do
 
       product.make_stripe_charge(card_id)
     end
-
-    it 'adds an error to :base if the Stripe::Charge raises an error' do
-      allow(product).to receive(:charge_information).and_return({})
-      allow(Stripe::Charge).to receive(:create).and_raise(Stripe::StripeError.new('Couldn\'t create charge'))
-
-      expect { product.make_stripe_charge }
-        .to change { product.errors[:base] }
-        .to(['There was a problem with your credit card: Couldn\'t create charge'])
-    end
   end
 
   describe 'save_with_payment!' do
@@ -116,10 +107,20 @@ shared_examples_for 'Commerce::Purchasable' do
     end
 
     it 'makes stripe charge with card_id if passed' do
-      product.stripe_card_token = stripe_card_token
+      product.stripe_card_token = ''
       card_id = StripeHelper.card_id
 
       expect(product).to receive(:make_stripe_charge).with(card_id)
+
+      allow(product.purchaser).to receive(:create_or_update_stripe_customer).and_return(double('Stripe::Customer'))
+      product.save_with_payment!(card_id)
+    end
+
+    it 'ignores card_id if stripe_card_token is present' do
+      product.stripe_card_token = stripe_card_token
+      card_id = StripeHelper.card_id
+
+      expect(product).to receive(:make_stripe_charge).with(nil)
 
       allow(product.purchaser).to receive(:create_or_update_stripe_customer).and_return(double('Stripe::Customer'))
       product.save_with_payment!(card_id)
