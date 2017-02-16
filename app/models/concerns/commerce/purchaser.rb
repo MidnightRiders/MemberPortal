@@ -10,7 +10,7 @@ module Commerce
 
     def create_or_update_stripe_customer(stripe_card_token = nil)
       if stripe_customer.present?
-        update_payment_method(stripe_card_token).id if stripe_card_token
+        update_payment_method(stripe_card_token) if stripe_card_token
         update_stripe_customer
       else
         create_stripe_customer(stripe_card_token: stripe_card_token)

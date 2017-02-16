@@ -5,6 +5,8 @@ class MembershipsController < ApplicationController
   before_action :get_membership, except: %i(new create webhooks)
   authorize_resource except: [:webhooks]
   before_action :get_user, except: [:webhooks]
+  before_action :build_membership, only: [:create]
+  before_action :admin_grant_membership, only: [:create]
   skip_before_action :verify_authenticity_token, only: [:webhooks]
 
   # GET /users/:user_id/memberships
@@ -21,7 +23,7 @@ class MembershipsController < ApplicationController
       @card = Stripe::Charge.retrieve(@membership.stripe_charge_id).card
     end
   rescue Stripe::StripeError => e
-    logger.error "Stripe error retrieving charge: #{e.message}"
+    ErrorNotifier.notify(e)
   end
 
   # GET /users/:user_id/memberships/new
@@ -36,16 +38,14 @@ class MembershipsController < ApplicationController
   # POST /users/:user_id/memberships
   # POST /users/:user_id/memberships.json
   def create
-    @membership = @user.memberships.new(membership_params)
-    admin_grant_membership and return unless @user == current_user
-
     @membership.save_with_payment!(params[:card_id])
     MembershipNotifier.new(user: @user, membership: @membership).notify_new
 
     redirect_to user_membership_path(@user, @membership), notice: t('.payment_successful')
-  rescue => e
+  rescue => err
+    flash.now[:error] = ErrorNotifier.notify(err)
+
     prepare_new_form
-    flash.now[:error] = e.message
     render action: 'new'
   end
 
@@ -87,6 +87,7 @@ class MembershipsController < ApplicationController
   private
 
   def admin_grant_membership
+    return if @user == current_user
     if @membership.save
       redirect_to get_user_path, notice: 'Membership was successfully created.'
     else
@@ -102,6 +103,10 @@ class MembershipsController < ApplicationController
   # Define +@membership+ based on route +:id+
   def get_membership
     @membership = Membership.unscoped.find(params[:id] || params[:membership_id])
+  end
+
+  def build_membership
+    @membership = @user.memberships.new(membership_params)
   end
 
   # Determine where to redirect after success
