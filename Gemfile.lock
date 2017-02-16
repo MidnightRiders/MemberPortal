@@ -60,9 +60,6 @@ GEM
     capybara-screenshot (1.0.13)
       capybara (>= 1.0, < 3)
       launchy
-    capybara-webkit (1.11.1)
-      capybara (>= 2.3.0, < 2.8.0)
-      json
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cliver (0.3.2)
@@ -320,7 +317,6 @@ DEPENDENCIES
   cancancan (~> 1.10.1)
   capybara
   capybara-screenshot
-  capybara-webkit
   codeclimate-test-reporter (~> 1.0.0)
   coffee-rails
   database_cleaner
