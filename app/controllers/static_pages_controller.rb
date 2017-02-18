@@ -60,14 +60,15 @@ class StaticPagesController < ApplicationController
   private
 
   def stripe_events
-    if params[:refresh] || @stripe_events.nil?
-      @stripe_events = []
-      100.times do
-        capture = Stripe::Event.all(limit: 100, starting_after: @stripe_events.last.try(:id))
-        @stripe_events += capture.data
-        break unless capture.has_more
-      end
-    end
-    @stripe_events
+    []
+    # if params[:refresh] || @stripe_events.nil?
+    #   @stripe_events = []
+    #   100.times do
+    #     capture = Stripe::Event.all(limit: 100, starting_after: @stripe_events.last.try(:id))
+    #     @stripe_events += capture.data
+    #     break unless capture.has_more
+    #   end
+    # end
+    # @stripe_events
   end
 end
