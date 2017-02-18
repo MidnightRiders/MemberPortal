@@ -7,26 +7,27 @@
 %table
   %thead
     %th.small-2 Timestamp
-    %th.small-2 Event Type
+    %th.small-3 Event Type
     %th.small-2 User
     %th.small-5 Details
-    %th.small-1 Actions
   %tbody
     - @transactions.each do |event|
-      - user = @users[event.data.object.object == 'customer' ? event.data.object.id : event.data.object.customer]
+      - user = @users[event.data.object.object == 'customer' ? event.data.object.id : event.data.object.try(:customer)]
       %tr{ data: { event_id: event.id } }
         %td
           %small= Time.at(event.created).in_time_zone.strftime('%m-%d-%Y %I:%M%P')
-        %td= event.type
+        %td
+          %strong= event.type
         %td
           - if user
             = link_to user.username, user
+          - elsif event.data.object.object == 'transfer'
+            No User (Transfer)
           - else
             No User:
-            = event.data.object.object == 'customer' ? event.data.object.id : event.data.object.customer
+            = event.data.object.object == 'customer' ? event.data.object.id : event.data.object.try(:customer)
         %td
           %a.toggle-div{ href: '#' } View Details
           %pre.toggle-target= event.data.object
-        %td
 .text-right
   = will_paginate(@transactions, previous_label: 'Newer', next_label: 'Older', params: { view: 'detailed' })

@@ -24,14 +24,16 @@
             %time= membership.created_at.strftime('%m-%d-%Y %I:%M%P')
         %td
           = icon 'repeat fa-fw' if membership.subscription?
-          = icon 'credit-card fa-fw' if membership.stripe_charge_id
+          = icon 'credit-card fa-fw' if membership.stripe_charge_id.present?
+          = icon 'bolt fa-fw' if membership.override.present?
+          = icon 'warning fa-fw', title: 'No charge found or override present' unless membership.stripe_charge_id.present? || membership.override.present?
           = membership.type
           - if membership.is_a? Family
             %br
             - if membership.relatives.empty?
               %em No Relatives
             - else
-              - membership.relatives.includes(:user).each do |relative|
+              - membership.relatives.includes(:user).where.not(user_id: nil).each do |relative|
                 #{link_to relative.user.username, relative.user},
         %td= membership.privileges.join(', ')
         - if params[:view] == 'all'

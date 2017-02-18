@@ -40,7 +40,8 @@ class StaticPagesController < ApplicationController
     when 'detailed'
       require 'will_paginate/array'
       @transactions = stripe_events.paginate(per_page: 25, page: params[:page])
-      @users = Hash[User.where(stripe_customer_token: @transactions.map { |e| e.data.object.object == 'customer' ? e.data.object.id : e.data.object.customer }.reject(&:nil?)).map { |u| [u.stripe_customer_token, u] }]
+      tokens = @transactions.map { |e| e.data.object.object == 'customer' ? e.data.object.id : e.data.object.try(:customer) }.reject(&:nil?)
+      @users = User.where(stripe_customer_token: tokens).map { |u| [u.stripe_customer_token, u] }.to_h
       view = 'transactions'
     when 'all'
       @transactions = Membership.unscoped.includes(:user).where.not(type: 'Relative').order(created_at: :desc).paginate(per_page: 25, page: params[:page])
