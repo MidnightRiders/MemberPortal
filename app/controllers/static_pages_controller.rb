@@ -39,7 +39,7 @@ class StaticPagesController < ApplicationController
     case params[:view]
     when 'detailed'
       require 'will_paginate/array'
-      @transactions = stripe_events.paginate(per_page: 25, page: params[:page])
+      @transactions = stripe_events
       tokens = @transactions.map { |e| e.data.object.object == 'customer' ? e.data.object.id : e.data.object.try(:customer) }.reject(&:nil?)
       @users = User.where(stripe_customer_token: tokens).map { |u| [u.stripe_customer_token, u] }.to_h
       view = 'transactions'
@@ -60,15 +60,8 @@ class StaticPagesController < ApplicationController
   private
 
   def stripe_events
-    []
-    # if params[:refresh] || @stripe_events.nil?
-    #   @stripe_events = []
-    #   100.times do
-    #     capture = Stripe::Event.all(limit: 100, starting_after: @stripe_events.last.try(:id))
-    #     @stripe_events += capture.data
-    #     break unless capture.has_more
-    #   end
-    # end
-    # @stripe_events
+    events = Stripe::Event.all(limit: 25, starting_after: params[:starting_after])
+    @has_more = events.has_more
+    events.data
   end
 end

@@ -30,4 +30,8 @@
           %a.toggle-div{ href: '#' } View Details
           %pre.toggle-target= event.data.object
 .text-right
-  = will_paginate(@transactions, previous_label: 'Newer', next_label: 'Older', params: { view: 'detailed' })
+  - if @has_more
+    = link_to transactions_path(view: :detailed, starting_after: @transactions.last[:id]), class: 'button' do
+      Next
+      %i.fa.fa-arrow-right.fa-fw
+
