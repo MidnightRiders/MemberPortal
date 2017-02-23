@@ -35,8 +35,7 @@ class BlogRss
       rss_parsed = Hash.from_xml(rss)
       rss_parsed.dig('rss', 'channel', 'item')
     rescue => e
-      Rails.logger.error 'Blog error for ' + url
-      Rails.logger.error e
+      ErrorNotifier.notify(e)
       Rails.logger.info 'RSS: ' + rss
     end
   end

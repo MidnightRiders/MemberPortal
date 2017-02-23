@@ -11,6 +11,6 @@ class SlackBot
     response = JSON.parse(response.body)
     raise("Unable to post \"#{text}\" to #{channel}: #{response}") unless response['ok']
   rescue => e
-    Rails.logger.error e
+    ErrorNotifier.notify(e)
   end
 end

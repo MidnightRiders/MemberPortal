@@ -176,8 +176,7 @@ class User < ActiveRecord::Base
         family_id = nil if type == 'Individual'
         imported_users << user
       rescue => e
-        Rails.logger.warn e.message
-        Rails.logger.info e.backtrace.to_yaml
+        ErrorNotifier.notify(e, :warn)
       end
     end
   end

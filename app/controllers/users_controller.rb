@@ -93,8 +93,7 @@ class UsersController < ApplicationController
     users = User.import(file, override_id: current_user.id)
     redirect_to users_path, notice: "#{users.size} #{'user'.pluralize(users.size)} imported."
   rescue => e
-    Rails.logger.warn e.message
-    Rails.logger.info e.backtrace.to_yaml
+    ErrorNotifier.notify(e)
     redirect_to users_path, alert: e.message
   end
 
