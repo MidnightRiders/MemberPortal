@@ -12,19 +12,15 @@ class StripeWebhookService
     public_send(@event[:type].gsub(/[^a-z0-9]+/i, '_'))
     @response
   rescue => e
-    Rails.logger.error e.message
-    Rails.logger.info e.backtrace&.join("\n")
+    ErrorNotifier.notify(e)
     @response
   end
 
   def charge_refunded
     membership = Membership.find_by(stripe_charge_id: object[:id])
-    if membership.present?
-      membership.update!(refunded: 'true')
-    else
-      Rails.logger.error "No membership associated with Stripe Charge #{object[:id]}."
-    end
     @response[:status] = 200
+    raise StripeWebhooks::MissingRecord, "No membership associated with Stripe Charge #{object[:id]}." if membership.nil?
+    membership.update!(refunded: 'true')
   end
 
   def invoice_payment_succeeded
@@ -44,9 +40,8 @@ class StripeWebhookService
     return @customer_token if @customer_token
     customer_token = object[:object] == 'customer' ? object[:id] : object[:customer]
     return @customer_token = customer_token if customer_token.present?
-    Rails.logger.error 'No Stripe::Customer attached to event.'
     @response[:status] = 200
-    false
+    raise StripeWebhooks::Ignored, 'No Stripe::Customer attached to event.'
   end
 
   def filter_event
@@ -72,9 +67,8 @@ class StripeWebhookService
     return @user if @user
     user = User.find_by(stripe_customer_token: customer_token)
     return @user = user if user
-    Rails.logger.error "No User could be found with Stripe ID #{customer_token}\n  Event ID: #{@event[:id]}"
     @response[:status] = 404
-    false
+    raise StripeWebhooks::MissingRecord, "No User could be found with Stripe ID #{customer_token}\n  Event ID: #{@event[:id]}"
   end
 
   def subscription_year

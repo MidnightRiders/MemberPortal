@@ -46,7 +46,7 @@ RSpec.describe StripeWebhookService do
       end
       webhook = StripeWebhookService.new(event)
 
-      expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')
+      expect(Rails.logger).to receive(:error).with('StripeWebhooks::Ignored: No Stripe::Customer attached to event.')
 
       response = webhook.process
 
