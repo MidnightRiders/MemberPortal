@@ -125,6 +125,19 @@ shared_examples_for 'Commerce::Purchasable' do
       allow(product.purchaser).to receive(:create_or_update_stripe_customer).and_return(double('Stripe::Customer'))
       product.save_with_payment!(card_id)
     end
+
+    it 'does not save if the Stripe Charge fails' do
+      product.stripe_card_token = stripe_card_token
+      allow(product).to receive(:make_stripe_charge).and_raise(Stripe::StripeError, 'Something broke')
+      allow(product.purchaser).to receive(:create_or_update_stripe_customer).and_return(double('Stripe::Customer'))
+
+      expect(product.class).not_to receive(:include?)
+      expect(product.purchaser).not_to receive(:subscribe_to)
+
+      expect { product.save_with_payment! }.to raise_error(Stripe::StripeError, 'Something broke')
+
+      expect(product.persisted?).to be(false)
+    end
   end
 
   describe 'refund' do
