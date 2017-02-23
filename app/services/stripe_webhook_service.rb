@@ -8,6 +8,7 @@ class StripeWebhookService
 
   def process
     return @response unless filter_event && customer_token && user
+    return { nothing: true, status: 200 } if ignored?
     public_send(@event[:type].gsub(/[^a-z0-9]+/i, '_'))
     @response
   rescue => e
@@ -78,5 +79,9 @@ class StripeWebhookService
 
   def subscription_year
     Time.zone.at(object[:lines][:data][0][:period][:start].to_i).year
+  end
+
+  def ignored?
+    ENV['IGNORED_STRIPE_EVENT_IDS'].to_s.split(/\s*,\s*/).include? @event[:id]
   end
 end
