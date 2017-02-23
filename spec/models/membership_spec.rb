@@ -13,11 +13,11 @@ describe Membership do
   end
 
   it_behaves_like 'Commerce::Purchasable' do
-    let(:product) { FactoryGirl.create(:membership).tap { |m| m.update_attribute(:info, {}) } }
+    let(:product) { FactoryGirl.build(:membership).tap { |m| m.info = {} } }
   end
 
   it_behaves_like 'Commerce::Subscribable' do
-    let(:product) { FactoryGirl.create(:membership).tap { |m| m.update_attribute(:info, {}) } }
+    let(:product) { FactoryGirl.build(:membership).tap { |m| m.info = {} } }
   end
 
   describe 'notify_slack' do

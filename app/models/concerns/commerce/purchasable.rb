@@ -37,8 +37,8 @@ module Commerce
       card_id = nil if stripe_card_token.present?
       purchaser.create_or_update_stripe_customer(stripe_card_token)
 
-      purchaser.subscribe_to(self) if self.class.include?(Subscribable) && subscribe?
       make_stripe_charge(card_id)
+      purchaser.subscribe_to(self) if self.class.include?(Subscribable) && subscribe?
 
       save!
     end
