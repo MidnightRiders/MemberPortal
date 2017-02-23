@@ -20,6 +20,22 @@ RSpec.describe StripeWebhookService do
       expect(response[:nothing]).to be(true)
     end
 
+    it 'returns 200 for explicitly ignored Stripe::Event IDs' do
+      ignored_id = StripeHelper.event_id
+      ignored_ids = [ignored_id] + Array.new(5) { StripeHelper.event_id }
+      allow(ENV).to receive(:[]).with('IGNORED_STRIPE_EVENT_IDS').and_return ignored_ids.join(',')
+
+      event = { id: ignored_id, type: 'event_type' }
+
+      webhook = StripeWebhookService.new(event)
+
+      expect(StripeWebhookService).not_to receive(:event_type)
+
+      response = webhook.process
+
+      expect(response[:status]).to eq(200)
+    end
+
     it 'returns 200 for events that don\'t have a Stripe::Customer' do
       event_name = StripeWebhookService::ACCEPTED_EVENTS.sample
       event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access

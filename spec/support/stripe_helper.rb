@@ -14,6 +14,10 @@ class StripeHelper
       'ch_' + chars
     end
 
+    def event_id
+      'evt_' + chars
+    end
+
     def chars(n = 24)
       FFaker::Lorem.characters(n)
     end
