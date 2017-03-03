@@ -1,34 +1,30 @@
 class RelativesController < ApplicationController
-  load_and_authorize_resource
+  before_action :custom_authorize
   before_action :get_user_family
 
   # GET /users/:username/memberships/:membership_id/relatives/new
   def new
-    @relative = @family.relatives.new
-    @relative_user = @relative.user = User.new
+    @relative = @family.relatives.new(info: { pending_approval: true, invited_email: '' })
   end
 
   # POST /users/:username/memberships/:membership_id/relatives
   def create
-    @relative_user = User.find_or_initialize_by(relative_params[:user_attributes])
+    @relative_user = User.find_or_initialize_by(relative_params).tap(&:valid?)
 
-    if @relative_user.current_member?
-      redirect_to new_user_membership_relative_path(@family.user, @family), flash: { error: 'There is already a user with a current membership for that email.' }
-    else
-      if Devise.email_regexp =~ @relative_user.email
-        @relative = Relative.new(year: @family.year, family_id: @family.id, info: { pending_approval: true, invited_email: @relative_user.email })
-        @relative.save(validate: false)
-        if @relative_user.persisted?
-          MembershipMailer.invite_existing_user_to_family(@relative_user, @family, @relative).deliver_now
-        else
-          MembershipMailer.invite_new_user_to_family(@relative_user, @family, @relative).deliver_now
-        end
-        redirect_to user_membership_path(@user, @family), flash: { success: "#{@relative_user.email} has been invited to join your family membership." }
-      else
-        @relative_user.errors.add(:email, 'does not appear to be valid')
-        render action: 'new'
-      end
-    end
+    raise 'There is already a user with a current membership for that email.' if @relative_user.current_member?
+
+    @relative = Relative.create!(
+      year: @family.year,
+      family_id: @family.id,
+      info: { pending_approval: true, invited_email: @relative_user.email }
+    )
+    MembershipMailer.invite_user_to_family(@relative_user, @family, @relative).deliver_now
+    redirect_to user_membership_path(@user, @family), flash: {
+      success: "#{@relative_user.email} has been invited to join your family membership."
+    }
+  rescue => e
+    flash.now[:error] = ErrorNotifier.notify(e, severity: :warn)
+    render action: :new
   end
 
   # DELETE /users/:username/memberships/:membership_id/relatives/1
@@ -55,7 +51,7 @@ class RelativesController < ApplicationController
 
   # POST /users/:username/memberships/:membership_id/relatives//accept_invitation
   def accept_invitation
-    if @relative.pending_approval
+    if @relative.pending_approval?
       if (@relative_user = User.find_by(email: @relative.invited_email)).present? && @relative.update_attributes(user_id: @relative_user.id, info: @relative.info.with_indifferent_access.except(:pending_approval, :invited_email))
         MembershipNotifier.new(user: @relative_user, membership: @relative).notify_relative
         redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
@@ -80,8 +76,12 @@ class RelativesController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def relative_params
-    r = params.require(:relative).permit(user_attributes: [:email])
-    r[:user_attributes][:email].downcase! if r[:user_attributes].try(:[], :email)
-    r
+    params.require(:relative).permit(info: [:invited_email]).tap { |p|
+      p.dig(:info, :invited_email)&.downcase!
+    }
+  end
+
+  def custom_authorize
+    authorize! :manage, Relative, family_id: params[:membership_id]
   end
 end

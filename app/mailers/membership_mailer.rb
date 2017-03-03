@@ -49,6 +49,16 @@ class MembershipMailer < ActionMailer::Base
     mail(to: 'Membership Chair<membership@midnightriders.com>,President<president@midnightriders.com>,Web Chair<webczar@midnightriders.com>', subject: @title)
   end
 
+  # Invite user to join Family membership - determines which email to send
+  # based on whether the user is persisted
+  def invite_user_to_family(relative_user, family, relative)
+    if relative_user.persisted?
+      invite_existing_user_to_family(relative_user, family, relative)
+    else
+      invite_new_user_to_family(relative_user, family, relative)
+    end
+  end
+
   # Invite existing user to join Family membership
   def invite_existing_user_to_family(user, family, relative)
     @user = user

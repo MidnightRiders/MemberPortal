@@ -14,7 +14,6 @@ class Membership < ActiveRecord::Base
 
   hstore_accessor :info,
                   override: :integer,
-                  pending_approval: :boolean,
                   invited_email: :string
 
   belongs_to :user
@@ -26,12 +25,13 @@ class Membership < ActiveRecord::Base
 
   before_validation :remove_blank_privileges
 
-  validates :year, presence: true,
+  validates :year,
     inclusion: {
       in: (Date.current.year..Date.current.year + 1)
     },
     uniqueness: {
-      scope: [:user_id], conditions: -> { where(refunded: nil) }
+      scope: [:user_id],
+      conditions: -> { where(refunded: nil) }
     }
   validates :type, presence: true, inclusion: { in: TYPES, message: 'is not valid' }
   validate :accepted_privileges
@@ -112,7 +112,7 @@ class Membership < ActiveRecord::Base
   private
 
   def paid_for?
-    return true if is_a?(Relative) || overriding_admin.present?
+    return true if overriding_admin.present?
     super
   end
 

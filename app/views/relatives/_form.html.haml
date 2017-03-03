@@ -1,16 +1,17 @@
-= form_for @relative, url: user_membership_relatives_path(@family.user, @family) do |f|
-  = f.fields_for :user, @relative_user do |ff|
+= form_for relative, url: user_membership_relatives_path(relative.family.user, relative.family) do |relative_form|
+  = relative_form.fields_for :info, OpenStruct.new(relative_form.object.info) do |relative_info_form|
     .row
       .medium-4.columns
-        = ff.label :email, class: 'inline'
+        = relative_info_form.label :invited_email, class: 'inline'
       .medium-8.columns
-        = ff.text_field :email, placeholder: 'Email Address'
-        - if @relative_user.errors.include?(:email)
+        = relative_info_form.text_field :email, placeholder: 'Email Address'
+        - if relative_form.object.errors.dig(:info, :invited_email).present?
           %small.error
-            = @relative_user.class.human_attribute_name(:email).titleize
-            = @relative_user.errors.messages[:email].to_sentence
+            = User.human_attribute_name(:email).titleize
+            = relative_form.object.errors.dig(:info, :invited_email).to_sentence
+
   .row.actions
     .column
-      = f.button :submit, class: 'button' do
+      = relative_form.button :submit, class: 'button' do
         = icon 'plus'
         Add

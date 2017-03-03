@@ -4,11 +4,16 @@ class Relative < Membership
 
   before_validation :strip_invited_email
 
+  hstore_accessor :info,
+                  pending_approval: :boolean,
+                  invited_email: :string
+
   validate :has_good_family
   validate :no_time_traveling
+  validate :valid_invited_email
 
-  scope :approved, -> { where("info->'pending_approval'::text != ?", 'true') }
-  scope :pending, -> { where("info->'pending_approval'::text = ?", 'true') }
+  scope :approved, -> { not_pending_approval }
+  scope :pending, -> { is_pending_approval }
 
   def relatives
     [family] + family.relatives - [self]
@@ -35,8 +40,12 @@ class Relative < Membership
 
   private
 
+  def paid_for?
+    true
+  end
+
   def strip_invited_email
-    info.dig(:invited_email)&.strip!
+    invited_email&.strip!
   end
 
   def has_good_family
@@ -45,6 +54,11 @@ class Relative < Membership
   end
 
   def no_time_traveling
-    errors.add(:year, 'is not the same year as family membership') if year != family.try(:year)
+    return unless family.present?
+    errors.add(:year, 'is not the same year as family membership') if year != family&.year
+  end
+
+  def valid_invited_email
+    errors[:info] = (errors[:info] || {}).merge(invited_email: 'does not appear to be valid') unless Devise.email_regexp =~ invited_email
   end
 end

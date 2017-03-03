@@ -58,7 +58,7 @@
               %li None
             - @membership.relatives.each do |relative|
               %li
-                - if relative.pending_approval
+                - if relative.pending_approval?
                   = relative.invited_email
                   [Pending]
                 - elsif relative.is_a? Family
@@ -66,7 +66,7 @@
                 - else
                   = link_to "#{relative.user.first_name} #{relative.user.last_name} (#{relative.user.username})", relative.user
                 - if can? :manage, relative
-                  (#{link_to 'Remove', user_membership_relative_path(@user, @membership, relative), data: { method: :delete, confirm: "Are you sure you wish to remove #{relative.pending_approval ? relative.invited_email : relative.user.first_name} from your Family membership?" } })
+                  (#{link_to 'Remove', user_membership_relative_path(@user, @membership, relative), data: { method: :delete, confirm: "Are you sure you wish to remove #{relative.pending_approval? ? relative.invited_email : relative.user.first_name} from your Family membership?" } })
           - if @membership.is_a? Family
             = link_to new_user_membership_relative_path(@membership.user, @membership), class: 'button small expand' do
               = icon 'plus fa-fw'
