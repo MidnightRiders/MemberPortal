@@ -5,11 +5,17 @@ feature 'Board Nominations', type: :feature, js: true do
   let(:positions) {
     %w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator).sort + ['501(c)(3) Board of Directors']
   }
+
   before(:each) do
+    Timecop.travel(Time.zone.local(Date.current.year, 1, 15))
     login_as user
     visit user_home_path
 
-    click_on 'Submit 2017 Board Nomination'
+    click_on "Submit #{Date.current.year} Board Nomination"
+  end
+
+  after(:each) do
+    Timecop.return
   end
 
   it 'shows the modal' do
