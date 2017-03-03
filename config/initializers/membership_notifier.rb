@@ -16,6 +16,10 @@ class MembershipNotifier
     slack_notify
   end
 
+  def notify_relative
+    slack_notify
+  end
+
   private
 
   def slack_notify
