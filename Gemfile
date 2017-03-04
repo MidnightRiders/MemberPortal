@@ -20,6 +20,7 @@ gem 'sass-rails'
 gem 'uglifier'
 gem 'sprockets-es6'
 gem 'react-rails'
+gem 'therubyracer'
 
 gem 'draper'
 gem 'icalendar'
