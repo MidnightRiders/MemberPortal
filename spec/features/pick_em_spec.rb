@@ -5,10 +5,43 @@ feature 'Pick ’Em' do
   let!(:match) { FactoryGirl.create(:match, kickoff: Time.current + 2.hours) }
   before :each do
     login_as user
-    visit matches_path(date: match.kickoff.to_date)
+  end
+
+  describe 'presentation' do
+    scenario 'includes disabled if match is in past', js: true do
+      match.update_attribute(:kickoff, Time.current - 2.hours)
+      visit matches_path(date: match.kickoff.to_date)
+
+      within('li.match', text: match.kickoff.strftime('%-m.%-d%l:%M%P')) do
+        expect(page).to have_css('.pick-em-picker.disabled')
+      end
+    end
+
+    scenario 'includes result class if match has score', js: true do
+      match.update_attributes(kickoff: Time.current - 2.hours, home_goals: 2, away_goals: 1)
+      visit matches_path(date: match.kickoff.to_date)
+
+      within('li.match', text: match.kickoff.strftime('%-m.%-d%l:%M%P')) do
+        expect(page).to have_css('.pick-em-picker.result-home')
+      end
+    end
+
+    scenario 'includes picked class if user has already picked', js: true do
+      match.update_attributes(kickoff: Time.current - 2.hours, home_goals: 2, away_goals: 1)
+      match.pick_ems.create(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
+      visit matches_path(date: match.kickoff.to_date)
+
+      within('li.match', text: match.kickoff.strftime('%-m.%-d%l:%M%P')) do
+        expect(page).to have_css('.pick-em-picker.picked-home')
+      end
+    end
   end
 
   describe 'picking' do
+    before :each do
+      visit matches_path(date: match.kickoff.to_date)
+    end
+
     scenario 'user picks home team', js: true do
       click_link match.home_team.name
       expect(page).to have_css(".pick-em-picker.picked-home .#{match.home_team.abbrv.downcase}")
