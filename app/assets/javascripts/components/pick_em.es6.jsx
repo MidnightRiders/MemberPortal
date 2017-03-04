@@ -85,21 +85,17 @@ class PickEm extends React.Component {
     event.preventDefault();
     let choice = event.currentTarget;
     this.setState({ loading: true });
-    new Promise((resolve, reject) => {
-      jQuery.ajax({
-        data: choice.search.replace(/^\?/, ''),
-        method: 'post',
-        url: choice.pathname,
-        success: resolve,
-        error: reject
-      })
-    }).then(() => {
+    jQuery.ajax({
+      url: choice.pathname,
+      data: choice.search.replace(/^\?/, ''),
+      method: 'post'
+    }).error(() => {
       this.setState({
-        pick: choice.dataset.pick,
         loading: false
       });
-    }).catch((e) => {
+    }).done(() => {
       this.setState({
+        pick: choice.dataset.pick,
         loading: false
       });
     });
