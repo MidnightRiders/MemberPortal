@@ -20,6 +20,7 @@ $draw-hover-scale: 1.25;
   width: auto;
 
   &.disabled {
+    opacity: .85;
     pointer-events: none;
   }
 

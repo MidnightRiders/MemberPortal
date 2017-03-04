@@ -1,14 +1,7 @@
 /*global React, Match*/
 class MatchesList extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      matches: props.matches
-    };
-  }
   renderMatches() {
-    return this.state.matches.map((match) => {
+    return this.props.matches.map((match) => {
       return (
         <Match
           key={`match-${match.id}`}

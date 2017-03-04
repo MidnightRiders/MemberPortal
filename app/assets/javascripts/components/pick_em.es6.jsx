@@ -6,13 +6,13 @@ class PickEm extends React.Component {
     this.state = {
       hover: null,
       pick: props.pick,
+      loading: false,
       disabled: props.kickoff < new Date()
     };
 
     this.kickoffInterval = null;
 
-    this.mouseEnterHandler = this.mouseEnterHandler.bind(this);
-    this.mouseLeaveHandler = this.mouseLeaveHandler.bind(this);
+    ['handleClick', 'handleMouseEnter', 'handleMouseLeave'].forEach((e) => this[e] = this[e].bind(this));
   }
 
   result() {
@@ -33,11 +33,11 @@ class PickEm extends React.Component {
     );
   }
 
-  mouseEnterHandler(event) {
+  handleMouseEnter(event) {
     this.setState({ hover: event.currentTarget.dataset.pick });
   }
 
-  mouseLeaveHandler() {
+  handleMouseLeave() {
     this.setState({ hover: null });
   }
 
@@ -58,7 +58,7 @@ class PickEm extends React.Component {
   }
 
   disabledClassName() {
-    if (this.state.disabled) return 'disabled';
+    if (this.state.disabled || this.state.loading) return 'disabled';
     else return '';
   }
 
@@ -81,6 +81,30 @@ class PickEm extends React.Component {
     }
   }
 
+  handleClick(event) {
+    event.preventDefault();
+    let choice = event.currentTarget;
+    this.setState({ loading: true });
+    new Promise((resolve, reject) => {
+      jQuery.ajax({
+        data: choice.search.replace(/^\?/, ''),
+        method: 'post',
+        url: choice.pathname,
+        success: resolve,
+        error: reject
+      })
+    }).then(() => {
+      this.setState({
+        pick: choice.dataset.pick,
+        loading: false
+      });
+    }).catch((e) => {
+      this.setState({
+        loading: false
+      });
+    });
+  }
+
   stopWaitingForKickoff() {
     if (this.kickoffInterval) {
       clearInterval(this.kickoffInterval);
@@ -91,28 +115,31 @@ class PickEm extends React.Component {
   render () {
     return (
       <div className={`pick-em-picker ${this.hoverClassName()} ${this.pickedClassName()} ${this.disabledClassName()}`}>
-        <a href={`/matches/${this.props.matchId}/pick_ems/vote?result=1`}
+        <a href={`/matches/${this.props.matchId}/pick_ems/vote?pick_em[result]=1`}
           data-pick="home"
           className={`home ${this.props.homeTeam.abbrv.toLowerCase()} primary-bg crest`}
-          onMouseEnter={this.mouseEnterHandler}
-          onMouseLeave={this.mouseLeaveHandler}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+          onClick={this.handleClick}
            title={this.props.homeTeam.name}>
           <div className="value">{this.props.homeTeam.abbrv}</div>
           {this.score('home')}
         </a>
-        <a href={`/matches/${this.props.matchId}/pick_ems/vote?result=0`}
+        <a href={`/matches/${this.props.matchId}/pick_ems/vote?pick_em[result]=0`}
           data-pick="draw"
           className="draw"
-          onMouseEnter={this.mouseEnterHandler}
-          onMouseLeave={this.mouseLeaveHandler}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+          onClick={this.handleClick}
           title="Draw">
           <div className="value">Draw</div>
         </a>
-        <a href={`/matches/${this.props.matchId}/pick_ems/vote?result=-1`}
+        <a href={`/matches/${this.props.matchId}/pick_ems/vote?pick_em[result]=-1`}
           data-pick="away"
           className={`away ${this.props.awayTeam.abbrv.toLowerCase()} primary-bg crest`}
-          onMouseEnter={this.mouseEnterHandler}
-          onMouseLeave={this.mouseLeaveHandler}
+          onMouseEnter={this.handleMouseEnter}
+          onMouseLeave={this.handleMouseLeave}
+          onClick={this.handleClick}
           title={this.props.awayTeam.name}>
           <div className="value">{this.props.awayTeam.abbrv}</div>
           {this.score('away')}
