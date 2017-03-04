@@ -13,10 +13,10 @@ class MatchesList extends React.Component {
         <Match
           key={`match-${match.id}`}
           id={match.id}
-          homeTeam={match.home_team}
-          awayTeam={match.away_team}
-          homeGoals={match.home_goals}
-          awayGoals={match.away_goals}
+          homeTeam={match.homeTeam}
+          awayTeam={match.awayTeam}
+          homeGoals={match.homeGoals}
+          awayGoals={match.awayGoals}
           pick={match.pick}
           kickoff={new Date(match.kickoff)}
           location={match.location}
