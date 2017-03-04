@@ -18,6 +18,8 @@ gem 'jquery-rails'
 gem 'sass'
 gem 'sass-rails'
 gem 'uglifier'
+gem 'sprockets-es6'
+gem 'react-rails'
 
 gem 'draper'
 gem 'icalendar'

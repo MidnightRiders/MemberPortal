@@ -1,0 +1,178 @@
+$base-color: #bce;
+$circle-width: .8;
+$draw-width: .25;
+$line-width: .075;
+$win-hover-scale: 1.1;
+$draw-hover-scale: 1.25;
+
+.pick-em-container {
+  display: block;
+  float: left;
+  width: 40%;
+}
+
+.pick-em-picker {
+  display: block;
+  height: 0;
+  margin: 10px;
+  padding-top: percentage(1 / 3);
+  position: relative;
+  width: auto;
+
+  &.disabled {
+    pointer-events: none;
+  }
+
+  &::before {
+    display: block;
+    background-color: $base-color;
+    border: 2px solid #fff;
+    content: '\00A0';
+    height: percentage($line-width);
+    left: percentage(1 / 6);
+    margin-top: - percentage($line-width / 6);
+    overflow: hidden;
+    position: absolute;
+    right: percentage(1 / 6);
+    top: 50%;
+    z-index: 2;
+  }
+
+  &::after {
+    background: transparentize($base-color, .5);
+    border-radius: 100%;
+    content: '\00A0';
+    display: block;
+    height: 0%;
+    left: 50%;
+    position: absolute;
+    transition: .3s width, .3s height, .3s left, .3s margin-left, .3s margin-top, .3s color;
+    top: 50%;
+    width: 0%;
+    z-index: 1;
+  }
+
+  &.hover-home::after,
+  &.hover-away::after,
+  &.picked-home::after,
+  &.picked-away::after {
+    height: 100%;
+    margin-left: - percentage(1 / 6);
+    margin-top: - percentage(1/ 6);
+    width: percentage(1 / 3);
+  }
+
+  &.hover-home::after,
+  &.picked-home::after {
+    left: percentage(1 / 6);
+  }
+
+  &.hover-away::after,
+  &.picked-away::after {
+    left: percentage(5 / 6);
+  }
+
+  &.hover-draw::after,
+  &.picked-draw::after {
+    height: percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale);
+    margin-left: - percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / 6);
+    margin-top: - percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / 6);
+    width: percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / 3);
+  }
+
+  &.picked-home::after,
+  &.picked-draw::after,
+  &.picked-away::after {
+    background-color: $base-color;
+  }
+
+  a {
+    background-size: 50%;
+    border: 2px solid #fff;
+    border-radius: 100%;
+    position: absolute;
+    transition: .3s transform;
+    transform: scale(1);
+    transform-origin: center;
+    top: 50%;
+    z-index: 5;
+
+    &,
+    &.crest {
+      display: inline-block;
+      overflow: visible;
+      padding: 0;
+    }
+
+    .value {
+      height: 0;
+      overflow: hidden;
+      position: absolute;
+      width: 0;
+    }
+
+    &.home,
+    &.away {
+      height: percentage($circle-width);
+      margin-left: - percentage($circle-width / 6);
+      margin-top: - percentage($circle-width / 6);
+      width: percentage($circle-width / 3);
+
+      &:hover {
+        transform: scale($win-hover-scale);
+      }
+
+      &:active {
+        transform: scale(2 - $win-hover-scale);
+      }
+    }
+
+    &.home {
+      left: percentage(1 / 6);
+    }
+
+    &.away {
+      left: percentage(5 / 6);
+    }
+
+    &.draw {
+      background-color: $base-color;
+      height: percentage($draw-width);
+      left: 50%;
+      margin-left: - percentage($draw-width / 6);
+      margin-top: - percentage($draw-width / 6);
+      width: percentage($draw-width / 3);
+
+      &:hover {
+        transform: scale($draw-hover-scale);
+      }
+
+      &:active {
+        transform: scale(2 - $draw-hover-scale);
+      }
+    }
+
+    &,
+    &:focus,
+    &:active {
+      outline: none;
+      -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+      -moz-tap-highlight-color: rgba(0, 0, 0, 0);
+    }
+
+    .pick-em-result-score {
+      border-radius: 100%;
+      font-size: 1em;
+      height: 1.5em;
+      left: 50%;
+      line-height: 1.5em;
+      font-weight: bold;
+      margin-left: -.75em;
+      margin-top: -.75em;
+      position: absolute;
+      text-align: center;
+      top: 100%;
+      width: 1.5em;
+    }
+  }
+}

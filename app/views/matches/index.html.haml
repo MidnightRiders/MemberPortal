@@ -1,3 +1,7 @@
+- content_for :foot do
+  = javascript_include_tag 'react', 'react_ujs'
+  = javascript_include_tag 'components'
+
 - content_for :title, 'Match listings for the week of ' + @start_date.strftime('%_m.%-d.%Y')
 
 .row.actions
@@ -71,8 +75,7 @@
           voting for <strong>Man of the Match</strong> is tallied at the end of every year for the Riders’ annual
           <a href="http://www.midnightriders.com/events-awards/man-of-the-year-award/">Man of the Year</a> award.
     .large-9.columns
-      %ul.matches
-        = render @matches
+      = react_component 'MatchesList', { matches: @matches.decorate.map { |m| m.for_react(user: current_user) } }, prerender: true
 - else
   .alert-box
     %h2.text-center No matches scheduled this week

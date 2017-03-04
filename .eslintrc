@@ -1,12 +1,15 @@
 {
-  "extends": "eslint:recommended",
+  "extends": ["eslint:recommended", "plugin:react/recommended"],
   "env": {
     "browser": true,
     "jquery": true,
     "es6": true
   },
   "parserOptions": {
-    "ecmaVersion": 6
+    "ecmaVersion": 6,
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "camelcase": [ 1, { "properties": "never" } ],
@@ -28,5 +31,8 @@
     "radix": 1,
     "semi": [ 1, "always" ],
     "strict": 1
-  }
+  },
+  "plugins": [
+    "react"
+  ]
 }
