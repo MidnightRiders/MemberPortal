@@ -41,27 +41,6 @@ class PickEm extends React.Component {
     this.setState({ hover: null });
   }
 
-  hoverClassName() {
-    if (!this.state.hover || this.state.pick) return '';
-    return `hover-${this.state.hover}`;
-  }
-
-  // resultClassName() {
-  //   let result = this.result();
-  //   if (!result) return '';
-  //   return `result-${result}`;
-  // }
-
-  pickedClassName() {
-    if (!this.state.pick) return '';
-    return `picked-${this.state.pick}`;
-  }
-
-  disabledClassName() {
-    if (this.state.disabled || this.state.loading) return 'disabled';
-    else return '';
-  }
-
   componentDidMount() {
     this.waitForKickoff();
   }
@@ -89,14 +68,13 @@ class PickEm extends React.Component {
       url: choice.pathname,
       data: choice.search.replace(/^\?/, ''),
       method: 'post'
-    }).error(() => {
+    }).always(() => {
       this.setState({
         loading: false
       });
     }).done(() => {
       this.setState({
-        pick: choice.dataset.pick,
-        loading: false
+        pick: choice.dataset.pick
       });
     });
   }
@@ -108,9 +86,20 @@ class PickEm extends React.Component {
     }
   }
 
+  containerClassNames() {
+    return [
+      'pick-em-picker',
+      this.state.hover ? `hover-${this.state.hover}` : '',
+      this.state.pick ? `picked-${this.state.pick}` : '',
+      this.result() ? `result-${this.result()}` : '',
+      this.state.disabled ? 'disabled' : '',
+      this.state.loading ? 'loading' : ''
+    ].filter((o) => !!o).join(' ');
+  }
+
   render () {
     return (
-      <div className={`pick-em-picker ${this.hoverClassName()} ${this.pickedClassName()} ${this.disabledClassName()}`}>
+      <div className={this.containerClassNames()}>
         <a href={`/matches/${this.props.matchId}/pick_ems/vote?pick_em[result]=1`}
           data-pick="home"
           className={`home ${this.props.homeTeam.abbrv.toLowerCase()} primary-bg crest`}
