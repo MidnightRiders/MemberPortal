@@ -31,6 +31,25 @@ class MatchDecorator < Draper::Decorator
     end
   end
 
+  def for_react(user:)
+    {
+      id: model.id,
+      home_team: {
+        name: model.home_team.name,
+        abbrv: model.home_team.abbrv
+      },
+      away_team: {
+        name: model.away_team.name,
+        abbrv: model.away_team.abbrv
+      },
+      home_goals: model.home_goals,
+      away_goals: model.away_goals,
+      pick: user.pick_for(model)&.result_key,
+      kickoff: model.kickoff.to_f * 1000,
+      location: model.location
+    }
+  end
+
   # Returns individual +PickEm+ links.
   # === options:
   #   +:user+ defaults to current_user. Not sure when it wouldn't be that.
