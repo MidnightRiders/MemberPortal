@@ -1,11 +1,11 @@
 - content_for :foot do
-  = javascript_include_tag 'react', 'react_ujs'
+  = javascript_include_tag 'react', 'react_ujs', cache: 'react-core'
   = javascript_include_tag 'components'
 
 - content_for :title, 'Match listings for the week of ' + @start_date.strftime('%_m.%-d.%Y')
 
 .row.actions
-  .medium-8.columns{ class: ('medium-centered' unless can?(:manage, Match)) }
+  .medium-8.columns.medium-centered
     %ul.button-group
       - if @prev_date
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }
@@ -22,49 +22,30 @@
           = link_to matches_path(date: @next_date), class: 'button secondary small expand' do
             = @next_link
             = icon 'arrow-circle-o-right fa-fw'
-  - if can? :manage, Match
-    .medium-4.columns.text-right
-      = link_to '#', class: 'button small expand', data: { reveal_id: 'matches-admin' } do
-        = icon 'bolt fa-fw'
-        Admin
-      #matches-admin.reveal-modal.small{ data: { reveal: true } }
-        %a.close-reveal-modal{ href: '#' } &times;
-        %h2 Matches Admin
-        .row
-          = form_tag import_matches_path, class: 'row collapse' do
-            .medium-4.columns
-              = label_tag :url, 'Import/Update Matches'
-            .medium-8.columns
-              .small-8.columns
-                = text_field_tag :url, 'http://ics.ecal.com/ecal-sub/587a65961406256574913027/Major%20League%20Soccer.ics'
-              .small-4.columns
-                = button_tag :submit, class: 'button secondary postfix', title: 'Import/Update Matches' do
-                  = icon 'cloud-download fa-fw'
-        .row
-          .medium-8.columns.right
-            = link_to auto_update_matches_path, class: 'button small secondary expand' do
-              = icon 'refresh fa-fw'
-              Automated Results Update
-        .row
-          .medium-8.columns.right
-            = link_to new_match_path, class: 'button small expand' do
-              = icon 'calendar fa-fw'
-              New Match
 
-- if @matches.present?
-  .row
-    .large-3.columns
-      %h2 Matches for the week of #{@start_date.strftime('%_m.%-d.%Y')}
-      .show-for-medium-up
-        %p Make your <strong>Pick ’Em</strong> picks by clicking on the crest of the team you expect to win, or D for Draw.
-        %p To submit your <strong>RevGuess</strong>, click on the button underneath any Revs game before kickoff.
-        %p
-          And don’t forget to come back after every game to vote for your Man of the Match –
-          voting for <strong>Man of the Match</strong> is tallied at the end of every year for the Riders’ annual
-          <a href="http://www.midnightriders.com/events-awards/man-of-the-year-award/">Man of the Year</a> award.
-    .large-9.columns
-      = react_component 'MatchesList', { matches: @matches.decorate.map { |m| m.for_react(user: current_user) } }, prerender: true
-- else
-  .alert-box
-    %h2.text-center No matches scheduled this week
+= react_component 'Matches', { show_admin_ui: can?(:manage, Match), start_date: @start_date.to_f * 1000, matches: @matches.decorate.map { |m| m.for_react(user: current_user) } }, prerender: true
 
+- if can? :manage, Match
+  #matches-admin.reveal-modal.small{ data: { reveal: true } }
+    %a.close-reveal-modal{ href: '#' } &times;
+    %h2 Matches Admin
+    .row
+      = form_tag import_matches_path, class: 'row collapse' do
+        .medium-4.columns
+          = label_tag :url, 'Import/Update Matches'
+        .medium-8.columns
+          .small-8.columns
+            = text_field_tag :url, 'http://ics.ecal.com/ecal-sub/587a65961406256574913027/Major%20League%20Soccer.ics'
+          .small-4.columns
+            = button_tag :submit, class: 'button secondary postfix', title: 'Import/Update Matches' do
+              = icon 'cloud-download fa-fw'
+    .row
+      .medium-8.columns.right
+        = link_to auto_update_matches_path, class: 'button small secondary expand' do
+          = icon 'refresh fa-fw'
+          Automated Results Update
+    .row
+      .medium-8.columns.right
+        = link_to new_match_path, class: 'button small expand' do
+          = icon 'calendar fa-fw'
+          New Match

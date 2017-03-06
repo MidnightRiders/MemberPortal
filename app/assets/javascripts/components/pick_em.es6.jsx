@@ -6,11 +6,8 @@ class PickEm extends React.Component {
     this.state = {
       hover: null,
       pick: props.pick,
-      loading: false,
-      disabled: props.kickoff < new Date()
+      loading: false
     };
-
-    this.kickoffInterval = null;
 
     ['handleClick', 'handleMouseEnter', 'handleMouseLeave'].forEach((e) => this[e] = this[e].bind(this));
   }
@@ -33,6 +30,13 @@ class PickEm extends React.Component {
     );
   }
 
+  title(side) {
+    let text = side === 'draw' ? 'Draw' : this.props[`${side}Team`].name;
+    if (this.state.pick === side) text += ' (Picked)';
+    if (this.result() === side) text += ' (Result)';
+    return text;
+  }
+
   handleMouseEnter(event) {
     this.setState({ hover: event.currentTarget.dataset.pick });
   }
@@ -41,27 +45,9 @@ class PickEm extends React.Component {
     this.setState({ hover: null });
   }
 
-  componentDidMount() {
-    this.waitForKickoff();
-  }
-
-  componentWillUnmount() {
-    this.stopWaitingForKickoff();
-  }
-
-  waitForKickoff() {
-    if (!this.state.disabled && !this.kickoffInterval) {
-      this.kickoffInterval = setInterval(() => {
-        if (this.props.kickoff < new Date()) {
-          this.setState({ disabled: true });
-          this.stopWaitingForKickoff();
-        }
-      }, 5000);
-    }
-  }
-
   handleClick(event) {
     event.preventDefault();
+    if (this.state.past) return;
     let choice = event.currentTarget;
     this.setState({ loading: true });
     jQuery.ajax({
@@ -79,20 +65,14 @@ class PickEm extends React.Component {
     });
   }
 
-  stopWaitingForKickoff() {
-    if (this.kickoffInterval) {
-      clearInterval(this.kickoffInterval);
-      this.kickoffInterval = null;
-    }
-  }
-
   containerClassNames() {
+    let result = this.result();
     return [
       'pick-em-picker',
-      this.state.hover ? `hover-${this.state.hover}` : '',
+      this.state.hover && !this.state.pick && !this.state.past ? `hover-${this.state.hover}` : '',
       this.state.pick ? `picked-${this.state.pick}` : '',
-      this.result() ? `result-${this.result()}` : '',
-      this.state.disabled ? 'disabled' : '',
+      result ? `result-${result}` : '',
+      this.props.past ? 'past' : '',
       this.state.loading ? 'loading' : ''
     ].filter((o) => !!o).join(' ');
   }
@@ -100,13 +80,14 @@ class PickEm extends React.Component {
   render () {
     return (
       <div className={this.containerClassNames()}>
+        <div className="pick-em-bar" />
         <a href={`/matches/${this.props.matchId}/pick_ems/vote?pick_em[result]=1`}
           data-pick="home"
           className={`home ${this.props.homeTeam.abbrv.toLowerCase()} primary-bg crest`}
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
           onClick={this.handleClick}
-           title={this.props.homeTeam.name}>
+          title={this.title('home')}>
           <div className="value">{this.props.homeTeam.abbrv}</div>
           {this.score('home')}
         </a>
@@ -116,7 +97,7 @@ class PickEm extends React.Component {
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
           onClick={this.handleClick}
-          title="Draw">
+          title={this.title('draw')}>
           <div className="value">Draw</div>
         </a>
         <a href={`/matches/${this.props.matchId}/pick_ems/vote?pick_em[result]=-1`}
@@ -125,7 +106,7 @@ class PickEm extends React.Component {
           onMouseEnter={this.handleMouseEnter}
           onMouseLeave={this.handleMouseLeave}
           onClick={this.handleClick}
-          title={this.props.awayTeam.name}>
+          title={this.title('away')}>
           <div className="value">{this.props.awayTeam.abbrv}</div>
           {this.score('away')}
         </a>
@@ -141,5 +122,5 @@ PickEm.propTypes = {
   homeGoals: React.PropTypes.number,
   awayGoals: React.PropTypes.number,
   pick: React.PropTypes.string,
-  kickoff: React.PropTypes.instanceOf(Date)
+  past: React.PropTypes.bool
 };
