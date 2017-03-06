@@ -1,4 +1,5 @@
-$base-color: mix(#fff, $maroon, 80%);
+$base-color: mix(#fff, $maroon, 75%);
+$picked-color: mix(#fff, $silver);
 $circle-width: .8;
 $draw-width: .25;
 $line-width: .075;
@@ -6,25 +7,24 @@ $win-hover-scale: 1.1;
 $draw-hover-scale: 1.25;
 
 .pick-em-container {
-  display: block;
-  float: left;
-  width: 40%;
+  padding: 10px;
 }
 
 .pick-em-picker {
   display: block;
   height: 0;
-  margin: 10px;
   padding-top: percentage(1 / 3);
   position: relative;
+  transform: translateZ(0);
   width: auto;
 
-  &.disabled {
-    opacity: .85;
+  &.past,
+  &.loading {
+    opacity: .75;
     pointer-events: none;
   }
 
-  &::before {
+  .pick-em-bar {
     display: block;
     background-color: $base-color;
     border: 2px solid #fff;
@@ -35,6 +35,7 @@ $draw-hover-scale: 1.25;
     overflow: hidden;
     position: absolute;
     right: percentage(1 / 6);
+    transition: .3s filter;
     top: 50%;
     z-index: 2;
   }
@@ -47,7 +48,7 @@ $draw-hover-scale: 1.25;
     height: 0%;
     left: 50%;
     position: absolute;
-    transition: .3s width, .3s height, .3s left, .3s margin-left, .3s margin-top, .3s color;
+    transition: .3s width, .3s height, .3s left, .3s margin-left, .3s margin-top, .3s background-color;
     top: 50%;
     width: 0%;
     z-index: 1;
@@ -84,7 +85,112 @@ $draw-hover-scale: 1.25;
   &.picked-home::after,
   &.picked-draw::after,
   &.picked-away::after {
-    background-color: $base-color;
+    background-color: $picked-color;
+  }
+
+  &.loading {
+    &::after,
+    a,
+    .pick-em-bar {
+      filter: blur(2px);
+    }
+  }
+
+  &.loading::before {
+    @extend .fa-spin;
+    color: $navy;
+    content: $fa-var-cog;
+  }
+
+  &.past::before {
+    color: $navy;
+    content: $fa-var-hourglass-2;
+    font-size: 1.25em;
+  }
+
+  &.loading,
+  &.past {
+    &::before {
+      @include fa-icon;
+      display: block;
+      left: 50%;
+      line-height: 1em;
+      margin-left: -.5em;
+      margin-top: -.5em;
+      position: absolute;
+      text-align: center;
+      text-shadow: -1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff, 1px -1px #fff;
+      transition: .3s filter;
+      top: 50%;
+      width: 1em;
+      z-index: 8;
+    }
+  }
+
+  &.loading,
+  &.result-home,
+  &.result-draw,
+  &.result-away {
+    &::before {
+      font-size: 2em;
+    }
+  }
+
+  &.result-home.picked-away,
+  &.result-home.picked-draw,
+  &.result-away.picked-home,
+  &.result-away.picked-draw,
+  &.result-draw.picked-home,
+  &.result-draw.picked-away {
+    &::before {
+      color: $alert-color;
+      content: $fa-var-times;
+    }
+  }
+
+  &.result-home.picked-home,
+  &.result-away.picked-away,
+  &.result-draw.picked-draw {
+    &::before {
+      color: $success-color;
+      content: $fa-var-check;
+    }
+  }
+
+  &.picked-home .home,
+  &.picked-draw .draw,
+  &.picked-away .away {
+    &::before {
+      border-radius: 100%;
+      bottom: 0;
+      content: '\00A0';
+      display: block;
+      left: 0;
+      opacity: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: -1;
+
+      .cssanimations & {
+        opacity: .7;
+      }
+    }
+  }
+
+  &.picked-home .home,
+  &.picked-away .away {
+    &::before {
+      animation: ripple .3s 1 forwards;
+      border: 10px solid $picked-color;
+    }
+  }
+
+  &.picked-draw .draw {
+    &::before {
+      animation: draw-ripple .3s 1 forwards;
+      border: 5px solid $picked-color;
+    }
   }
 
   a {
@@ -92,7 +198,7 @@ $draw-hover-scale: 1.25;
     border: 2px solid #fff;
     border-radius: 100%;
     position: absolute;
-    transition: .3s transform;
+    transition: .3s transform, .3s filter;
     transform: scale(1);
     transform-origin: center;
     top: 50%;
@@ -160,20 +266,70 @@ $draw-hover-scale: 1.25;
       -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
       -moz-tap-highlight-color: rgba(0, 0, 0, 0);
     }
+  }
 
-    .pick-em-result-score {
-      border-radius: 100%;
-      font-size: 1em;
-      height: 1.5em;
-      left: 50%;
-      line-height: 1.5em;
-      font-weight: bold;
-      margin-left: -.75em;
-      margin-top: -.75em;
-      position: absolute;
-      text-align: center;
-      top: 100%;
-      width: 1.5em;
+  &.loading {
+    a.home,
+    a.away {
+      &:hover {
+        transform: scale(1);
+      }
     }
+  }
+
+  .pick-em-result-score {
+    box-shadow: 0 0 0 1px #fff;
+    border-radius: 100%;
+    font-size: 1em;
+    height: 1.5em;
+    left: 50%;
+    line-height: 1.5em;
+    font-weight: bold;
+    margin-left: -.75em;
+    margin-top: -.75em;
+    position: absolute;
+    text-align: center;
+    top: percentage(.5 + .707105469 / 2);
+    width: 1.5em;
+  }
+
+  .home .pick-em-result-score {
+    left: percentage(.5 + .707105469 / 2);
+  }
+
+  .away .pick-em-result-score {
+    left: percentage(.5 - .707105469 / 2);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+  }
+
+  99% {
+    opacity: 0;
+    transform: scale(3);
+  }
+
+  100% {
+    opacity: 0;
+    scale: 0;
+  }
+}
+
+@keyframes draw-ripple {
+  0% {
+    transform: scale(1);
+  }
+
+  99% {
+    opacity: 0;
+    transform: scale(6);
+  }
+
+  100% {
+    opacity: 0;
+    scale: 0;
   }
 }

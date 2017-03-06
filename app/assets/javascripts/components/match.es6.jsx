@@ -1,9 +1,20 @@
 /*global React, PickEm*/
 class Match extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.kickoffInterval = null;
+
+    this.state = {
+      canVoteForMotM: this.canVoteForMotM(),
+      past: props.kickoff < new Date()
+    };
+  }
+
   formatKickoff() {
-    let hour = this.props.kickoff.getHours(),
+    let hour    = this.props.kickoff.getHours(),
         minutes = `0${this.props.kickoff.getMinutes()}`.substr(-2),
-        amPm = hour > 11 ? 'pm' : 'am';
+        amPm    = hour > 11 ? 'pm' : 'am';
     if (hour === 0) hour = 12;
     if (hour > 12) hour = hour % 12;
     return `
@@ -11,28 +22,55 @@ class Match extends React.Component {
       ${hour}:${minutes}${amPm}`;
   }
 
-  formatScore() {
-    return `
-      ${this.props.homeTeam.abbrv}
-      ${this.props.homeGoals === null ? '' : this.props.homeGoals}
-      -
-      ${this.props.awayGoals === null ? '' : this.props.awayGoals }
-      ${this.props.awayTeam.abbrv}
-    `;
+  isRevs() {
+    return this.props.homeTeam.abbrv === 'NE' || this.props.awayTeam.abbrv === 'NE';
   }
 
-  render () {
+  canVoteForMotM() {
+    return this.isRevs() &&
+      this.props.kickoff < new Date() - 1000 * 60 * 45 &&         // at least 45 minutes ago
+      this.props.kickoff > new Date() - 1000 * 60 * 60 * 24 * 14; // less than two weeks ago
+  }
+
+  componentDidMount() {
+    this.waitForGameProgress();
+  }
+
+  componentWillUnmount() {
+    this.stopWaitingForGameProgress();
+  }
+
+  stopWaitingForGameProgress() {
+    if (this.kickoffInterval) {
+      clearInterval(this.kickoffInterval);
+      this.kickoffInterval = null;
+    }
+  }
+
+  waitForGameProgress() {
+    if (!this.state.past && !this.kickoffInterval) {
+      this.kickoffInterval = setInterval(() => {
+        if (!this.state.past && this.props.kickoff < new Date()) {
+          this.setState({ past: true });
+          if (!this.isRevs()) this.stopWaitingForGameProgress();
+        }
+        if (this.state.past && this.isRevs() && this.canVoteForMotM()) {
+          this.setState({ canVoteForMotM: true });
+          this.stopWaitingForGameProgress();
+        }
+      }, 5000);
+    }
+  }
+
+  render() {
     return (
       <li className="match">
         <time dateTime={this.props.kickoff.toISOString()}>
           <a href={`/matches/${this.props.id}`}>
             {this.formatKickoff()}
-            <i className="fa fa-arrow-circle-right fa-fw" />
+            <sup><i className="fa fa-info-circle"/></sup>
           </a>
         </time>
-        <div className="score">
-          {this.formatScore()}
-        </div>
         <div className="pick-em-container">
           <PickEm
             key={`pick-em-for-${this.props.id}`}
@@ -42,11 +80,8 @@ class Match extends React.Component {
             homeGoals={this.props.homeGoals}
             awayGoals={this.props.awayGoals}
             pick={this.props.pick}
-            kickoff={this.props.kickoff}
+            past={this.state.past}
           />
-        </div>
-        <div className="location">
-          {this.props.location}
         </div>
       </li>
     );
@@ -61,5 +96,6 @@ Match.propTypes = {
   awayGoals: React.PropTypes.number,
   pick: React.PropTypes.string,
   kickoff: React.PropTypes.instanceOf(Date),
-  location: React.PropTypes.string
+  location: React.PropTypes.string,
+  showAdminUi: React.PropTypes.bool
 };

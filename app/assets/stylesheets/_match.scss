@@ -1,0 +1,35 @@
+ul.matches,
+li.match {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+li.match {
+  @include clearfix;
+  border: 1px solid $silver;
+  border-radius: 100px;
+  margin: $column-gutter / 2 auto;
+  max-width: 360px;
+  position: relative;
+
+  time {
+    font-size: .75em;
+    font-weight: bold;
+    left: 30%;
+    line-height: 1.25em;
+    margin-top: -.6125em;
+    position: absolute;
+    right: 30%;
+    text-align: center;
+    top: 20%;
+
+    @media #{$medium-up} {
+      font-size: .875em;
+    }
+
+    @media #{$large-up} {
+      font-size: 1em;
+    }
+  }
+}

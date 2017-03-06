@@ -8,12 +8,12 @@ feature 'Pick ’Em' do
   end
 
   describe 'presentation' do
-    scenario 'includes disabled if match is in past', js: true do
+    scenario 'includes past class if match is in past', js: true do
       match.update_attribute(:kickoff, Time.current - 2.hours)
       visit matches_path(date: match.kickoff.to_date)
 
-      within('li.match', text: match.kickoff.strftime('%-m.%-d%l:%M%P')) do
-        expect(page).to have_css('.pick-em-picker.disabled')
+      within('li.match', text: match.kickoff.strftime('%-m.%-d %-I:%M%P')) do
+        expect(page).to have_css('.pick-em-picker.past')
       end
     end
 
@@ -21,7 +21,7 @@ feature 'Pick ’Em' do
       match.update_attributes(kickoff: Time.current - 2.hours, home_goals: 2, away_goals: 1)
       visit matches_path(date: match.kickoff.to_date)
 
-      within('li.match', text: match.kickoff.strftime('%-m.%-d%l:%M%P')) do
+      within('li.match', text: match.kickoff.strftime('%-m.%-d %-I:%M%P')) do
         expect(page).to have_css('.pick-em-picker.result-home')
       end
     end
@@ -31,7 +31,7 @@ feature 'Pick ’Em' do
       match.pick_ems.create(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
       visit matches_path(date: match.kickoff.to_date)
 
-      within('li.match', text: match.kickoff.strftime('%-m.%-d%l:%M%P')) do
+      within('li.match', text: match.kickoff.strftime('%-m.%-d %-I:%M%P')) do
         expect(page).to have_css('.pick-em-picker.picked-home')
       end
     end
@@ -65,7 +65,10 @@ feature 'Pick ’Em' do
       match.pick_ems.create(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
       match.update_games
       visit matches_path(date: match.kickoff.to_date)
-      expect(page).to have_css('.choice.correct', text: match.home_team.abbrv)
+
+      within('li.match', text: match.kickoff.strftime('%-m.%-d %-I:%M%P')) do
+        expect(page.find('.home')['title']).to  include('(Picked) (Result)')
+      end
     end
 
     scenario 'user wrongly picks home team' do
@@ -73,8 +76,12 @@ feature 'Pick ’Em' do
       match.pick_ems.build(user: user, result: PickEm::RESULTS[:home]).save(validate: false)
       match.update_games
       visit matches_path(date: match.kickoff.to_date)
-      expect(page).to have_css('.choice.wrong', text: match.home_team.abbrv)
-      expect(page).to have_css('.choice.actual', text: match.away_team.abbrv)
+
+      within('li.match', text: match.kickoff.strftime('%-m.%-d %-I:%M%P')) do
+        expect(page.find('.home')['title']).to  include('(Picked)')
+        expect(page.find('.home')['title']).not_to  include('(Result)')
+        expect(page.find('.away')['title']).to  include('(Result)')
+      end
     end
   end
 end
