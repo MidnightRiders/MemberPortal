@@ -39,11 +39,10 @@ module Commerce
       {}
     end
 
-    def subscribe_to(product, card_id = stripe_customer.default_source)
+    def subscribe_to(product)
       subscription = stripe_customer.subscriptions.create(
         plan: product.plan,
-        trial_end: product.trial_end,
-        source: card_id
+        trial_end: product.trial_end
       )
       product.stripe_subscription_id = subscription.id
     end
