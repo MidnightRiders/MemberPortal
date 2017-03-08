@@ -47,6 +47,10 @@ $button-tny: rem-calc(7);
 $button-sml: rem-calc(10);
 $button-lrg: rem-calc(16);
 
+$code-color: mix($maroon, #fff, 75%);
+$code-background-color: mix($maroon, #fff, 10%);
+$code-border-color: mix($maroon, #fff);
+
 @import "foundation/components/grid";
 @import "foundation/components/alert-boxes";
 @import "foundation/components/button-groups";

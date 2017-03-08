@@ -59,10 +59,6 @@
                     Parlor Sports
                     %small Somerville, MA
                 %li.external
-                  = link_to 'http://britishbeer.com/', target: '_blank' do
-                    British Beer Company
-                    %small Multiple Locations, MA
-                %li.external
                   = link_to 'http://www.the-rumbleseat.com/', target: '_blank' do
                     The Rumbleseat
                     %small Chicopee, MA
@@ -76,22 +72,35 @@
                 Other Partners
               %ul.dropdown
                 %li.external
+                  = link_to 'http://www.awaydaysfootball.com/', target: '_blank' do
+                    Away Days
+                    %small Quincy, MA
+                    - if user_signed_in? && current_user.current_member?
+                      %br
+                      15% Off Code:
+                      %code RIDERSOVERHERE2017
+                %li.external
+                  = link_to 'http://www.risingtidebrewing.com', target: :_blank do
+                    Rising Tide Brewing
+                    %small Portland, ME
+                %li.external
                   = link_to 'http://topshelfcookies.com/', target: '_blank' do
                     Top Shelf Cookies
                     %small Quincy, MA
                     - if user_signed_in? && current_user.current_member?
                       %br
-                      15% Off Code: THEFORT
+                      15% Off Code:
+                      %code RIDERS2017
             %li.has-dropdown
               %a{ href: '#' }
                 = icon 'reddit fa-fw'
                 Reddit
               %ul.dropdown
                 %li.external
-                  = link_to 'http://reddit.com/r/newenglandrevolution', target: '_blank' do
+                  = link_to 'http://reddit.com/r/newenglandrevolution', target: :_blank do
                     Revolution Subreddit
                 %li.external
-                  = link_to 'http://reddit.com/r/mls', target: '_blank' do
+                  = link_to 'http://reddit.com/r/mls', target: :_blank do
                     MLS Subreddit
 
           - if user_signed_in?
@@ -140,19 +149,15 @@
                     = icon 'trophy fa-fw'
                     Standings
                 %li.external
-                  = link_to 'http://fantasy.mlssoccer.com/?autojoin-code=1534-566', target: '_blank' do
+                  = link_to 'http://fantasy.mlssoccer.com/?autojoin-code=1534-566', target: :_blank do
                     = icon 'users fa-fw'
                     MLS Fantasy
                 %li
                   %label Other Fantasy
                 %li.external
-                  = link_to 'http://fantasy.premierleague.com/my-leagues/290319/join/?autojoin-code=1206043-290319', target: '_blank' do
+                  = link_to 'http://fantasy.premierleague.com/my-leagues/290319/join/?autojoin-code=1206043-290319', target: :_blank do
                     = icon 'users fa-fw'
                     EPL Fantasy
-                -#%li
-                  = link_to 'http://bracket.mlssoccer.com/og_objects/wcbracket/groups/107?join_key=eqwfoi310asdofijwe&action=join', target: '_blank' do
-                    = icon 'globe fa-fw'
-                    World Cup Bracket
                 - if current_user.privilege?('admin') || current_user.privilege?('executive_board')
                   %li
                     %label Admin
