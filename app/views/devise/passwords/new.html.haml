@@ -1,13 +1,16 @@
-%h2 Forgot your password?
-= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
-  = devise_error_messages!
-  .row
-    .large-4.columns
-      = f.label :email, class: 'inline'
-    .large-8.columns
-      = f.email_field :email, autofocus: true
-  .row.actions
-    .column
-      = f.button :submit, class: 'button' do
-        =icon('envelope fa-fw')
-        Send me reset password instructions
+.row
+  .medium-10.medium-centered.large-8.columns
+    %section.card
+      %h2 Forgot your password?
+      = form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f|
+        = devise_error_messages!
+        .row
+          .large-4.columns
+            = f.label :email, class: 'inline'
+          .large-8.columns
+            = f.email_field :email, autofocus: true
+        .row.actions
+          .column
+            = f.button :submit, class: 'button' do
+              =icon('envelope fa-fw')
+              Send me reset password instructions

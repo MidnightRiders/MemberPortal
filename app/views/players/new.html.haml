@@ -1,5 +1,9 @@
-%h1 New player
+%section.row
+  .large-4.columns
+    .alert-box
+      %h1 New player
+      = link_to 'Return to Players', players_path
 
-= render 'form'
+  .large-8.columns
+    = render 'form'
 
-= link_to 'Back', players_path

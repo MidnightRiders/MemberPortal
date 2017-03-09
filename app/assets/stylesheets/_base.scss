@@ -5,7 +5,13 @@
 }
 
 html {
+  background: image-url('portal-bg-2017-1x.png') repeat top center $navy;
   height: 100%;
+
+  @media #{$retina} {
+    background-image: image-url('portal-bg-2017-2x.png');
+    background-size: auto 200px;
+  }
 }
 html, body {
   margin: 0;
@@ -13,11 +19,10 @@ html, body {
   padding: 0;
 }
 body {
+  background: linear-gradient(transparentize($navy, 1), transparentize($navy, 1) 10vh, $navy 40vh, $navy) transparent;
   height: auto;
-  min-height: 100%;
-  position: relative;
-  padding-bottom: 4rem + rem-calc(10);
-  background: $maroon image-url('bg.png') repeat center;
+  min-height: 100vh;
+
   &.wait {
     &, * {
       cursor: wait !important;
@@ -37,11 +42,26 @@ p.hint {
   &:hover span {
     display: inline;
   }
+
+  // overrides for dumb Foundation bug
+  &.expand {
+    &.tiny {
+      font-size: $button-font-tny;
+    }
+
+    &.small {
+      font-size: $button-font-sml;
+    }
+
+    &.large {
+      font-size: $button-font-lrg;
+    }
+  }
 }
 
 main {
   display: block;
-  padding: rem-calc(10 5);
+
   h1, h2, h3, h4, h5, h6 {
     small {
       font-family: 'Lato', sans-serif;

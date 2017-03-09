@@ -1,19 +1,19 @@
-.row.collapse
-  .medium-3.columns
+%ul.button-group.even-4
+  %li
     = link_to transactions_path, class: "button small expand #{'success' unless params[:view]}" do
       = icon 'plus'
       = icon 'users'
       New Memberships
-  .medium-3.columns
+  %li
     = link_to transactions_path(view: 'refunded'), class: "button small expand #{'success' if params[:view] == 'refunded'}" do
       = icon 'minus'
       = icon 'users'
       Refunded Memberships
-  .medium-3.columns
+  %li
     = link_to transactions_path(view: 'all'), class: "button small expand #{'success' if params[:view] == 'all'}" do
       = icon 'users'
       All Memberships
-  .medium-3.columns
+  %li
     = link_to transactions_path(view: 'detailed'), class: "button small expand #{'success' if params[:view] == 'detailed'}" do
       = icon 'list-alt'
       Detailed Transactions

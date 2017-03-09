@@ -1,10 +1,21 @@
-main > .row {
-  margin: 0;
-  padding: rem-calc(10 0);
-  background: #fff;
-  border: 1px solid $silver;
-  @media #{$medium-up} {
+main {
+  margin: rem-calc(10) 0;
+
+  @media (screen and min-width: $column-gutter + $row-width) {
     margin: rem-calc(20) auto;
-    padding: rem-calc(20 10);
+  }
+}
+
+.card {
+  background: #fff;
+  padding: $column-gutter / 2;
+}
+
+.card,
+.card-item {
+  box-shadow: 0 2px 6px #000;
+
+  & + & {
+    margin-top: $column-gutter / 2;
   }
 }

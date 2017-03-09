@@ -8,11 +8,6 @@ class PlayersController < ApplicationController
     @players = Player.all
   end
 
-  # GET /players/1
-  # GET /players/1.json
-  def show
-  end
-
   # GET /players/new
   def new
     @player = Player.new(club_id: revs.id)
@@ -46,22 +41,12 @@ class PlayersController < ApplicationController
         format.html { redirect_to @player, notice: 'Player was successfully updated.' }
         format.json {
           @players = Player.all
-          render json: { selector: '#content', html: render_to_string(action: 'index', layout: false, formats: [:html]) }
+          render json: { selector: 'main', html: render_to_string(action: 'index', layout: false, formats: [:html]) }
         }
       else
         format.html { render action: 'edit' }
         format.json { render json: @player.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /players/1
-  # DELETE /players/1.json
-  def destroy
-    @player.destroy
-    respond_to do |format|
-      format.html { redirect_to players_url }
-      format.json { head :no_content }
     end
   end
 
