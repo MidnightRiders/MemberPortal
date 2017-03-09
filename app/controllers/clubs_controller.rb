@@ -52,16 +52,6 @@ class ClubsController < ApplicationController
     end
   end
 
-  # DELETE /clubs/1
-  # DELETE /clubs/1.json
-  def destroy
-    @club.destroy
-    respond_to do |format|
-      format.html { redirect_to clubs_url }
-      format.json { head :no_content }
-    end
-  end
-
   private
 
   def club_params

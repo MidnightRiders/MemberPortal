@@ -1,7 +1,9 @@
-%h1 Editing player
+%section.row
+  .large-4.columns
+    .alert-box
+      %h1 Edit #{@player.first_name} #{@player.last_name}
+      = link_to 'Return to Players', players_path
 
-= render 'form'
+  .large-8.columns
+    = render 'form'
 
-= link_to 'Show', @player
-\|
-= link_to 'Back', players_path

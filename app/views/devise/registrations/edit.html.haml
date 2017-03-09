@@ -2,7 +2,8 @@
   Edit User
   %small= link_to 'Return', (resource == current_user ? root_url : users_path)
 
-= render partial: 'users/form', locals: { user: resource, devise: true }
+.row
+  .column= render partial: 'users/form', locals: { user: resource, devise: true }
 
 -# if current_user == resource
   .row

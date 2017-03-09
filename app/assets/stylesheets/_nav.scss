@@ -1,5 +1,75 @@
-.contain-to-grid.sticky {
+.nav-container {
   box-shadow: 0 3px 6px #000;
+
+  @media #{$medium-up} {
+    box-shadow: none;
+    filter: drop-shadow(0 3px 6px #000);
+    margin-left: rem-calc(45);
+    margin-right: rem-calc(45);
+    position: relative;
+    width: auto;
+    z-index: 100;
+
+    &::before,
+    &::after {
+      border: solid $topbar-bg;
+      border-width: rem-calc(22) rem-calc(22) rem-calc(23) rem-calc(23);
+      content: '\00A0';
+      display: block;
+      height: 0;
+      top: 0;
+      width: 0;
+      position: absolute;
+    }
+
+    &::before {
+      border-left-color: transparent;
+      left: rem-calc(-45);
+    }
+
+    &::after {
+      border-right-color: transparent;
+      right: rem-calc(-45);
+    }
+
+    &.fixed {
+      left: rem-calc(45);
+      margin: 0;
+      position: fixed;
+      right: rem-calc(45);
+
+      &::before,
+      &::after {
+        position: fixed;
+      }
+
+      &::before {
+        left: 0;
+      }
+
+      &::after {
+        right: 0;
+      }
+    }
+  }
+
+  @media #{$large-up} {
+    margin-left: rem-calc(60);
+    margin-right: rem-calc(60);
+
+    &.fixed {
+      left: rem-calc(60);
+      right: rem-calc(60);
+
+      &::before {
+        left: rem-calc(15);
+      }
+
+      &::after {
+        right: rem-calc(15);
+      }
+    }
+  }
 }
 .top-bar {
   text-shadow: 0 1px 1px #333;

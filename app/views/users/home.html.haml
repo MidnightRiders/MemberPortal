@@ -17,20 +17,16 @@
   -#      Vote for 2017’s Scarf
   = render 'board_nominations'
 
-  %section.medium-6.columns
-    = render partial: 'users/info', locals: { user: current_user }
-  %section.medium-6.columns
-    - if current_user.current_member? && current_user.current_membership.is_a?(Family)
-      = link_to user_membership_path(current_user, current_user.current_membership), class: 'button large expand' do
-        = icon 'users fa-fw'
-        Manage Family Membership
-    .row.show-for-medium-up= render 'shared/next_last_games', last_match: revs.last_match, next_match: revs.next_match
+  .medium-6.columns
+    %section.card= render partial: 'users/info', locals: { user: current_user }
+  .medium-6.columns
+    %section.show-for-medium-up.card-item= render 'shared/next_last_games', last_match: revs.last_match, next_match: revs.next_match
     = render 'static_pages/events', events: @events
     = render 'static_pages/blog', articles: @articles unless @articles.empty?
 
 
 - if current_user.current_member?
-  %section.row
+  .row
     .medium-6.columns
       - content_for :foot do
         = javascript_include_tag 'react', 'react_ujs', cache: 'react-core'

@@ -1,11 +1,14 @@
-%h1 Contact
+.row
+  .medium-10.large-8.medium-centered.columns
+    %section.card
+      %h1 Contact
 
-%ul.button-group
-  %li
-    = mail_to 'info@midnightriders.com', class: 'button' do
-      = icon 'envelope fa-fw'
-      General Inquiries
-  %li
-    = mail_to 'webczar@midnightriders.com', class: 'button secondary' do
-      = icon 'at fa-fw'
-      Member Portal and Web Inquiries
+      %ul.button-group.even-2
+        %li
+          = mail_to 'info@midnightriders.com', class: 'button no-margin-bottom' do
+            = icon 'envelope fa-fw'
+            General Inquiries
+        %li
+          = mail_to 'webczar@midnightriders.com', class: 'button secondary no-margin-bottom' do
+            = icon 'at fa-fw'
+            Member Portal and Web Inquiries

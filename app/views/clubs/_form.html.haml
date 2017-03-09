@@ -1,64 +1,65 @@
-= form_for @club, html: { multipart: true } do |f|
-  - if @club.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@club.errors.count, 'error')} prohibited this club from being saved:"
-      %ul
-        - @club.errors.full_messages.each do |msg|
-          %li= msg
+.card
+  = form_for @club, html: { multipart: true } do |f|
+    - if @club.errors.any?
+      #error_explanation
+        %h2= "#{pluralize(@club.errors.count, 'error')} prohibited this club from being saved:"
+        %ul
+          - @club.errors.full_messages.each do |msg|
+            %li= msg
 
-  .row
-    .large-4.columns
-      = f.label :name, class: 'inline'
-    .large-8.columns
-      = f.text_field :name
-  .row
-    .large-4.columns
-      = f.label :conference, class: 'inline'
-    .large-8.columns
-      = f.select :conference, options_for_select(Club::CONFERENCES.map{|x| [x.titleize,x]}, f.object.conference)
-  .row
-    .large-4.columns
-      = f.label :crest, class: 'inline'
-    .large-8.columns
-      = f.file_field :crest
-  .row
-    .large-4.columns
-      = f.label :primary_color
-    .large-8.columns
-      .row.collapse
-        .small-1.column
-          %span.prefix{data: { 'color-input' => 'club_primary_color' }} #
-        .small-11.columns
-          = f.text_field :primary_color, value: f.object.primary_color
-  .row
-    .large-4.columns
-      = f.label :secondary_color
-    .large-8.columns
-      .row.collapse
-        .small-1.column
-          %span.prefix{data: { 'color-input' => 'club_secondary_color' }} #
-        .small-11.columns
-          = f.text_field :secondary_color, value: f.object.secondary_color
-  .row
-    .large-4.columns
-      = f.label :accent_color
-    .large-8.columns
-      .row.collapse
-        .small-1.column
-          %span.prefix{data: { 'color-input' => 'club_accent_color' }} #
-        .small-11.columns
-          = f.text_field :accent_color, value: f.object.accent_color
-  .row
-    .large-4.columns
-      = f.label :abbrv
-    .large-8.columns
-      = f.text_field :abbrv
-  .row.actions
-    .column.text-right
-      = f.button :submit, class: 'button' do
-        - if f.object.new_record?
-          = icon 'check fa-fw'
-          Create
-        - else
-          = icon 'save fa-fw'
-          Save
+    .row
+      .large-4.columns
+        = f.label :name, class: 'inline'
+      .large-8.columns
+        = f.text_field :name
+    .row
+      .large-4.columns
+        = f.label :conference, class: 'inline'
+      .large-8.columns
+        = f.select :conference, options_for_select(Club::CONFERENCES.map{|x| [x.titleize,x]}, f.object.conference)
+    .row
+      .large-4.columns
+        = f.label :crest, class: 'inline'
+      .large-8.columns
+        = f.file_field :crest
+    .row
+      .large-4.columns
+        = f.label :primary_color
+      .large-8.columns
+        .row.collapse
+          .small-1.column
+            %span.prefix{data: { 'color-input' => 'club_primary_color' }} #
+          .small-11.columns
+            = f.text_field :primary_color, value: f.object.primary_color
+    .row
+      .large-4.columns
+        = f.label :secondary_color
+      .large-8.columns
+        .row.collapse
+          .small-1.column
+            %span.prefix{data: { 'color-input' => 'club_secondary_color' }} #
+          .small-11.columns
+            = f.text_field :secondary_color, value: f.object.secondary_color
+    .row
+      .large-4.columns
+        = f.label :accent_color
+      .large-8.columns
+        .row.collapse
+          .small-1.column
+            %span.prefix{data: { 'color-input' => 'club_accent_color' }} #
+          .small-11.columns
+            = f.text_field :accent_color, value: f.object.accent_color
+    .row
+      .large-4.columns
+        = f.label :abbrv
+      .large-8.columns
+        = f.text_field :abbrv
+    .row.actions
+      .column.text-right
+        = f.button :submit, class: 'button' do
+          - if f.object.new_record?
+            = icon 'check fa-fw'
+            Create
+          - else
+            = icon 'save fa-fw'
+            Save

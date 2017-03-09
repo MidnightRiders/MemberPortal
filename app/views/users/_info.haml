@@ -23,6 +23,12 @@
         = icon 'trash-o fa-lg fa-fw'
 
 %hr
+
+- if current_user.current_member? && current_user.current_membership.is_a?(Family)
+  = link_to user_membership_path(current_user, current_user.current_membership), class: 'button large expand' do
+    = icon 'users fa-fw'
+    Manage Family Membership
+
 %h4
   Digital Membership history:
 %table.expand
@@ -54,7 +60,7 @@
                       Cancel Automatic Renewal
 
 %hr
-- if current_user==user
+- if current_user == user
   .row.show-for-small-only= render 'shared/next_last_games', last_match: revs.last_match, next_match: revs.next_match
 
 .table

@@ -7,7 +7,7 @@ li.match {
 
 li.match {
   @include clearfix;
-  border: 1px solid $silver;
+  background: #fff;
   border-radius: 100px;
   margin: $column-gutter / 2 auto;
   max-width: 360px;

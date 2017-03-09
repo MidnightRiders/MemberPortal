@@ -1,8 +1,26 @@
+%maroon-bg {
+  background: $maroon;
+  background: linear-gradient(transparentize($navy, .9), transparentize($navy, .4)), image-url('portal-bg-red-2017-1x.png') repeat top center $maroon;
+
+  @media #{$retina} {
+    background-image: linear-gradient(transparentize($navy, .9), transparentize($navy, .4)), image-url('portal-bg-red-2017-2x.png');
+    background-size: 100%, auto 94px;
+  }
+}
+
 header.page-header {
-  background: rgba(0,0,0,.25);
+  @extend %maroon-bg;
+  border: 1px solid $silver;
+  border-bottom: none;
+  border-top: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   padding-top: rem-calc(10);
+
   h1 {
     margin-bottom: 0;
+    text-transform: uppercase;
+
     &:before {
       display: block;
       content: '\00A0';
@@ -11,17 +29,21 @@ header.page-header {
       padding: 12% 0 0;
       background: transparent image-url('logo.png') no-repeat center;
       background-size: contain;
+      filter: drop-shadow(0 1px 2px darken($maroon, 25%));
       float: left;
       margin: 5px 10px 0 0;
     }
+
+    small {
+      text-transform: none;
+    }
   }
+
   &, * {
     color: #fff;
     text-shadow: 0 2px 3px #000;
-    small, .subheader {
-      opacity: .8;
-    }
   }
+
   .next-game {
     padding-bottom: 10px;
 
@@ -44,11 +66,13 @@ header.page-header {
       }
     }
 
-    h5, h3 {
+    h5,
+    h3 {
       margin: 0;
       line-height: 1.2em;
     }
   }
+
   @media #{$small-only} {
     display: none;
   }

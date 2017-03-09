@@ -1,5 +1,8 @@
-%h1 New club
+%section.row
+  .large-4.columns
+    .alert-box
+      %h1 New club
+      = link_to 'Return to Clubs', clubs_path
 
-= render 'form'
-
-= link_to 'Back', clubs_path
+  .large-8.columns
+    = render 'form'

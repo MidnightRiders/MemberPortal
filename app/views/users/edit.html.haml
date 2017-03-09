@@ -2,4 +2,5 @@
   Edit User
   %small= link_to 'Return', users_path
 
-= render partial: 'users/form', locals: { user: @user }
+.row
+  .column= render partial: 'users/form', locals: { user: @user }

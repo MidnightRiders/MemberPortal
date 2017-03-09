@@ -1,6 +1,6 @@
 MidnightRiders::Application.routes.draw do
   get 'stylesheets/club', constraints: { format: :css }
-  resources :players
+  resources :players, except: %i(show destroy)
 
   resources :mot_ms, path: 'motm', only: [:index]
 
@@ -14,7 +14,7 @@ MidnightRiders::Application.routes.draw do
     post 'pick_ems/vote', to: 'pick_ems#vote', as: :pick_em_vote
   end
 
-  resources :clubs
+  resources :clubs, except: %i(destroy)
 
   match 'memberships/webhooks', to: 'memberships#webhooks', via: :all
   devise_for :users, controllers: { registrations: 'registrations' }

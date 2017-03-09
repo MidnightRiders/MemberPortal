@@ -7,10 +7,6 @@ describe PlayersController do
       get :index
       expect(response).to redirect_to root_path
     end
-    it 'rejects #show' do
-      get :show, id: FactoryGirl.create(:player)
-      expect(response).to redirect_to root_path
-    end
     it 'rejects #new' do
       get :new
       expect(response).to redirect_to root_path
@@ -52,12 +48,6 @@ describe PlayersController do
     it 'accepts #new' do
       get :new
       expect(response).to be_success
-    end
-    it 'accepts #show' do
-      player = FactoryGirl.create(:player)
-      get :show, id: player
-      expect(response).to be_success
-      expect(assigns(:player)).to eq player
     end
     it 'accepts #edit' do
       player = FactoryGirl.create(:player)
