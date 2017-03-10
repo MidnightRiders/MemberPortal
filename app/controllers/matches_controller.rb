@@ -7,7 +7,6 @@ class MatchesController < ApplicationController
   before_action :set_match, only: %i(show edit update destroy)
 
   # GET /matches
-  # GET /matches.json
   def index
     @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
     @matches = Match.unscoped.with_clubs.includes(:pick_ems).where(kickoff: (@start_date..@start_date + 7.days)).order(kickoff: :asc, location: :asc)
@@ -21,7 +20,6 @@ class MatchesController < ApplicationController
   end
 
   # GET /matches/1
-  # GET /matches/1.json
   def show
     @order_point = @match.order_selected(Match.all_seasons)
     @mot_m_players = Player.includes(:mot_m_firsts, :mot_m_seconds, :mot_m_thirds).select { |x| x.mot_m_total(match_id: @match.id) && x.mot_m_total(match_id: @match.id) > 0 }.sort_by { |x| x.mot_m_total(match_id: @match.id) }.reverse if @match.teams.include? revs
@@ -124,7 +122,6 @@ class MatchesController < ApplicationController
   end
 
   # POST /matches
-  # POST /matches.json
   def create
     @match = Match.new(match_params)
 
@@ -154,7 +151,6 @@ class MatchesController < ApplicationController
   end
 
   # DELETE /matches/1
-  # DELETE /matches/1.json
   def destroy
     @match.destroy
     respond_to do |format|

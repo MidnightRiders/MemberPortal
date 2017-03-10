@@ -3,13 +3,11 @@ class ClubsController < ApplicationController
   load_and_authorize_resource
 
   # GET /clubs
-  # GET /clubs.json
   def index
     @clubs = Club.order(name: :asc)
   end
 
   # GET /clubs/1
-  # GET /clubs/1.json
   def show
   end
 
@@ -23,7 +21,6 @@ class ClubsController < ApplicationController
   end
 
   # POST /clubs
-  # POST /clubs.json
   def create
     @club = Club.new(club_params)
 

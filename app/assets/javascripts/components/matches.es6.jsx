@@ -24,7 +24,7 @@ class Matches extends React.Component {
   render() {
     return (
       <div className="row">
-        <div className="medium-4 large-6 columns">
+        <div className="medium-6 columns">
           <section className="card">
             {this.adminButton()}
             <h2>Matches for the week of {this.formatDate()}</h2>
@@ -44,7 +44,7 @@ class Matches extends React.Component {
             </div>
           </section>
         </div>
-        <div className="medium-8 large-6 columns">
+        <div className="medium-6 columns">
           <MatchCollection
             matches={this.props.matches}
             showAdminUi={this.props.showAdminUi}

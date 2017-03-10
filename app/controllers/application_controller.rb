@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :set_next_revs_match
   before_action :configure_permitted_parameters, if: :devise_controller?
+  serialization_scope :view_context
 
   before_action do
     resource = controller_name.singularize.to_sym
