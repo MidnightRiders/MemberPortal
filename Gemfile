@@ -8,6 +8,7 @@ gem 'rails', '~> 4.2.7'
 gem 'hstore_accessor'
 gem 'order_query'
 gem 'pg'
+gem 'active_model_serializers'
 
 gem 'autoprefixer-rails'
 gem 'coffee-rails'
@@ -42,9 +43,6 @@ gem 'fuzzy_match', '~> 2.1'
 
 # Payments
 gem 'stripe'
-
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

@@ -3,7 +3,6 @@ class PlayersController < ApplicationController
   load_and_authorize_resource
 
   # GET /players
-  # GET /players.json
   def index
     @players = Player.all
   end
@@ -18,7 +17,6 @@ class PlayersController < ApplicationController
   end
 
   # POST /players
-  # POST /players.json
   def create
     @player = Player.new(player_params)
 

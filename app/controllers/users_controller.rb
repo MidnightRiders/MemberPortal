@@ -3,7 +3,6 @@ class UsersController < ApplicationController
   load_and_authorize_resource find_by: :username
 
   # GET /users
-  # GET /users.json
   def index
     @privilege = params[:privilege].blank? ? nil : params[:privilege]
     @year = params.fetch(:year, Date.current.year).to_i
@@ -17,16 +16,21 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json
-      format.csv {
+      format.json do
+        render json: @user_set
+      end
+      format.csv do
         render text: @user_set.to_csv
-      }
+      end
     end
   end
 
   # GET /users/1
-  # GET /users/1.json
   def show
+    respond_to do |format|
+      format.html
+      format.json { render json: @user }
+    end
   end
 
   # GET /home
@@ -66,7 +70,6 @@ class UsersController < ApplicationController
   end
 
   # POST /users
-  # POST /users.json
   def create
     u = user_params
     u[:password] = (pass = rand(36**10).to_s(36))
@@ -77,7 +80,7 @@ class UsersController < ApplicationController
       if @user.save
         UserMailer.new_user_creation_email(@user, pass)
         format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @user }
+        format.json { render json: @user, status: :created, location: @user }
       else
         format.html { render action: 'new' }
         format.json { render json: @user.errors, status: :unprocessable_entity }

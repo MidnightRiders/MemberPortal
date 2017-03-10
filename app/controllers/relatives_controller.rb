@@ -32,7 +32,6 @@ class RelativesController < ApplicationController
   end
 
   # DELETE /users/:username/memberships/:membership_id/relatives/1
-  # DELETE /users/:username/memberships/:membership_id/relatives/1.json
   def destroy
     @relative_user = @relative.user
     name = @relative_user.present? ? "#{@relative_user.first_name} #{@relative_user.last_name}" : @relative.invited_email
