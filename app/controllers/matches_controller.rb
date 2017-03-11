@@ -5,18 +5,16 @@ require 'nokogiri'
 class MatchesController < ApplicationController
   authorize_resource
   before_action :set_match, only: %i(show edit update destroy)
+  before_action :determine_start_date, only: %i(index)
 
   # GET /matches
   def index
-    @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
-    @matches = Match.unscoped.with_clubs.includes(:pick_ems).where(kickoff: (@start_date..@start_date + 7.days)).order(kickoff: :asc, location: :asc)
-    @prev_link = "Previous #{'Game ' if @matches.empty?}Week"
-    @next_link = "Next #{'Game ' if @matches.empty?}Week"
-    @prev_date = @matches.empty? ? Match.unscoped.where('kickoff < ?', Time.current).order(kickoff: :asc).last.try(:kickoff) : @start_date - 1.week
-    @prev_date = @prev_date.try(:to_date)
-    @next_date = @matches.empty? ? Match.unscoped.where('kickoff > ?', Time.current).order(kickoff: :asc).first.try(:kickoff) : @start_date + 1.week
-    @next_date = @next_date.try(:to_date)
-    @is_current_week = @start_date == Time.current.beginning_of_week
+    generate_match_index
+
+    respond_to do |format|
+      format.html
+      format.json { render json: @match_index }
+    end
   end
 
   # GET /matches/1
@@ -161,14 +159,53 @@ class MatchesController < ApplicationController
 
   private
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_match
-    @match = Match.all_seasons.with_clubs.find(params[:id])
+  def determine_start_date
+    @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
+  end
+
+  def generate_match_index
+    @match_index = {
+      start_date: @start_date.to_f * 1000,
+      prev_week: previous_match_week_from(@start_date).to_f * 1000,
+      next_week: next_match_week_from(@start_date).to_f * 1000,
+      matches: ActiveModelSerializers::SerializableResource.new(prepared_matches, scope: view_context).serializable_hash,
+      show_admin_ui: can?(:manage, Match)
+    }
+  end
+
+  def next_match_week_from(date)
+    Match.unscope(where: :season)
+      .where('kickoff >= ?', date.beginning_of_week + 1.week)
+      .order(kickoff: :asc)
+      .first&.kickoff&.beginning_of_week
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def match_params
     params.require(:match).permit(:home_team_id, :away_team_id, :kickoff, :kickoff_date, :kickoff_time, :location, :home_goals, :away_goals)
+  end
+
+  def prepared_matches
+    Match.for_week(@start_date)
+      .with_clubs
+      .includes(:pick_ems)
+      .where(pick_ems: { user_id: [nil, current_user.id] })
+      .references(:pick_ems)
+      .each do |match|
+        match.user_pick_em = match.pick_ems[0]
+      end
+  end
+
+  def previous_match_week_from(date)
+    Match.unscope(where: :season)
+      .where('kickoff < ?', date.beginning_of_week)
+      .order(kickoff: :desc)
+      .first&.kickoff&.beginning_of_week
+  end
+
+  # Use callbacks to share common setup or constraints between actions.
+  def set_match
+    @match = Match.all_seasons.with_clubs.find(params[:id])
   end
 
   def scrape_all_results_for_week(html)
