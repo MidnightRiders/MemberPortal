@@ -2,8 +2,15 @@ class Matches extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      startDate: new Date(props.startDate)
+    this.state = this.stateFromProps(props);
+  }
+
+  stateFromProps(props) {
+    return {
+      startDate: new Date(props.startDate),
+      prevWeek: props.prevWeek ? new Date(props.prevWeek) : null,
+      nextWeek: props.nextWeek ? new Date(props.nextWeek) : null,
+      matches: props.matches
     };
   }
 
@@ -17,8 +24,57 @@ class Matches extends React.Component {
     );
   }
 
+  anchorPushState(e) {
+    if (!window.history || !window.history.pushState) return;
+    e.preventDefault();
+    window.history.pushState({}, '', e.currentTarget.href);
+    this.navigate();
+  }
+
+  componentDidMount() {
+    window.onpopstate = this.navigate.bind(this);
+  }
+
+  componentWillUnmount() {
+    window.onpopstate = null;
+  }
+
+  currentWeekLink() {
+    if (this.state.startDate < new Date() && +new Date() < +this.state.startDate + 1000 * 60 * 60 * 24 * 7) return '\u00A0';
+    return (
+      <a
+        href="/matches"
+        onClick={this.anchorPushState.bind(this)}
+        className="matches-navigate matches-navigate-current"
+        title="Current Week"
+      />
+    )
+  }
+
   formatDate() {
     return `${this.state.startDate.getMonth() + 1}.${this.state.startDate.getDate()}.${this.state.startDate.getFullYear()}`;
+  }
+
+  navigate() {
+    jQuery.ajax(document.location.href, { dataType: 'json' })
+      .then((data) => this.setState(this.stateFromProps(data)));
+  }
+
+  navLink(which) {
+    if (!this.state[`${which}Week`]) return '\u00A0';
+    let title = `${which === 'prev' ? 'Previous' : 'Next'} Game Week`;
+    return (
+      <a
+        href={`/matches?date=${this.yyyyMmDd(this.state[`${which}Week`])}`}
+        onClick={this.anchorPushState.bind(this)}
+        className={`matches-navigate matches-navigate-${which}`}
+        title={title}
+      />
+    );
+  }
+
+  yyyyMmDd(date) {
+    return `${date.getFullYear()}-${`0${date.getMonth() + 1}`.substr(-2, 2)}-${`0${date.getDate()}`.substr(-2, 2)}`;
   }
 
   render() {
@@ -45,8 +101,19 @@ class Matches extends React.Component {
           </section>
         </div>
         <div className="medium-6 columns">
+          <div className="row">
+            <div className="small-4 columns">
+              {this.navLink('prev')}
+            </div>
+            <div className="small-4 columns">
+              {this.currentWeekLink()}
+            </div>
+            <div className="small-4 columns">
+              {this.navLink('next')}
+            </div>
+          </div>
           <MatchCollection
-            matches={this.props.matches}
+            matches={this.state.matches}
             showAdminUi={this.props.showAdminUi}
           />
         </div>
@@ -58,5 +125,7 @@ class Matches extends React.Component {
 Matches.propTypes = {
   showAdminUi: React.PropTypes.bool,
   startDate: React.PropTypes.number,
+  prevWeek: React.PropTypes.number,
+  nextWeek: React.PropTypes.number,
   matches: React.PropTypes.array
 };

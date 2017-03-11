@@ -14,7 +14,7 @@ class MatchesController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: @match_index }
+      format.json { render json: @match_index.camelize_keys }
     end
   end
 
@@ -112,7 +112,7 @@ class MatchesController < ApplicationController
   def next_match_week_from(date)
     Match.unscope(where: :season)
       .where('kickoff >= ?', date.beginning_of_week + 1.week)
-      .order(kickoff: :asc)
+      .reorder(kickoff: :asc)
       .first&.kickoff&.beginning_of_week
   end
 
@@ -163,7 +163,7 @@ class MatchesController < ApplicationController
   def previous_match_week_from(date)
     Match.unscope(where: :season)
       .where('kickoff < ?', date.beginning_of_week)
-      .order(kickoff: :desc)
+      .reorder(kickoff: :desc)
       .first&.kickoff&.beginning_of_week
   end
 
