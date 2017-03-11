@@ -1,3 +1,53 @@
+.matches-navigate {
+  background: $maroon;
+  border-radius: 100%;
+  color: #fff;
+  display: block;
+  font-size: 1.6em;
+  line-height: 1.6em;
+  text-align: center;
+  transition: .3s background;
+  width: 1.6em;
+
+  &:hover,
+  &:focus,
+  &:active {
+    color: #fff;
+  }
+
+  &:hover {
+    background: mix(#fff, $maroon, 15%);
+  }
+
+  &::before {
+    @include fa-icon;
+  }
+
+  &.matches-navigate-current {
+    margin: 0 auto;
+
+    &::before {
+      content: $fa-var-calendar-o;
+    }
+  }
+
+  &.matches-navigate-prev{
+    margin: 0 auto 0 0;
+
+    &::before {
+      content: $fa-var-arrow-left;
+    }
+  }
+
+  &.matches-navigate-next{
+    margin: 0 0 0 auto;
+
+    &::before {
+      content: $fa-var-arrow-right;
+    }
+  }
+}
+
 ul.matches,
 li.match {
   list-style: none;
@@ -10,7 +60,6 @@ li.match {
   background: #fff;
   border-radius: 100px;
   margin: $column-gutter / 2 auto;
-  //max-width: 360px;
   position: relative;
 
   time {
