@@ -31,6 +31,9 @@
       - content_for :foot do
         = javascript_include_tag 'react', 'react_ujs', cache: 'react-core'
         = javascript_include_tag 'components'
-      = react_component 'MatchCollection', { show_admin_ui: can?(:manage, Match), matches: @revs_matches.map { |m| m.decorate.for_react(user: current_user) } }, prerender: true
+      = react_component 'MatchCollection',
+        { show_admin_ui: can?(:manage, Match),
+          matches: ActiveModelSerializers::SerializableResource.new(@revs_matches, scope: self).serializable_hash },
+        prerender: true
     .medium-6.columns
       = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses.where(matches: { season: Date.current.year }).present?
