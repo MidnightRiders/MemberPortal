@@ -33,5 +33,5 @@ MidnightRiders::Application.configure do
   config.assets.debug = true
 
   config.react.variant = :development
-  config.watchable_dirs.merge!({"#{Rails.root}/app/assets/javascripts/**/" => %w(jsx)})
+  config.watchable_dirs.merge!("#{Rails.root}/app/assets/javascripts/**/" => %w(jsx))
 end

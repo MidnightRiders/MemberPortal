@@ -9,8 +9,7 @@ class MotMsController < ApplicationController
   def index
     @mstart       = (params[:date].try(:to_datetime) || Date.current).beginning_of_month
     @season       = @mstart.year
-    @months       = Match.unscoped.where('kickoff <= :time', time: Time.current).group_by { |x| x.kickoff.beginning_of_month }.sort.map(&:first) + [Date.current.beginning_of_month]
-    @months.uniq!
+    @months       = [*past_match_months, Date.current.beginning_of_month].uniq
     yr_matches    = revs.matches.unscope(where: :season).where(season: @mstart.year)
     @yr_match_ids = yr_matches.map(&:id)
     @mo_match_ids = yr_matches.where(kickoff: (@mstart..@mstart.end_of_month)).map(&:id)
@@ -75,7 +74,7 @@ class MotMsController < ApplicationController
 
   # Set +@match+ based on route's +:match_id+.
   def set_match
-    @match = Match.unscoped.find(params[:match_id])
+    @match = Match.unscope(where: :season).find(params[:match_id])
   end
 
   # Redirects to matches path for that week if the match is not voteable
@@ -86,5 +85,12 @@ class MotMsController < ApplicationController
   # Strong params for +MotM+.
   def mot_m_params
     params.require(:mot_m).permit(:user_id, :match_id, :first_id, :second_id, :third_id)
+  end
+
+  def past_match_months
+    Match.unscoped
+      .where('kickoff <= :time', time: Time.current)
+      .pluck('DISTINCT cast(date_trunc(\'month\', kickoff) as date)')
+      .sort
   end
 end

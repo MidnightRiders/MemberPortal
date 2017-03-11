@@ -67,7 +67,7 @@ feature 'Pick ’Em' do
       visit matches_path(date: match.kickoff.to_date)
 
       within('li.match', text: match.kickoff.strftime('%-m.%-d %-I:%M%P')) do
-        expect(page.find('.home')['title']).to  include('(Picked) (Result)')
+        expect(page.find('.home')['title']).to include('(Picked) (Result)')
       end
     end
 
@@ -78,9 +78,9 @@ feature 'Pick ’Em' do
       visit matches_path(date: match.kickoff.to_date)
 
       within('li.match', text: match.kickoff.strftime('%-m.%-d %-I:%M%P')) do
-        expect(page.find('.home')['title']).to  include('(Picked)')
-        expect(page.find('.home')['title']).not_to  include('(Result)')
-        expect(page.find('.away')['title']).to  include('(Result)')
+        expect(page.find('.home')['title']).to include('(Picked)')
+        expect(page.find('.home')['title']).not_to include('(Result)')
+        expect(page.find('.away')['title']).to include('(Result)')
       end
     end
   end

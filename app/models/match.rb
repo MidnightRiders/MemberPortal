@@ -3,24 +3,28 @@ class Match < ActiveRecord::Base
 
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
+  attr_accessor :user_pick_em
 
   order_query :order_selected,
               %i(kickoff asc),
               %i(location asc)
 
-  default_scope -> {
-    where(season: Date.current.year)
+  default_scope lambda {
+    where(season: Date.current.year).order(kickoff: :asc, location: :asc)
   }
-  scope :all_seasons, -> {
+  scope :all_seasons, lambda {
     unscope(where: :season)
   }
-  scope :with_clubs, -> {
+  scope :for_week, lambda { |beginning|
+    unscope(where: :season).where(kickoff: (beginning..beginning + 7.days))
+  }
+  scope :with_clubs, lambda {
     includes(:home_team, :away_team)
   }
-  scope :completed, -> {
+  scope :completed, lambda {
     where.not(home_goals: nil, away_goals: nil)
   }
-  scope :upcoming, -> {
+  scope :upcoming, lambda {
     where('kickoff > ?', Time.current)
   }
 
