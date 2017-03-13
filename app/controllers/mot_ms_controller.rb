@@ -5,7 +5,6 @@ class MotMsController < ApplicationController
   before_action :check_eligible, only: %i(new edit create update)
 
   # GET /mot_ms
-  # GET /mot_ms.json
   def index
     @mstart       = (params[:date].try(:to_datetime) || Date.current).beginning_of_month
     @season       = @mstart.year
@@ -20,18 +19,7 @@ class MotMsController < ApplicationController
     @mot_ms_for_yr = Player.mot_ms_for(yr_matches)
   end
 
-  # GET /mot_ms/new
-  def new
-    redirect_to edit_match_mot_m_url(@match, @mot_m) if @mot_m = @match.mot_ms.find_by(user_id: @current_user)
-    @mot_m = @match.mot_ms.new
-  end
-
-  # GET /mot_ms/1/edit
-  def edit
-  end
-
   # POST /mot_ms
-  # POST /mot_ms.json
   def create
     @mot_m = MotM.new(mot_m_params)
 
@@ -47,7 +35,6 @@ class MotMsController < ApplicationController
   end
 
   # PATCH/PUT /mot_ms/1
-  # PATCH/PUT /mot_ms/1.json
   def update
     respond_to do |format|
       if @mot_m.update(mot_m_params)
@@ -57,16 +44,6 @@ class MotMsController < ApplicationController
         format.html { render action: 'edit' }
         format.json { render json: @mot_m.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # DELETE /mot_ms/1
-  # DELETE /mot_ms/1.json
-  def destroy
-    @mot_m.destroy
-    respond_to do |format|
-      format.html { redirect_to matches_url }
-      format.json { head :no_content }
     end
   end
 

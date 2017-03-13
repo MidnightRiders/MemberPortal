@@ -4,7 +4,7 @@ require 'match_score_retriever'
 # Controller for +Match+ model.
 class MatchesController < ApplicationController
   authorize_resource
-  before_action :set_match, only: %i(show edit update destroy)
+  before_action :set_match, only: %i(index show edit update destroy)
   before_action :determine_start_date, only: %i(index)
   before_action :check_for_matches_to_update, only: %i(auto_update)
 
@@ -94,8 +94,8 @@ class MatchesController < ApplicationController
   end
 
   private
-
   def determine_start_date
+    return @start_date = @match.kickoff.beginning_of_week if @match.present?
     @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
   end
 
@@ -170,6 +170,8 @@ class MatchesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_match
     @match = Match.all_seasons.with_clubs.find(params[:id])
+  rescue => e
+    raise e unless action_name == 'index'
   end
 
   def scrape_all_results_for_week(html)
