@@ -5,6 +5,7 @@ $draw-width: .25;
 $line-width: .075;
 $win-hover-scale: 1.1;
 $draw-hover-scale: 1.25;
+$option-proportion: .3;
 
 .pick-em-container {
   padding: 10px;
@@ -13,7 +14,7 @@ $draw-hover-scale: 1.25;
 .pick-em-picker {
   display: block;
   height: 0;
-  padding-top: percentage(1 / 3);
+  padding-top: percentage($option-proportion);
   position: relative;
   transform: translateZ(0);
   width: auto;
@@ -30,11 +31,11 @@ $draw-hover-scale: 1.25;
     border: 2px solid #fff;
     content: '\00A0';
     height: percentage($line-width);
-    left: percentage(1 / 6);
-    margin-top: - percentage($line-width / 6);
+    left: percentage($option-proportion / 2);
+    margin-top: - percentage($line-width / (2 / $option-proportion));
     overflow: hidden;
     position: absolute;
-    right: percentage(1 / 6);
+    right: percentage($option-proportion / 2);
     transition: .3s filter;
     top: 50%;
     z-index: 2;
@@ -59,27 +60,27 @@ $draw-hover-scale: 1.25;
   &.picked-home::after,
   &.picked-away::after {
     height: 100%;
-    margin-left: - percentage(1 / 6);
-    margin-top: - percentage(1/ 6);
-    width: percentage(1 / 3);
+    margin-left: - percentage($option-proportion / 2);
+    margin-top: - percentage($option-proportion / 2);
+    width: percentage($option-proportion);
   }
 
   &.hover-home::after,
   &.picked-home::after {
-    left: percentage(1 / 6);
+    left: percentage($option-proportion / 2);
   }
 
   &.hover-away::after,
   &.picked-away::after {
-    left: percentage(5 / 6);
+    left: percentage(1 - ($option-proportion / 2));
   }
 
   &.hover-draw::after,
   &.picked-draw::after {
     height: percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale);
-    margin-left: - percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / 6);
-    margin-top: - percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / 6);
-    width: percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / 3);
+    margin-left: - percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / (2 / $option-proportion));
+    margin-top: - percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / (2 / $option-proportion));
+    width: percentage($draw-width / $circle-width * $draw-hover-scale * $win-hover-scale / (1 / $option-proportion));
   }
 
   &.picked-home::after,
@@ -194,7 +195,7 @@ $draw-hover-scale: 1.25;
   }
 
   a {
-    background-size: 50%;
+    background-size: 60%;
     border: 2px solid #fff;
     border-radius: 100%;
     position: absolute;
@@ -221,9 +222,9 @@ $draw-hover-scale: 1.25;
     &.home,
     &.away {
       height: percentage($circle-width);
-      margin-left: - percentage($circle-width / 6);
-      margin-top: - percentage($circle-width / 6);
-      width: percentage($circle-width / 3);
+      margin-left: - percentage($circle-width / (2 / $option-proportion));
+      margin-top: - percentage($circle-width / (2 / $option-proportion));
+      width: percentage($circle-width / (1 / $option-proportion));
 
       &:hover {
         transform: scale($win-hover-scale);
@@ -235,20 +236,20 @@ $draw-hover-scale: 1.25;
     }
 
     &.home {
-      left: percentage(1 / 6);
+      left: percentage($option-proportion / 2);
     }
 
     &.away {
-      left: percentage(5 / 6);
+      left: percentage(1 - ($option-proportion / 2));
     }
 
     &.draw {
       background-color: $base-color;
       height: percentage($draw-width);
       left: 50%;
-      margin-left: - percentage($draw-width / 6);
-      margin-top: - percentage($draw-width / 6);
-      width: percentage($draw-width / 3);
+      margin-left: - percentage($draw-width / (2 / $option-proportion));
+      margin-top: - percentage($draw-width / (2 / $option-proportion));
+      width: percentage($draw-width / (1 / $option-proportion));
 
       &:hover {
         transform: scale($draw-hover-scale);
