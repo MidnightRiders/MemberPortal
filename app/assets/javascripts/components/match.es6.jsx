@@ -3,9 +3,11 @@ class Match extends React.Component {
   constructor(props) {
     super(props);
 
+    this.isRevs = this.props.homeTeam.abbrv === 'NE' || this.props.awayTeam.abbrv === 'NE';
     this.kickoffInterval = null;
 
     this.state = {
+      canMakeRevGuess: this.canMakeRevGuess(),
       canVoteForMotM: this.canVoteForMotM(),
       past: props.kickoff < new Date()
     };
@@ -22,14 +24,15 @@ class Match extends React.Component {
       ${hour}:${minutes}${amPm}`;
   }
 
-  isRevs() {
-    return this.props.homeTeam.abbrv === 'NE' || this.props.awayTeam.abbrv === 'NE';
-  }
-
   canVoteForMotM() {
-    return this.isRevs() &&
+    return this.isRevs &&
       this.props.kickoff < new Date() - 1000 * 60 * 45 &&         // at least 45 minutes ago
       this.props.kickoff > new Date() - 1000 * 60 * 60 * 24 * 14; // less than two weeks ago
+  }
+
+  canMakeRevGuess() {
+    return this.isRevs &&
+      this.props.kickoff > new Date();
   }
 
   componentDidMount() {
@@ -38,6 +41,28 @@ class Match extends React.Component {
 
   componentWillUnmount() {
     this.stopWaitingForGameProgress();
+  }
+
+  motM() {
+    if (this.state.canVoteForMotM) {
+      return (
+        <MotM
+          matchId={this.props.id}
+          kickoff={this.props.kickoff}
+          firstId={null}
+          secondId={null}
+          thirdId={null}
+        />
+      );
+    }
+  }
+
+  revGuess() {
+    if (this.state.canMakeRevGuess) {
+      return (
+        <RevGuess />
+      );
+    }
   }
 
   stopWaitingForGameProgress() {
@@ -52,9 +77,13 @@ class Match extends React.Component {
       this.kickoffInterval = setInterval(() => {
         if (!this.state.past && this.props.kickoff < new Date()) {
           this.setState({ past: true });
-          if (!this.isRevs()) this.stopWaitingForGameProgress();
+          if (this.isRevs) {
+            this.setState({ canMakeRevGuess: false });
+          } else {
+            this.stopWaitingForGameProgress();
+          }
         }
-        if (this.state.past && this.isRevs() && this.canVoteForMotM()) {
+        if (this.state.past && this.canVoteForMotM()) {
           this.setState({ canVoteForMotM: true });
           this.stopWaitingForGameProgress();
         }
@@ -82,6 +111,8 @@ class Match extends React.Component {
             pick={this.props.pick}
             past={this.state.past}
           />
+        {this.revGuess()}
+        {this.motM()}
         </div>
       </li>
     );

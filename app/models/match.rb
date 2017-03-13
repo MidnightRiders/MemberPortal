@@ -90,6 +90,10 @@ class Match < ActiveRecord::Base
     end
   end
 
+  def revs?
+    teams.map(&:abbrv).include? 'NE'
+  end
+
   # TODO: Break this up to separate tests, and clarify distinction with <tt>PickEm.voteable?</tt>
 
   # Returns *Boolean*.
@@ -100,7 +104,7 @@ class Match < ActiveRecord::Base
   def voteable?
     kickoff &&
       (kickoff + 45.minutes).past? &&
-      teams.map(&:abbrv).include?('NE') &&
+      revs? &&
       kickoff >= 2.weeks.ago
   end
 
