@@ -10,9 +10,13 @@
     %section.top-bar-section
       %ul.left
         %li.has-dropdown
-          %a{ href: '#' }
-            = icon 'external-link-square fa-fw'
-            Sites
+          %a{ href: '#', title: 'Sites' }
+            .hide-for-medium-only
+              = icon 'external-link-square fa-fw'
+              Sites
+            .show-for-medium-only
+              = icon 'external-link-square fa-fw'
+              &nbsp;
           %ul.dropdown
             %li.external
               = link_to 'http://MidnightRiders.com', target: '_blank' do
@@ -132,13 +136,21 @@
         - if user_signed_in?
           - if current_user.current_member?
             %li
-              = link_to matches_url do
-                = icon 'calendar fa-fw'
-                Matches
+              = link_to matches_url, title: 'Matches', title: 'Matches' do
+                .hide-for-medium-only
+                  = icon 'calendar fa-fw'
+                  Matches
+                .show-for-medium-only
+                  = icon 'calendar fa-fw'
+                  &nbsp;
             %li.has-dropdown
-              = link_to '#' do
-                = icon 'trophy fa-fw'
-                Games
+              = link_to '#', title: 'Games' do
+                .hide-for-medium-only
+                  = icon 'trophy fa-fw'
+                  Games
+                .show-for-medium-only
+                  = icon 'trophy fa-fw'
+                  &nbsp;
               %ul.dropdown
                 %li
                   = link_to matches_path do
@@ -167,9 +179,13 @@
                       MotY Rankings
 
           %li
-            = link_to edit_user_registration_path(current_user) do
-              = icon 'user fa-fw'
-              My Account
+            = link_to edit_user_registration_path(current_user), title: 'My Account' do
+              .hide-for-medium-only
+                = icon 'user fa-fw'
+                My Account
+              .show-for-medium-only
+                = icon 'user fa-fw'
+                &nbsp;
           - if current_user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
             %li.has-dropdown
               %a{ href: '#', title: 'Admin' }

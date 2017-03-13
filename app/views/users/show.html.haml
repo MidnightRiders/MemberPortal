@@ -1,6 +1,4 @@
-- content_for :title do
-  Viewing User
-  %small= link_to 'Return', users_path
+- content_for :title, 'Viewing User'
 
 = render partial: 'users/info', locals: { user: @user }
 

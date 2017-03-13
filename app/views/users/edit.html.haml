@@ -1,6 +1,4 @@
-- content_for :title do
-  Edit User
-  %small= link_to 'Return', users_path
+- content_for :title, 'Edit User'
 
 .row
   .column= render partial: 'users/form', locals: { user: @user }

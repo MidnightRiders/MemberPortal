@@ -2,7 +2,7 @@
   = javascript_include_tag 'react', 'react_ujs', cache: 'react-core'
   = javascript_include_tag 'components'
 
-- content_for :title, 'Match listings for the week of ' + @start_date.strftime('%_m.%-d.%Y')
+- content_for :title, 'Match listings'
 
 = react_component 'MatchesIndex', @match_index, prerender: true
 

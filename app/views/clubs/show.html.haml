@@ -1,6 +1,5 @@
-- content_for :title do
-  Club View
-  %small= link_to 'Return', clubs_path
+- content_for :title, 'Club View'
+
 %h2.club{ class: @club.abbrv.downcase }
   - unless @club.crest.blank?
     = image_tag @club.crest.url(:thumb), class: 'crest-img', alt: @club.name + ' crest'
