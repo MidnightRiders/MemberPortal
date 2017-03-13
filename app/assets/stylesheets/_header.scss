@@ -10,9 +10,7 @@
 
 header.page-header {
   @extend %maroon-bg;
-  border: 1px solid $silver;
-  border-bottom: none;
-  border-top: none;
+  display: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-top: rem-calc(10);
@@ -73,7 +71,13 @@ header.page-header {
     }
   }
 
-  @media #{$small-only} {
-    display: none;
+  @media #{$medium-up} {
+    display: block;
+  }
+
+  @media #{$large-up} {
+    border: 1px solid $silver;
+    border-bottom: none;
+    border-top: none;
   }
 }

@@ -1,5 +1,3 @@
-- content_for :title do
-  Editing RevGuess
-  %small= link_to 'Return', match_rev_guesses_path(@match)
+- content_for :title, 'Editing RevGuess'
 
 = render 'form'

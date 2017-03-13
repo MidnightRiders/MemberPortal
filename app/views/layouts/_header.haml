@@ -2,10 +2,10 @@
   .medium-8.columns
     %h1
       = link_to 'Midnight Riders', root_path
-      %small
-        Member Portal
-    = content_tag(:h2, yield(:title), class: 'subheader') if content_for?(:title)
-    = yield(:header)
+    %h4.subheader
+      Member Portal
+      \|
+      = yield :title if content_for?(:title)
   .medium-4.columns.text-right.next-game.show-for-medium-up
     %h5 Next Game:
     - if @next_revs_match
