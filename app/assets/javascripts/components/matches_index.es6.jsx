@@ -1,4 +1,4 @@
-class Matches extends React.Component {
+class MatchesIndex extends React.Component {
   constructor(props) {
     super(props);
 
@@ -10,7 +10,8 @@ class Matches extends React.Component {
       startDate: new Date(props.startDate),
       prevWeek: props.prevWeek ? new Date(props.prevWeek) : null,
       nextWeek: props.nextWeek ? new Date(props.nextWeek) : null,
-      matches: props.matches
+      matches: props.matches,
+      loadingMatches: false
     };
   }
 
@@ -56,6 +57,7 @@ class Matches extends React.Component {
   }
 
   navigate() {
+    this.setState({ loadingMatches: true });
     jQuery.ajax(document.location.href, { dataType: 'json' })
       .then((data) => this.setState(this.stateFromProps(data)));
   }
@@ -115,6 +117,7 @@ class Matches extends React.Component {
           <MatchCollection
             matches={this.state.matches}
             showAdminUi={this.props.showAdminUi}
+            loading={this.state.loadingMatches}
           />
         </div>
       </div>
@@ -122,7 +125,7 @@ class Matches extends React.Component {
   }
 }
 
-Matches.propTypes = {
+MatchesIndex.propTypes = {
   showAdminUi: React.PropTypes.bool,
   startDate: React.PropTypes.number,
   prevWeek: React.PropTypes.number,
