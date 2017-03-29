@@ -31,6 +31,7 @@ MidnightRiders::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+  config.assets.digest = false
 
   config.react.variant = :development
   config.watchable_dirs.merge!("#{Rails.root}/app/assets/javascripts/**/" => %w(jsx))
