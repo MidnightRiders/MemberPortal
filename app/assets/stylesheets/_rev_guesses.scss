@@ -1,8 +1,24 @@
-.table.rev-guesses {
-  .td.comment {
-    display: none;
-    @media #{$medium-up} {
-      display: table-cell;
+table.rev-guesses {
+  tbody tr {
+    background-color: #fff;
+
+    &.rev-guess:nth-of-type(even) {
+      background: $table-even-row-bg;
+
+      + .comment {
+        background: $table-even-row-bg;
+      }
     }
+  }
+
+  tbody tr:first-child td,
+  tr.comment + tr.rev-guess td,
+  tr.rev-guess + tr.rev-guess td {
+    border-top: 1px solid mix($silver, $table-even-row-bg);
+  }
+
+  .comment,
+  .comment p {
+    font-size: rem-calc(14);
   }
 }

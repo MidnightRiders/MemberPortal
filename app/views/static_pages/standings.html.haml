@@ -11,62 +11,64 @@
 
 .row
   .medium-6.columns
-    %section.card
-      %h2 RevGuess Standings
-      %ul.table
-        .thead
-          %li.tr
-            .thd
-            .thd User
-            .thd.text-right Score
-            .thd.text-right %
-        - count = ((params[:rev_guess_p]||1).to_i-1) * 25
-        - last = nil
-        - @rev_guess_standings.each do |u|
-          %li.tr
-            .td.text-center= last != u.rev_guesses_score ? count += 1 : ''
-            .td
-              = link_to u do
-                = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
-                = u.username
-            .td.numeric
-              = u.rev_guesses_score || 0
-              %small
-                \/
-                = u.rev_guesses_count * 5
-            .td.numeric
-              #{(u.rev_guesses_score.to_f / (u.rev_guesses_count == 0 ? 1 : u.rev_guesses_count.to_f * 5) * 100).round(2)}%
-            - last = u.rev_guesses_score
-      .row
-        .column
-          = will_paginate(@rev_guess_standings, param_name: 'rev_guess_p')
+    %table.card-item{ cellspacing: 0 }
+      %thead
+        %tr.dark
+          %th{ colspan: '100%' }
+            %strong RevGuess Standings
+        %tr
+          %th
+          %th User
+          %th.text-right Score
+          %th.text-right %
+      - count = ((params[:rev_guess_p]||1).to_i-1) * 25
+      - last = nil
+      - @rev_guess_standings.each do |u|
+        %tr
+          %td.text-center= last != u.rev_guesses_score ? count += 1 : ''
+          %td
+            = link_to u do
+              = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
+              = u.username
+          %td.numeric
+            = u.rev_guesses_score || 0
+            %small
+              \/
+              = u.rev_guesses_count * 5
+          %td.numeric
+            #{(u.rev_guesses_score.to_f / (u.rev_guesses_count == 0 ? 1 : u.rev_guesses_count.to_f * 5) * 100).round(2)}%
+          - last = u.rev_guesses_score
+      %tfoot
+        %tr
+          %td{ colspan: '100%' }= will_paginate(@rev_guess_standings, param_name: 'rev_guess_p')
   .medium-6.columns
-    %section.card
-      %h2 Pick ’Em Standings
-      %ul.table
-        .thead
-          %li.tr
-            .td
-            .td User
-            .td.text-right Score
-            .td.text-right %
-        - count = ((params[:pick_em_p]||1).to_i-1) * 25
-        - last = nil
-        - @pick_em_standings.each do |u|
-          %li.tr
-            .td.text-center= last != u.correct_pick_ems ? count += 1 : ''
-            .td
-              = link_to u do
-                = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
-                = u.username
-            .td.numeric
-              = u.correct_pick_ems
-              %small
-                \/
-                = u.total_pick_ems
-            .td.numeric
-              #{(u.correct_pick_ems.to_f / (u.total_pick_ems == 0 ? 1 : u.total_pick_ems).to_f * 100).round(2)}%
-            - last = u.correct_pick_ems
-      .row
-        .column.text-right
-          = will_paginate(@pick_em_standings, param_name: 'pick_em_p')
+    %table.card-item{ cellspacing: 0 }
+      %thead
+        %tr.dark
+          %th{ colspan: '100%' }
+            %strong Pick ’Em Standings
+        %tr
+          %td
+          %td User
+          %td.text-right Score
+          %td.text-right %
+      - count = ((params[:pick_em_p]||1).to_i-1) * 25
+      - last = nil
+      - @pick_em_standings.each do |u|
+        %tr
+          %td.text-center= last != u.correct_pick_ems ? count += 1 : ''
+          %td
+            = link_to u do
+              = image_tag(u.gravatar, class: 'gravatar', alt: 'gravatar')
+              = u.username
+          %td.numeric
+            = u.correct_pick_ems
+            %small
+              \/
+              = u.total_pick_ems
+          %td.numeric
+            #{(u.correct_pick_ems.to_f / (u.total_pick_ems == 0 ? 1 : u.total_pick_ems).to_f * 100).round(2)}%
+          - last = u.correct_pick_ems
+      %tfoot
+        %tr
+          %td.text-right{ colspan: '100%' }= will_paginate(@pick_em_standings, param_name: 'pick_em_p')

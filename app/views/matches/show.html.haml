@@ -55,87 +55,93 @@
 
 .row
   .medium-8.medium-centered.columns
-    %h2 Pick ’Ems
     - picks = @match.pick_ems.length
     - home_picks = @match.pick_ems.select{|x| x.result == PickEm::RESULTS[:home]}.length
     - draw_picks = @match.pick_ems.select{|x| x.result == PickEm::RESULTS[:draw]}.length
     - away_picks = @match.pick_ems.select{|x| x.result == PickEm::RESULTS[:away]}.length
-    - if picks > 0
-      .table.pick-em-results
-        .tr
-          - if home_picks > 0
-            .td.primary-bg.text-center{ class: @match.home_team.abbrv.downcase, style: "width:#{(home_picks.to_f/picks) * 100}%" }
-              - if @match.home_team.crest.blank?
-                = @match.home_team.abbrv
-              - else
-                = image_tag(@match.home_team.crest.url(:thumb), class: 'crest-img', alt: @match.home_team.abbrv)
-              %small
-                (#{home_picks}/#{picks})
-          - if draw_picks > 0
-            .td.text-center{ style: "width: #{(draw_picks.to_f/picks) * 100}%" }
-              D
-              %small
-                (#{draw_picks}/#{picks})
-          - if away_picks > 0
-            .td.primary-bg.text-center{ class: @match.away_team.abbrv.downcase, style: "width: #{(away_picks.to_f/picks) * 100}%" }
-              - if @match.away_team.crest.blank?
-                = @match.away_team.abbrv
-              - else
-                = image_tag(@match.away_team.crest.url(:thumb), class: 'crest-img', alt: @match.away_team.abbrv)
-              %small
-                (#{away_picks}/#{picks})
-    - else
-      %h4 No picks yet
+    %table.pick-em-results{ cellspacing: 0 }
+      %thead
+        %tr.dark
+          %th{ colspan: '100%' }
+            %strong Pick ’Ems
+      %tbody
+        - if picks > 0
+          %tr
+            - if home_picks > 0
+              %td.primary-bg.text-center{ class: @match.home_team.abbrv.downcase, style: "width:#{(home_picks.to_f/picks) * 100}%" }
+                - if @match.home_team.crest.blank?
+                  = @match.home_team.abbrv
+                - else
+                  = image_tag(@match.home_team.crest.url(:thumb), class: 'crest-img', alt: @match.home_team.abbrv)
+                %small
+                  (#{home_picks}/#{picks})
+            - if draw_picks > 0
+              %td.text-center{ style: "width: #{(draw_picks.to_f/picks) * 100}%" }
+                D
+                %small
+                  (#{draw_picks}/#{picks})
+            - if away_picks > 0
+              %td.primary-bg.text-center{ class: @match.away_team.abbrv.downcase, style: "width: #{(away_picks.to_f/picks) * 100}%" }
+                - if @match.away_team.crest.blank?
+                  = @match.away_team.abbrv
+                - else
+                  = image_tag(@match.away_team.crest.url(:thumb), class: 'crest-img', alt: @match.away_team.abbrv)
+                %small
+                  (#{away_picks}/#{picks})
+        - else
+          %tr
+            %h4 No picks yet
 
 
     - if @match.teams.include?(revs)
-      %h3 Man of the Match Standings
-      %ul.table
+      %table{ cellspacing: 0 }
+        %thead
+          %tr.dark
+            %th{ colspan: '100%' }
+              %strong Man of the Match Standings
+          %tr
+            %th
+            %th Player
+            %th.numeric 1
+            %th.numeric 2
+            %th.numeric 3
         - if @mot_m_players.empty?
-          %li.tr
-            .td No votes cast yet
+          %tr
+            %td{ colspan: '100%' } No votes cast yet
         - else
-          .thead
-            %li.tr
-              .thd
-              .thd Player
-              .thd.numeric 1
-              .thd.numeric 2
-              .thd.numeric 3
           - place = 0
           - last = nil
           - @mot_m_players.each do |mot_m|
-            %li.tr
-              .td.numeric= last == mot_m.mot_m_total ? '' : (place += 1)
-              .td
+            %tr
+              %td.numeric= last == mot_m.mot_m_total ? '' : (place += 1)
+              %td
                 %p
                   = mot_m.first_name
                   %strong= mot_m.last_name
-              .td
+              %td
                 %p= mot_m.mot_m_firsts.where(match: @match).length
-              .td
+              %td
                 %p= mot_m.mot_m_seconds.where(match: @match).length
-              .td
+              %td
                 %p= mot_m.mot_m_thirds.where(match: @match).length
-      %h3 RevGuesses
-      %ul.table
-        .thead
-          %li.tr
-            .thd User
-            .thd.text-center Score
-            .thd Comment
-        - @match.rev_guesses.sort_by{|r| r.user.username}.each do |r|
-          %li.tr
-            .td
+      %table.rev-guesses{ cellspacing: 0 }
+        %thead
+          %tr.dark
+            %th{ colspan: '100%' }
+              %strong RevGuesses
+          %tr
+            %th User
+            %th.text-center Score
+        - @match.rev_guesses.sort_by{ |r| r.user.username }.each do |r|
+          %tr.rev-guess
+            %td
               %p.nowrap
                 = link_to r.user do
                   = image_tag(r.user.gravatar, class: 'gravatar', alt: 'gravatar')
                   = r.user.username
-            .td.text-center
-              %p
-                %strong
-                  = r.home_goals
-                  \–
-                  = r.away_goals
-            .td
-              %p= r.comment
+            %td.text-center
+              %strong #{r.home_goals} – #{r.away_goals}
+          - if r.comment.present?
+            %tr.comment
+              %td{ colspan: '100%' }
+                %p= r.comment

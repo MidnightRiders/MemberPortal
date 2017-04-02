@@ -2,7 +2,7 @@
 
 .row
   .column
-    %table.card-item
+    %table.card-item{ cellspacing: 0 }
       %thead
         %tr
           %th{ colspan: '100%' }
@@ -25,7 +25,7 @@
           = render 'row', player: player
 
     - if can? :manage, Player
-      %table.card-item
+      %table.card-item{ cellspacing: 0 }
         - unless @players.inactive.empty?
           %thead
             %tr
