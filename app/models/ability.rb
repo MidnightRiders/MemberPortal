@@ -34,7 +34,8 @@ class Ability
             can :manage, Relative, family_id: user.current_membership.id
             can :manage, [user.current_membership.relatives, user.current_membership.relatives.map(&:user)]
           end
-          cannot :index, [Club, Membership, Player, User, MotM, Relative, Family]
+          can :index, Player
+          cannot :index, [Club, Membership, User, MotM, Relative, Family]
           cannot :refund, Membership
           cannot :grant_privileges, Membership
         end

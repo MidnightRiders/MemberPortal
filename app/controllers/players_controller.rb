@@ -5,6 +5,10 @@ class PlayersController < ApplicationController
   # GET /players
   def index
     @players = Player.all
+    respond_to do |format|
+      format.html
+      format.any(:js, :json) { render json: @players.where(active: true).sort, each_serializer: PlayerSerializer }
+    end
   end
 
   # GET /players/new
