@@ -8,13 +8,15 @@
           %th{ colspan: '100%' }
             %h3 Current Players
         %tr
-          %th
+          - if can? :manage, Player
+            %th
           %th.numeric #
           %th Name
-          %th.text-center Club
+          - if can? :manage, Player
+            %th.text-center Club
           %th.text-center Position
-          %th.text-right
-            - if can? :create, Player
+          - if can? :manage, Player
+            %th.text-right
               = link_to new_player_path, class: 'button small' do
                 = icon 'male fa-fw'
                 New Player
@@ -22,19 +24,23 @@
         - @players.active.sort.each do |player|
           = render 'row', player: player
 
-    %table.card-item
-      - unless @players.inactive.empty?
-        %thead
-          %tr
-            %th{ colspan: '100%' }
-              %h3 Former Players
-          %tr
-            %th
-            %th.numeric #
-            %th Name
-            %th.text-center Club
-            %th.text-center Position
-            %th
-        %tbody
-          - @players.inactive.sort.each do |player|
-            = render 'row', player: player
+    - if can? :manage, Player
+      %table.card-item
+        - unless @players.inactive.empty?
+          %thead
+            %tr
+              %th{ colspan: '100%' }
+                %h3 Former Players
+            %tr
+              - if can? :manage, Player
+                %th
+              %th.numeric #
+              %th Name
+              - if can? :manage, Player
+                %th.text-center Club
+              %th.text-center Position
+              - if can? :manage, Player
+                %th
+          %tbody
+            - @players.inactive.sort.each do |player|
+              = render 'row', player: player

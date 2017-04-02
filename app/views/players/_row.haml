@@ -1,21 +1,24 @@
 %tr
-  %td.text-center
-    - if can? :edit, player
-      = link_to player,
-        class: (player.active? ? 'alert' : 'success'),
-        data: { remote: true, method: :patch, params: { player: { active: player.inactive? } }.to_param },
-        title: (player.active? ? 'Move to former players' : 'Move to active players') do
-        %i.fa.fa-fw{ class: "fa-toggle-#{ player.active? ? 'down' : 'up' }" }
+  - if can? :manage, player
+    %td.text-center
+      - if can? :edit, player
+        = link_to player,
+          class: (player.active? ? 'alert' : 'success'),
+          data: { remote: true, method: :patch, params: { player: { active: player.inactive? } }.to_param },
+          title: (player.active? ? 'Move to former players' : 'Move to active players') do
+          %i.fa.fa-fw{ class: "fa-toggle-#{ player.active? ? 'down' : 'up' }" }
   %td.numeric
     = player.number
   %td
     = link_to player do
       = player.first_name
       %strong= player.last_name
-  %td.text-center= player.club.abbrv
+  - if can? :manage, player
+    %td.text-center= player.club.abbrv
   %td.text-center= player.position
-  %td.text-right
-    - if can? :edit, player
-      = link_to edit_player_path(player), class: 'button tiny' do
-        %i.fa.fa-pencil.fa-fw
-        Edit
+  -if can? :manage, player
+    %td.text-right
+      - if can? :edit, player
+        = link_to edit_player_path(player), class: 'button tiny' do
+          %i.fa.fa-pencil.fa-fw
+          Edit
