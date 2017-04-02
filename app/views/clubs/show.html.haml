@@ -42,7 +42,7 @@
     .medium-4.large-3.columns
       %h4 Colors:
     .medium-8.large-9.columns
-      %table{ width: '100%' }
+      %table{ cellspacing: 0, width: '100%' }
         %tr
           %td.text-center{ width: '40%', bgcolor: "##{@club.primary_color}", style: "color:##{get_contrast_yiq(@club.primary_color)};"} Primary: ##{@club.primary_color}
           %td.text-center{ width: '40%', bgcolor: "##{@club.secondary_color}", style: "color:##{get_contrast_yiq(@club.secondary_color)};"} Secondary: ##{@club.secondary_color}

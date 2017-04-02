@@ -1,38 +1,40 @@
 - count ||= 100
-%h2 RevGuesses
-%ul.table.rev-guesses
-  .thead
-    %li.tr
-      .td Match
-      .td.text-center RevGuess
-      .td.text-center Score
-      .td.text-center Points
-      .td.comment Comment
-  .tbody
+%table.rev-guesses{ cellspacing: 0 }
+  %thead
+    %tr.dark
+      %td{ colspan: '100%' }
+        %strong RevGuesses
+    %tr
+      %td Match
+      %td.text-center RevGuess
+      %td.text-center Score
+      %td.text-center Points
+  %tbody
     - user.rev_guesses.where(matches: { season: Date.current.year }).order('matches.kickoff desc').limit(count).reverse.each do |m|
-      %li.tr
-        .td
+      %tr.rev-guess
+        %td
           %p
             = link_to match_path(m.match) do
               = m.match.home_team.abbrv
               v
               = m.match.away_team.abbrv
               %small= m.match.kickoff.strftime('%_m.%-d')
-        .td.text-center
+        %td.text-center
           %p
             = m.home_goals
             –
             = m.away_goals
-        .td.text-center
+        %td.text-center
           %p= m.match.score
-        .td.text-center
+        %td.text-center
           %p= m.score
-        .td.comment
-          %p= m.comment
-  .tfoot
-    %li.tr
-      .td Total
-      .td
-      .td
-      .td.text-center= user.rev_guesses.score
-      .td.comment
+      - if m.comment.present?
+        %tr.comment
+          %td{ colspan: '100%' }
+            %p= m.comment
+  %tfoot
+    %tr
+      %td Total
+      %td
+      %td
+      %td.text-center= user.rev_guesses.score

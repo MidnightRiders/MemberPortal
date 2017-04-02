@@ -1,16 +1,16 @@
-.table
-  .thead
-    .tr
-      .td.text-center
+%table{ cellspacing: 0 }
+  %thead
+    %tr
+      %td.text-center
         = icon 'certificate'
         Pick ’Em
-      .td Match / time
+      %td Match / time
   - matches.each do |m|
     - m = m.decorate
-    .tr
-      .td.small-6.columns.text-right
+    %tr
+      %td.small-6.columns.text-right
         = m.pick_em_buttons
-      .td.small-6.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
+      %td.small-6.columns.secondary-border.border-left{class: m.home_team.abbrv.downcase}
         = link_to m do
           = m.home_team.abbrv
           %small{ title: 'W-L-D' } (#{m.away_team.record})

@@ -29,10 +29,11 @@
     = icon 'users fa-fw'
     Manage Family Membership
 
-%h4
-  Digital Membership history:
-%table.expand
+%table.expand{ cellspacing: 0 }
   %thead
+    %tr.dark
+      %th{ colspan: '100%' }
+        %strong Digital Membership history
     %tr
       %th.small-4 Year
       %th.small-4= current_user.leadership_or_admin? ? 'Privileges' : 'Board'
@@ -63,20 +64,20 @@
 - if current_user == user
   .row.show-for-small-only= render 'shared/next_last_games', last_match: revs.last_match, next_match: revs.next_match
 
-.table
-  .thead
-    .tr
-      .thd.text-center
-        %h4 RevGuess Score:
-      .thd.text-center
-        %h4 Pick ’Em Score:
-  .tbody
-    .tr
-      .td.text-center
+%table{ cellspacing: 0 }
+  %thead
+    %tr.dark
+      %th.text-center
+        %strong RevGuess Score
+      %th.text-center
+        %strong Pick ’Em Score
+  %tbody
+    %tr
+      %td.text-center
         %p
           = user.rev_guesses.where(matches: { season: Date.current.year }).score
           %small (#{user.rev_guesses.where(matches: { season: Date.current.year }).select{|r| r.match.complete? }.length} games)
-      .td.text-center
+      %td.text-center
         %p
           = user.pick_ems.where(matches: { season: Date.current.year }).score
           %small (#{user.pick_ems.where(matches: { season: Date.current.year }).select{|r| r.match.complete? }.length} games)

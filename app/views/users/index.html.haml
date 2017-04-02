@@ -56,34 +56,34 @@
           = link_to users_path(privilege: [ 'executive_board', 'at_large_board' ], year: @year), class: "button small expand #{'success' if @privilege == ['executive_board','at_large_board']}" do
             = icon 'sitemap'
             Boards
-      %ul.table.members
-        .thead
-          %li.tr
-            .thd
-            .thd Member
-            .thd Email
-            .thd Membership Type
-            .thd.numeric Member since
-            .thd.actions
+      %table.members{ cellspacing: 0 }
+        %thead
+          %tr
+            %th
+            %th Member
+            %th Email
+            %th Membership Type
+            %th.numeric Member since
+            %th.actions
 
-        .tbody
+        %tbody
           - @users.each do |user|
-            %li.tr
-              .td.text-center
+            %tr
+              %td.text-center
                 = icon 'check fa-fw' if user.memberships.select{|m| m.year == @year }.present?
                 - user.current_privileges.each do |r|
                   = content_tag(:i,'',class: 'fa fa-fw fa-' + r, title: r.titleize)
-              .td
+              %td
                 = link_to user do
                   %h5
                     %strong>= user.last_name
                     ,
                     = user.first_name
                     %small @#{user.username}
-              .td= link_to user.email, "mailto: #{user.email}"
-              .td= user.current_membership.try(&:type)
-              .td.numeric= user.member_since
-              .td.text-right
+              %td= link_to user.email, "mailto: #{user.email}"
+              %td= user.current_membership.try(&:type)
+              %td.numeric= user.member_since
+              %td.text-right
                 -#= link_to 'Show', user
                 = link_to edit_user_path(user), class: 'button tiny', title: 'Edit' do
                   = icon 'pencil'

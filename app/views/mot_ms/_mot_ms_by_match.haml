@@ -1,31 +1,31 @@
-%ul.table
+%table{ cellspacing: 0 }
   - if mot_ms.empty?
-    %li.tr
-      .td No votes cast yet
+    %tr
+      %td No votes cast yet
   - else
-    .thead
-      %li.tr
-        .thd
-        .thd Player
-        .thd.numeric 1st
-        .thd.numeric 2nd
-        .thd.numeric 3rd
-        .thd.numeric Points
+    %thead
+      %tr
+        %th
+        %th Player
+        %th.numeric 1
+        %th.numeric 2
+        %th.numeric 3
+        %th.numeric Pts
     - last = nil
     - place = 0
     - mot_ms.each do |player|
-      %li.tr
-        .td.numeric
+      %tr
+        %td.numeric
           - if player.info[:points] != last
             - last = player.info[:points]
             = place += 1
           - else
             %small= place
-        .td
+        %td
           = link_to player do
             = player.first_name
             %strong= player.last_name
-        .td.numeric= player.info[:breakdown][:first]
-        .td.numeric= player.info[:breakdown][:second]
-        .td.numeric= player.info[:breakdown][:third]
-        .td.numeric= player.info[:points]
+        %td.numeric= player.info[:breakdown][:first]
+        %td.numeric= player.info[:breakdown][:second]
+        %td.numeric= player.info[:breakdown][:third]
+        %td.numeric= player.info[:points]
