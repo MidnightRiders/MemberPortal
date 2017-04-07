@@ -1,10 +1,6 @@
-- content_for :foot do
-  = javascript_include_tag 'react', 'react_ujs', cache: 'react-core'
-  = javascript_include_tag 'components'
-
 - content_for :title, 'Match listings'
 
-= react_component 'MatchesIndex', @match_index, prerender: true
+= react_component 'MatchesIndex', @match_index.as_json, prerender: true
 
 - if can? :manage, Match
   #matches-admin.reveal-modal.small{ data: { reveal: true } }

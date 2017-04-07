@@ -3,7 +3,6 @@ class Match < ActiveRecord::Base
 
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
-  attr_accessor :user_pick_em
 
   order_query :order_selected,
               %i(kickoff asc),

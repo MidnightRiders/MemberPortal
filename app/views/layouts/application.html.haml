@@ -33,7 +33,10 @@
     = render partial: 'layouts/footer'
     <!--[if gte IE 9 | !IE ]><!-->
     = javascript_include_tag 'application'
-    = javascript_include_tag 'admin' if current_user && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
+    - if current_user&.current_member?
+      = javascript_include_tag 'react', 'react_ujs', cache: 'react-core'
+      = javascript_include_tag 'components'
+    = javascript_include_tag 'admin' if current_user&.privilege?('admin') || current_user&.privilege?('executive_board')
     = yield :foot
     = render_javascript
     <![endif]-->

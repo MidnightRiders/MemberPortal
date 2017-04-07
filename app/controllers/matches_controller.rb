@@ -6,15 +6,17 @@ class MatchesController < ApplicationController
   authorize_resource
   before_action :set_match, only: %i(index show edit update destroy)
   before_action :determine_start_date, only: %i(index)
+  before_action :set_rev_guess, only: %i(index), if: ->{ params[:rev_guess] }
+  before_action :set_mot_m, only: %i(index), if: ->{ params[:mot_m] }
   before_action :check_for_matches_to_update, only: %i(auto_update)
 
   # GET /matches
   def index
-    generate_match_index
+    @match_index = serialized_matches
 
     respond_to do |format|
       format.html
-      format.json { render json: @match_index.camelize_keys }
+      format.json { render json: @match_index.as_json }
     end
   end
 
@@ -31,10 +33,9 @@ class MatchesController < ApplicationController
     calendar = retrieve_document(params[:url])
     count = Match.import_ics(calendar).size
     redirect_to matches_path, success: "#{count} Matches were saved or updated."
-  rescue => e
-    logger.error "Error during Match import: #{e.message}"
-    logger.info e.backtrace&.to_yaml
-    redirect_to matches_path, alert: e.message and return
+  rescue => err
+    alert = ErrorNotifier.notify(err)
+    redirect_to matches_path, alert: alert and return
   end
 
   # GET /matches/auto_update
@@ -99,21 +100,16 @@ class MatchesController < ApplicationController
     @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
   end
 
-  def generate_match_index
-    @match_index = {
-      start_date: @start_date.to_f * 1000,
-      prev_week: previous_match_week_from(@start_date).to_f * 1000,
-      next_week: next_match_week_from(@start_date).to_f * 1000,
-      matches: ActiveModelSerializers::SerializableResource.new(prepared_matches, scope: view_context).serializable_hash,
-      show_admin_ui: can?(:manage, Match)
-    }
-  end
-
-  def next_match_week_from(date)
-    Match.unscope(where: :season)
-      .where('kickoff >= ?', date.beginning_of_week + 1.week)
-      .reorder(kickoff: :asc)
-      .first&.kickoff&.beginning_of_week
+  def serialized_matches
+    MatchWeekSerializer.new(
+      prepared_matches,
+      serializer: MatchWeekSerializer,
+      scope: view_context,
+      start_date: @start_date,
+      pick_em: @pick_em,
+      rev_guess: @rev_guess,
+      mot_m: @mot_m
+    )
   end
 
   def auto_update_match(score, match)
@@ -151,25 +147,13 @@ class MatchesController < ApplicationController
 
   def prepared_matches
     Match.for_week(@start_date)
+      .includes(:pick_ems, :rev_guesses, :mot_ms)
       .with_clubs
-      .includes(:pick_ems)
-      .where(pick_ems: { user_id: [nil, current_user.id] })
-      .references(:pick_ems)
-      .each do |match|
-        match.user_pick_em = match.pick_ems[0]
-      end
   end
 
-  def previous_match_week_from(date)
-    Match.unscope(where: :season)
-      .where('kickoff < ?', date.beginning_of_week)
-      .reorder(kickoff: :desc)
-      .first&.kickoff&.beginning_of_week
-  end
-
-  # Use callbacks to share common setup or constraints between actions.
+  # Use callbacks to share common setup or constraints between sactions.
   def set_match
-    @match = Match.all_seasons.with_clubs.find(params[:id])
+    @match = Match.all_seasons.with_clubs.find(params[:match_id])
   rescue => e
     raise e unless action_name == 'index'
   end
@@ -190,6 +174,16 @@ class MatchesController < ApplicationController
       }
     end
     result
+  end
+
+  def set_rev_guess
+    authorize! :create, RevGuess
+    @rev_guess = @match.rev_guesses.find_or_initialize_by(user_id: current_user.id)
+  end
+
+  def set_mot_m
+    authorize! :create, MotM
+    @mot_m = @match.mot_ms.find_or_initialize_by(user_id: current_user.id)
   end
 
   # For use in +import+
