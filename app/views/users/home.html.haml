@@ -29,12 +29,8 @@
 - if current_user.current_member?
   .row
     .medium-6.columns
-      - content_for :foot do
-        = javascript_include_tag 'react', 'react_ujs', cache: 'react-core'
-        = javascript_include_tag 'components'
       = react_component 'MatchCollection',
-        { show_admin_ui: can?(:manage, Match),
-          matches: ActiveModelSerializers::SerializableResource.new(@revs_matches, scope: self).serializable_hash },
+        MatchesSerializer.new(@revs_matches, scope: self).as_json.tap { |m| m[:base_url] = user_home_path },
         prerender: true
     .medium-6.columns
       = render partial: 'users/rev_guesses', locals: { user: current_user } if current_user.rev_guesses.where(matches: { season: Date.current.year }).present?

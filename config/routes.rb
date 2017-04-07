@@ -10,12 +10,16 @@ MidnightRiders::Application.routes.draw do
       post :bulk_update
       get :auto_update
     end
-    member do
-      get 'motm', to: 'matches#index', as: :mot_m
-    end
-    resources :mot_ms, path: 'motm', only: %i(create update)
-    resources :rev_guesses, path: 'revguess', except: %i(index show destroy)
-    post 'pick_ems/vote', to: 'pick_ems#vote', as: :pick_em_vote
+  end
+
+  scope 'matches/:match_id', match_id: /\d+/ do
+    get 'motm', to: 'mot_ms#show', as: nil, constraints: ->(req) { req.format == :json }
+    get 'motm', to: 'matches#index', as: :mot_m, mot_m: true
+    match 'motm', to: 'mot_ms#create', via: %i(put post)
+    get 'rev_guess', to: 'rev_guesses#show', as: nil, constraints: ->(req) { req.format == :json }
+    get 'rev_guess', to: 'matches#index', as: :rev_guess, rev_guess: true
+    match 'rev_guess', to: 'rev_guesses#create', via: %i(put post)
+    match 'pick_em', to: 'pick_em#create', via: %i(put post), as: :pick
   end
 
   resources :clubs, except: %i(destroy)

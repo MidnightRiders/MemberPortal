@@ -1,22 +1,14 @@
+/* global React */
 class MatchesIndex extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = this.stateFromProps(props);
-  }
-
-  stateFromProps(props) {
-    return {
-      startDate: new Date(props.startDate),
-      prevWeek: props.prevWeek ? new Date(props.prevWeek) : null,
-      nextWeek: props.nextWeek ? new Date(props.nextWeek) : null,
-      matches: props.matches,
-      loadingMatches: false
-    };
+    this.navigate = this.navigate.bind(this);
   }
 
   adminButton() {
-    if (!this.props.showAdminUi) return;
+    if (!this.props.meta.show_admin_ui) return;
     return (
       <a href="#" className="button small expand" data-reveal-id="matches-admin">
         <i className="fa fa-bolt fa-fw"/>
@@ -33,15 +25,19 @@ class MatchesIndex extends React.Component {
   }
 
   componentDidMount() {
-    window.onpopstate = this.navigate.bind(this);
+    let currentState = history.state || {};
+    currentState.start_date = this.state.start_date;
+    currentState.url = window.location.href;
+    history.replaceState(currentState, '', window.location.href);
+    jQuery(window).on('popstate', this.navigate);
   }
 
   componentWillUnmount() {
-    window.onpopstate = null;
+    jQuery(window).off('popstate', this.navigate);
   }
 
   currentWeekLink() {
-    if (this.state.startDate < new Date() && +new Date() < +this.state.startDate + 1000 * 60 * 60 * 24 * 7) return '\u00A0';
+    if (this.state.start_date < new Date() && +new Date() < +this.state.start_date + 1000 * 60 * 60 * 24 * 7) return '\u00A0';
     return (
       <a
         href="/matches"
@@ -53,7 +49,7 @@ class MatchesIndex extends React.Component {
   }
 
   formatDate() {
-    return `${this.state.startDate.getMonth() + 1}.${this.state.startDate.getDate()}.${this.state.startDate.getFullYear()}`;
+    return `${this.state.start_date.getMonth() + 1}.${this.state.start_date.getDate()}.${this.state.start_date.getFullYear()}`;
   }
 
   navigate() {
@@ -63,16 +59,26 @@ class MatchesIndex extends React.Component {
   }
 
   navLink(which) {
-    if (!this.state[`${which}Week`]) return '\u00A0';
+    if (!this.state[`${which}_week`]) return '\u00A0';
     let title = `${which === 'prev' ? 'Previous' : 'Next'} Game Week`;
     return (
       <a
-        href={`/matches?date=${this.yyyyMmDd(this.state[`${which}Week`])}`}
+        href={`/matches?date=${this.yyyyMmDd(this.state[`${which}_week`])}`}
         onClick={this.anchorPushState.bind(this)}
         className={`matches-navigate matches-navigate-${which}`}
         title={title}
       />
     );
+  }
+
+  stateFromProps(props) {
+    return {
+      loadingMatches: false,
+      matches: props.matches,
+      start_date: new Date(props.meta.start_date),
+      prev_week: props.meta.prev_week ? new Date(props.meta.prev_week) : null,
+      next_week: props.meta.next_week ? new Date(props.meta.next_week) : null
+    };
   }
 
   yyyyMmDd(date) {
@@ -116,7 +122,9 @@ class MatchesIndex extends React.Component {
           </div>
           <MatchCollection
             matches={this.state.matches}
-            showAdminUi={this.props.showAdminUi}
+            mot_m={this.props.mot_m}
+            rev_guess={this.props.rev_guess}
+            show_admin_ui={this.props.meta.show_admin_ui}
             loading={this.state.loadingMatches}
           />
         </div>
@@ -126,9 +134,13 @@ class MatchesIndex extends React.Component {
 }
 
 MatchesIndex.propTypes = {
-  showAdminUi: React.PropTypes.bool,
-  startDate: React.PropTypes.number,
-  prevWeek: React.PropTypes.number,
-  nextWeek: React.PropTypes.number,
-  matches: React.PropTypes.array
+  meta: React.PropTypes.shape({
+    show_admin_ui: React.PropTypes.bool,
+    start_date: React.PropTypes.number.isRequired,
+    prev_week: React.PropTypes.number,
+    next_week: React.PropTypes.number
+  }).isRequired,
+  matches: React.PropTypes.array.isRequired,
+  mot_m: React.PropTypes.object,
+  rev_guess: React.PropTypes.object
 };
