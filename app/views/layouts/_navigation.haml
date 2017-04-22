@@ -136,7 +136,7 @@
         - if user_signed_in?
           - if current_user.current_member?
             %li
-              = link_to matches_url, title: 'Matches', title: 'Matches' do
+              = link_to matches_url, title: 'Matches' do
                 .hide-for-medium-only
                   = icon 'calendar fa-fw'
                   Matches

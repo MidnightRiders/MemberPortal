@@ -1,3 +1,11 @@
+.row.matches-navigation {
+  margin-bottom: $column-gutter / 2;
+}
+
+[data-reveal-id=matches-admin] {
+  margin-bottom: 0;
+}
+
 .matches-navigate {
   background: $maroon;
   border-radius: 100%;
@@ -31,7 +39,7 @@
     }
   }
 
-  &.matches-navigate-prev{
+  &.matches-navigate-prev {
     margin: $column-gutter / 2 auto 0 0;
 
     &::before {
@@ -39,19 +47,11 @@
     }
   }
 
-  &.matches-navigate-next{
+  &.matches-navigate-next {
     margin: $column-gutter / 2 0 0 auto;
 
     &::before {
       content: $fa-var-arrow-right;
-    }
-  }
-
-  @media #{$medium-up} {
-    &.matches-navigate-prev,
-    &.matches-navigate-current,
-    &.matches-navigate-next {
-      margin-top: 0;
     }
   }
 }
@@ -68,7 +68,8 @@ li.match {
 }
 
 ul.matches,
-.no-matches {
+.no-matches,
+li.match {
   transition: .3s filter, .3s opacity;
 
   &.loading {
@@ -81,9 +82,14 @@ ul.matches,
 li.match {
   @include clearfix;
   background: #fff;
+  border: 5px solid transparent;
   border-radius: 100px;
   margin: $column-gutter / 2 auto;
   position: relative;
+
+  @media #{$medium-up} {
+    margin: 0 auto $column-gutter / 2;
+  }
 
   time {
     font-size: .75em;
@@ -103,5 +109,86 @@ li.match {
     @media #{$large-up} {
       font-size: 1em;
     }
+  }
+
+  .game-indicator {
+    background: $button-bg-color;
+    border-radius: 1em;
+    bottom: $column-gutter / 4;
+    color: $button-font-color;
+    font-size: .875em;
+    height: 2em;
+    line-height: 2em;
+    margin-left: -1em;
+    opacity: .6;
+    padding: 0;
+    position: absolute;
+    text-align: center;
+    transition: .3s background;
+    width: 2em;
+
+    @media #{$medium-up} {
+      bottom: $column-gutter / 2;
+      font-size: 1em;
+    }
+
+    @media #{$large-up} {
+      font-size: 1.125em;
+    }
+
+    &.game-indicator-link {
+      cursor: pointer;
+      opacity: 1;
+
+      &:hover {
+        background: $button-bg-hover;
+      }
+    }
+
+    &.completed {
+      background: $success-color;
+
+      &.game-indicator-link:hover {
+        background: scale-color($success-color, $lightness: $button-function-factor);
+      }
+    }
+  }
+
+  .game-indicator-rev-guess {
+    left: percentage(3 / 8);
+  }
+
+  .game-indicator-motm {
+    left: percentage(5 / 8);
+  }
+
+  .match-motm,
+  .match-rev-guess {
+    animation: .3s fade-in linear 1;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, .6);
+    left: 0;
+    padding: $column-gutter / 2;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    z-index: 50;
+
+    .close {
+      position: absolute;
+      right: $column-gutter / 2;
+      top: $column-gutter / 2;
+    }
+  }
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
   }
 }

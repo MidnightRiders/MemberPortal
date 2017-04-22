@@ -5,13 +5,9 @@ class Match extends React.Component {
 
     this.isRevs = props.home_team.abbrv === 'NE' || props.away_team.abbrv === 'NE';
     this.kickoffInterval = null;
-    this.popstateCallback = null;
 
     this.motMUrl = `/matches/${this.props.id}/motm`;
-    this.revGuessUrl = `/matches/${this.props.id}/revguess`;
-    this.selfUrl = `/matches?date=${props.kickoff.getFullYear()}` +
-      `-${`0${props.kickoff.getMonth() + 1}`.substr(-2, 2)}` +
-      `-${`0${props.kickoff.getDate()}`.substr(-2, 2)}`;
+    this.revGuessUrl = `/matches/${this.props.id}/rev_guess`;
 
     this.state = {
       canMakeRevGuess: this.canMakeRevGuess(),
@@ -22,8 +18,8 @@ class Match extends React.Component {
 
   canVoteForMotM() {
     return this.isRevs &&
-      this.props.kickoff < new Date() - 1000 * 60 * 45 &&         // at least 45 minutes ago
-      this.props.kickoff > new Date() - 1000 * 60 * 60 * 24 * 14; // less than two weeks ago
+      this.props.kickoff < moment().subtract(45, 'minutes') &&         // at least 45 minutes ago
+      this.props.kickoff > moment().subtract(2, 'weeks'); // less than two weeks ago
   }
 
   canMakeRevGuess() {
@@ -33,38 +29,28 @@ class Match extends React.Component {
 
   componentDidMount() {
     this.waitForGameProgress();
-    let callback;
-    if (window.onpopstate) callback = window.onpopstate;
-    window.onpopstate = () => { this.navigate.call(this, callback); };
   }
 
   componentWillUnmount() {
     this.stopWaitingForGameProgress();
   }
 
-  formatKickoff() {
-    let hour    = this.props.kickoff.getHours(),
-        minutes = `0${this.props.kickoff.getMinutes()}`.substr(-2),
-        amPm    = hour > 11 ? 'pm' : 'am';
-    if (hour === 0) hour = 12;
-    if (hour > 12) hour = hour % 12;
-    return `
-      ${this.props.kickoff.getMonth() + 1}.${this.props.kickoff.getDate()}
-      ${hour}:${minutes}${amPm}
-    `;
-  }
-
   motM() {
-    if (!this.state.canVoteForMotM) return '';
-    if (this.props.motM) {
+    if (!this.state.canVoteForMotM) {
+      if (!this.isRevs) return '';
+      return (
+        <div className={`game-indicator game-indicator-motm ${this.props.mot_m ? 'completed' : ''}`}>
+          <i className="fa fa-trophy fa-fw" />
+        </div>
+      );
+    } else if (this.props.motMForDisplay) {
       return (
         <MotM
-          match_id={this.props.id}
-          kickoff={this.props.kickoff}
-          self_url={this.motMUrl}
-          match_url={this.selfUrl}
-          exit={this.clearGame}
-          {...this.props.motM}
+          updateMatch={this.props.updateMatch}
+          exitHandler={this.props.clearGame}
+          baseUrl={this.props.baseUrl}
+          matchup={`${this.props.home_team.abbrv} v ${this.props.away_team.abbrv}`}
+          {...this.props.motMForDisplay}
         />
       );
     } else {
@@ -72,36 +58,34 @@ class Match extends React.Component {
         e.preventDefault();
 
         this.setState({ loading: true });
-        this.props.getMotM()
-          .done(() => {
-            this.setState({ loading: false });
-          });
+        this.props.getMotM().done(() => { this.setState({ loading: false }); });
       };
       return (
-        <a href={this.motMUrl} onClick={showMotM}>RevGuess</a>
+        <a className={`game-indicator game-indicator-link game-indicator-motm ${this.props.mot_m ? 'completed' : ''}`} href={this.motMUrl} onClick={showMotM} title='Man of the Match'>
+          <i className="fa fa-trophy fa-fw" />
+        </a>
       );
     }
   }
 
-  navigate(callback) {
-    let pathname = document.location.pathname;
-    if (pathname.indexOf(this.motMUrl) === 0 ||
-      pathname.indexOf(this.revGuessUrl) === 0 ||
-      pathname.indexOf(this.selfUrl) === 0
-    ) {
-
-    }
-  }
-
   revGuess() {
-    if (!this.state.canMakeRevGuess) return '';
-    if (this.props.revGuess) {
+    if (!this.state.canMakeRevGuess) {
+      if (!this.isRevs) return '';
+      return (
+        <div className={`game-indicator game-indicator-rev-guess ${this.props.mot_m ? 'completed' : ''}`}>
+          <i className="fa fa-balance-scale fa-fw" />
+        </div>
+      );
+    } else if (this.props.revGuessForDisplay) {
       return (
         <RevGuess
           match_id={this.props.id}
-          self_url={this.revGuessUrl}
-          match_url={this.selfUrl}
-          exit={this.clearGame}
+          exitHandler={this.props.clearGame}
+          baseUrl={this.props.baseUrl}
+          updateMatch={this.props.updateMatch}
+          home_team={this.props.home_team}
+          away_team={this.props.away_team}
+          {...this.props.revGuessForDisplay}
         />
       );
     } else {
@@ -109,13 +93,12 @@ class Match extends React.Component {
         e.preventDefault();
 
         this.setState({ loading: true });
-        this.props.getRevGuess()
-          .done(() => {
-            this.setState({ loading: false });
-          });
+        this.props.getRevGuess().done(() => { this.setState({ loading: false }); });
       };
       return (
-        <a href={this.revGuessUrl} onClick={showRevGuess}>RevGuess</a>
+        <a className={`game-indicator game-indicator-link game-indicator-rev-guess ${this.props.rev_guess ? 'completed' : ''}`} href={this.revGuessUrl} onClick={showRevGuess} title='RevGuess'>
+          <i className="fa fa-balance-scale fa-fw" />
+        </a>
       );
     }
   }
@@ -148,10 +131,10 @@ class Match extends React.Component {
 
   render() {
     return (
-      <li className="match">
+      <li className={`match ${this.isRevs ? 'secondary-border ne' : ''} ${this.state.loading ? 'loading' : ''}`}>
         <time dateTime={this.props.kickoff.toISOString()}>
           <a href={`/matches/${this.props.id}`}>
-            {this.formatKickoff()}
+            {moment(this.props.kickoff).format('M.D h:mma')}
             <sup><i className="fa fa-info-circle"/></sup>
           </a>
         </time>
@@ -166,8 +149,8 @@ class Match extends React.Component {
             pick={this.props.pick}
             past={this.state.past}
           />
-        {this.revGuess()}
-        {this.motM()}
+          {this.revGuess()}
+          {this.motM()}
         </div>
       </li>
     );
@@ -181,12 +164,15 @@ Match.propTypes = {
   home_goals: React.PropTypes.number,
   away_goals: React.PropTypes.number,
   pick: React.PropTypes.string,
-  kickoff: React.PropTypes.instanceOf(Date),
-  location: React.PropTypes.string,
-  show_admin_ui: React.PropTypes.bool,
+  kickoff: React.PropTypes.instanceOf(Date).isRequired,
+  location: React.PropTypes.string.isRequired,
   getMotM: React.PropTypes.func,
   getRevGuess: React.PropTypes.func,
-  clearGame: React.PropTypes.func,
-  motM: React.PropTypes.object,
-  revGuess: React.PropTypes.object
+  clearGame: React.PropTypes.func.isRequired,
+  updateMatch: React.PropTypes.func.isRequired,
+  motMForDisplay: React.PropTypes.object,
+  revGuessForDisplay: React.PropTypes.object,
+  mot_m: React.PropTypes.object,
+  rev_guess: React.PropTypes.object,
+  baseUrl: React.PropTypes.string.isRequired
 };
