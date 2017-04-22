@@ -1,7 +1,7 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'support/shared_examples/purchaser'
 
-describe User do
+RSpec.describe User do
   describe 'scopes' do
     pending 'members'
     pending 'non_members'

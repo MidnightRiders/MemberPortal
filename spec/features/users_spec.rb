@@ -1,6 +1,7 @@
-require 'spec_helper'
+require 'rails_helper'
+require 'support/share_db_connection'
 
-feature 'User privileges and security' do
+RSpec.feature 'User privileges and security' do
 
   subject(:user) { FactoryGirl.create(:user) }
 

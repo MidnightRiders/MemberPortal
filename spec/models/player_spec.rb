@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Player do
+RSpec.describe Player do
   describe 'validation' do
     subject(:player) { Player.new }
     it 'does not accept empty fields' do

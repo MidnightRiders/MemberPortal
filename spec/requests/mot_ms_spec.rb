@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe 'MotMs' do
+RSpec.describe 'MotMs' do
   let(:match) { FactoryGirl.create(:match) }
   before(:each) do
     sign_in FactoryGirl.create(:user, :admin)

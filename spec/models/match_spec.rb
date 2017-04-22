@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Match do
+RSpec.describe Match do
   # Capybara overwrites the +all+ matcher without this +include+
   include RSpec::Matchers.clone
 

@@ -1,6 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
+require 'support/share_db_connection'
+require 'support/stripe_helper'
 
-describe 'Purchasing Membership', :js, type: :feature do
+RSpec.describe 'Purchasing Membership', :js, type: :feature do
   let(:user) { FactoryGirl.create(:user, :without_membership) }
 
   it 'prompts for membership if user isn\'t a current member' do

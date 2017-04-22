@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ClubsHelper do
+RSpec.describe ClubsHelper do
   describe 'parse_hex' do
     pending 'returns a hash'
   end

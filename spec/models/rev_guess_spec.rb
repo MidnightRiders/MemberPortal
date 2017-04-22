@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe RevGuess do
+RSpec.describe RevGuess do
   let (:user) { FactoryGirl.create(:user) }
   let (:revs) { Club.find_by(abbrv: 'NE') || FactoryGirl.create(:club, :ne) }
   let (:rev_guess) { FactoryGirl.build(:rev_guess) }
