@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ClubDecorator do
+RSpec.describe ClubDecorator do
   describe 'formatted_record' do
     pending
   end

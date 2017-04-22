@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe PickEm do
+RSpec.describe PickEm do
   pending 'does not allow multiples from a user on a match'
   pending 'does not allow votes after kickoff'
 

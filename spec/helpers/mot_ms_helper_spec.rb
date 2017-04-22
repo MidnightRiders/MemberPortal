@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe MotMsHelper do
+RSpec.describe MotMsHelper do
   describe 'mot_m_for' do
     pending 'returns MotM'
   end

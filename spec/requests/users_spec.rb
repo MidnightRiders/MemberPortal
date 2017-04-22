@@ -1,6 +1,7 @@
-require 'spec_helper'
+require 'rails_helper'
+require 'support/share_db_connection'
 
-describe 'Users' do
+RSpec.describe 'Users' do
   describe 'GET /users/user' do
     let(:user) { FactoryGirl.create(:user) }
     it 'rejects signed-out users' do

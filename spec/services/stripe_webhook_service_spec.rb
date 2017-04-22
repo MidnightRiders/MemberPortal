@@ -1,4 +1,5 @@
-require 'spec_helper'
+require 'rails_helper'
+require 'support/stripe_helper'
 
 RSpec.describe StripeWebhookService do
   describe 'process' do

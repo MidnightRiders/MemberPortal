@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe StylesheetsController do
+RSpec.describe StylesheetsController do
   describe 'GET "clubs"' do
     it 'returns CSS' do
       get 'club', format: 'css'

@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe 'Matches' do
+RSpec.describe 'Matches' do
   pending 'get /matches'
   pending 'get /matches/:id'
 end

@@ -2,17 +2,10 @@ MidnightRiders::Application.routes.draw do
   get 'stylesheets/club', constraints: { format: :css }
   resources :players, except: %i(show destroy)
 
-  resources :mot_ms, path: 'motm', only: [:index]
-
-  resources :matches do
-    collection do
-      post :import
-      post :bulk_update
-      get :auto_update
-    end
-  end
+  get 'motm', to: 'mot_ms#index', as: :mot_ms
 
   scope 'matches/:match_id', match_id: /\d+/ do
+    get '/', to: 'matches#show', as: nil, constraints: ->(req) { req.format == :json }
     get 'motm', to: 'mot_ms#show', as: nil, constraints: ->(req) { req.format == :json }
     get 'motm', to: 'matches#index', as: :mot_m, mot_m: true
     match 'motm', to: 'mot_ms#create', via: %i(put post)
@@ -20,6 +13,14 @@ MidnightRiders::Application.routes.draw do
     get 'rev_guess', to: 'matches#index', as: :rev_guess, rev_guess: true
     match 'rev_guess', to: 'rev_guesses#create', via: %i(put post)
     match 'pick_em', to: 'pick_em#create', via: %i(put post), as: :pick
+  end
+
+  resources :matches do
+    collection do
+      post :import
+      post :bulk_update
+      get :auto_update
+    end
   end
 
   resources :clubs, except: %i(destroy)

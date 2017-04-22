@@ -30,3 +30,5 @@ config/secrets.yml
 coverage/
 
 node_modules/
+
+spec/examples.txt
