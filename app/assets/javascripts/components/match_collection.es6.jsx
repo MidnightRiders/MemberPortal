@@ -1,87 +1,103 @@
+/* global React */
 class MatchCollection extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       matches: props.matches,
-      mot_m: props.mot_m || false,
-      rev_guess: props.rev_guess || false
+      mot_m: props.mot_m,
+      rev_guess: props.rev_guess
     };
 
-    this.base_url = props.base_url;
-    this.getRevGuessFor = this.getRevGuessFor.bind(this);
-    this.getMotMFor = this.getMotMFor.bind(this);
-    this.clearGame = this.clearGame.bind(this);
+    ['baseUrl', 'clearGame', 'getRevGuessFor', 'getMotMFor', 'navigate', 'updateMatch']
+      .forEach((method) => this[method] = this[method].bind(this));
   }
 
-  clearGame() {
-    this.setState({ rev_guess: false, mot_m: false });
-    history.pushState(this.state, null, this.base_url);
+  baseUrl() {
+    return '/home';
   }
 
   componentDidMount() {
-    this.base_url = this.base_url || location.href.replace(location.hash, '');
-    if (!history.state) {
-      history.replaceState(this.state, null, this.base_url);
-    }
+    if (!history.state) history.replaceState(this.state, document.title, location.href);
+    jQuery(window).on('popstate', this.navigate);
+  }
+
+  componentWillUnmount() {
+    jQuery(window).off('popstate', this.navigate);
+  }
+
+  clearGame(e) {
+    if (e) e.preventDefault();
+    this.setState({ rev_guess: null, mot_m: null }, () => {
+      history.pushState(this.state, 'Midnight Riders | Match Listings', this.baseUrl());
+    });
   }
 
   getRevGuessFor(match) {
     return jQuery.getJSON(`/matches/${match.id}/rev_guess`)
       .done((data) => {
-        this.setState({ rev_guess: data, mot_m: false });
-        history.pushState(this.state, null, `/matches/${match.id}/rev_guess`);
-      });
+        this.setState({ rev_guess: data, mot_m: null }, () => {
+          history.pushState(this.state, 'Midnight Riders | RevGuess', `/matches/${match.id}/rev_guess`);
+        });
+      })
+      .error((err) => { /* noop */ });
   }
 
   getMotMFor(match) {
     return jQuery.getJSON(`/matches/${match.id}/motm`)
       .done((data) => {
-        this.setState({ rev_guess: false, mot_m: data });
-        history.pushState(this.state, null, `/matches/${match.id}/motm`);
-      });
+        this.setState({ rev_guess: null, mot_m: data }, () => {
+          history.pushState(this.state, 'Midnight Riders | Man of the Match', `/matches/${match.id}/motm`);
+        });
+      })
+      .error((err) => { /* noop */ });
+  }
+
+  motMIfForMatch(match) {
+    if (this.state.mot_m && this.state.mot_m.match_id === match.id) return this.state.mot_m;
+  }
+
+  revGuessIfForMatch(match) {
+    if (this.state.rev_guess && this.state.rev_guess.match_id === match.id) return this.state.rev_guess;
   }
 
   matchList() {
     return this.state.matches.map((match) => {
-      let motM = (this.state.mot_m && this.state.mot_m.match_id === match.id) ? this.state.mot_m : null;
-      let revGuess = (this.state.rev_guess && this.state.rev_guess.match_id === match.id) ? this.state.rev_guess : null;
-
       return (
         <Match
           key={`match-${match.id}`}
-          id={match.id}
-          home_team={match.home_team}
-          away_team={match.away_team}
-          home_goals={match.home_goals}
-          away_goals={match.away_goals}
-          pick={match.pick}
+          {...match}
           kickoff={new Date(match.kickoff)}
-          location={match.location}
-          show_admin_ui={this.props.show_admin_ui}
           getRevGuess={() => this.getRevGuessFor(match)}
           getMotM={() => this.getMotMFor(match)}
           clearGame={this.clearGame}
-          motM={motM}
-          revGuess={revGuess}
+          updateMatch={(state) => this.updateMatch(match, state)}
+          motMForDisplay={this.motMIfForMatch(match)}
+          revGuessForDisplay={this.revGuessIfForMatch(match)}
+          baseUrl={this.baseUrl()}
         />
       );
     });
   }
 
+  navigate() {
+    console.log('navigated', history.state);
+    if (history.state) this.setState(history.state);
+  }
+
+  updateMatch(match, state, title, url) {
+    let deferred = jQuery.Deferred();
+    Object.keys(state).forEach((key) => { match[key] = state[key]; });
+    this.forceUpdate(deferred.resolve);
+    return deferred;
+  }
+
   render() {
-    if (this.state.matches.length > 0) {
-      return (
-        <ul className={`matches ${this.props.loading ? 'loading' : ''}`}>
-          {this.matchList()}
-        </ul>
-      );
-    } else {
-      return (
-        <div className={`alert-box no-matches ${this.props.loading ? 'loading' : ''}`}>
-          <h2 className="text-center">No matches scheduled this week.</h2>
-        </div>
-      );
-    }
+    return (
+      <ul className={`matches ${this.state.loadingMatches ? 'loading' : ''}`}>
+        {this.matchList()}
+      </ul>
+    );
   }
 }
 

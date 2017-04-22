@@ -1,8 +1,8 @@
 # Controller for Man of the Match model, +MotM+.
 class MotMsController < ApplicationController
   load_and_authorize_resource only: %i(index)
-  before_action :check_eligible, only: %i(create)
   before_action :set_match, only: %i(show create)
+  before_action :check_eligible, only: %i(create)
   before_action :set_mot_m, only: %i(show create)
   skip_before_action :verify_authenticity_token, only: %i(create)
 

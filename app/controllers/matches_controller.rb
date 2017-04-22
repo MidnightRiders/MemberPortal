@@ -23,6 +23,7 @@ class MatchesController < ApplicationController
   def show
     @order_point = @match.order_selected(Match.all_seasons)
     @mot_m_players = Player.includes(:mot_m_firsts, :mot_m_seconds, :mot_m_thirds).select { |x| x.mot_m_total(match_id: @match.id) && x.mot_m_total(match_id: @match.id) > 0 }.sort_by { |x| x.mot_m_total(match_id: @match.id) }.reverse if @match.teams.include? revs
+    render json: @match, serializer: MatchSerializer, scope: view_context
   end
 
   # TODO: Allow updated URLs and/or alternate sources

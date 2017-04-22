@@ -1,4 +1,12 @@
-- content_for :title, 'Match listings'
+:ruby
+  title = if @rev_guess.present?
+    'RevGuess'
+  elsif @mot_m.present?
+    'Man of the Match'
+  else
+    'Match Listings'
+  end
+  content_for :title, title
 
 = react_component 'MatchesIndex', @match_index.as_json, prerender: true
 
