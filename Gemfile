@@ -54,7 +54,7 @@ group :development, :test do
   gem 'active_record_query_trace'
   gem 'capybara'
   gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
-  gem 'factory_girl_rails'
+  gem 'factory_girl_rails', require: false
   gem 'ffaker'
   gem 'fivemat'
   gem 'pry-nav'
