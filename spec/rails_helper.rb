@@ -30,6 +30,7 @@ require 'capybara-screenshot/rspec'
 require 'support/controller_macros'
 require 'support/database_cleaner'
 require 'support/external_request_classes'
+require 'support/request_spec_helper'
 require 'support/vcr'
 Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
@@ -67,6 +68,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include Devise::TestHelpers, type: :view
   config.extend ControllerMacros, type: :controller
+  config.include RequestSpecHelper, type: :request
   config.include Warden::Test::Helpers
   config.include Capybara::DSL
 

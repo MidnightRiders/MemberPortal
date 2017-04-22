@@ -130,9 +130,16 @@ class MatchesIndex extends MatchCollection {
   }
 }
 
-MatchesIndex.propTypes.meta = React.PropTypes.shape({
+let propTypes = Object.keys(MatchCollection.propTypes).reduce((obj, key) => {
+  obj[key] = MatchCollection.propTypes[key];
+  return obj;
+}, {});
+
+propTypes.meta = React.PropTypes.shape({
   show_admin_ui: React.PropTypes.bool,
   start_date: React.PropTypes.number.isRequired,
   prev_week: React.PropTypes.number,
   next_week: React.PropTypes.number
 }).isRequired;
+
+MatchesIndex.propTypes = propTypes;

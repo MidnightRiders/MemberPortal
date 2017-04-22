@@ -27,14 +27,13 @@ class Ability
           can :show, [User, Club, Match]
           can :index, Match
           can :manage, [user.current_membership, user.mot_ms, user.rev_guesses, user.pick_ems]
-          can :create, [MotM, RevGuess], user_id: user.id
-          can :vote, PickEm, user_id: user.id
+          can %i(create update), [MotM, RevGuess], user_id: user.id
+          can :create, PickEm, user_id: user.id
           cannot :manage, Relative
           if user.current_membership.is_a? Family
             can :manage, Relative, family_id: user.current_membership.id
             can :manage, [user.current_membership.relatives, user.current_membership.relatives.map(&:user)]
           end
-          can :index, Player
           cannot :index, [Club, Membership, User, MotM, Relative, Family]
           cannot :refund, Membership
           cannot :grant_privileges, Membership
