@@ -19,19 +19,22 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rails_helper'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'ffaker'
+require 'cancan/matchers'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'capybara/poltergeist'
-require 'cancan/matchers'
+require 'capybara-screenshot/rspec'
+require 'factory_girl_rails'
+require 'ffaker'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
-require 'capybara-screenshot/rspec'
+
 require 'support/controller_macros'
 require 'support/database_cleaner'
 require 'support/external_request_classes'
 require 'support/request_spec_helper'
 require 'support/vcr'
+
 Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
 WebMock.disable_net_connect!(allow_localhost: true)
