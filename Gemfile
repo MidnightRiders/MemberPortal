@@ -31,7 +31,7 @@ gem 'date_time_attribute'
 
 gem 'will_paginate'
 
-gem 'aws-sdk', '~> 1.6'
+gem 'aws-sdk', '~> 2'
 gem 'paperclip', '~>4.3.0'
 
 # Users/auth
