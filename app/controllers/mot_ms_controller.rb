@@ -2,8 +2,8 @@
 class MotMsController < ApplicationController
   load_and_authorize_resource only: %i(index)
   before_action :set_match, only: %i(show create)
-  before_action :check_eligible, only: %i(create)
   before_action :set_mot_m, only: %i(show create)
+  before_action :check_eligible, only: %i(create)
   skip_before_action :verify_authenticity_token, only: %i(create)
 
   # GET /mot_ms
@@ -56,7 +56,7 @@ class MotMsController < ApplicationController
 
   # Redirects to matches path for that week if the match is not voteable
   def check_eligible
-    authorize! :manage, MotM, match_id: @match.id
+    authorize! @mot_m&.persisted? ? :update : :create, MotM, match_id: @match.id, user_id: current_user.id
     redirect_to matches_path(date: @match.kickoff.to_date), flash: { notice: 'Cannot submit Man of the Match for that match.' } unless @match.voteable?
   end
 

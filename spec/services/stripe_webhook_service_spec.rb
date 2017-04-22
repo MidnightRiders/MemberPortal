@@ -26,11 +26,11 @@ RSpec.describe StripeWebhookService do
       ignored_ids = [ignored_id] + Array.new(5) { StripeHelper.event_id }
       allow(ENV).to receive(:[]).with('IGNORED_STRIPE_EVENT_IDS').and_return ignored_ids.join(',')
 
-      event = { id: ignored_id, type: 'event_type' }
+      event = { id: ignored_id, type: 'charge_refunded' }
 
       webhook = StripeWebhookService.new(event)
 
-      expect(StripeWebhookService).not_to receive(:event_type)
+      expect(webhook).not_to receive(:charge_refunded)
 
       response = webhook.process
 

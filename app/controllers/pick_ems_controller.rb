@@ -5,7 +5,7 @@ class PickEmsController < ApplicationController
 
   # POST /matches/:match_id/pickem/vote
   # Updates or creates +PickEm+ for match from given user.
-  def create_or_update
+  def create
     @pick_em = @match.pick_ems.find_or_initialize_by(user_id: current_user.id)
     head :not_modified and return if @pick_em.result == pick_em_params[:result]&.to_i
     if @pick_em.update(result: pick_em_params[:result])

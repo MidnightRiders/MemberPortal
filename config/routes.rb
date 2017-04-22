@@ -12,7 +12,7 @@ MidnightRiders::Application.routes.draw do
     get 'rev_guess', to: 'rev_guesses#show', as: nil, constraints: ->(req) { req.format == :json }
     get 'rev_guess', to: 'matches#index', as: :rev_guess, rev_guess: true
     match 'rev_guess', to: 'rev_guesses#create', via: %i(put post)
-    match 'pick_em', to: 'pick_em#create', via: %i(put post), as: :pick
+    match 'pick_em', to: 'pick_ems#create', via: %i(put post), as: :pick
   end
 
   resources :matches do
