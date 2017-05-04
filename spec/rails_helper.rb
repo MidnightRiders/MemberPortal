@@ -1,16 +1,3 @@
-require 'simplecov'
-SimpleCov.start do
-  add_filter '/vendor/'
-  add_filter '/public/'
-  add_filter '/spec/vcr/'
-end
-
-# save to CircleCI's artifacts directory if we're on CircleCI
-if ENV['CIRCLE_ARTIFACTS']
-  dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
-  SimpleCov.coverage_dir(dir)
-end
-
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
@@ -33,7 +20,6 @@ require 'support/controller_macros'
 require 'support/database_cleaner'
 require 'support/external_request_classes'
 require 'support/request_spec_helper'
-require 'support/vcr'
 
 Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
@@ -45,6 +31,10 @@ Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_hos
 Capybara.register_server :thin do |app, port|
   require 'rack/handler/thin'
   Rack::Handler::Thin.run(app, Port: port)
+end
+
+VCR.configure do |config|
+  config.hook_into :webmock
 end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in

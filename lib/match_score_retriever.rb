@@ -1,6 +1,5 @@
 require 'open-uri'
 require 'nokogiri'
-require 'error_notifier'
 
 class MatchScoreRetriever
   URL_ROOT = 'https://matchcenter.mlssoccer.com/matches/'.freeze
@@ -40,11 +39,7 @@ class MatchScoreRetriever
   def compare_kickoff(item, match)
     date = item.at_css('.sb-match-date')&.content
     return false if date.nil? || date == ''
-    if Date.parse(date) == match.kickoff.to_date
-      true
-    else
-      ErrorNotifier.notify("Dates do not match: #{date}/#{match.kickoff}")
-      false
-    end
+    raise StandardError, "Dates do not match: #{date}/#{match.kickoff}" unless Date.parse(date) == match.kickoff.to_date
+    true
   end
 end

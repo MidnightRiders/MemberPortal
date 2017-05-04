@@ -125,7 +125,12 @@ class MatchesController < ApplicationController
   def auto_update_week(date, matches)
     importer = MatchScoreRetriever.new(date)
     matches.map do |match|
-      auto_update_match(importer.match_info_for(match), match)
+      begin
+        auto_update_match(importer.match_info_for(match), match)
+      rescue => error
+        ErrorNotifier.notify(error)
+        false
+      end
     end
   end
 

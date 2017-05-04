@@ -2,8 +2,7 @@ require 'vcr'
 
 VCR.configure do |config|
   config.default_cassette_options = { record: :new_episodes }
-  config.cassette_library_dir = Rails.root.join('spec', 'vcr')
-  config.hook_into :webmock
+  config.cassette_library_dir = File.expand_path('../../spec/vcr')
   config.configure_rspec_metadata!
 
   config.filter_sensitive_data('STRIPE_SECRET_KEY') { ENV['STRIPE_SECRET_KEY'] }
