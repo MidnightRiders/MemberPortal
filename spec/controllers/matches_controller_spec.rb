@@ -14,6 +14,5 @@ describe MatchesController do
     pending 'delete #destroy'
     pending 'post #import'
     pending 'get #auto_update'
-    pending 'post #bulk_update'
   end
 end
