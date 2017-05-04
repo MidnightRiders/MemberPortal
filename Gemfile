@@ -30,6 +30,8 @@ gem 'will_paginate'
 gem 'aws-sdk', '~> 1.6'
 gem 'paperclip', '~>4.3.0'
 
+gem 'nokogiri', '~>1.7', '>= 1.7.1'
+
 # Users/auth
 gem 'cancancan', '~>1.10.1'
 gem 'devise', '~>4.0.0'
