@@ -1,4 +1,4 @@
-require 'net/http'
+require 'open-uri'
 require 'nokogiri'
 
 # Controller for +Match+ model.
@@ -48,10 +48,9 @@ class MatchesController < ApplicationController
     failures = []
     matches_by_week.each do |(_year, _week), matches|
       week_start = matches.first.kickoff.to_date.beginning_of_week
-      uri = URI("http://matchcenter.mlssoccer.com/matches/#{week_start.strftime('%Y-%m-%d')}")
-      html = Nokogiri::HTML(Net::HTTP.get(uri))
+      url = "https://matchcenter.mlssoccer.com/matches/#{week_start.strftime('%Y-%m-%d')}"
+      html = Nokogiri::HTML(URI.parse(url).read)
       matches.each do |match|
-        Rails.logger.info match
         match_html = html.xpath('//*[contains(@class,"ml-link") and ' \
           ".//*[contains(@class, 'sb-home')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.home_team.abbrv}')] and " \
           ".//*[contains(@class, 'sb-away')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.away_team.abbrv}')]]").try(:first)
