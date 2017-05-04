@@ -37,18 +37,6 @@
                 = button_tag :submit, class: 'button secondary postfix', title: 'Import/Update Matches' do
                   = icon 'cloud-download fa-fw'
         .row
-          = form_tag bulk_update_matches_path, class: 'row collapse', multipart: true, method: :post do
-            .medium-4.columns
-              %label
-                Batch Update Results
-                %small.hint{ title: "CSV should be in the following format:\nDate,Home,Away,HG,AG\n6/12,NE,CLB,1,3" } ?
-            .medium-8.columns
-              .small-8.columns
-                = file_field_tag :file
-              .small-4.columns
-                = button_tag :submit, class: 'button secondary postfix', title: 'Upload' do
-                  = icon 'upload fa-fw'
-        .row
           .medium-8.columns.right
             = link_to auto_update_matches_path, class: 'button small secondary expand' do
               = icon 'refresh fa-fw'

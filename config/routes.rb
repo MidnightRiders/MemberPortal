@@ -7,7 +7,6 @@ MidnightRiders::Application.routes.draw do
   resources :matches do
     collection do
       post :import
-      post :bulk_update
       get :auto_update
     end
     resources :mot_ms, path: 'motm', except: %i(index show)

@@ -1,11 +1,11 @@
 require 'net/http'
-require 'open-uri'
-require 'nokogiri'
+require 'match_score_retriever'
 
 # Controller for +Match+ model.
 class MatchesController < ApplicationController
   authorize_resource
   before_action :set_match, only: %i(show edit update destroy)
+  before_action :check_for_matches_to_update, only: %i(auto_update)
 
   # GET /matches
   # GET /matches.json
@@ -43,75 +43,12 @@ class MatchesController < ApplicationController
 
   # GET /matches/auto_update
   def auto_update
-    finished_matches = Match.where('(home_goals IS NULL OR away_goals IS NULL) AND kickoff < ?', Time.current - 2.hours)
-    matches_by_week = finished_matches.group_by { |m| [m.kickoff.year, m.kickoff.strftime('%W')] }
-    successes = 0
-    failures = []
-    matches_by_week.each do |(_year, _week), matches|
-      week_start = matches.first.kickoff.to_date.beginning_of_week
-      url = "https://matchcenter.mlssoccer.com/matches/#{week_start.strftime('%Y-%m-%d')}"
-      html = Nokogiri::HTML(URI.parse(url).read)
-      matches.each do |match|
-        match_html = html.xpath('//*[contains(@class,"ml-link") and ' \
-          ".//*[contains(@class, 'sb-home')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.home_team.abbrv}')] and " \
-          ".//*[contains(@class, 'sb-away')]//*[contains(@class, 'sb-club-name-short') and contains(text(), '#{match.away_team.abbrv}')]]").try(:first)
-        next unless match_html.present?
-        if (match_info = scrape_single_result(match_html))[:date] == match.kickoff.to_date
-          if match_info[:home][:goals].present? && match_info[:away][:goals].present?
-            if match.update_attributes(
-              home_goals: match_info[:home][:goals],
-              away_goals: match_info[:away][:goals]
-              )
-              successes += 1
-            else
-              failures << [match, 'Could not save (see logs).']
-              Rails.logger.info match.errors.to_yaml
-            end
-          else
-            failures << [match, 'No score recorded.']
-            Rails.logger.warn 'No score recorded:'
-            Rails.logger.info match_info.to_yaml
-          end
-        else
-          failures << [match, 'Dates do not match.']
-          Rails.logger.warn 'Dates do not match:'
-          Rails.logger.info match.to_yaml
-          Rails.logger.info match_info.to_yaml
-        end
-      end
-    end
-    if finished_matches.empty?
-      flash[:notice] = 'There were no matches to update.'
-    else
-      flash[:success] = "#{successes} of #{finished_matches.size} #{'Match'.pluralize(finished_matches.size)} were updated."
-      if failures.any?
-        flash[:success] += '<br><ul><li>' + failures.map { |m, e|
-          "#{view_context.link_to "#{m.home_team.abbrv} v #{m.away_team.abbrv}", m}: #{e}"
-        }.join('</li><li>') + '</li></ul>'
-      end
-    end
-    redirect_to matches_path
-  rescue => e
-    flash[:error] = e.message
-    Rails.logger.error e.message
-    Rails.logger.info e.backtrace.to_yaml
-    redirect_to matches_path
-  end
-
-  # POST /matches/bulk_update
-  def bulk_update
-    updated = 0
-    matches = CSV.table(params[:file].path.to_s)
-    matches.each do |m|
-      d = m[:date].to_date.beginning_of_day
-      match = Match.find_by(kickoff: (d..d + 1.day), home_team: Club.find_by(abbrv: m[:home]), away_team: Club.find_by(abbrv: m[:away]), home_goals: nil, away_goals: nil)
-      if match.present?
-        updated += 1 if match.update_attributes(home_goals: m[:hg], away_goals: m[:ag])
-      else
-        logger.error "Bulk Import Error: no incomplete Match found for #{m[:home]} v #{m[:away]} on #{m[:date]} (#{d})"
-      end
-    end
-    redirect_to matches_path, notice: "#{updated}/#{matches.length} Matches were successfully updated."
+    successes = matches_to_update_by_week.map { |week, matches|
+      auto_update_week(week, matches)
+    }.flatten.count(true)
+    redirect_to matches_path, flash: {
+      success: "#{successes} of #{matches_to_update.size} #{'Match'.pluralize(matches_to_update.size)} were updated."
+    }
   end
 
   # GET /matches/new
@@ -120,8 +57,7 @@ class MatchesController < ApplicationController
   end
 
   # GET /matches/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /matches
   # POST /matches.json
@@ -164,6 +100,34 @@ class MatchesController < ApplicationController
   end
 
   private
+
+  def auto_update_match(score, match)
+    if score.present?
+      match.update_attributes(score) ? true : Rails.logger.info(match.errors.to_yaml) && false
+    else
+      Rails.logger.warn 'No match found:'
+      Rails.logger.info match.to_yaml
+    end
+  end
+
+  def auto_update_week(date, matches)
+    importer = MatchScoreRetriever.new(date)
+    matches.map do |match|
+      auto_update_match(importer.match_info_for(match), match)
+    end
+  end
+
+  def check_for_matches_to_update
+    redirect_to matches_path, flash: { notice: 'There were no matches to update.' } if matches_to_update.empty?
+  end
+
+  def matches_to_update
+    @finished_matches_to_update ||= Match.where('(home_goals IS NULL OR away_goals IS NULL) AND kickoff < ?', Time.current - 2.hours)
+  end
+
+  def matches_to_update_by_week
+    matches_to_update.group_by { |m| m.kickoff.to_date.beginning_of_week }
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_match
