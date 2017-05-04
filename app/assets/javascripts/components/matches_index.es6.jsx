@@ -50,6 +50,37 @@ class MatchesIndex extends MatchCollection {
       });
   }
 
+  addResultPoll(time, id) {
+    let timeInt = time.getTime();
+    if (this.resultPolls[timeInt]) {
+      this.resultPolls[timeInt].ids.push(id);
+    } else {
+      this.resultPolls[timeInt] = { ids: [id] };
+      this.waitForPossibleResult(this.resultPolls[timeInt], time);
+      this.setResultPoll(this.resultPolls[timeInt], time);
+    }
+  }
+
+  waitForPossibleResult(obj, time) {
+    if (time <= new Date()) return obj.timeout = null;
+    obj.timeout = setTimeout(() => {
+      obj.timeout = null;
+      this.setResultPoll(obj, time);
+    }, time - new Date());
+  }
+
+  setResultPoll(obj, time) {
+    if (time > new Date()) return obj.poll = null;
+    obj.poll = setInterval(() => {
+      jQuery.ajax(this.baseUrl())
+        .then((data) => {
+          this.setState({ matches: data.matches }, () => {
+            history.replaceState(this.state, document.title, location.href);
+          });
+        });
+    }, 5 * 60 * 1000);
+  }
+
   urlFor(date) {
     if (moment(date).isSame(new Date(), 'week')) {
       return '/matches';

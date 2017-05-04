@@ -7,7 +7,6 @@ gem 'rails', '~> 4.2.7'
 # Use postgresql as the database for Active Record
 gem 'active_model_serializers'
 gem 'hstore_accessor'
-gem 'order_query'
 gem 'pg'
 
 gem 'autoprefixer-rails'
@@ -53,13 +52,17 @@ group :development, :test do
   # Testing
   gem 'active_record_query_trace'
   gem 'capybara'
+  gem 'debase'
   gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
   gem 'factory_girl_rails', require: false
   gem 'ffaker'
   gem 'fivemat'
   gem 'pry-nav'
   gem 'pry-rails'
+  gem 'pry-rescue'
+  gem 'pry-stack_explorer'
   gem 'rspec-rails'
+  gem 'ruby-debug-ide'
   gem 'spring-commands-rspec'
   gem 'thin'
 end

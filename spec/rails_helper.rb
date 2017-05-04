@@ -20,6 +20,7 @@ require 'support/controller_macros'
 require 'support/database_cleaner'
 require 'support/external_request_classes'
 require 'support/request_spec_helper'
+require 'support/with_wait_time'
 
 Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 

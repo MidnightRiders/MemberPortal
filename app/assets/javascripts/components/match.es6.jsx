@@ -4,27 +4,28 @@ class Match extends React.Component {
     super(props);
 
     this.isRevs = props.home_team.abbrv === 'NE' || props.away_team.abbrv === 'NE';
-    this.kickoffInterval = null;
+    this.kickoffTimeout = null;
+    this.completionTimeout = null;
+    this.resultPoll = null;
 
-    this.motMUrl = `/matches/${this.props.id}/motm`;
-    this.revGuessUrl = `/matches/${this.props.id}/rev_guess`;
+    this.matchUrl = `/matches/${this.props.id}`;
+    this.motMUrl = `${this.matchUrl}/motm`;
+    this.revGuessUrl = `${this.matchUrl}/rev_guess`;
 
     this.state = {
-      canMakeRevGuess: this.canMakeRevGuess(),
-      canVoteForMotM: this.canVoteForMotM(),
-      past: props.kickoff < new Date()
+      live: this.isLive(),
+      completed: this.isCompleted()
     };
   }
 
   canVoteForMotM() {
     return this.isRevs &&
-      this.props.kickoff < moment().subtract(45, 'minutes') &&         // at least 45 minutes ago
+      this.state.completed &&
       this.props.kickoff > moment().subtract(2, 'weeks'); // less than two weeks ago
   }
 
   canMakeRevGuess() {
-    return this.isRevs &&
-      this.props.kickoff > new Date();
+    return this.isRevs && this.props.kickoff > new Date();
   }
 
   componentDidMount() {
@@ -35,8 +36,20 @@ class Match extends React.Component {
     this.stopWaitingForGameProgress();
   }
 
+  hasScore(match) {
+    return !isNaN(parseInt(match.home_goals, 10)) && !isNaN(parseInt(match.away_goals, 10));
+  }
+
+  isCompleted() {
+    return this.hasScore(this.props);
+  }
+
+  isLive() {
+    return this.props.kickoff < new Date() && !this.isCompleted();
+  }
+
   motM() {
-    if (!this.state.canVoteForMotM) {
+    if (!this.canVoteForMotM()) {
       if (!this.isRevs) return '';
       return (
         <div className={`game-indicator game-indicator-motm ${this.props.mot_m ? 'completed' : ''}`}>
@@ -68,8 +81,20 @@ class Match extends React.Component {
     }
   }
 
+  pollForResult() {
+    this.resultPoll = setInterval(() => {
+      jQuery.getJSON(this.matchUrl)
+        .then((match) => {
+          if (this.hasScore(match)) return;
+          this.props.updateMatch(match);
+          clearInterval(this.resultPoll);
+          this.resultPoll = null;
+        });
+    }, 60 * 1000 * 5);
+  }
+
   revGuess() {
-    if (!this.state.canMakeRevGuess) {
+    if (!this.canMakeRevGuess()) {
       if (!this.isRevs) return '';
       return (
         <div className={`game-indicator game-indicator-rev-guess ${this.props.mot_m ? 'completed' : ''}`}>
@@ -104,36 +129,49 @@ class Match extends React.Component {
   }
 
   stopWaitingForGameProgress() {
-    if (this.kickoffInterval) {
-      clearInterval(this.kickoffInterval);
-      this.kickoffInterval = null;
+    if (this.kickoffTimeout) {
+      clearTimeout(this.kickoffTimeout);
+      this.kickoffTimeout = null;
+    }
+    if (this.completionTimeout) {
+      clearTimeout(this.completionTimeout);
+      this.completionTimeout = null;
+    }
+    if (this.resultPoll) {
+      clearInterval(this.resultPoll);
+      this.resultPoll = null;
     }
   }
 
   waitForGameProgress() {
-    if (!this.state.past && !this.kickoffInterval) {
-      this.kickoffInterval = setInterval(() => {
-        if (!this.state.past && this.props.kickoff < new Date()) {
-          this.setState({ past: true });
-          if (this.isRevs) {
-            this.setState({ canMakeRevGuess: false });
-          } else {
-            this.stopWaitingForGameProgress();
-          }
-        }
-        if (this.state.past && this.canVoteForMotM()) {
-          this.setState({ canVoteForMotM: true });
-          this.stopWaitingForGameProgress();
-        }
-      }, 5000);
+    if (this.state.completed) return;
+
+    if (!this.state.live) {
+      this.kickoffTimeout = setTimeout(() => {
+        this.setState({ live: true });
+      }, - moment(this.props.kickoff).diff(new Date()));
     }
+
+    this.completionTimeout = setTimeout(() => {
+      this.pollForResult();
+    }, - moment(this.props.kickoff).add(105, 'minutes').diff(new Date()));
+  }
+
+  classNames() {
+    return [
+      'match',
+      this.isRevs ? 'secondary-border ne' : null,
+      this.state.loading ? 'loading' : null,
+      this.state.live ? 'live' : null,
+      this.state.completed ? 'completed' : null
+    ].filter((e) => !!e).join(' ');
   }
 
   render() {
     return (
-      <li className={`match ${this.isRevs ? 'secondary-border ne' : ''} ${this.state.loading ? 'loading' : ''}`}>
+      <li className={this.classNames()} data-match-id={this.props.id}>
         <time dateTime={this.props.kickoff.toISOString()}>
-          <a href={`/matches/${this.props.id}`}>
+          <a href={this.matchUrl}>
             {moment(this.props.kickoff).format('M.D h:mma')}
             <sup><i className="fa fa-info-circle"/></sup>
           </a>

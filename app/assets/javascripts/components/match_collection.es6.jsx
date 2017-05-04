@@ -9,6 +9,8 @@ class MatchCollection extends React.Component {
       rev_guess: props.rev_guess
     };
 
+    this.resultPolls = {};
+
     ['baseUrl', 'clearGame', 'getRevGuessFor', 'getMotMFor', 'navigate', 'updateMatch']
       .forEach((method) => this[method] = this[method].bind(this));
   }
@@ -85,10 +87,13 @@ class MatchCollection extends React.Component {
     if (history.state) this.setState(history.state);
   }
 
-  updateMatch(match, state, title, url) {
+  updateMatch(match, state) {
     let deferred = jQuery.Deferred();
     Object.keys(state).forEach((key) => { match[key] = state[key]; });
-    this.forceUpdate(deferred.resolve);
+    this.forceUpdate(() => {
+      history.replaceState(this.state, document.title, location.href);
+      deferred.resolve();
+    });
     return deferred;
   }
 

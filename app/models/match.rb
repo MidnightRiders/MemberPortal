@@ -1,12 +1,6 @@
 class Match < ActiveRecord::Base
-  include OrderQuery
-
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
-
-  order_query :order_selected,
-              %i(kickoff asc),
-              %i(location asc)
 
   default_scope lambda {
     where(season: Date.current.year).order(kickoff: :asc, location: :asc)
@@ -14,8 +8,12 @@ class Match < ActiveRecord::Base
   scope :all_seasons, lambda {
     unscope(where: :season)
   }
-  scope :for_week, lambda { |beginning|
+  scope :for_week, lambda { |date|
+    beginning = date.beginning_of_week.to_time
     unscope(where: :season).where(kickoff: (beginning..beginning + 7.days))
+  }
+  scope :missing_scores, lambda {
+    unscoped.where('(home_goals IS NULL OR away_goals IS NULL) AND kickoff < ?', Time.current - 2.hours)
   }
   scope :with_clubs, lambda {
     includes(:home_team, :away_team)
@@ -166,6 +164,10 @@ class Match < ActiveRecord::Base
       kickoff: kickoff
     )
     match if (match.new_record? || match.changed?) && match.save!
+  end
+
+  def self.dates_to_retrieve_scores
+    missing_scores.pluck('DISTINCT kickoff::date AS kickoff_date')
   end
 
   def self.teams_from_event_summary(summary)

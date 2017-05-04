@@ -9,6 +9,7 @@ class MatchesController < ApplicationController
   before_action :set_rev_guess, only: %i(index), if: ->{ params[:rev_guess] }
   before_action :set_mot_m, only: %i(index), if: ->{ params[:mot_m] }
   before_action :check_for_matches_to_update, only: %i(auto_update)
+  before_action :retrieve_score, only: %i(show), if: -> { @match.kickoff < 2.hours.ago && !@match.complete? }
 
   # GET /matches
   def index
@@ -22,9 +23,8 @@ class MatchesController < ApplicationController
 
   # GET /matches/1
   def show
-    @order_point = @match.order_selected(Match.all_seasons)
     @mot_m_players = Player.includes(:mot_m_firsts, :mot_m_seconds, :mot_m_thirds).select { |x| x.mot_m_total(match_id: @match.id) && x.mot_m_total(match_id: @match.id) > 0 }.sort_by { |x| x.mot_m_total(match_id: @match.id) }.reverse if @match.teams.include? revs
-    render json: @match, serializer: MatchSerializer, scope: view_context
+    render json: @match, serializer: MatchDetailSerializer, scope: view_context
   end
 
   # TODO: Allow updated URLs and/or alternate sources
@@ -97,8 +97,17 @@ class MatchesController < ApplicationController
 
   private
   def determine_start_date
-    return @start_date = @match.kickoff.beginning_of_week if @match.present?
-    @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
+    @start_date = (
+      @match&.kickoff&.beginning_of_week ||
+      params[:date].try(:in_time_zone, Time.zone) ||
+      Time.current
+    ).beginning_of_week
+  end
+
+  def retrieve_score
+    updater = MatchScoreRetriever.new(@match.kickoff.to_date)
+    return unless (score = updater.match_info_for(@match)).present?
+    @match.update(score)
   end
 
   def serialized_matches
