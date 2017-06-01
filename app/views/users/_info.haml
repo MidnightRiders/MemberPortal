@@ -89,6 +89,8 @@
           #{user.city},
           = user.state
           = user.postal_code
+          %br
+          = user.country
         - else
           %em Not provided
   - if user.phone
