@@ -164,6 +164,7 @@ GEM
     minitest (5.10.1)
     multi_json (1.12.1)
     netrc (0.11.0)
+    newrelic_rpm (4.2.0.334)
     nokogiri (1.7.1)
       mini_portile2 (~> 2.1.0)
     order_query (0.3.3)
@@ -339,6 +340,7 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   launchy
+  newrelic_rpm
   nokogiri (~> 1.7, >= 1.7.1)
   order_query
   paper_trail
