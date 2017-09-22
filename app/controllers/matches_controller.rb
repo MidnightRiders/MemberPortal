@@ -111,7 +111,7 @@ class MatchesController < ApplicationController
   end
 
   def auto_update_week(date, matches)
-    importer = MatchScoreRetriever.new(date)
+    importer = MatchScoreRetriever.new
     matches.map do |match|
       auto_update_match(importer.match_info_for(match), match)
     end
