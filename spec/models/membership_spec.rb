@@ -27,4 +27,14 @@ describe Membership do
       membership.notify_slack
     end
   end
+
+  describe 'trial_end' do
+    it 'returns midnight on January 1st for the following year' do
+      this_year_membership = Membership.new(year: 2017)
+      next_year_membership = Membership.new(year: 2018)
+
+      expect(this_year_membership.trial_end).to eq 1_514_782_800
+      expect(next_year_membership.trial_end).to eq 1_546_318_800
+    end
+  end
 end

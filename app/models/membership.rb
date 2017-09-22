@@ -97,7 +97,7 @@ class Membership < ActiveRecord::Base
 
   # For Stripe Subscriptions
   def trial_end
-    1.year.from_now.beginning_of_year.to_i
+    DateTime.civil_from_format(:local, year + 1, 1, 1).to_i
   end
 
   def self.breakdown(season = Date.current.year)
