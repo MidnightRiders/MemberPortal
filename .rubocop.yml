@@ -16,11 +16,11 @@ AllCops:
 Rails:
   Enabled: true
 
-Style/AlignHash:
+Layout/AlignHash:
   Enabled: false
 
 Lint/EndAlignment:
-  AlignWith: variable
+  EnforcedStyleAlignWith: variable
   Enabled: true
 
 Metrics/LineLength:
@@ -32,7 +32,7 @@ Metrics/LineLength:
 Performance/StringReplacement:
   Enabled: false
 
-Style/AlignParameters:
+Layout/AlignParameters:
   Enabled: false
 
 Style/BlockDelimiters:
@@ -41,7 +41,7 @@ Style/BlockDelimiters:
   Exclude:
     - spec/**/*
 
-Style/ClosingParenthesisIndentation:
+Layout/ClosingParenthesisIndentation:
   Enabled: false
 
 Style/ClassAndModuleChildren:
@@ -58,43 +58,43 @@ Style/CollectionMethods:
 Style/Documentation:
   Enabled: false
 
-Style/DotPosition:
+Layout/DotPosition:
   Enabled: true
   EnforcedStyle: leading
 
-Style/EmptyLinesAroundBlockBody:
+Layout/EmptyLinesAroundBlockBody:
   Exclude:
     - spec/**/*
 
-Style/EmptyLinesAroundClassBody:
+Layout/EmptyLinesAroundClassBody:
   Enabled: false
 
-Style/EmptyLinesAroundModuleBody:
+Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Style/IndentHash:
+Layout/IndentHash:
   Enabled: true
   EnforcedStyle: consistent
 
-Style/MultilineArrayBraceLayout:
+Layout/MultilineArrayBraceLayout:
   Enabled: true
 
-Style/MultilineHashBraceLayout:
+Layout/MultilineHashBraceLayout:
   Enabled: true
 
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   Enabled: true
   EnforcedStyle: indented
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
   Enabled: true
   IndentationWidth: 0
 
-Style/PredicateName:
+Naming/PredicateName:
   # Predicate name prefixes.
   NamePrefix:
     - is_
@@ -131,7 +131,7 @@ Style/SymbolArray:
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#percent-i'
   Enabled: true
 
-Style/VariableName:
+Naming/VariableName:
   EnforcedStyle: snake_case
   Enabled: true
 

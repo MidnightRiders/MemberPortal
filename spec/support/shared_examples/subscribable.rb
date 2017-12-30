@@ -52,10 +52,13 @@ shared_examples_for 'Commerce::Subscribable' do
         product.cancel
       end
 
-      it 'replaces stripe_subscription_id with "Stripe Subscription Canceled"' do
+      it 'replaces stripe_subscription_id with "Stripe Subscription [SUBSCRIPTION ID] Canceled"' do
         allow(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+        sub_id = product.stripe_subscription_id
 
-        expect { product.cancel }.to change { product.stripe_subscription_id }.to 'Stripe Subscription Canceled'
+        expect { product.cancel }
+          .to change { product.stripe_subscription_id }
+          .to "Stripe Subscription #{sub_id} Canceled"
       end
 
       it 'refunds if argument is true' do
