@@ -33,7 +33,7 @@ module Commerce
     end
 
     def subscription?
-      /^(?!Stripe Subscription )(sub_[^ ]+)(?<!Canceled)$/i === stripe_subscription_id
+      stripe_subscription_id =~ /^(?!Stripe Subscription )(sub_[^ ]+)(?<! Canceled)$/i ? true : false
     end
 
     class_methods do
