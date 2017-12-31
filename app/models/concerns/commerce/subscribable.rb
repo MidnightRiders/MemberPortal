@@ -33,7 +33,7 @@ module Commerce
     end
 
     def subscription?
-      stripe_subscription_id.present?
+      /^(?!Stripe Subscription )(sub_[^ ]+)(?<!Canceled)$/i === stripe_subscription_id
     end
 
     class_methods do

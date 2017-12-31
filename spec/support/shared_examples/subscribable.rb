@@ -36,6 +36,29 @@ shared_examples_for 'Commerce::Subscribable' do
     end
   end
 
+  describe 'subscription?' do
+    it 'returns false for never having been subscribed' do
+      expect(product.subscription?).to be false
+    end
+
+    it 'returns false for having a canceled subscription' do
+      allow(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+
+      stripe_subscription_id = StripeHelper.subscription_id
+      product.update_attribute(:stripe_subscription_id, stripe_subscription_id)
+      product.cancel
+
+      expect(product.subscription?).to be false
+    end
+
+    it 'returns true for having an active subscription' do
+      stripe_subscription_id = StripeHelper.subscription_id
+      product.update_attribute(:stripe_subscription_id, stripe_subscription_id)
+
+      expect(product.subscription?).to be true
+    end
+  end
+
   describe 'cancel' do
     context 'without stripe_subscription_id' do
       it 'returns false' do
