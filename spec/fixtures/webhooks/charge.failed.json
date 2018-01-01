@@ -42,7 +42,7 @@
       "created": 1486854460,
       "currency": "usd",
       "customer": "cus_9elr2c72oj0jcd",
-      "description": "Midnight Riders 2017 Individual Membership",
+      "description": "Midnight Riders 2018 Individual Membership",
       "destination": null,
       "dispute": null,
       "failure_code": "card_declined",
@@ -52,7 +52,7 @@
       "invoice": null,
       "livemode": true,
       "metadata": {
-        "year": "2017",
+        "year": "2018",
         "type": "Individual"
       },
       "on_behalf_of": null,
@@ -106,7 +106,7 @@
         "tokenization_method": null
       },
       "source_transfer": null,
-      "statement_descriptor": "MRiders 2017 Ind Mem",
+      "statement_descriptor": "MRiders 2018 Ind Mem",
       "status": "failed",
       "transfer_group": null
     }
