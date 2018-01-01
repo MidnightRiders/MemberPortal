@@ -64,7 +64,12 @@ class StripeWebhookService
   end
 
   def renew_subscription
-    new_membership = Membership.re_up!(object[:subscription], { user_id: user.id }, year: subscription_year)
+    new_membership = Membership.re_up!(
+      object[:subscription],
+      { user_id: user.id },
+      year: subscription_year,
+      stripe_charge_id: object[:charge]
+    )
     MembershipNotifier.new(user: user, membership: new_membership).notify_renewal
   end
 
