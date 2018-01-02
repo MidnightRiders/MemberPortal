@@ -7,14 +7,14 @@
 
 = render 'accept_family_invitation', user: current_user if current_user.invited_to_family?
 
--#= render 'static_pages/jotform' if current_user.current_member? #&& Time.current < Time.zone.local(2016,1,15,17)
+= render 'static_pages/jotform' if current_user.current_member? #&& Time.current < Time.zone.local(2016,1,15,17)
 
 .row
-  -#- if current_user.current_member? # && Time.current < Time.zone.local(2016,1,15,17)
-  -#  .medium-6.columns.right
-  -#    = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
-  -#      = icon 'check-circle'
-  -#      Vote for 2017’s Scarf
+  - if current_user.current_member? # && Time.current < Time.zone.local(2016,1,15,17)
+    .medium-6.columns.right
+      = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
+        = icon 'check-circle'
+        Vote for 2018’s Scarf
   = render 'board_nominations'
 
   %section.medium-6.columns

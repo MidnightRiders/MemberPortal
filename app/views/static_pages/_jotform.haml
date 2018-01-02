@@ -1,112 +1,62 @@
-%script{src: 'https://cdn.jotfor.ms/static/prototype.forms.js', type: 'text/javascript'}
-%script{src: 'https://cdn.jotfor.ms/static/jotform.forms.js?3.3.16420', type: 'text/javascript'}
+:ruby
+  scarves = ["http://midnightriders.com/ext-img/2017scarves/01-HbuFRxh.png","http://midnightriders.com/ext-img/2017scarves/02-bHA8pWu.png","http://midnightriders.com/ext-img/2017scarves/03-7umJJDr.png","http://midnightriders.com/ext-img/2017scarves/04-KLOrdmr.png","http://midnightriders.com/ext-img/2017scarves/05-EcKaHXh.png","http://midnightriders.com/ext-img/2017scarves/06-V6pxaZC.png","http://midnightriders.com/ext-img/2017scarves/07-ianyENX.png","http://midnightriders.com/ext-img/2017scarves/08-XVUr1PQ.png","http://midnightriders.com/ext-img/2017scarves/09-z91rvyP.png","http://midnightriders.com/ext-img/2017scarves/10-p7pAbLW.png","http://midnightriders.com/ext-img/2017scarves/11-U1boiwH.png","http://midnightriders.com/ext-img/2017scarves/12-E70PZpD.png","http://midnightriders.com/ext-img/2017scarves/13-Z7Auvim.png"]
+%script{ src: 'https://cdn.jotfor.ms/static/prototype.forms.js', type: 'text/javascript' }
+%script{ src: 'https://cdn.jotfor.ms/static/jotform.forms.js?3.3.3697', type: 'text/javascript' }
+%script{ src: 'https://js.jotform.com/vendor/postMessage.js?3.3.3697', type: 'text/javascript' }
+%script{ src: 'https://js.jotform.com/WidgetsServer.js?v=1514599669303', type: 'text/javascript' }
 :javascript
-  JotForm.init(function() {
-    JotForm.shuffleOptions('3');
-    JotForm.clearFieldOnHide='disable';
-    JotForm.onSubmissionError='jumpToSubmit';
+  JotForm.init(function () {
+    JotForm.alterTexts({ 'alphabetic': 'This field can only contain letters', 'alphanumeric': 'This field can only contain letters and numbers.', 'ccDonationMinLimitError': 'Minimum amount is {minAmount} {currency}', 'ccInvalidCVC': 'CVC number is invalid.', 'ccInvalidExpireDate': 'Expire date is invalid.', 'ccInvalidNumber': 'Credit Card Number is invalid.', 'ccMissingDetails': 'Please fill up the Credit Card details.', 'ccMissingDonation': 'Please enter numeric values for donation amount.', 'ccMissingProduct': 'Please select at least one product.', 'characterLimitError': 'Too many Characters.  The limit is', 'characterMinLimitError': 'Too few characters. The minimum is', 'confirmClearForm': 'Are you sure you want to clear the form?', 'confirmEmail': 'E-mail does not match', 'currency': 'This field can only contain currency values.', 'cyrillic': 'This field can only contain cyrillic characters', 'dateInvalid': 'This date is not valid. The date format is {format}', 'dateInvalidSeparate': 'This date is not valid. Enter a valid {element}.', 'dateLimited': 'This date is unavailable.', 'disallowDecimals': 'Please enter a whole number.', 'email': 'Enter a valid e-mail address', 'fillMask': 'Field value must fill mask.', 'freeEmailError': 'Free email accounts are not allowed', 'generalError': 'There are errors on the form. Please fix them before continuing.', 'generalPageError': 'There are errors on this page. Please fix them before continuing.', 'gradingScoreError': 'Score total should only be less than or equal to', 'incompleteFields': 'There are incomplete required fields. Please complete them.', 'inputCarretErrorA': 'Input should not be less than the minimum value:', 'inputCarretErrorB': 'Input should not be greater than the maximum value:', 'lessThan': 'Your score should be less than or equal to', 'maxDigitsError': 'The maximum digits allowed is', 'maxSelectionsError': 'The maximum number of selections allowed is', 'minSelectionsError': 'The minimum required number of selections is', 'multipleFileUploads_emptyError': '{file} is empty, please select files again without it.', 'multipleFileUploads_fileLimitError': 'Only {fileLimit} file uploads allowed.', 'multipleFileUploads_minSizeError': '{file} is too small, minimum file size is {minSizeLimit}.', 'multipleFileUploads_onLeave': 'The files are being uploaded, if you leave now the upload will be cancelled.', 'multipleFileUploads_sizeError': '{file} is too large, maximum file size is {sizeLimit}.', 'multipleFileUploads_typeError': '{file} has invalid extension. Only {extensions} are allowed.', 'nextButtonText': 'Next', 'numeric': 'This field can only contain numeric values', 'pastDatesDisallowed': 'Date must not be in the past.', 'pleaseWait': 'Please wait...', 'prevButtonText': 'Previous', 'progressMiddleText': 'of', 'required': 'This field is required.', 'requireEveryCell': 'Every cell is required.', 'requireEveryRow': 'Every row is required.', 'requireOne': 'At least one field required.', 'reviewBackText': 'Back to Form', 'reviewSubmitText': 'Review and Submit', 'seeAllText': 'See All', 'submissionLimit': 'Sorry! Only one entry is allowed.  Multiple submissions are disabled for this form.', 'submitButtonText': 'Submit', 'uploadExtensions': 'You can only upload following files:', 'uploadFilesize': 'File size cannot be bigger than:', 'uploadFilesizemin': 'File size cannot be smaller than:', 'url': 'This field can only contain a valid URL', 'wordLimitError': 'Too many words. The limit is', 'wordMinLimitError': 'Too few words.  The minimum is' });
+    JotForm.clearFieldOnHide = 'disable';
+    JotForm.submitError = 'jumpToFirstError';
   });
+  JotForm.prepareCalculationsOnTheFly([null, { 'name': '2018Scarf', 'qid': '1', 'text': '2018 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
+  setTimeout(function () {
+    JotForm.paymentExtrasOnTheFly([null, { 'name': '2018Scarf', 'qid': '1', 'text': '2018 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
+  }, 20);
 #scarf-vote-modal.reveal-modal.medium{ data: { reveal: true } }
   .close-reveal-modal &#215;
   #scarf-vote{ style: 'max-height: 100%; overflow-y: auto;' }
-    %form.jotform-form{id: '70097112602143', 'accept-charset':'utf-8', action: 'https://submit.jotform.us/submit/70097112602143/', method:'post', name:'form_70097112602143'}
-      %input{name: 'formID', type: 'hidden', value: '70097112602143'}
+    %form#73627010053142.jotform-form{ 'accept-charset': 'utf-8', action: 'https://submit.jotform.us/submit/73627010053142/', method: 'post', name: 'form_73627010053142', target: :_blank }
+      %input{ name: 'formID', type: 'hidden', value: '73627010053142' }
       .form-all
         %ul.form-section.page-section
-          %li#id_3.form-line.jf-required{'data-type': 'control_checkbox'}
+          %li#id_5.form-line.jf-required{'data-type': 'control_checkbox'}
             %h2.text-center! Pick Your THREE&nbsp;Favorite Scarf&nbsp;Designs
-            #cid_3.form-input-wide.jf-required
+            #cid_5.form-input-wide.jf-required
               .form-single-column{'data-component': 'checkbox'}
-                .scarf.form-radio-item
-                  %input#input_3_0.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #1'}
-                  %label#label_input_3_0{for: 'input_3_0'}
-                    Scarf #1
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 1', src: 'http://www.midnightriders.com/files/2017scarves/9exDnon%20-%20Imgur.jpg', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_1.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #2'}
-                  %label#label_input_3_1{for: 'input_3_1'}
-                    Scarf #2
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 2', src: 'http://www.midnightriders.com/files/2017scarves/mGMdzwY%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_2.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #3'}
-                  %label#label_input_3_2{for: 'input_3_2'}
-                    Scarf #3
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 3', src: 'http://www.midnightriders.com/files/2017scarves/H935hc1%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_3.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #4'}
-                  %label#label_input_3_3{for: 'input_3_3'}
-                    Scarf #4
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 4', src: 'http://www.midnightriders.com/files/2017scarves/pee3QEx%20-%20Imgur.jpg', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_4.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #5'}
-                  %label#label_input_3_4{for: 'input_3_4'}
-                    Scarf #5
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 5', src: 'http://www.midnightriders.com/files/2017scarves/2REcUua%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_5.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #6'}
-                  %label#label_input_3_5{for: 'input_3_5'}
-                    Scarf #6
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 6', src: 'http://www.midnightriders.com/files/2017scarves/heGDUAz%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_6.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #7'}
-                  %label#label_input_3_6{for: 'input_3_6'}
-                    Scarf #7
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 7', src: 'http://www.midnightriders.com/files/2017scarves/FvBF3mu%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_7.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #8'}
-                  %label#label_input_3_7{for: 'input_3_7'}
-                    Scarf #8
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 8', src: 'http://www.midnightriders.com/files/2017scarves/rsJoV88%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_8.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #9'}
-                  %label#label_input_3_8{for: 'input_3_8'}
-                    Scarf #9
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 9', src: 'http://www.midnightriders.com/files/2017scarves/BuY8Fxa%20-%20Imgur.jpg', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_9.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #10'}
-                  %label#label_input_3_9{for: 'input_3_9'}
-                    Scarf #10
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 10', src: 'http://www.midnightriders.com/files/2017scarves/aA280m2%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_10.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #11'}
-                  %label#label_input_3_10{for: 'input_3_10'}
-                    Scarf #11
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 11', src: 'http://www.midnightriders.com/files/2017scarves/jIB0jWX%20-%20Imgur.jpg', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_11.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #12'}
-                  %label#label_input_3_11{for: 'input_3_11'}
-                    Scarf #12
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 12', src: 'http://www.midnightriders.com/files/2017scarves/a7eY1Mx%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_12.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #13'}
-                  %label#label_input_3_12{for: 'input_3_12'}
-                    Scarf #13
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 13', src: 'http://www.midnightriders.com/files/2017scarves/u8NaXAO%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_13.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #14'}
-                  %label#label_input_3_13{for: 'input_3_13'}
-                    Scarf #14
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 14', src: 'http://www.midnightriders.com/files/2017scarves/S3iHIng%20-%20Imgur.jpg', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_14.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #15'}
-                  %label#label_input_3_14{for: 'input_3_14'}
-                    Scarf #15
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 15', src: 'http://www.midnightriders.com/files/2017scarves/cVNfWcV%20-%20Imgur.png', width:'600'}
-                .scarf.form-radio-item
-                  %input#input_3_15.form-checkbox{class: 'validate[required,maxselection,minselection]', data: { maxselection: '3', minselection: '3' }, name:'q3_pickYour[]', type:'checkbox', value:'Scarf #16'}
-                  %label#label_input_3_15{for: 'input_3_15'}
-                    Scarf #16
-                    %img{alt: 'Midnight Riders 2017 Scarf Contest Scarf # 16', src: 'http://www.midnightriders.com/files/2017scarves/qx3azc3%20-%20Imgur.png', width:'600'}
+                - scarves.each_with_index do |img, i|
+                  .scarf.form-radio-item
+                    %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_5_#{i}", data: { maxselection: '3', minselection: '3' }, name: 'q5_typeA[]', type: 'checkbox', value: "Scarf ##{i + 1}" }
+                    %label{ for: "input_5_#{i}", id: "label_input_5_#{i}" }
+                      Scarf ##{i + 1}
+                      %img{ alt: "Midnight Riders 2018 Scarf Contest Scarf ##{i + 1}", src: img, width: 600 }
+          = hidden_field_tag 'q5_typeA'
           = hidden_field_tag 'q4_email', current_user.email
-          %li#id_2.form-line.text-center{ data: { type: 'control_button' } }
+          %li#id_2.form-line{ data: { type: 'control_button' } }
             #cid_2.form-input-wide
-              .form-buttons-wrapper
-                %button#input_2.form-submit-button{'data-component': 'button', type: 'submit'}
-                  = icon 'check'
-                  Cast My Vote
-          %li{style: 'display:none'}
+              .form-buttons-wrapper{ style: 'margin-left:156px;' }
+                %button#input_2.form-submit-button{ data: { component: 'button' }, type: 'submit' }
+                  Submit
+          %li{ style: 'display:none' }
             Should be Empty:
-            %input{name: 'website', type: 'text', value: ''}
-      %input#simple_spc{name: 'simple_spc', type: 'hidden', value: '70097112602143'}
+            %input{ name: 'website', type: 'text', value: '' }
       :javascript
-        document.getElementById('si' + 'mple' + '_spc').value = '70097112602143-70097112602143';
+        JotForm.showJotFormPowered = '0';
+        var scarves = document.getElementsByName('q5_typeA[]');
+        var pickComposer = function () {
+          var hiddenField = document.getElementById('q5_typeA');
+          var picks = [];
+          for (var i = 0, len = scarves.length; i < len; i++) {
+            if (scarves[i].checked === true) picks.push(scarves[i].value);
+          }
+          hiddenField.value = picks.join('\n');
+        };
+        for (var i = scarves.length; i--;) { scarves[i].addEventListener('change', pickComposer); }
+        document.getElementById('73627010053142').addEventListener('submit', pickComposer);
+      %input#simple_spc{ name: 'simple_spc', type: 'hidden', value: '73627010053142' }
+      :javascript
+        document.getElementById('si' + 'mple' + '_spc').value = '73627010053142-73627010053142';
+      %script{ src: 'https://cdn.jotfor.ms/js/widgetResizer.js?REV=3.3.3697', type: 'text/javascript' }
+-# :javascript
+-#   JotForm.ownerView = true;
