@@ -41,12 +41,12 @@
           .medium-4.columns
             Auto-Renew
           .medium-8.columns
-            - if @membership.stripe_subscription_id.nil?
-              %strong Off
-            - else
+            - if @membership.subscription?
               %strong On
               (next charge: #{(Date.current + 1.year).beginning_of_year.strftime('%-m/%-d/%Y')})
               = link_to 'cancel', cancel_user_membership_path(@user, @membership), data: { method: :patch, confirm: 'Are you sure you wish to cancel automatic renewal?' }
+            - else
+              %strong Off
     - if @membership.can_have_relatives?
       %hr
       .row
