@@ -60,7 +60,7 @@ class RelativesController < ApplicationController
         MembershipNotifier.new(user: @relative_user, membership: @relative).notify_relative
         redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
       else
-        redirect_to user_home_path, flash: { error: @relative.errors.join(', ') }
+        redirect_to user_home_path, flash: { error: @relative.errors.messages.to_sentence }
       end
     else
       redirect_to user_home_path, flash: { error: 'This membership is not eligible to accept a family membership.' }
