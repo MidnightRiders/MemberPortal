@@ -91,7 +91,7 @@ class MembershipsController < ApplicationController
     if @membership.save
       redirect_to get_user_path, notice: 'Membership was successfully created.'
     else
-      redirect_to new_user_membership_path(@user), flash: { error: @membership.errors.messages.to_sentence }
+      redirect_to new_user_membership_path(@user), flash: { error: @membership.errors.full_messages.to_sentence }
     end
   end
 
