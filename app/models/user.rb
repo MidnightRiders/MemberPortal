@@ -70,7 +70,7 @@ class User < ActiveRecord::Base
 
   # Returns +Relative+ +Membership+ if invited to join +Family+
   def family_invitation
-    Relative.with_invited_email(email).first
+    Relative.with_invited_email(email).where(year: Membership.maximum(:year))
   end
 
   # Returns *Boolean* based on +family_invitation+
