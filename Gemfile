@@ -40,7 +40,7 @@ gem 'paper_trail'
 gem 'fuzzy_match', '~> 2.1'
 
 # Payments
-gem 'stripe'
+gem 'stripe', '~> 3.9.1'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'

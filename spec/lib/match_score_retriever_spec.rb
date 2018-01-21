@@ -5,7 +5,7 @@ require 'ostruct'
 
 RSpec.describe MatchScoreRetriever, :vcr do
   describe 'constructor' do
-    it 'creates an array of fixtures from an HTTPS get' do
+    skip 'creates an array of fixtures from an HTTPS get' do
       importer = MatchScoreRetriever.new
 
       expect(importer.instance_variable_get('@data')).to be_an(Array)
@@ -16,7 +16,7 @@ RSpec.describe MatchScoreRetriever, :vcr do
   describe 'match_info_for' do
     let(:importer) { MatchScoreRetriever.new }
 
-    it 'returns nil if no Match is found with same teams' do
+    skip 'returns nil if no Match is found with same teams' do
       different_match = fake_match(
         home_team: { abbrv: 'NE' },
         away_team: { abbrv: 'NY' },
@@ -26,7 +26,7 @@ RSpec.describe MatchScoreRetriever, :vcr do
       expect(importer.match_info_for(different_match)).to be_nil
     end
 
-    it 'calls ErrorNotifier and returns nil if a match is found for the wrong date' do
+    skip 'calls ErrorNotifier and returns nil if a match is found for the wrong date' do
       different_date_match = fake_match(
         home_team: { abbrv: 'SEA' },
         away_team: { abbrv: 'NE' },
@@ -37,7 +37,7 @@ RSpec.describe MatchScoreRetriever, :vcr do
       expect(importer.match_info_for(different_date_match)).to be_nil
     end
 
-    it 'returns a Hash if a match is found' do
+    skip 'returns a Hash if a match is found' do
       match = fake_match(
         home_team: { abbrv: 'NY' },
         away_team: { abbrv: 'CHI' },
