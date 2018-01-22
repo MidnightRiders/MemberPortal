@@ -27,10 +27,10 @@ gem 'date_time_attribute'
 
 gem 'will_paginate'
 
-gem 'aws-sdk', '~> 1.6'
-gem 'paperclip', '~>4.3.0'
+gem 'aws-sdk', '~> 2.3.0'
+gem 'paperclip', '~> 5.1.0'
 
-gem 'nokogiri', '~>1.8.1'
+gem 'nokogiri', '~> 1.8.1'
 
 # Users/auth
 gem 'cancancan', '~>1.10.1'
