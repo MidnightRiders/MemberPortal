@@ -221,7 +221,7 @@ class User < ActiveRecord::Base
     CSV.generate do |csv|
       csv << (CSV_ATTRIBUTES + %W[current_member #{year}_membership_type]).map(&:titleize)
       all.find_each do |user|
-        csv << user.attributes.values_at(*CSV_ATTRIBUTES) + [user.current_member?, user.memberships.select { |m| m.year == year }&.type]
+        csv << user.attributes.values_at(*CSV_ATTRIBUTES) + [user.current_member?, user.memberships.find { |m| m.year == year }&.type]
       end
     end
   end

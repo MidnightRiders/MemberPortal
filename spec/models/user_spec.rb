@@ -196,7 +196,7 @@ describe User do
       let(:csv) { User.all.to_csv }
 
       it 'outputs headers' do
-        expect(csv.split("\n").first).to eq('Id,Last Name,First Name,Address,City,State,Postal Code,Phone,Email,Username,Member Since,Last Sign In At,Country,Current Member,Membership Type')
+        expect(csv.split("\n").first).to eq("Id,Last Name,First Name,Address,City,State,Postal Code,Phone,Email,Username,Member Since,Last Sign In At,Country,Current Member,#{Date.current.year} Membership Type")
       end
 
       it 'outputs users' do
