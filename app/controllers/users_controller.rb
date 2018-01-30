@@ -19,7 +19,7 @@ class UsersController < ApplicationController
       format.html
       format.json
       format.csv {
-        render text: @user_set.to_csv
+        render text: @user_set.to_csv(year: @year)
       }
     end
   end

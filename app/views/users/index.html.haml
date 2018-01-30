@@ -59,15 +59,16 @@
       .thd
       .thd Member
       .thd Email
-      .thd Membership Type
+      .thd #{@year} Membership Type
       .thd.numeric Member since
       .thd.actions
 
   .tbody
     - @users.each do |user|
+      - membership = user.memberships.select { |m| m.year == @year }
       %li.tr
         .td.text-center
-          = icon 'check fa-fw' if user.memberships.select{|m| m.year == @year }.present?
+          = icon 'check fa-fw' if membership.present?
           - user.current_privileges.each do |r|
             = content_tag(:i,'',class: 'fa fa-fw fa-' + r, title: r.titleize)
         .td
@@ -78,7 +79,7 @@
               = user.first_name
               %small @#{user.username}
         .td= link_to user.email, "mailto: #{user.email}"
-        .td= user.current_membership.try(&:type)
+        .td= membership.try(&:type)
         .td.numeric= user.member_since
         .td.text-right
           -#= link_to 'Show', user
