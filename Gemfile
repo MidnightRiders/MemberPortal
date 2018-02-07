@@ -28,7 +28,7 @@ gem 'date_time_attribute'
 gem 'will_paginate'
 
 gem 'aws-sdk', '~> 2.3.0'
-gem 'paperclip', '~> 5.1.0'
+gem 'paperclip', '~> 5.2.1'
 
 gem 'nokogiri', '~> 1.8.1'
 
