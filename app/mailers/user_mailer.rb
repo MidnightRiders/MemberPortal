@@ -24,6 +24,6 @@ class UserMailer < ActionMailer::Base
     raise ArgumentError, 'Need all information for nominee.' unless @nominee.present? && @position.present?
 
     @title = "#{@user.first_name} #{@user.last_name} has nominated #{@nominee} to the 2017 Board"
-    mail(to: 'secretary@midnightriders.com, info@midnightriders.com, webczar@midnightriders.com', subject: @title)
+    mail(to: 'secretary@midnightriders.com, info@midnightriders.com, member-portal-support@midnightriders.com', subject: @title)
   end
 end

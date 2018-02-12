@@ -30,8 +30,8 @@ The Stripe and AWS credentials are unnecessary for a large portion of the projec
 need is the `SECRET_KEY_BASE`, which can be generated for your local environment with `rake secret`.
 
 Access to the development credentials for Stripe and AWS can be obtained as needed by contacting
-Midnight Riders Web Chair [@bensaufley](https://github.com/bensaufley) at
-[webczar@midnightriders.com](mailto:webczar@midnightriders.com).
+Midnight Riders Web Committee Member [@bensaufley](https://github.com/bensaufley) at
+[member-portal-support@midnightriders.com](mailto:member-portal-support@midnightriders.com).
 
 ### Dependencies
 **`postgresql`** is used for the database. I've used [Postgres.app](https://postgresapp.com/documentation/install.html)
