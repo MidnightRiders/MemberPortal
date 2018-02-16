@@ -18,7 +18,7 @@
       = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
         = icon 'check-circle'
         Vote for 2018’s Scarf
-  -# = render 'board_nominations'
+  = render 'board_nominations'
 
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
