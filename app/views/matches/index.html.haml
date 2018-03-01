@@ -27,20 +27,10 @@
         %a.close-reveal-modal{ href: '#' } &times;
         %h2 Matches Admin
         .row
-          = form_tag import_matches_path, class: 'row collapse' do
-            .medium-4.columns
-              = label_tag :url, 'Import/Update Matches'
-            .medium-8.columns
-              .small-8.columns
-                = text_field_tag :url, 'http://ics.ecal.com/ecal-sub/587a65961406256574913027/Major%20League%20Soccer.ics'
-              .small-4.columns
-                = button_tag :submit, class: 'button secondary postfix', title: 'Import/Update Matches' do
-                  = icon 'cloud-download fa-fw'
-        .row
           .medium-8.columns.right
-            = link_to auto_update_matches_path, class: 'button small secondary expand' do
+            = link_to sync_matches_path, class: 'button small secondary expand' do
               = icon 'refresh fa-fw'
-              Automated Results Update
+              Sync Fixtures/Results
         .row
           .medium-8.columns.right
             = link_to new_match_path, class: 'button small expand' do

@@ -1,5 +1,4 @@
 require 'net/http'
-require 'match_score_retriever'
 
 # Controller for +Match+ model.
 class MatchesController < ApplicationController
@@ -28,27 +27,28 @@ class MatchesController < ApplicationController
     @mot_m_players = Player.includes(:mot_m_firsts, :mot_m_seconds, :mot_m_thirds).select { |x| x.mot_m_total(match_id: @match.id) && x.mot_m_total(match_id: @match.id) > 0 }.sort_by { |x| x.mot_m_total(match_id: @match.id) }.reverse if @match.teams.include? revs
   end
 
-  # TODO: Allow updated URLs and/or alternate sources
-
-  # Imports matches from MLS Calendar.
-  def import
-    calendar = retrieve_document(params[:url])
-    count = Match.import_ics(calendar).size
-    redirect_to matches_path, success: "#{count} Matches were saved or updated."
-  rescue => e
-    logger.error "Error during Match import: #{e.message}"
-    logger.info e.backtrace&.to_yaml
-    redirect_to matches_path, alert: e.message and return
-  end
-
-  # GET /matches/auto_update
-  def auto_update
-    successes = matches_to_update_by_week.map { |week, matches|
-      auto_update_week(week, matches)
-    }.flatten.count(true)
-    redirect_to matches_path, flash: {
-      success: "#{successes} of #{matches_to_update.size} #{'Match'.pluralize(matches_to_update.size)} were updated."
-    }
+  # GET /matches/sync
+  def sync
+    match_data = JSON.parse(
+      URI.parse('http://mls-data-gatherer.herokuapp.com/').read,
+      symbolize_names: true
+    )[:fixtures]
+    clubs = Club.all.map { |c| [c.abbrv, c] }.to_h
+    errors = []
+    match_data.each do |fixture|
+      match = Match.find_or_initialize_by(uid: fixture[:id]) do |m|
+        m.home_team = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]]
+        m.away_team = clubs[Match::API_CLUB_IDS[fixture[:AwayTeam][:id]]]
+        m.location = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]].name
+        m.kickoff = Time.zone.parse(fixture[:matchDate])
+      end
+      match.home_goals = fixture[:HomeScore]
+      match.away_goals = fixture[:AwayScore]
+      errors += match.errors.full_messages.map { |m| "#{fixture[:id]}: #{m}" } unless match.save
+    end
+    flash[:notice] = "#{match_data.length} matches synced"
+    flash[:error] = errors.join(', ') if errors.any?
+    redirect_to matches_path
   end
 
   # GET /matches/new

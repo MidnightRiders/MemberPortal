@@ -6,8 +6,7 @@ MidnightRiders::Application.routes.draw do
 
   resources :matches do
     collection do
-      post :import
-      get :auto_update
+      get :sync
     end
     resources :mot_ms, path: 'motm', except: %i(index show)
     resources :rev_guesses, path: 'revguess', except: %i(index show destroy)
