@@ -1,4 +1,4 @@
-![CircleCI](https://circleci.com/gh/MidnightRiders/MemberPortal.svg?style=shield)
+[![CircleCI](https://circleci.com/gh/MidnightRiders/MemberPortal.svg?style=shield)](https://circleci.com/gh/MidnightRiders/MemberPortal)
 [![Code Climate](https://codeclimate.com/github/MidnightRiders/MemberPortal/badges/gpa.svg)](https://codeclimate.com/github/MidnightRiders/MemberPortal)
 [![Test Coverage](https://codeclimate.com/github/MidnightRiders/MemberPortal/badges/coverage.svg)](https://codeclimate.com/github/MidnightRiders/MemberPortal/coverage)
 
