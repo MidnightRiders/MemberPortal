@@ -35,18 +35,22 @@ class MatchesController < ApplicationController
     )[:fixtures]
     clubs = Club.all.map { |c| [c.abbrv, c] }.to_h
     errors = []
+    changed = 0
+    added = 0
     match_data.each do |fixture|
       match = Match.find_or_initialize_by(uid: fixture[:id]) do |m|
         m.home_team = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]]
         m.away_team = clubs[Match::API_CLUB_IDS[fixture[:AwayTeam][:id]]]
         m.location = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]].name
-        m.kickoff = Time.zone.parse(fixture[:matchDate])
       end
+      match.kickoff = Time.zone.parse(fixture[:matchDate])
       match.home_goals = fixture[:HomeScore]
       match.away_goals = fixture[:AwayScore]
+      added += 1 if match.new_record?
+      changed += 1 if !match.new_record? && match.changed?
       errors += match.errors.full_messages.map { |m| "#{fixture[:id]}: #{m}" } unless match.save
     end
-    flash[:notice] = "#{match_data.length} matches synced"
+    flash[:notice] = "#{match_data.length} matches synced: #{added} added, #{changed} changed."
     flash[:error] = errors.join(', ') if errors.any?
     redirect_to matches_path
   end
