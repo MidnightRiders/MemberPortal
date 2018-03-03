@@ -44,8 +44,10 @@ class MatchesController < ApplicationController
         m.location = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]].name
       end
       match.kickoff = Time.zone.parse(fixture[:matchDate])
-      match.home_goals = fixture[:HomeScore]
-      match.away_goals = fixture[:AwayScore]
+      if fixture[:Finished]
+        match.home_goals = fixture[:homeScore]
+        match.away_goals = fixture[:awayScore]
+      end
       added += 1 if match.new_record?
       changed += 1 if !match.new_record? && match.changed?
       errors += match.errors.full_messages.map { |m| "#{fixture[:id]}: #{m}" } unless match.save
