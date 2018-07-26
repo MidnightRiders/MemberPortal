@@ -29,17 +29,13 @@ class BlogRss
   end
 
   def self.request_rss_items
-    uri = URI.parse(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = uri.scheme == 'https'
-    begin
-      rss = http.get(uri.request_uri)
-      rss_parsed = Hash.from_xml(rss)
-      rss_parsed.dig('rss', 'channel', 'item')
-    rescue => e
-      Rails.logger.error 'Blog error for ' + url
-      Rails.logger.error e
-      Rails.logger.info 'RSS: ' + rss
-    end
+    uri = URI(url)
+    rss = Net::HTTP.get(uri)
+    rss_parsed = Hash.from_xml(rss)
+    rss_parsed.dig('rss', 'channel', 'item')
+  rescue => e
+    Rails.logger.error 'Blog error for ' + url
+    Rails.logger.error e
+    Rails.logger.info 'RSS: ' + rss
   end
 end
