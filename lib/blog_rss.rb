@@ -29,9 +29,11 @@ class BlogRss
   end
 
   def self.request_rss_items
-    uri = URI(url)
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = uri.scheme == 'https'
     begin
-      rss = Net::HTTP.get(uri)
+      rss = http.get(uri.request_uri)
       rss_parsed = Hash.from_xml(rss)
       rss_parsed.dig('rss', 'channel', 'item')
     rescue => e
