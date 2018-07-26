@@ -1,7 +1,7 @@
 %section
   %h3
     From the
-    = link_to 'blog', 'http://www.midnightriders.com', target: 'RidersSite'
+    = link_to 'blog', 'https://www.midnightriders.com', target: 'RidersSite'
   - articles.each do |article|
     %article
       %h4= link_to article['title'].html_safe, article['link'], target: 'RidersSite'

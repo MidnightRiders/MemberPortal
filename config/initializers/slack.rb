@@ -7,7 +7,7 @@ class SlackBot
       channel: channel,
       text: text,
       username: 'Portalbot',
-      icon_url: 'http://www.midnightriders.com/images/logo-128.png')
+      icon_url: 'https://www.midnightriders.com/images/logo-128.png')
     response = JSON.parse(response.body)
     raise("Unable to post \"#{text}\" to #{channel}: #{response}") unless response['ok']
   rescue => e

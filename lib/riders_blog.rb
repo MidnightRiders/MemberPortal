@@ -3,6 +3,6 @@ class RidersBlog < BlogRss
 
   # Hard-coded URL.
   def self.url
-    'http://www.midnightriders.com/feed/'
+    'https://www.midnightriders.com/feed/'
   end
 end
