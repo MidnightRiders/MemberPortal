@@ -17,17 +17,17 @@ jobs:
           POSTGRES_PASSWORD: ""
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - mr-member-portal-bundle-v2-{{ checksum "Gemfile.lock" }}
-            - mr-member-portal-bundle-v2-
+      # - restore_cache:
+      #     keys:
+      #       - mr-member-portal-bundle-v2-{{ checksum "Gemfile.lock" }}
+      #       - mr-member-portal-bundle-v2-
       - run:
           name: Bundle Install
           command: bundle check || bundle install
-      - save_cache:
-          key: mr-member-portal-bundle-v2-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
+      # - save_cache:
+      #     key: mr-member-portal-bundle-v2-{{ checksum "Gemfile.lock" }}
+      #     paths:
+      #       - vendor/bundle
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
