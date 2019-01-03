@@ -1,0 +1,39 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/MemberPortal
+    docker:
+      - image: circleci/ruby:2.3.7
+        environment:
+          RAILS_ENV: test
+          BUNDLE_PATH: vendor/bundle
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - mr-member-portal-bundle-v2-{{ checksum "Gemfile.lock" }}
+            - mr-member-portal-bundle-v2-
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install
+      - save_cache:
+          key: mr-member-portal-bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - run:
+          name: Migrate
+          command: bundle exec rails db:create db:schema:load db:migrate
+      - run:
+          name: Run Tests
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      - store_test_results:
+          path: test_results
+      - run:
+          name: Report Coverage to CodeClimate
+          command: bundle exec codeclimate-test-reporter "$CIRCLE_ARTIFACTS/coverage/.resultset.json"
+
