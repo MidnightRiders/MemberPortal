@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/MemberPortal
     docker:
-      - image: circleci/ruby:2.3.7-node-browsers
+      - image: circleci/ruby:2.6.0-node-browsers
         environment:
           BUNDLE_PATH: vendor/bundle
           LD_LIBRARY_PATH: /usr/local/lib64/
