@@ -36,11 +36,10 @@ jobs:
           command: bundle exec rake db:create db:schema:load db:migrate
       - run:
           name: Run Tests
-          command: bundle exec rspec --profile 10 \
+          command: bundle exec rspec spec/**/*_spec.rb --profile 10 \
                               --format RspecJunitFormatter \
                               --out test_results/rspec.xml \
-                              --format progress \
-                              spec/**/*_spec.rb
+                              --format progress
       - store_test_results:
           path: test_results
       - run:
