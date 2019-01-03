@@ -1,6 +1,6 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :membership do
-    user { FactoryGirl.build(:user) }
+    user { FactoryBot.build(:user) }
     year { Date.current.year }
     info { { override: User.find_by(username: 'admin').id } }
     type :Individual
@@ -11,7 +11,7 @@ FactoryGirl.define do
 
     trait :relative do
       type :Relative
-      family_id { FactoryGirl.create(:membership, :family).id }
+      family_id { FactoryBot.create(:membership, :family).id }
     end
   end
 end

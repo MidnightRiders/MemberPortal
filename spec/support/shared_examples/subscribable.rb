@@ -4,7 +4,7 @@ shared_examples_for 'Commerce::Subscribable' do
   it 'validates unique Stripe subscription' do
     product.update_attribute(:stripe_subscription_id, StripeHelper.subscription_id)
     new_product = product.dup
-    new_product.user_id = FactoryGirl.create(:user).id
+    new_product.user_id = FactoryBot.create(:user).id
 
     expect(new_product).not_to be_valid
     expect(new_product.errors.messages.keys).to include(:stripe_subscription_id)

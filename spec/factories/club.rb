@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :club do
     name { FFaker::Address.city + ' FC' }
     abbrv { name.gsub(/\W/, '').upcase[0, [2, 3].sample] }
