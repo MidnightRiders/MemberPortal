@@ -22,7 +22,7 @@ jobs:
             - vendor/bundle
       - run:
           name: Migrate
-          command: bundle exec rails db:create db:schema:load db:migrate
+          command: bundle exec rake db:create db:schema:load db:migrate
       - run:
           name: Run Tests
           command: |
