@@ -1,5 +1,18 @@
 :ruby
-  scarves = ["http://midnightriders.com/ext-img/2017scarves/01-HbuFRxh.png","http://midnightriders.com/ext-img/2017scarves/02-bHA8pWu.png","http://midnightriders.com/ext-img/2017scarves/03-7umJJDr.png","http://midnightriders.com/ext-img/2017scarves/04-KLOrdmr.png","http://midnightriders.com/ext-img/2017scarves/05-EcKaHXh.png","http://midnightriders.com/ext-img/2017scarves/06-V6pxaZC.png","http://midnightriders.com/ext-img/2017scarves/07-ianyENX.png","http://midnightriders.com/ext-img/2017scarves/08-XVUr1PQ.png","http://midnightriders.com/ext-img/2017scarves/09-z91rvyP.png","http://midnightriders.com/ext-img/2017scarves/10-p7pAbLW.png","http://midnightriders.com/ext-img/2017scarves/11-U1boiwH.png","http://midnightriders.com/ext-img/2017scarves/12-E70PZpD.png","http://midnightriders.com/ext-img/2017scarves/13-Z7Auvim.png"]
+  scarves = %w[
+    https://www.midnightriders.com/ext-img/2019scarves/scarf1.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf2.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf3.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf4.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf5.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf6.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf7.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf8.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf9.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf10.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf11.png
+    https://www.midnightriders.com/ext-img/2019scarves/scarf12.png
+  ]
 %script{ src: '//cdn.jotfor.ms/static/prototype.forms.js', type: 'text/javascript' }
 %script{ src: '//cdn.jotfor.ms/static/jotform.forms.js?3.3.3697', type: 'text/javascript' }
 %script{ src: '//js.jotform.com/vendor/postMessage.js?3.3.3697', type: 'text/javascript' }
@@ -10,15 +23,15 @@
     JotForm.clearFieldOnHide = 'disable';
     JotForm.submitError = 'jumpToFirstError';
   });
-  JotForm.prepareCalculationsOnTheFly([null, { 'name': '2018Scarf', 'qid': '1', 'text': '2018 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
+  JotForm.prepareCalculationsOnTheFly([null, { 'name': '2019Scarf', 'qid': '1', 'text': '2019 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
   setTimeout(function () {
-    JotForm.paymentExtrasOnTheFly([null, { 'name': '2018Scarf', 'qid': '1', 'text': '2018 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
+    JotForm.paymentExtrasOnTheFly([null, { 'name': '2019Scarf', 'qid': '1', 'text': '2019 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
   }, 20);
 #scarf-vote-modal.reveal-modal.medium{ data: { reveal: true } }
   .close-reveal-modal &#215;
   #scarf-vote{ style: 'max-height: 100%; overflow-y: auto;' }
-    %form#73627010053142.jotform-form{ 'accept-charset': 'utf-8', action: '//submit.jotform.us/submit/73627010053142/', method: 'post', name: 'form_73627010053142', target: :_blank }
-      %input{ name: 'formID', type: 'hidden', value: '73627010053142' }
+    %form#90018049869162.jotform-form{ 'accept-charset': 'utf-8', action: '//submit.jotform.us/submit/90018049869162/', method: 'post', name: 'form_90018049869162', target: :_blank }
+      %input{ name: 'formID', type: 'hidden', value: '90018049869162' }
       .form-all
         %ul.form-section.page-section
           %li#id_5.form-line.jf-required{'data-type': 'control_checkbox'}
@@ -30,7 +43,7 @@
                     %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_5_#{i}", data: { maxselection: '3', minselection: '3' }, name: 'q5_typeA[]', type: 'checkbox', value: "Scarf ##{i + 1}" }
                     %label{ for: "input_5_#{i}", id: "label_input_5_#{i}" }
                       Scarf ##{i + 1}
-                      %img{ alt: "Midnight Riders 2018 Scarf Contest Scarf ##{i + 1}", src: img, width: 600 }
+                      %img{ alt: "Midnight Riders 2019 Scarf Contest Scarf ##{i + 1}", src: img, width: 600 }
           = hidden_field_tag 'q5_typeA'
           = hidden_field_tag 'q4_email', current_user.email
           %li#id_2.form-line{ data: { type: 'control_button' } }
@@ -53,8 +66,8 @@
           hiddenField.value = picks.join('\n');
         };
         for (var i = scarves.length; i--;) { scarves[i].addEventListener('change', pickComposer); }
-        document.getElementById('73627010053142').addEventListener('submit', pickComposer);
-      %input#simple_spc{ name: 'simple_spc', type: 'hidden', value: '73627010053142' }
+        document.getElementById('90018049869162').addEventListener('submit', pickComposer);
+      %input#simple_spc{ name: 'simple_spc', type: 'hidden', value: '90018049869162' }
       :javascript
-        document.getElementById('si' + 'mple' + '_spc').value = '73627010053142-73627010053142';
+        document.getElementById('si' + 'mple' + '_spc').value = '90018049869162-90018049869162';
       %script{ src: '//cdn.jotfor.ms/js/widgetResizer.js?REV=3.3.3697', type: 'text/javascript' }
