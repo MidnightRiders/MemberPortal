@@ -8,8 +8,8 @@ FactoryBot.define do
     conference { %w(east west).sample }
 
     trait :ne do
-      abbrv 'NE'
-      name 'New England Revolution'
+      abbrv { 'NE' }
+      name { 'New England Revolution' }
     end
   end
 end

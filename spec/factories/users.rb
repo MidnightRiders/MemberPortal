@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
     transient do
-      with_membership true
+      with_membership { true }
     end
 
     first_name { FFaker::Name.first_name }
@@ -18,7 +18,7 @@ FactoryBot.define do
     password { FFaker::Lorem.characters(Random.rand * 12 + 8) }
 
     trait :without_membership do
-      with_membership false
+      with_membership { false }
     end
 
     after :create do |u, evaluator|

@@ -1,2 +1,5 @@
 --color
 --format documentation
+--profile 10
+--format RspecJunitFormatter
+--out test_results/rspec.xml

@@ -3,14 +3,14 @@ FactoryBot.define do
     user { FactoryBot.build(:user) }
     year { Date.current.year }
     info { { override: User.find_by(username: 'admin').id } }
-    type :Individual
+    type { :Individual }
 
     trait :family do
-      type :Family
+      type { :Family }
     end
 
     trait :relative do
-      type :Relative
+      type { :Relative }
       family_id { FactoryBot.create(:membership, :family).id }
     end
   end
