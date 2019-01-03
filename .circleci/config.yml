@@ -6,6 +6,7 @@ jobs:
       - image: circleci/ruby:2.3.7-jessie-node
         environment:
           BUNDLE_PATH: vendor/bundle
+          LD_LIBRARY_PATH: /usr/local/lib64/
           RAILS_ENV: test
           PGHOST: 127.0.0.1
           PGUSER: root
@@ -27,7 +28,6 @@ jobs:
           key: mr-member-portal-bundle-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-            - /usr/lib
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
