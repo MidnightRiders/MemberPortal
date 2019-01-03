@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/MemberPortal
     docker:
-      - image: circleci/ruby:2.3.7
+      - image: circleci/ruby:2.3.7-jessie-node
         environment:
           RAILS_ENV: test
           BUNDLE_PATH: vendor/bundle
