@@ -50,8 +50,8 @@ FactoryBot.define do
         u.current_membership.update_attribute(:privileges, u.current_membership.privileges + ['at_large_board'])
       end
     end
-    trait :no_membership do |u|
-      u.memberships = []
+    trait :no_membership do
+      memberships { [] }
     end
   end
 end

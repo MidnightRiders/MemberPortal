@@ -36,6 +36,8 @@ Capybara.register_server :thin do |app, port|
   Rack::Handler::Thin.run(app, Port: port)
 end
 
+Capybara.server = :thin
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
