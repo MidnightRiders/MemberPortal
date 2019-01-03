@@ -7,7 +7,7 @@ gem 'rails', '~> 4.2.11'
 # Use postgresql as the database for Active Record
 gem 'hstore_accessor'
 gem 'order_query'
-gem 'pg'
+gem 'pg', '~>0.21'
 
 gem 'autoprefixer-rails'
 gem 'coffee-rails'
