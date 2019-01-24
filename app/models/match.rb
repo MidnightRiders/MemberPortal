@@ -8,6 +8,7 @@ class Match < ActiveRecord::Base
     '8314' => 'COL',
     '6399' => 'DAL',
     '6602' => 'DC',
+    '722265' => 'FCC',
     '8259' => 'HOU',
     '6637' => 'LA',
     '867280' => 'LAFC',
