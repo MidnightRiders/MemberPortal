@@ -44,7 +44,7 @@ class MatchesController < ApplicationController
         m.location = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]].name
       end
       match.kickoff = Time.zone.parse(fixture[:matchDate])
-      if fixture[:statusOfMatch] == 'Finished'
+      if fixture[:status] == '6'
         match.home_goals = fixture[:homeScore]
         match.away_goals = fixture[:awayScore]
       end
