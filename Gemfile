@@ -73,6 +73,7 @@ group :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'poltergeist'
+  gem 'rspec_junit_formatter'
   gem 'timecop'
   gem 'vcr', '~>3.0'
   gem 'webmock', '~>2.3'
