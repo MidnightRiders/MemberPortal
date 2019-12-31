@@ -34,7 +34,7 @@ gem 'nokogiri', '~> 1.8.1'
 
 # Users/auth
 gem 'cancancan', '~>1.10.1'
-gem 'devise', '~>4.6.0'
+gem 'devise', '~>4.7.1'
 gem 'paper_trail'
 
 gem 'fuzzy_match', '~> 2.1'
