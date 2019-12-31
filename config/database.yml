@@ -46,9 +46,9 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: MLS_Pick_Em_test
+  database: mr_member_portal_test
   pool: 5
-  username: root
+  username: mr-member-portal-test-user
   password:
 
 production:
