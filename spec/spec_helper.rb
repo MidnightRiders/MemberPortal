@@ -18,7 +18,7 @@ require 'rspec/rails'
 require 'ffaker'
 require 'capybara/rspec'
 require 'capybara/rails'
-require 'capybara/poltergeist'
+# require 'capybara/poltergeist'
 require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
@@ -28,7 +28,7 @@ Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
-Capybara.javascript_driver = :poltergeist
+# Capybara.javascript_driver = :poltergeist
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
 Capybara.register_server :thin do |app, port|
