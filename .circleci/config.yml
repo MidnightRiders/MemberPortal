@@ -44,17 +44,17 @@ jobs:
       - run:
           name: Run rspec in parallel
           command: |
-            mkdir -p test-results/rspec test-artifacts
+            mkdir -p test-results test-artifacts
             ./cc-test-reporter before-build
             bundle exec rspec --profile 10 \
                               --color \
                               --order random \
                               --format RspecJunitFormatter \
-                              --out test-results/rspec/rspec.xml \
+                              --out test-results/rspec.xml \
                               --format progress \
                               -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
-          path: test_results
+          path: test-results
       - store_artifacts:
           path: test-artifacts
 

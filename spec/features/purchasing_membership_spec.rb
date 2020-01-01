@@ -28,7 +28,7 @@ describe 'Purchasing Membership', :js, type: :feature do
 
     it 'rejects an expired card with message' do
       last_year = Date.current.year - 1
-      page.evaluate_script("jQuery('#stripe_exp_year').append('<option value=#{last_year}>#{last_year}</option>');")
+      page.execute_script("jQuery('#stripe_exp_year').append('<option value=#{last_year}>#{last_year}</option>');")
 
       fill_in 'stripe_card_number', with: '4242424242424242'
       select '1', from: 'stripe_exp_month'
