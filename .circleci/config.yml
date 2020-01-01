@@ -1,10 +1,11 @@
 version: 2.0
 jobs:
   build:
+    parallelism: 3
     docker:
       - image: circleci/ruby:2.3.7-jessie-node-browsers
         environment:
-          COVERAGE: 'true'
+          COVERAGE: true
           BUNDLE_PATH: vendor/bundle
           PGHOST: 127.0.0.1
           PGUSER: mr-member-portal-test-user
@@ -51,6 +52,7 @@ jobs:
                               --format RspecJunitFormatter \
                               --out test-results/rspec.xml \
                               --format progress \
+                              -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test-results
       - store_artifacts:
