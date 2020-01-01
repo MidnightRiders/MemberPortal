@@ -1,7 +1,10 @@
 :ruby
   should_show_scarf_vote = current_user.current_member? &&
     (
-      Time.current < Time.zone.local(2020, 1, 7, 17) ||
+      (
+        Time.current >= Time.zone.local(2020, 1, 1, 0) &&
+        Time.current < Time.zone.local(2020, 1, 7, 17)
+       ) ||
       (current_user.privilege?('admin') && params[:show_jotform].present?)
     )
 
