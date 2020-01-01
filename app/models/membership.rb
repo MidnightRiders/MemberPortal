@@ -28,7 +28,7 @@ class Membership < ActiveRecord::Base
 
   validates :year, presence: true,
     inclusion: {
-      in: (Date.current.year..Date.current.year + 1)
+      in: ->(_) { (Date.current.year..Date.current.year + 1) }
     },
     uniqueness: {
       scope: [:user_id], conditions: -> { where(refunded: nil) }
