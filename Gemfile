@@ -72,7 +72,6 @@ group :test do
   gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'launchy'
-  # gem 'poltergeist'
   gem 'rspec_junit_formatter'
   gem 'selenium-webdriver'
   gem 'timecop'
