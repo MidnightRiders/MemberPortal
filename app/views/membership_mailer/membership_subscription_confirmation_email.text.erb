@@ -2,6 +2,15 @@
 
 Congratulations! You're officially a <%=@membership.year%> <%=@membership.type%> member.
 
+-----------------------------------------------------------
+PAYMENT CONFIRMATION
+
+We've received confirmation of your yearly payment of <%=number_to_currency(@membership.cost)%>.
+Please keep this email for your financial records.
+
+Charge ID: <%=@membership.stripe_charge_id%>
+-----------------------------------------------------------
+
 Membership Packs may be picked up at the Annual General Meeting. Unclaimed
 packs will be mailed USPS to the addresses listed in the Midnight Riders
 Member Portal. Please make sure that your address is current. We will do
@@ -25,14 +34,5 @@ https://www.midnightriders.com/Midnight%20Riders%20Constitution%20and%20Bylaws.p
 <%- end %>
 
 See you in the parking lots!
-
------------------------------------------------------------
-PAYMENT CONFIRMATION
-
-We've received your payment of <%=number_to_currency(@membership.cost)%>.
-Please keep this email for your financial records.
-
-Charge ID: <%=@membership.stripe_charge_id%>
------------------------------------------------------------
 
 The Midnight Riders
