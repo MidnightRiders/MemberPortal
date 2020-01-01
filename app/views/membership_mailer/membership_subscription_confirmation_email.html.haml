@@ -1,10 +1,6 @@
 %p
   #{@user.first_name},
 %p Congratulations! You're officially a #{@membership.year} #{@membership.type} member.
-%p We've received confirmation of your yearly payment of #{number_to_currency(@membership.cost.to_i)}.
-%p Please keep this email for your records.
-%center
-  %code Charge ID: #{@membership.stripe_charge_id}
 %p
   Membership Packs may be picked up at the Annual General Meeting. Unclaimed
   packs will be mailed USPS to the addresses listed in the Midnight Riders
@@ -28,4 +24,13 @@
     = link_to 'by-laws', 'https://www.midnightriders.com/Midnight%20Riders%20Constitution%20and%20Bylaws.pdf'
     for further information.
 %p See you in the parking lots!
+%hr{ style: 'border:dashed #6a0003;border-width:1px 0 0;' }
+%h4{ align: 'center', style: 'text-transform: uppercase;' } Payment Confirmation
+%p
+  We've received your payment of
+  %strong #{number_to_currency(@membership.cost)}.
+%p Please keep this email for your financial records.
+%center
+  %code Charge ID: #{@membership.stripe_charge_id}
+%hr{ style: 'border:dashed #6a0003;border-width:1px 0 0;' }
 %p The Midnight Riders

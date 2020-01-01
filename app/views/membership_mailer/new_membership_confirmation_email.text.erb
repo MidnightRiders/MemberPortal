@@ -1,17 +1,34 @@
 <%=@user.first_name%>,
 
-Congratulations! You're an official <%=@membership.type%> Midnight Rider for the <%=@membership.year%> Season.
+Congratulations! You're officially a <%=@membership.year%> <%=@membership.type%> member.
 
-Now that you're an official Midnight Rider, be on the lookout for a few things:
+Membership Packs can be picked up in person or are shipped USPS to the address
+listed in your Midnight Riders Member Portal account. Packs include your Parking
+Pass<%= 'es' if @membership.is_a?(Family)%> required to park in our dedicated supporters lot. Materials for
+memberships purchased within three days of a Home Game are held for pickup in
+the parking lot.
 
-1. An invite (via email) to our official <%=@membership.year%>
-   Midnight Riders Facebook group and our Open Disucssion Facebook group. We utilize these groups to post various updates and alerts regarding games, away matches, watch parties, and philanthropy events. The Open Discussion Group is where Riders may discuss all things Revs, Riders, or MLS related. Accept your invite and join in on the discussion.
-2. Your Membership Packet will arrive in the mail and includes your Parking Pass<%= 'es' if @membership.is_a?(Family)%>, a Membership Card, and a wicked awesome sticker. You'll need your parking pass to park in our dedicated supporters lot. If you've signed up a couple days before a home game that you plan on attending, shoot an email to membership@midnightriders.com as your pack might not arrive on time.
+Email membership@midnightriders.com if you have any questions or plan to pickup
+the materials in person.
 
-If you've got any further questions check out our New Member FAQ - it's got some really useful information:
+Active members receive exclusive access to our dedicated Facebook Group
+(https://www.facebook.com/groups/2020Riders). Visit the page and press the
+blue "+ Join Group" button. All Member Requests and Posts are screened by
+the Exec. Board. Don't be discouraged if this might take some time.
+
+<%- if @user.privilege? 'family' %>
+You are registered as having a Family Membership. Sub-accounts may be created
+for qualified family members by clicking the "Actions" button on your main
+Member Portal page. Qualified Family Members are immediate family members
+residing in the same household. Please see our by-laws for further information:
+
+https://www.midnightriders.com/Midnight%20Riders%20Constitution%20and%20Bylaws.pdf
+<%- end %>
+
+Please visit our New Member FAQ:
 https://www.midnightriders.com/about-us/membership/new-member-faq/
 
-That's it, welcome aboard, and see you in the Parking Lots!
+Welcome aboard and see you in the Parking Lots!
 
 -----------------------------------------------------------
 PAYMENT CONFIRMATION
