@@ -12,8 +12,6 @@ class StripeWebhookService
     public_send(@event[:type].gsub(/[^a-z0-9]+/i, '_'))
     @response
   rescue => e
-    puts "error in process:"
-    puts e.inspect
     Rails.logger.error e.message
     Rails.logger.info e.backtrace&.join("\n")
     @response
@@ -30,12 +28,9 @@ class StripeWebhookService
   end
 
   def invoice_payment_succeeded
-    puts "================= invoice_payment_succeeded"
     renew_subscription
     @response[:status] = 200
   rescue ActiveRecord::RecordInvalid => e
-    puts "error in invoice_payment_succeeded:"
-    puts e.inspect
     if e.record.errors.messages.keys.include? :year
       Rails.logger.info "Skipping duplicate Membership for #{object[:subscription]}"
       return @response[:status] = 200
