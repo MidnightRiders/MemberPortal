@@ -1,17 +1,14 @@
 :ruby
   scarves = %w[
-    https://www.midnightriders.com/ext-img/2019scarves/scarf1.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf2.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf3.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf4.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf5.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf6.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf7.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf8.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf9.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf10.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf11.png
-    https://www.midnightriders.com/ext-img/2019scarves/scarf12.png
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-1.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-2.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-3.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-4.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-5.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-6.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-7.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-8.jpg
+    https://www.midnightriders.com/ext-img/2020scarves/scarf-9.png
   ]
 %script{ src: '//cdn.jotfor.ms/static/prototype.forms.js', type: 'text/javascript' }
 %script{ src: '//cdn.jotfor.ms/static/jotform.forms.js?3.3.3697', type: 'text/javascript' }
@@ -23,15 +20,15 @@
     JotForm.clearFieldOnHide = 'disable';
     JotForm.submitError = 'jumpToFirstError';
   });
-  JotForm.prepareCalculationsOnTheFly([null, { 'name': '2019Scarf', 'qid': '1', 'text': '2019 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
+  JotForm.prepareCalculationsOnTheFly([null, { 'name': '2020Scarf', 'qid': '1', 'text': '2020 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
   setTimeout(function () {
-    JotForm.paymentExtrasOnTheFly([null, { 'name': '2019Scarf', 'qid': '1', 'text': '2019 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
+    JotForm.paymentExtrasOnTheFly([null, { 'name': '2020Scarf', 'qid': '1', 'text': '2020 Scarf Vote', 'type': 'control_head' }, { 'name': 'submit2', 'qid': '2', 'text': 'Submit', 'type': 'control_button' }, null, { 'name': 'email', 'qid': '4', 'text': 'Email', 'type': 'control_email' }, { 'name': 'typeA', 'qid': '5', 'text': '', 'type': 'control_widget' }]);
   }, 20);
 #scarf-vote-modal.reveal-modal.medium{ data: { reveal: true } }
   .close-reveal-modal &#215;
   #scarf-vote{ style: 'max-height: 100%; overflow-y: auto;' }
-    %form#90018049869162.jotform-form{ 'accept-charset': 'utf-8', action: '//submit.jotform.us/submit/90018049869162/', method: 'post', name: 'form_90018049869162', target: :_blank }
-      %input{ name: 'formID', type: 'hidden', value: '90018049869162' }
+    %form#193648025883165.jotform-form{ 'accept-charset': 'utf-8', action: '//submit.jotform.us/submit/193648025883165/', method: 'post', name: 'form_193648025883165', target: :_blank }
+      %input{ name: 'formID', type: 'hidden', value: '193648025883165' }
       .form-all
         %ul.form-section.page-section
           %li#id_5.form-line.jf-required{'data-type': 'control_checkbox'}
@@ -40,10 +37,10 @@
               .form-single-column{'data-component': 'checkbox'}
                 - scarves.each_with_index do |img, i|
                   .scarf.form-radio-item
-                    %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_5_#{i}", data: { maxselection: '3', minselection: '3' }, name: 'q5_typeA[]', type: 'checkbox', value: "Scarf ##{i + 1}" }
+                    %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_5_#{i}", data: { maxselection: '3', minselection: '1' }, name: 'q5_typeA[]', type: 'checkbox', value: "Scarf ##{i + 1}" }
                     %label{ for: "input_5_#{i}", id: "label_input_5_#{i}" }
                       Scarf ##{i + 1}
-                      %img{ alt: "Midnight Riders 2019 Scarf Contest Scarf ##{i + 1}", src: img, width: 600 }
+                      %img{ alt: "Midnight Riders 2020 Scarf Contest Scarf ##{i + 1}", src: img, width: 600 }
           = hidden_field_tag 'q5_typeA'
           = hidden_field_tag 'q4_email', current_user.email
           %li#id_2.form-line{ data: { type: 'control_button' } }
@@ -66,8 +63,8 @@
           hiddenField.value = picks.join('\n');
         };
         for (var i = scarves.length; i--;) { scarves[i].addEventListener('change', pickComposer); }
-        document.getElementById('90018049869162').addEventListener('submit', pickComposer);
-      %input#simple_spc{ name: 'simple_spc', type: 'hidden', value: '90018049869162' }
+        document.getElementById('193648025883165').addEventListener('submit', pickComposer);
+      %input#simple_spc{ name: 'simple_spc', type: 'hidden', value: '193648025883165' }
       :javascript
-        document.getElementById('si' + 'mple' + '_spc').value = '90018049869162-90018049869162';
+        document.getElementById('si' + 'mple' + '_spc').value = '193648025883165-193648025883165';
       %script{ src: '//cdn.jotfor.ms/js/widgetResizer.js?REV=3.3.3697', type: 'text/javascript' }

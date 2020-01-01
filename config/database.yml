@@ -17,10 +17,10 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: MLS_Pick_Em_development
+  database: mr_member_portal_development
   pool: 5
-  username: root
-  password:
+  username: postgres
+  password: postgres
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
