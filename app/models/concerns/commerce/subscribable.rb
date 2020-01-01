@@ -44,10 +44,13 @@ module Commerce
       end
 
       def re_up!(subscription, query_attributes = {}, update_attributes = {})
+        puts "re-upping…"
         last_order = for_subscription(subscription, query_attributes)
         new_order = last_order.dup
         new_order.id = nil
         new_order.assign_attributes(update_attributes) if update_attributes.present?
+        puts "about to save…"
+        puts new_order.inspect
         new_order.save!
         new_order
       end
