@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dev.dockerfile
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+    depends_on:
+      - db
+      - start_db
+    environment:
+      APP_ENV: "${APP_ENV:-development}"
+      DATABASE_URL: "postgresql://postgres:postgres@db:5432/mr_member_portal_${DBENV:-development}"
+      RAILS_ENV: "${RAILS_ENV:-development}"
+      PORT: 3000
+    ports:
+      - "5991:3000"
+    volumes:
+      - .:/usr/src/member-portal
+  db:
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: "mr_member_portal_${DBENV:-dev}"
+    image: postgres:11.5-alpine
+    ports:
+      - "5152:5432"
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  start_db:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - db
+    environment:
+      TIMEOUT_LENGTH: 30
+    command: db:5432
+volumes:
+  pgdata:
