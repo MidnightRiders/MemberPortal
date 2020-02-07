@@ -10,7 +10,7 @@ require 'csv'
 
 print 'Seeding clubs…'
 CSV.foreach(Rails.root.join('lib/assets/clubs.csv'), headers: true, header_converters: :symbol) do |club|
-  Club.unscoped.find_or_initialize_by(abbrv: club[:abbrv]).update_attributes(club.to_h)
+  Club.unscoped.find_or_initialize_by(abbrv: club[:abbrv]).update_attributes!(club.to_h)
 end
 puts ' done.'
 

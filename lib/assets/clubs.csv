@@ -1,28 +1,28 @@
 name,conference,abbrv,primary_color,secondary_color,accent_color,api_id
-Atlanta United FC,east,ATL,1255755,8388619,2301728,773958
-Chicago Fire,east,CHI,12192815,16777215,466249,6397
-Chivas USA,west,CHV,10297909,16777215,16762668,0
-Colorado Rapids,west,COL,8791603,16777215,9156840,8314
-Columbus Crew,east,CLB,14330368,0,16777215,6001
-DC United,east,DC,0,13372416,16777215,6602
-FC Cincinnati,east,FCC,15618859,2308735,16777215,722265
-FC Dallas,west,DAL,12520766,16777215,8283,6399
-Houston Dynamo,west,HOU,15036928,16777215,9156840,8259
-Inter Miami CF,east,MIA,14791364,1709848,16777215,960720
-LAFC,west,LAFC,0,12820077,16777215,867280
-Los Angeles Galaxy,west,LA,1255755,16777215,15378944,6637
-Minnesota United FC,west,MIN,1255755,10210788,2301728,207242
-Montréal Impact,east,MTL,12423,0,8161166,161195
-NYC FC,east,NYC,6991078,16777215,16273410,546238
-Nashville SC,west,NSC,15591517,1511746,15591517,915807
-New England Revolution,east,NE,795456,13111342,16777215,6580
-New York Red Bulls,east,NY,12910654,9556,16762668,6514
-Orlando City SC,east,ORL,6171034,16310678,16777215,267810
-Philadelphia Union,east,PHI,269356,8745293,4296670,191716
-Portland Timbers,west,POR,2904628,14802944,16777215,307690
-Real Salt Lake,west,RSL,7778,10297909,14330368,6606
-San Jose Earthquakes,west,SJ,2959654,29390,11711666,6603
-Seattle Sounders,west,SEA,6655259,2318738,1910061,130394
-Sporting Kansas City,west,SKC,10992854,795456,16777215,6604
-Toronto FC,east,TOR,13111342,3358536,10660525,56453
-Vancouver Whitecaps,west,VAN,1255755,9156840,16777215,307691
+Atlanta United FC,east,ATL,13294b,80000b,231f20,773958
+Chicago Fire,east,CHI,b22435,f5b940,07154a,6397
+Chivas USA,west,CHV,9d2235,ffffff,ffc72c,0
+Colorado Rapids,west,COL,862633,ffffff,8bb8e8,8314
+Columbus Crew,east,CLB,daaa00,000000,ffffff,6001
+DC United,east,DC,000000,cc0c00,ffffff,6602
+FC Cincinnati,east,FCC,ee532b,233a7f,ffffff,722265
+FC Dallas,west,DAL,bf0d3e,ffffff,00205b,6399
+Houston Dynamo,west,HOU,e57200,ffffff,8bb8e8,8259
+Inter Miami CF,east,MIA,e1b2c4,1a1718,ffffff,960720
+LAFC,west,LAFC,000000,c39e6d,ffffff,867280
+Los Angeles Galaxy,west,LA,13294b,ffffff,eaaa00,6637
+Minnesota United FC,west,MIN,13294b,9bcde4,231f20,207242
+Montréal Impact,east,MTL,003087,000000,7c878e,161195
+Nashville SC,west,NSC,ede85d,171142,ede85d,915807
+New England Revolution,east,NE,0c2340,c8102e,ffffff,6580
+New York Red Bulls,east,NY,c5003e,002554,ffc72c,6514
+NYC FC,east,NYC,6aace6,ffffff,f85002,546238
+Orlando City SC,east,ORL,5e299a,f8e196,ffffff,267810
+Philadelphia Union,east,PHI,041c2c,85714d,418fde,191716
+Portland Timbers,west,POR,2c5234,e1e000,ffffff,307690
+Real Salt Lake,west,RSL,001e62,9d2235,daaa00,6606
+San Jose Earthquakes,west,SJ,2d2926,0072ce,b2b4b2,6603
+Seattle Sounders,west,SEA,658d1b,236192,1d252d,130394
+Sporting Kansas City,west,SKC,a7bcd6,0c2340,ffffff,6604
+Toronto FC,east,TOR,c8102e,333f48,a2aaad,56453
+Vancouver Whitecaps,west,VAN,13294b,8bb8e8,ffffff,307691
