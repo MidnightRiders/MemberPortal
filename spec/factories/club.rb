@@ -6,6 +6,7 @@ FactoryGirl.define do
     secondary_color { FFaker::Color.hex_code }
     accent_color { FFaker::Color.hex_code }
     conference { %w(east west).sample }
+    api_id { FFaker::Random.rand(0..9999) }
 
     trait :ne do
       abbrv 'NE'
