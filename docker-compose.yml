@@ -21,10 +21,10 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: "mr_member_portal_${DBENV:-dev}"
+      POSTGRES_DB: "mr_member_portal_${DBENV:-development}"
     image: postgres:11.5-alpine
     ports:
-      - "5152:5432"
+      - "5992:5432"
     restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data

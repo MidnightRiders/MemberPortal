@@ -33,15 +33,15 @@ class MatchesController < ApplicationController
       URI.parse('http://mls-data-gatherer.herokuapp.com/').read,
       symbolize_names: true
     )[:fixtures]
-    clubs = Club.all.map { |c| [c.abbrv, c] }.to_h
+    clubs = Club.all.map { |c| [c.api_id, c] }.to_h
     errors = []
     changed = 0
     added = 0
     match_data.each do |fixture|
       match = Match.find_or_initialize_by(uid: fixture[:id]) do |m|
-        m.home_team = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]]
-        m.away_team = clubs[Match::API_CLUB_IDS[fixture[:AwayTeam][:id]]]
-        m.location = clubs[Match::API_CLUB_IDS[fixture[:HomeTeam][:id]]].name
+        m.home_team = clubs[fixture[:HomeTeam][:id].to_i]
+        m.away_team = clubs[fixture[:AwayTeam][:id].to_i]
+        m.location = clubs[fixture[:HomeTeam][:id].to_i].name
       end
       match.kickoff = Time.zone.parse(fixture[:matchDate])
       if fixture[:status] == '6'

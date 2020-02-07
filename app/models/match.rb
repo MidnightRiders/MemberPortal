@@ -1,33 +1,6 @@
 class Match < ActiveRecord::Base
   include OrderQuery
 
-  API_CLUB_IDS = {
-    '773958' => 'ATL',
-    '6397' => 'CHI',
-    '6001' => 'CLB',
-    '8314' => 'COL',
-    '6399' => 'DAL',
-    '6602' => 'DC',
-    '722265' => 'FCC',
-    '8259' => 'HOU',
-    '6637' => 'LA',
-    '867280' => 'LAFC',
-    '207242' => 'MIN',
-    '161195' => 'MTL',
-    '6580' => 'NE',
-    '6514' => 'NY',
-    '546238' => 'NYC',
-    '267810' => 'ORL',
-    '191716' => 'PHI',
-    '307690' => 'POR',
-    '6606' => 'RSL',
-    '130394' => 'SEA',
-    '6603' => 'SJ',
-    '6604' => 'SKC',
-    '56453' => 'TOR',
-    '307691' => 'VAN'
-  }.freeze
-
   belongs_to :home_team, class_name: 'Club'
   belongs_to :away_team, class_name: 'Club'
 

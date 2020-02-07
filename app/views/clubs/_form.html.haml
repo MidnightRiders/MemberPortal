@@ -53,6 +53,11 @@
       = f.label :abbrv
     .large-8.columns
       = f.text_field :abbrv
+  .row
+    .large-4.columns
+      = f.label :api_id
+    .large-8.columns
+      = f.text_field :api_id, type: :number, min: 0
   .row.actions
     .column.text-right
       = f.button :submit, class: 'button' do
