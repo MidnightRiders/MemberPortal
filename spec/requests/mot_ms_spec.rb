@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'MotMs' do
-  let(:match) { FactoryGirl.create(:match) }
+  let(:match) { FactoryGirl.create!(:match) }
   before(:each) do
-    sign_in FactoryGirl.create(:user, :admin)
+    sign_in FactoryGirl.create!(:user, :admin)
   end
 
   pending 'GET /matches/:match_id/motms/new'

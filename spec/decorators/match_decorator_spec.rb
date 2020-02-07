@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe MatchDecorator do
-  let(:match) { FactoryGirl.create(:match) }
-  before(:each) { sign_in FactoryGirl.create(:user) }
+  let(:match) { FactoryGirl.create!(:match) }
+  before(:each) { sign_in FactoryGirl.create!(:user) }
 
   describe 'rev_guess_button' do
     pending

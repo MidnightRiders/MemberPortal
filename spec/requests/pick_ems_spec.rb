@@ -2,8 +2,8 @@ require 'spec_helper'
 
 RSpec.describe 'PickEms', type: :request do
   describe 'POST /matches/:match_id/pick_ems/vote' do
-    let(:match) { FactoryGirl.create(:match) }
-    let!(:user) { FactoryGirl.create(:user).tap { |u| u.update(password: 'password', password_confirmation: 'password') } }
+    let(:match) { FactoryGirl.create!(:match) }
+    let!(:user) { FactoryGirl.create!(:user).tap { |u| u.update(password: 'password', password_confirmation: 'password') } }
 
     before(:each) { post new_user_session_path, user: { username: user.username, password: 'password' } }
 

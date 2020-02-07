@@ -3,8 +3,8 @@ require 'support/shared_examples/purchasable'
 require 'support/shared_examples/subscribable'
 
 describe Membership do
-  let!(:admin) { FactoryGirl.create(:user, :admin) }
-  let(:membership) { FactoryGirl.create(:membership) }
+  let!(:admin) { FactoryGirl.create!(:user, :admin) }
+  let(:membership) { FactoryGirl.create!(:membership) }
 
   describe 'scopes' do
     pending 'refunds'

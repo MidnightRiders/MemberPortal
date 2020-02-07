@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe RevGuess do
-  let (:user) { FactoryGirl.create(:user) }
-  let (:revs) { Club.find_by(abbrv: 'NE') || FactoryGirl.create(:club, :ne) }
+  let (:user) { FactoryGirl.create!(:user) }
+  let (:revs) { Club.find_by(abbrv: 'NE') || FactoryGirl.create!(:club, :ne) }
   let (:rev_guess) { FactoryGirl.build(:rev_guess) }
 
   before :each do

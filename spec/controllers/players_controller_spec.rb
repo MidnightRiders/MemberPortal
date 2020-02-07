@@ -8,7 +8,7 @@ describe PlayersController do
       expect(response).to redirect_to root_path
     end
     it 'rejects #show' do
-      get :show, id: FactoryGirl.create(:player)
+      get :show, id: FactoryGirl.create!(:player)
       expect(response).to redirect_to root_path
     end
     it 'rejects #new' do
@@ -20,11 +20,11 @@ describe PlayersController do
       expect(response).to redirect_to root_path
     end
     it 'rejects #edit' do
-      get :edit, id: FactoryGirl.create(:player)
+      get :edit, id: FactoryGirl.create!(:player)
       expect(response).to redirect_to root_path
     end
     it 'accepts #update' do
-      p = FactoryGirl.create(:player)
+      p = FactoryGirl.create!(:player)
       new_name = FFaker::Name.first_name
       expect {
         patch :update, id: p, player: { first_name: new_name }
@@ -37,13 +37,13 @@ describe PlayersController do
   end
   context 'when signed in as normal user' do
     before :each do
-      sign_in FactoryGirl.create(:user)
+      sign_in FactoryGirl.create!(:user)
     end
     it_should_behave_like 'unauthorized'
   end
   context 'when signed in as admin' do
     before do
-      sign_in FactoryGirl.create(:user, :admin)
+      sign_in FactoryGirl.create!(:user, :admin)
     end
     it 'accepts #index' do
       get :index
@@ -54,13 +54,13 @@ describe PlayersController do
       expect(response).to be_success
     end
     it 'accepts #show' do
-      player = FactoryGirl.create(:player)
+      player = FactoryGirl.create!(:player)
       get :show, id: player
       expect(response).to be_success
       expect(assigns(:player)).to eq player
     end
     it 'accepts #edit' do
-      player = FactoryGirl.create(:player)
+      player = FactoryGirl.create!(:player)
       get :edit, id: player
       expect(response).to be_success
       expect(assigns(:player)).to eq player
@@ -69,7 +69,7 @@ describe PlayersController do
       expect { post :create, player: FactoryGirl.attributes_for(:player) }.to change(Player, :count)
     end
     it 'accepts #update' do
-      p = FactoryGirl.create(:player)
+      p = FactoryGirl.create!(:player)
       new_name = FFaker::Name.first_name
       expect {
         patch :update, id: p, player: { first_name: new_name }

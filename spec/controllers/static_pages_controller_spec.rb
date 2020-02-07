@@ -31,7 +31,7 @@ describe StaticPagesController do
   describe 'GET "standings"' do
     context 'signed in' do
       it 'should show' do
-        sign_in FactoryGirl.create(:user)
+        sign_in FactoryGirl.create!(:user)
         get 'standings'
         expect(response).to be_success
       end
@@ -46,7 +46,7 @@ describe StaticPagesController do
   end
 
   describe 'POST "nominate"' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create!(:user) }
     let!(:positions) {
       %w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator).sort + ['501(c)(3) Board of Directors']
     }

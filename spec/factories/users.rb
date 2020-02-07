@@ -22,7 +22,7 @@ FactoryGirl.define do
     end
 
     after :create do |u, evaluator|
-      FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample) if evaluator.with_membership
+      FactoryGirl.create!(:membership, user_id: u.id, type: %w(Individual Family).sample) if evaluator.with_membership
     end
 
     trait :admin do
