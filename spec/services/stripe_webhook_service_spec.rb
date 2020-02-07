@@ -67,7 +67,7 @@ RSpec.describe StripeWebhookService do
 
     it 'calls charge_refunded for charge.refunded event' do
       event = JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/charge.refunded.json'))).with_indifferent_access
-      FactoryGirl.create!(:user).tap do |u|
+      FactoryGirl.create(:user).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
         u.current_membership.update(stripe_charge_id: event[:data][:object][:id])
       end
@@ -79,7 +79,7 @@ RSpec.describe StripeWebhookService do
     end
     it 'calls invoice_payment_received for invoice.payment_succeeded event' do
       event = JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/invoice.payment_succeeded.json'))).with_indifferent_access
-      FactoryGirl.create!(:user, :without_membership).tap do |u|
+      FactoryGirl.create(:user, :without_membership).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
       end
       webhook = StripeWebhookService.new(event)
@@ -93,7 +93,7 @@ RSpec.describe StripeWebhookService do
   describe 'charge_refunded' do
     let!(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/charge.refunded.json'))).with_indifferent_access }
     let(:user) {
-      FactoryGirl.create!(:user).tap do |u|
+      FactoryGirl.create(:user).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
         u.current_membership.update(stripe_charge_id: event[:data][:object][:id])
       end
@@ -125,7 +125,7 @@ RSpec.describe StripeWebhookService do
   describe 'invoice_payment_succeeded' do
     let!(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/invoice.payment_succeeded.json'))).with_indifferent_access }
     let!(:user) {
-      FactoryGirl.create!(:user, :without_membership).tap do |u|
+      FactoryGirl.create(:user, :without_membership).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
         u.memberships.new(
           year: Time.zone.at(event[:created]).year - 1,

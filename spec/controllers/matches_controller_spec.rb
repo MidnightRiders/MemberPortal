@@ -5,7 +5,7 @@ describe MatchesController do
   pending 'get #show'
 
   context 'admin actions' do
-    before(:each) { sign_in FactoryGirl.create!(:user, :admin) }
+    before(:each) { sign_in FactoryGirl.create(:user, :admin) }
 
     pending 'get #new'
     pending 'get #edit'

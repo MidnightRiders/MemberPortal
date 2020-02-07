@@ -11,7 +11,7 @@ FactoryGirl.define do
 
     trait :relative do
       type :Relative
-      family_id { FactoryGirl.create!(:membership, :family).id }
+      family_id { FactoryGirl.create(:membership, :family).id }
     end
   end
 end
