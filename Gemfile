@@ -30,7 +30,7 @@ gem 'will_paginate'
 gem 'aws-sdk', '~> 2.3.0'
 gem 'paperclip', '~> 5.2.1'
 
-gem 'nokogiri', '~> 1.10.4'
+gem 'nokogiri', '~> 1.10.8'
 
 # Users/auth
 gem 'cancancan', '~>1.10.1'
