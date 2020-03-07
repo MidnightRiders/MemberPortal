@@ -96,14 +96,27 @@ class Club < ActiveRecord::Base
   end
 
   # Sets color methods which return *String*s.
-  %w(primary secondary accent).each do |x|
+  %w[primary secondary accent].each do |x|
     define_method("#{x}_color=") do |val|
       self["#{x}_color"] = val.to_s.to_i(16)
     end
 
     define_method("#{x}_color") do
-      self["#{x}_color"].to_s(16).rjust(6, '0') unless self["#{x}_color"].nil?
+      self["#{x}_color"]&.to_s(16)&.rjust(6, '0')
     end
+  end
+
+  def color_on_primary
+    secondary_contrast = contrast(primary_color, secondary_color)
+    return secondary_color if secondary_contrast >= 7.0
+
+    accent_contrast = contrast(primary_color, accent_color)
+    return accent_color if accent_contrast >= 7.0
+
+    pct = luminosity(primary_color) < 0.5 ? 0.1 : -0.1
+    col = secondary_contrast > accent_contrast ? secondary_color : accent_color
+    col = adjust_color(col, pct) while !%w[ffffff fff 000000 000].include?(col) && contrast(primary_color, col) < 7.0
+    col
   end
 
   # Returns *String*. Color method that falls back to +accent_color+ if +secondary_color+ is white.
@@ -115,5 +128,38 @@ class Club < ActiveRecord::Base
     return find_by(abbrv: 'NYC') if name =~ /New ?York ?City/i
 
     FuzzyMatch.new(all, read: :name).find(name)
+  end
+
+  private
+
+  def contrast(one, two)
+    l1 = luminosity(one)
+    l2 = luminosity(two)
+    lighter, darker = l1 < l2 ? [l2, l1] : [l1, l2]
+    (lighter + 0.05) / (darker + 0.05)
+  end
+
+  def luminosity(hex)
+    r, g, b = rgb(hex).map do |v|
+      x = v / 255.0
+      x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055)**2.4
+    end
+    0.2126 * r + 0.7152 * g + 0.0722 * b
+  end
+
+  def rgb(hex)
+    hex.match('^#?([a-f0-9]{1,2})([a-f0-9]{1,2})([a-f0-9]{1,2})$')[1..3].map { |v| (v.length == 1 ? "#{v}#{v}" : v).to_i(16) }
+  end
+
+  def adjust_color(hex, pct)
+    amt = pct * 255
+    r, g, b = rgb(hex)
+    [r, g, b].map { |v|
+      [255, [0, v + amt].max]
+        .min
+        .round
+        .to_s(16)
+        .rjust(2, '0')
+    }.join('')
   end
 end

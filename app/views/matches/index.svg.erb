@@ -1,0 +1,135 @@
+<%-
+  vars = {}
+  revs_min_block = revs_row_height = 64
+  revs_block_gap = 8
+  vars[:page_border] = 16
+  vars[:page_width] = 600
+  vars[:row_gap] = 12
+  vars[:min_block] = vars[:row_height] = 32
+  vars[:block_gap] = 8
+  vars[:icon_height] = 32
+  vars[:icon_width] = 40
+  vars[:icon_offset] = 0
+  vars[:title_block] = 64
+  vars[:block_text_size] = 12
+
+  rev_guess_font_size = 16
+  rev_guess_size = 24
+  title_block_font_size = 24
+
+  revs_matches, other_matches = @matches.reduce([[], []]) do |(r, o), m|
+    m.home_team == revs || m.away_team == revs ? [[*r, m], o] : [r, [*o, m]]
+  end
+
+  vars[:page_height] =
+    vars[:page_border] +
+    vars[:title_block] +
+    revs_matches.size * (revs_row_height + vars[:row_gap] + rev_guess_size + vars[:row_gap]) +
+    revs_block_gap +
+    other_matches.size * (vars[:row_height] + vars[:row_gap]) +
+    vars[:page_border]
+%>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg
+  height="<%= vars[:page_height] %>"
+  viewBox="0 0 600 <%= vars[:page_height] %>"
+  width="600"
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+  <style type="text/css"><![CDATA[
+    /* latin-ext */
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: local('Lato Regular'), local('Lato-Regular'), url(https://fonts.gstatic.com/s/lato/v16/S6uyw4BMUTPHjxAwXiWtFCfQ7A.woff2) format('woff2');
+      unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+    /* latin */
+    @font-face {
+      font-family: 'Lato';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: local('Lato Regular'), local('Lato-Regular'), url(https://fonts.gstatic.com/s/lato/v16/S6uyw4BMUTPHjx4wXiWtFCc.woff2) format('woff2');
+      unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
+    text { font-family: 'Lato', sans-serif; font-size: 1.25rem; }
+    .title { width: <%= vars[:page_width] %>px; font-size: <%= title_block_font_size %>px; }
+    .rev-guess { width: <%= vars[:page_width] %>px; font-size: <%= rev_guess_font_size %>px; }
+  ]]></style>
+  <defs>
+    <filter id="logoDropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feOffset result="offOut" in="SourceAlpha" dx="0" dy="2" />
+      <feGaussianBlur result="blurOut" in="offOut" stdDeviation="3" />
+      <feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    </filter>
+  </defs>
+  <title>Matches for the week of <%= @start_date.strftime('%-m/%-d/%Y') %></title>
+  <rect width="600" height="<%= vars[:page_height] %>" x="0" y="0" fill="#6a0003" />
+  <image
+    filter="url(#logoDropShadow)"
+    xlink:href="<%= png_asset('logo.png') %>"
+    height="<%= vars[:title_block] %>"
+    preserveAspectRatio="xMidYMid meet"
+    width="<%= vars[:title_block] %>"
+    x="<%= vars[:page_border] %>"
+    y="<%= vars[:page_border] %>"
+  />
+  <text
+    class="title"
+    fill="#fff"
+    x="<%= (vars[:page_width] - vars[:page_border] - vars[:title_block]) / 2.0 + vars[:title_block] %>"
+    y="<%= vars[:page_border] + vars[:title_block] * 0.5 %>"
+    text-anchor="middle"
+  >
+    Members’ picks for the week of <%= @start_date.strftime('%-m/%-d/%Y') %>
+  </text>
+
+  <%- revs_matches.each_with_index do |match, i| %>
+    <%-
+      home_avg, away_avg = match.rev_guesses.reduce([0, 0]) { |(h, a), rg|
+        [h + rg.home_goals, a + rg.away_goals]
+      }.map { |v|
+        (v.to_f / match.rev_guesses.size).round
+      }
+      result = if home_avg == away_avg
+        'Draw'
+      elsif match.home_team == revs
+        home_avg > away_avg ? 'Win' : 'Loss'
+      else
+        home_avg < away_avg ? 'Win' : 'Loss'
+      end
+    %>
+    <%=
+      render partial: 'matches/match_row', locals: vars.merge({
+        block_text_size: 18,
+        row_height: revs_row_height,
+        min_block: revs_min_block,
+        match: match,
+        y_offset: vars[:page_border] + vars[:title_block] + i * (revs_row_height + vars[:row_gap]) + i * (rev_guess_size + vars[:row_gap]),
+      })
+    %>
+    <text
+      class="rev-guess"
+      fill="#fff"
+      text-anchor="middle"
+      x="<%= vars[:page_width] / 2 %>"
+      y="<%= vars[:title_block] + i * (revs_row_height + vars[:row_gap]) + vars[:page_border] + revs_row_height + vars[:row_gap] + (rev_guess_size / 2) %>"
+    >
+      <%= match.kickoff.strftime('%-m/%-d %l:%M%P') %>
+      Average RevGuess: <%= result %> <%= home_avg %>–<%= away_avg %>
+    </text>
+  <%- end %>
+
+  <%- other_matches.each.with_index do |match, i| %>
+    <%=
+      render partial: 'matches/match_row', locals: vars.merge({
+        match: match,
+        y_offset: vars[:title_block] + (revs_matches.size * (revs_row_height + vars[:row_gap]) + revs_matches.size * (rev_guess_size + vars[:row_gap])) + revs_block_gap + (i * (vars[:row_height] + vars[:row_gap])) + vars[:page_border],
+      })
+    %>
+  <%- end %>
+</svg>

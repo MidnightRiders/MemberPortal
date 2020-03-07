@@ -8,6 +8,8 @@ class MatchesController < ApplicationController
 
   # GET /matches
   # GET /matches.json
+  # GET /matches.svg
+  # WIP: GET /matches.png
   def index
     @start_date = (params[:date].try(:in_time_zone, Time.zone) || Time.current).beginning_of_week
     @matches = Match.unscoped.with_clubs.includes(:pick_ems).where(kickoff: (@start_date..@start_date + 7.days)).order(kickoff: :asc, location: :asc)
@@ -18,6 +20,30 @@ class MatchesController < ApplicationController
     @next_date = @matches.empty? ? Match.unscoped.where('kickoff > ?', Time.current).order(kickoff: :asc).first.try(:kickoff) : @start_date + 1.week
     @next_date = @next_date.try(:to_date)
     @is_current_week = @start_date == Time.current.beginning_of_week
+    respond_to do |format|
+      format.html
+      format.json
+      format.svg {
+        redirect_to matches_url unless current_user.privilege? 'admin'
+        render layout: false, cached: false
+      }
+      # WIP: easily-reusable PNG generation from SVG
+      # format.png {
+      #   @embed_resources = true
+      #   redirect_to matches_url unless current_user.privilege? 'admin'
+      #   svg_str = render_to_string 'matches/index', layout: false, formats: %w[svg]
+      #   img = Magick::Image.from_blob(svg_str) {
+      #     self.background_color = '#6a0003'
+      #     self.density= '144.0x144.0'
+      #     self.format = 'SVG'
+      #   }
+      #   png = img[0].to_blob {
+      #     self.density= '144.0x144.0'
+      #     self.format = 'PNG'
+      #   }
+      #   send_data png, filename: "matches-#{@start_date.strftime('%Y-%m-%d')}.png", disposition: 'inline', type: 'image/png'
+      # }
+    end
   end
 
   # GET /matches/1

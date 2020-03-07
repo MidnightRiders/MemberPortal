@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dev.dockerfile
-    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "8080"]
     depends_on:
       - db
       - start_db
@@ -12,11 +12,12 @@ services:
       APP_ENV: "${APP_ENV:-development}"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/mr_member_portal_${DBENV:-development}"
       RAILS_ENV: "${RAILS_ENV:-development}"
-      PORT: 3000
+      PORT: 8080
     ports:
-      - "5991:3000"
+      - "5991:8080"
     volumes:
       - .:/usr/src/member-portal
+      - /usr/src/member-portal/tmp
   db:
     environment:
       POSTGRES_USER: postgres
