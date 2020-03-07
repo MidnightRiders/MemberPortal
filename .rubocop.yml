@@ -1,6 +1,11 @@
 # rubocop configuration file
 #
 
+require:
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+
 AllCops:
   Exclude:
     - "vendor/**/*"
@@ -16,14 +21,14 @@ AllCops:
 Rails:
   Enabled: true
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: false
 
-Lint/EndAlignment:
+Layout/EndAlignment:
   EnforcedStyleAlignWith: variable
   Enabled: true
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 140
   Enabled: true
   Exclude:
@@ -32,7 +37,7 @@ Metrics/LineLength:
 Performance/StringReplacement:
   Enabled: false
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Enabled: false
 
 Style/BlockDelimiters:
@@ -75,7 +80,7 @@ Layout/EmptyLinesAroundModuleBody:
 Style/FrozenStringLiteralComment:
   Enabled: false
 
-Layout/IndentHash:
+Layout/FirstHashElementIndentation:
   Enabled: true
   EnforcedStyle: consistent
 
@@ -101,16 +106,25 @@ Naming/PredicateName:
     - has_
     - have_
   # Predicate name prefixes that should be removed.
-  NamePrefixBlacklist:
+  ForbiddenPrefixes:
     - is_
     - has_
     - have_
   # Predicate names which, despite having a blacklisted prefix, or no ?,
   # should still be accepted
-  NameWhitelist:
+  AllowedMethods:
     - is_a?
   Exclude:
     - spec/**/*
+
+Style/HashEachMethods:
+  Enabled: true
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
 
 Style/RegexpLiteral:
   EnforcedStyle: slashes
