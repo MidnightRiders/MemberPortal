@@ -27,6 +27,9 @@ gem 'date_time_attribute'
 
 gem 'will_paginate'
 
+gem 'color', '~> 1.5.1'
+gem 'rmagick', '~> 4.1.0-rc2'
+
 gem 'aws-sdk', '~> 2.3.0'
 gem 'paperclip', '~> 5.2.1'
 
