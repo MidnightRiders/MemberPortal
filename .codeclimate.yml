@@ -3,7 +3,7 @@ engines:
   brakeman:
     enabled: true
   bundler-audit:
-    enabled: true
+    enabled: false
   csslint:
     enabled: false
   coffeelint:
@@ -19,9 +19,9 @@ engines:
   fixme:
     enabled: true
   rubocop:
-    enabled: true
+    enabled: false
   scss-lint:
-    enabled: true
+    enabled: false
 ratings:
   paths:
   - "**.erb"
@@ -34,9 +34,3 @@ ratings:
   - "**.es6"
   - "**.jsx"
   - "**.module"
-exclude_paths:
-- config/
-- db/
-- spec/
-- vendor/
-- public/

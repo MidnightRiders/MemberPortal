@@ -1,8 +1,0 @@
-.table.rev-guesses {
-  .td.comment {
-    display: none;
-    @media #{$medium-up} {
-      display: table-cell;
-    }
-  }
-}
