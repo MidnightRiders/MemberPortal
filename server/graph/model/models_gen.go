@@ -2,19 +2,295 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+import (
+	"fmt"
+	"io"
+	"strconv"
+)
+
+type Club struct {
+	ID             string     `json:"id"`
+	Name           string     `json:"name"`
+	PrimaryColor   string     `json:"primaryColor"`
+	SecondaryColor string     `json:"secondaryColor"`
+	AccentColor    string     `json:"accentColor"`
+	Conference     Conference `json:"conference"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type ManOfTheMatchVote struct {
+	ID         string  `json:"id"`
+	Match      *Match  `json:"match"`
+	User       *User   `json:"user"`
+	FirstPick  *Player `json:"firstPick"`
+	SecondPick *Player `json:"secondPick"`
+	ThirdPick  *Player `json:"thirdPick"`
+}
+
+type Match struct {
+	ID                 string               `json:"id"`
+	Kickoff            string               `json:"kickoff"`
+	HomeClub           *Club                `json:"homeClub"`
+	AwayClub           *Club                `json:"awayClub"`
+	HomeGoals          *int                 `json:"homeGoals"`
+	AwayGoals          *int                 `json:"awayGoals"`
+	Status             MatchStatus          `json:"status"`
+	RevGuesses         []*RevGuess          `json:"revGuesses"`
+	ManOfTheMatchVotes []*ManOfTheMatchVote `json:"manOfTheMatchVotes"`
+}
+
+type Membership struct {
+	ID    string         `json:"id"`
+	User  *User          `json:"user"`
+	Year  int            `json:"year"`
+	Type  MembershipType `json:"type"`
+	Roles []Role         `json:"roles"`
+}
+
+type Player struct {
+	ID        string   `json:"id"`
+	FirstName string   `json:"firstName"`
+	LastName  string   `json:"lastName"`
+	Position  Position `json:"position"`
+	Club      *Club    `json:"club"`
+	Active    bool     `json:"active"`
+}
+
+type RevGuess struct {
+	ID        string  `json:"id"`
+	Match     *Match  `json:"match"`
+	User      *User   `json:"user"`
+	HomeGoals int     `json:"homeGoals"`
+	AwayGoals int     `json:"awayGoals"`
+	Comment   *string `json:"comment"`
 }
 
 type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+	ID          string        `json:"id"`
+	Email       string        `json:"email"`
+	FirstName   string        `json:"firstName"`
+	LastName    string        `json:"lastName"`
+	Address1    string        `json:"address1"`
+	Address2    *string       `json:"address2"`
+	City        string        `json:"city"`
+	State       *string       `json:"state"`
+	PostalCode  string        `json:"postalCode"`
+	Country     string        `json:"country"`
+	Memberships []*Membership `json:"memberships"`
+}
+
+type Conference string
+
+const (
+	ConferenceEastern Conference = "Eastern"
+	ConferenceWestern Conference = "Western"
+)
+
+var AllConference = []Conference{
+	ConferenceEastern,
+	ConferenceWestern,
+}
+
+func (e Conference) IsValid() bool {
+	switch e {
+	case ConferenceEastern, ConferenceWestern:
+		return true
+	}
+	return false
+}
+
+func (e Conference) String() string {
+	return string(e)
+}
+
+func (e *Conference) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Conference(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Conference", str)
+	}
+	return nil
+}
+
+func (e Conference) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type MatchStatus string
+
+const (
+	MatchStatusUpcoming  MatchStatus = "Upcoming"
+	MatchStatusDelayed   MatchStatus = "Delayed"
+	MatchStatusPostponed MatchStatus = "Postponed"
+	MatchStatusStarted   MatchStatus = "Started"
+	MatchStatusFinished  MatchStatus = "Finished"
+)
+
+var AllMatchStatus = []MatchStatus{
+	MatchStatusUpcoming,
+	MatchStatusDelayed,
+	MatchStatusPostponed,
+	MatchStatusStarted,
+	MatchStatusFinished,
+}
+
+func (e MatchStatus) IsValid() bool {
+	switch e {
+	case MatchStatusUpcoming, MatchStatusDelayed, MatchStatusPostponed, MatchStatusStarted, MatchStatusFinished:
+		return true
+	}
+	return false
+}
+
+func (e MatchStatus) String() string {
+	return string(e)
+}
+
+func (e *MatchStatus) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MatchStatus(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MatchStatus", str)
+	}
+	return nil
+}
+
+func (e MatchStatus) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type MembershipType string
+
+const (
+	MembershipTypeIndividual MembershipType = "Individual"
+	MembershipTypeFamily     MembershipType = "Family"
+)
+
+var AllMembershipType = []MembershipType{
+	MembershipTypeIndividual,
+	MembershipTypeFamily,
+}
+
+func (e MembershipType) IsValid() bool {
+	switch e {
+	case MembershipTypeIndividual, MembershipTypeFamily:
+		return true
+	}
+	return false
+}
+
+func (e MembershipType) String() string {
+	return string(e)
+}
+
+func (e *MembershipType) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = MembershipType(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid MembershipType", str)
+	}
+	return nil
+}
+
+func (e MembershipType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Position string
+
+const (
+	PositionGoalkeeper Position = "Goalkeeper"
+	PositionDefender   Position = "Defender"
+	PositionMidfielder Position = "Midfielder"
+	PositionAttacker   Position = "Attacker"
+)
+
+var AllPosition = []Position{
+	PositionGoalkeeper,
+	PositionDefender,
+	PositionMidfielder,
+	PositionAttacker,
+}
+
+func (e Position) IsValid() bool {
+	switch e {
+	case PositionGoalkeeper, PositionDefender, PositionMidfielder, PositionAttacker:
+		return true
+	}
+	return false
+}
+
+func (e Position) String() string {
+	return string(e)
+}
+
+func (e *Position) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Position(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Position", str)
+	}
+	return nil
+}
+
+func (e Position) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Role string
+
+const (
+	RoleAdmin        Role = "Admin"
+	RoleExecBoard    Role = "ExecBoard"
+	RoleAtLargeBoard Role = "AtLargeBoard"
+)
+
+var AllRole = []Role{
+	RoleAdmin,
+	RoleExecBoard,
+	RoleAtLargeBoard,
+}
+
+func (e Role) IsValid() bool {
+	switch e {
+	case RoleAdmin, RoleExecBoard, RoleAtLargeBoard:
+		return true
+	}
+	return false
+}
+
+func (e Role) String() string {
+	return string(e)
+}
+
+func (e *Role) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Role(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Role", str)
+	}
+	return nil
+}
+
+func (e Role) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }

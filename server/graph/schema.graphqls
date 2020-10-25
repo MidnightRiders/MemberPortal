@@ -1,28 +1,144 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
+type Query {
+  user(id: ID!): User
+  users: [User!]
+  membership(userID: ID!, year: Int!): Membership
+  memberships(userID: ID, year: Int): [Membership!]
+  revGuess(userID: ID!, matchID: ID!): RevGuess
+  revGuesses(matchID: ID): [RevGuess!]
+  manOfTheMatchVote(userID: ID!, matchID: ID!): ManOfTheMatchVote
+  manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
 }
 
 type User {
   id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  address1: String!
+  address2: String
+  city: String!
+  state: String
+  postalCode: String!
+  country: String!
+
+  memberships: [Membership!]
+}
+
+enum Role {
+  Admin
+  ExecBoard
+  AtLargeBoard
+}
+
+enum MembershipType {
+  Individual
+  Family
+}
+
+type Membership {
+  id: ID!
+  user: User!
+  year: Int!
+  type: MembershipType!
+  roles: [Role!]
+}
+
+enum Conference {
+  Eastern
+  Western
+}
+
+type Club {
+  id: ID!
   name: String!
+  primaryColor: String!
+  secondaryColor: String!
+  accentColor: String!
+  conference: Conference!
 }
 
-type Query {
-  todos: [Todo!]!
+enum Position {
+  Goalkeeper
+  Defender
+  Midfielder
+  Attacker
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
+type Player {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  position: Position!
+  club: Club!
+  active: Boolean!
+}
+
+scalar DateTime
+
+enum MatchStatus {
+  Upcoming
+  Delayed
+  Postponed
+  Started
+  Finished
+}
+
+type Match {
+  id: ID!
+  kickoff: DateTime!
+  homeClub: Club!
+  awayClub: Club!
+  homeGoals: Int
+  awayGoals: Int
+  status: MatchStatus!
+  revGuesses: [RevGuess!]
+  manOfTheMatchVotes: [ManOfTheMatchVote!]
+}
+
+type RevGuess {
+  id: ID!
+  match: Match!
+  user: User!
+  homeGoals: Int!
+  awayGoals: Int!
+  comment: String
+}
+
+type ManOfTheMatchVote {
+  id: ID!
+  match: Match!
+  user: User!
+  firstPick: Player!
+  secondPick: Player
+  thirdPick: Player
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  createUser(
+    email: String!,
+    firstName: String!,
+    lastName: String!,
+    address1: String!,
+    address2: String,
+    city: String!,
+    state: String,
+    postalCode: String!,
+    country: String!
+  ): User!
+
+  createRevGuess(
+    userID: ID!,
+    matchID: ID!,
+    homeGoals: Int!,
+    awayGoals: Int!,
+    comment: String
+  ): RevGuess!
+
+  createManOfTheMatchVote(
+    userID: ID!,
+    matchID: ID!,
+    firstPickID: ID!,
+    secondPickID: ID,
+    thirdPickID: ID
+  ): ManOfTheMatchVote
 }
