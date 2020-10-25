@@ -1,0 +1,12 @@
+FROM golang:1.15.3
+LABEL maintainer="Midnight Riders <info@midnightriders.com>"
+
+WORKDIR /go
+
+RUN go get github.com/pilu/fresh
+
+WORKDIR /go/src/github.com/MidnightRiders/MemberPortal/server
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .

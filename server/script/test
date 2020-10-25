@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+script/setup
+
+docker run --rm midnightriders-server:dev go test ./...

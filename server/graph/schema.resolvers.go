@@ -11,11 +11,47 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/graph/model"
 )
 
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+func (r *mutationResolver) CreateUser(ctx context.Context, email string, firstName string, lastName string, address1 string, address2 *string, city string, state *string, postalCode string, country string) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
+func (r *mutationResolver) CreateRevGuess(ctx context.Context, userID string, matchID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userID string, matchID string, firstPickID string, secondPickID *string, thirdPickID *string) (*model.ManOfTheMatchVote, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Membership(ctx context.Context, userID string, year int) (*model.Membership, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Memberships(ctx context.Context, userID *string, year *int) ([]*model.Membership, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) RevGuess(ctx context.Context, userID string, matchID string) (*model.RevGuess, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) RevGuesses(ctx context.Context, matchID *string) ([]*model.RevGuess, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) ManOfTheMatchVote(ctx context.Context, userID string, matchID string) (*model.ManOfTheMatchVote, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) ManOfTheMatchVotes(ctx context.Context, matchID *string) ([]*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

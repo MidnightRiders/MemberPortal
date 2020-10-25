@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+cd "$(dirname "$0")/.."
+
+service=1
+service="${!service}"
+
+if [[ ! "$service" =~ ^client|server$ ]]; then
+  echo "Error: unexpected or missing service name \"$service\"" >&2
+  exit 1
+fi
+
+shift 1
+
+cd "$service"
+script/setup
+
+docker run --volume "$(pwd)":/go/src/github.com/MidnightRiders/MemberPortal/server --rm midnightriders-server:dev "${@}"
