@@ -68,6 +68,7 @@ type RevGuess struct {
 
 type User struct {
 	UUID             string        `json:"uuid"`
+	Username         string        `json:"username"`
 	Email            string        `json:"email"`
 	FirstName        string        `json:"firstName"`
 	LastName         string        `json:"lastName"`

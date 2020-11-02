@@ -83,9 +83,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateManOfTheMatchVote func(childComplexity int, useruuid string, matchuuid string, firstPickuuid string, secondPickID *string, thirdPickID *string) int
-		CreateRevGuess          func(childComplexity int, useruuid string, matchuuid string, homeGoals int, awayGoals int, comment *string) int
-		CreateUser              func(childComplexity int, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) int
+		CreateManOfTheMatchVote func(childComplexity int, userUUID string, matchUUID string, firstPickUUID string, secondPickUUID *string, thirdPickUUID *string) int
+		CreateRevGuess          func(childComplexity int, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) int
+		CreateUser              func(childComplexity int, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) int
 	}
 
 	Player struct {
@@ -100,13 +100,13 @@ type ComplexityRoot struct {
 	Query struct {
 		Club               func(childComplexity int, uuid string) int
 		Clubs              func(childComplexity int, conference *model.Conference) int
-		ManOfTheMatchVote  func(childComplexity int, useruuid string, matchuuid string) int
+		ManOfTheMatchVote  func(childComplexity int, userUUID string, matchUUID string) int
 		ManOfTheMatchVotes func(childComplexity int, matchID *string) int
 		Match              func(childComplexity int, uuid string) int
 		Matches            func(childComplexity int, before *string, after *string, club *string) int
-		Membership         func(childComplexity int, useruuid string, year int) int
-		Memberships        func(childComplexity int, userID *string, year *int) int
-		RevGuess           func(childComplexity int, useruuid string, matchuuid string) int
+		Membership         func(childComplexity int, uuid *string, userUUID *string, year *int) int
+		Memberships        func(childComplexity int, userUUID *string, year *int) int
+		RevGuess           func(childComplexity int, userUUID string, matchUUID string) int
 		RevGuesses         func(childComplexity int, matchID *string) int
 		User               func(childComplexity int, uuid string) int
 		Users              func(childComplexity int) int
@@ -135,26 +135,27 @@ type ComplexityRoot struct {
 		PostalCode       func(childComplexity int) int
 		Province         func(childComplexity int) int
 		UUID             func(childComplexity int) int
+		Username         func(childComplexity int) int
 	}
 }
 
 type MutationResolver interface {
-	CreateUser(ctx context.Context, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) (*model.User, error)
-	CreateRevGuess(ctx context.Context, useruuid string, matchuuid string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error)
-	CreateManOfTheMatchVote(ctx context.Context, useruuid string, matchuuid string, firstPickuuid string, secondPickID *string, thirdPickID *string) (*model.ManOfTheMatchVote, error)
+	CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) (*model.User, error)
+	CreateRevGuess(ctx context.Context, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error)
+	CreateManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string, firstPickUUID string, secondPickUUID *string, thirdPickUUID *string) (*model.ManOfTheMatchVote, error)
 }
 type QueryResolver interface {
 	User(ctx context.Context, uuid string) (*model.User, error)
 	Users(ctx context.Context) ([]*model.User, error)
-	Membership(ctx context.Context, useruuid string, year int) (*model.Membership, error)
-	Memberships(ctx context.Context, userID *string, year *int) ([]*model.Membership, error)
+	Membership(ctx context.Context, uuid *string, userUUID *string, year *int) (*model.Membership, error)
+	Memberships(ctx context.Context, userUUID *string, year *int) ([]*model.Membership, error)
 	Club(ctx context.Context, uuid string) (*model.Club, error)
 	Clubs(ctx context.Context, conference *model.Conference) ([]*model.Club, error)
 	Match(ctx context.Context, uuid string) (*model.Match, error)
 	Matches(ctx context.Context, before *string, after *string, club *string) ([]*model.Match, error)
-	RevGuess(ctx context.Context, useruuid string, matchuuid string) (*model.RevGuess, error)
+	RevGuess(ctx context.Context, userUUID string, matchUUID string) (*model.RevGuess, error)
 	RevGuesses(ctx context.Context, matchID *string) ([]*model.RevGuess, error)
-	ManOfTheMatchVote(ctx context.Context, useruuid string, matchuuid string) (*model.ManOfTheMatchVote, error)
+	ManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string) (*model.ManOfTheMatchVote, error)
 	ManOfTheMatchVotes(ctx context.Context, matchID *string) ([]*model.ManOfTheMatchVote, error)
 }
 
@@ -379,7 +380,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateManOfTheMatchVote(childComplexity, args["useruuid"].(string), args["matchuuid"].(string), args["firstPickuuid"].(string), args["secondPickID"].(*string), args["thirdPickID"].(*string)), true
+		return e.complexity.Mutation.CreateManOfTheMatchVote(childComplexity, args["userUUID"].(string), args["matchUUID"].(string), args["firstPickUUID"].(string), args["secondPickUUID"].(*string), args["thirdPickUUID"].(*string)), true
 
 	case "Mutation.createRevGuess":
 		if e.complexity.Mutation.CreateRevGuess == nil {
@@ -391,7 +392,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateRevGuess(childComplexity, args["useruuid"].(string), args["matchuuid"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string)), true
+		return e.complexity.Mutation.CreateRevGuess(childComplexity, args["userUUID"].(string), args["matchUUID"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -403,7 +404,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUser(childComplexity, args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(*string), args["postalCode"].(string), args["country"].(string)), true
+		return e.complexity.Mutation.CreateUser(childComplexity, args["username"].(string), args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(*string), args["postalCode"].(string), args["country"].(string)), true
 
 	case "Player.active":
 		if e.complexity.Player.Active == nil {
@@ -481,7 +482,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ManOfTheMatchVote(childComplexity, args["useruuid"].(string), args["matchuuid"].(string)), true
+		return e.complexity.Query.ManOfTheMatchVote(childComplexity, args["userUUID"].(string), args["matchUUID"].(string)), true
 
 	case "Query.manOfTheMatchVotes":
 		if e.complexity.Query.ManOfTheMatchVotes == nil {
@@ -529,7 +530,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Membership(childComplexity, args["useruuid"].(string), args["year"].(int)), true
+		return e.complexity.Query.Membership(childComplexity, args["uuid"].(*string), args["userUUID"].(*string), args["year"].(*int)), true
 
 	case "Query.memberships":
 		if e.complexity.Query.Memberships == nil {
@@ -541,7 +542,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Memberships(childComplexity, args["userID"].(*string), args["year"].(*int)), true
+		return e.complexity.Query.Memberships(childComplexity, args["userUUID"].(*string), args["year"].(*int)), true
 
 	case "Query.revGuess":
 		if e.complexity.Query.RevGuess == nil {
@@ -553,7 +554,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.RevGuess(childComplexity, args["useruuid"].(string), args["matchuuid"].(string)), true
+		return e.complexity.Query.RevGuess(childComplexity, args["userUUID"].(string), args["matchUUID"].(string)), true
 
 	case "Query.revGuesses":
 		if e.complexity.Query.RevGuesses == nil {
@@ -719,6 +720,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.UUID(childComplexity), true
 
+	case "User.username":
+		if e.complexity.User.Username == nil {
+			break
+		}
+
+		return e.complexity.User.Username(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -788,21 +796,22 @@ var sources = []*ast.Source{
 type Query {
   user(uuid: ID!): User
   users: [User!]
-  membership(useruuid: ID!, year: Int!): Membership
-  memberships(userID: ID, year: Int): [Membership!]
+  membership(uuid: ID, userUUID: ID, year: Int): Membership
+  memberships(userUUID: ID, year: Int): [Membership!]
 
   club(uuid: ID!): Club
   clubs(conference: Conference): [Club!]
   match(uuid: ID!): Match
   matches(before: Date, after: Date, club: ID): [Match!]
-  revGuess(useruuid: ID!, matchuuid: ID!): RevGuess
+  revGuess(userUUID: ID!, matchUUID: ID!): RevGuess
   revGuesses(matchID: ID): [RevGuess!]
-  manOfTheMatchVote(useruuid: ID!, matchuuid: ID!): ManOfTheMatchVote
+  manOfTheMatchVote(userUUID: ID!, matchUUID: ID!): ManOfTheMatchVote
   manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
 }
 
 type User {
   uuid: ID!
+  username: String!
   email: String!
   firstName: String!
   lastName: String!
@@ -910,6 +919,7 @@ type ManOfTheMatchVote {
 
 type Mutation {
   createUser(
+    username: String!,
     email: String!,
     firstName: String!,
     lastName: String!,
@@ -923,19 +933,19 @@ type Mutation {
   ): User!
 
   createRevGuess(
-    useruuid: ID!,
-    matchuuid: ID!,
+    userUUID: ID!,
+    matchUUID: ID!,
     homeGoals: Int!,
     awayGoals: Int!,
     comment: String
   ): RevGuess!
 
   createManOfTheMatchVote(
-    useruuid: ID!,
-    matchuuid: ID!,
-    firstPickuuid: ID!,
-    secondPickID: ID,
-    thirdPickID: ID
+    userUUID: ID!,
+    matchUUID: ID!,
+    firstPickUUID: ID!,
+    secondPickUUID: ID,
+    thirdPickUUID: ID
   ): ManOfTheMatchVote
 }
 `, BuiltIn: false},
@@ -950,50 +960,50 @@ func (ec *executionContext) field_Mutation_createManOfTheMatchVote_args(ctx cont
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["useruuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useruuid"))
+	if tmp, ok := rawArgs["userUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["useruuid"] = arg0
+	args["userUUID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchuuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchuuid"))
+	if tmp, ok := rawArgs["matchUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchuuid"] = arg1
+	args["matchUUID"] = arg1
 	var arg2 string
-	if tmp, ok := rawArgs["firstPickuuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstPickuuid"))
+	if tmp, ok := rawArgs["firstPickUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstPickUUID"))
 		arg2, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["firstPickuuid"] = arg2
+	args["firstPickUUID"] = arg2
 	var arg3 *string
-	if tmp, ok := rawArgs["secondPickID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondPickID"))
+	if tmp, ok := rawArgs["secondPickUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondPickUUID"))
 		arg3, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["secondPickID"] = arg3
+	args["secondPickUUID"] = arg3
 	var arg4 *string
-	if tmp, ok := rawArgs["thirdPickID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("thirdPickID"))
+	if tmp, ok := rawArgs["thirdPickUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("thirdPickUUID"))
 		arg4, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["thirdPickID"] = arg4
+	args["thirdPickUUID"] = arg4
 	return args, nil
 }
 
@@ -1001,23 +1011,23 @@ func (ec *executionContext) field_Mutation_createRevGuess_args(ctx context.Conte
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["useruuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useruuid"))
+	if tmp, ok := rawArgs["userUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["useruuid"] = arg0
+	args["userUUID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchuuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchuuid"))
+	if tmp, ok := rawArgs["matchUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchuuid"] = arg1
+	args["matchUUID"] = arg1
 	var arg2 int
 	if tmp, ok := rawArgs["homeGoals"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("homeGoals"))
@@ -1052,95 +1062,104 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["email"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
+	if tmp, ok := rawArgs["username"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("username"))
 		arg0, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["email"] = arg0
+	args["username"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["firstName"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstName"))
+	if tmp, ok := rawArgs["email"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("email"))
 		arg1, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["firstName"] = arg1
+	args["email"] = arg1
 	var arg2 string
-	if tmp, ok := rawArgs["lastName"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName"))
+	if tmp, ok := rawArgs["firstName"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstName"))
 		arg2, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["lastName"] = arg2
+	args["firstName"] = arg2
 	var arg3 string
-	if tmp, ok := rawArgs["address1"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address1"))
+	if tmp, ok := rawArgs["lastName"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("lastName"))
 		arg3, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["address1"] = arg3
-	var arg4 *string
+	args["lastName"] = arg3
+	var arg4 string
+	if tmp, ok := rawArgs["address1"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address1"))
+		arg4, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["address1"] = arg4
+	var arg5 *string
 	if tmp, ok := rawArgs["address2"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("address2"))
-		arg4, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg5, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["address2"] = arg4
-	var arg5 string
+	args["address2"] = arg5
+	var arg6 string
 	if tmp, ok := rawArgs["city"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("city"))
-		arg5, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["city"] = arg5
-	var arg6 string
-	if tmp, ok := rawArgs["password"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
 		arg6, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["password"] = arg6
-	var arg7 *string
+	args["city"] = arg6
+	var arg7 string
+	if tmp, ok := rawArgs["password"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("password"))
+		arg7, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["password"] = arg7
+	var arg8 *string
 	if tmp, ok := rawArgs["province"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("province"))
-		arg7, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg8, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["province"] = arg7
-	var arg8 string
+	args["province"] = arg8
+	var arg9 string
 	if tmp, ok := rawArgs["postalCode"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("postalCode"))
-		arg8, err = ec.unmarshalNString2string(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["postalCode"] = arg8
-	var arg9 string
-	if tmp, ok := rawArgs["country"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
 		arg9, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["country"] = arg9
+	args["postalCode"] = arg9
+	var arg10 string
+	if tmp, ok := rawArgs["country"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("country"))
+		arg10, err = ec.unmarshalNString2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["country"] = arg10
 	return args, nil
 }
 
@@ -1193,23 +1212,23 @@ func (ec *executionContext) field_Query_manOfTheMatchVote_args(ctx context.Conte
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["useruuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useruuid"))
+	if tmp, ok := rawArgs["userUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["useruuid"] = arg0
+	args["userUUID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchuuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchuuid"))
+	if tmp, ok := rawArgs["matchUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchuuid"] = arg1
+	args["matchUUID"] = arg1
 	return args, nil
 }
 
@@ -1279,24 +1298,33 @@ func (ec *executionContext) field_Query_matches_args(ctx context.Context, rawArg
 func (ec *executionContext) field_Query_membership_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 string
-	if tmp, ok := rawArgs["useruuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useruuid"))
-		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+	var arg0 *string
+	if tmp, ok := rawArgs["uuid"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uuid"))
+		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["useruuid"] = arg0
-	var arg1 int
+	args["uuid"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["userUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
+		arg1, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["userUUID"] = arg1
+	var arg2 *int
 	if tmp, ok := rawArgs["year"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("year"))
-		arg1, err = ec.unmarshalNInt2int(ctx, tmp)
+		arg2, err = ec.unmarshalOInt2ᚖint(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["year"] = arg1
+	args["year"] = arg2
 	return args, nil
 }
 
@@ -1304,14 +1332,14 @@ func (ec *executionContext) field_Query_memberships_args(ctx context.Context, ra
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *string
-	if tmp, ok := rawArgs["userID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userID"))
+	if tmp, ok := rawArgs["userUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
 		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userID"] = arg0
+	args["userUUID"] = arg0
 	var arg1 *int
 	if tmp, ok := rawArgs["year"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("year"))
@@ -1328,23 +1356,23 @@ func (ec *executionContext) field_Query_revGuess_args(ctx context.Context, rawAr
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["useruuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("useruuid"))
+	if tmp, ok := rawArgs["userUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["useruuid"] = arg0
+	args["userUUID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchuuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchuuid"))
+	if tmp, ok := rawArgs["matchUUID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchuuid"] = arg1
+	args["matchUUID"] = arg1
 	return args, nil
 }
 
@@ -2400,7 +2428,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUser(rctx, args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(*string), args["postalCode"].(string), args["country"].(string))
+		return ec.resolvers.Mutation().CreateUser(rctx, args["username"].(string), args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(*string), args["postalCode"].(string), args["country"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2442,7 +2470,7 @@ func (ec *executionContext) _Mutation_createRevGuess(ctx context.Context, field 
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRevGuess(rctx, args["useruuid"].(string), args["matchuuid"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string))
+		return ec.resolvers.Mutation().CreateRevGuess(rctx, args["userUUID"].(string), args["matchUUID"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2484,7 +2512,7 @@ func (ec *executionContext) _Mutation_createManOfTheMatchVote(ctx context.Contex
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateManOfTheMatchVote(rctx, args["useruuid"].(string), args["matchuuid"].(string), args["firstPickuuid"].(string), args["secondPickID"].(*string), args["thirdPickID"].(*string))
+		return ec.resolvers.Mutation().CreateManOfTheMatchVote(rctx, args["userUUID"].(string), args["matchUUID"].(string), args["firstPickUUID"].(string), args["secondPickUUID"].(*string), args["thirdPickUUID"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2804,7 +2832,7 @@ func (ec *executionContext) _Query_membership(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Membership(rctx, args["useruuid"].(string), args["year"].(int))
+		return ec.resolvers.Query().Membership(rctx, args["uuid"].(*string), args["userUUID"].(*string), args["year"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2843,7 +2871,7 @@ func (ec *executionContext) _Query_memberships(ctx context.Context, field graphq
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Memberships(rctx, args["userID"].(*string), args["year"].(*int))
+		return ec.resolvers.Query().Memberships(rctx, args["userUUID"].(*string), args["year"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3038,7 +3066,7 @@ func (ec *executionContext) _Query_revGuess(ctx context.Context, field graphql.C
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().RevGuess(rctx, args["useruuid"].(string), args["matchuuid"].(string))
+		return ec.resolvers.Query().RevGuess(rctx, args["userUUID"].(string), args["matchUUID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3116,7 +3144,7 @@ func (ec *executionContext) _Query_manOfTheMatchVote(ctx context.Context, field 
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ManOfTheMatchVote(rctx, args["useruuid"].(string), args["matchuuid"].(string))
+		return ec.resolvers.Query().ManOfTheMatchVote(rctx, args["userUUID"].(string), args["matchUUID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3480,6 +3508,41 @@ func (ec *executionContext) _User_uuid(ctx context.Context, field graphql.Collec
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNID2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _User_username(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "User",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Username, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_email(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -5509,6 +5572,11 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = graphql.MarshalString("User")
 		case "uuid":
 			out.Values[i] = ec._User_uuid(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "username":
+			out.Values[i] = ec._User_username(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
