@@ -27,6 +27,7 @@ type User {
   province: String
   postalCode: String!
   country: String!
+  admin: Boolean!
   membershipNumber: Int!
 
   memberships: [Membership!]
@@ -57,11 +58,13 @@ enum Conference {
 
 type Club {
   id: ID!
+  abbreviation: String!
   name: String!
   primaryColor: String!
   secondaryColor: String!
   accentColor: String!
   conference: Conference!
+  active: Boolean!
 }
 
 enum Position {
@@ -128,6 +131,7 @@ type Mutation {
     address1: String!,
     address2: String,
     city: String!,
+    password: String!,
     province: String,
     postalCode: String!,
     country: String!
