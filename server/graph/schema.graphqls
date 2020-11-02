@@ -1,23 +1,23 @@
 scalar Date
 
 type Query {
-  user(id: ID!): User
+  user(uuid: ID!): User
   users: [User!]
-  membership(userID: ID!, year: Int!): Membership
+  membership(useruuid: ID!, year: Int!): Membership
   memberships(userID: ID, year: Int): [Membership!]
 
-  club(id: ID!): Club
+  club(uuid: ID!): Club
   clubs(conference: Conference): [Club!]
-  match(id: ID!): Match
+  match(uuid: ID!): Match
   matches(before: Date, after: Date, club: ID): [Match!]
-  revGuess(userID: ID!, matchID: ID!): RevGuess
+  revGuess(useruuid: ID!, matchuuid: ID!): RevGuess
   revGuesses(matchID: ID): [RevGuess!]
-  manOfTheMatchVote(userID: ID!, matchID: ID!): ManOfTheMatchVote
+  manOfTheMatchVote(useruuid: ID!, matchuuid: ID!): ManOfTheMatchVote
   manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
 }
 
 type User {
-  id: ID!
+  uuid: ID!
   email: String!
   firstName: String!
   lastName: String!
@@ -44,7 +44,7 @@ enum MembershipType {
 }
 
 type Membership {
-  id: ID!
+  uuid: ID!
   user: User!
   year: Int!
   type: MembershipType!
@@ -57,7 +57,7 @@ enum Conference {
 }
 
 type Club {
-  id: ID!
+  uuid: ID!
   abbreviation: String!
   name: String!
   primaryColor: String!
@@ -75,7 +75,7 @@ enum Position {
 }
 
 type Player {
-  id: ID!
+  uuid: ID!
   firstName: String!
   lastName: String!
   position: Position!
@@ -94,7 +94,7 @@ enum MatchStatus {
 }
 
 type Match {
-  id: ID!
+  uuid: ID!
   kickoff: DateTime!
   homeClub: Club!
   awayClub: Club!
@@ -106,7 +106,7 @@ type Match {
 }
 
 type RevGuess {
-  id: ID!
+  uuid: ID!
   match: Match!
   user: User!
   homeGoals: Int!
@@ -115,7 +115,7 @@ type RevGuess {
 }
 
 type ManOfTheMatchVote {
-  id: ID!
+  uuid: ID!
   match: Match!
   user: User!
   firstPick: Player!
@@ -138,17 +138,17 @@ type Mutation {
   ): User!
 
   createRevGuess(
-    userID: ID!,
-    matchID: ID!,
+    useruuid: ID!,
+    matchuuid: ID!,
     homeGoals: Int!,
     awayGoals: Int!,
     comment: String
   ): RevGuess!
 
   createManOfTheMatchVote(
-    userID: ID!,
-    matchID: ID!,
-    firstPickID: ID!,
+    useruuid: ID!,
+    matchuuid: ID!,
+    firstPickuuid: ID!,
     secondPickID: ID,
     thirdPickID: ID
   ): ManOfTheMatchVote

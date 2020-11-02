@@ -9,16 +9,18 @@ import (
 )
 
 type Club struct {
-	ID             string     `json:"id"`
+	UUID           string     `json:"uuid"`
+	Abbreviation   string     `json:"abbreviation"`
 	Name           string     `json:"name"`
 	PrimaryColor   string     `json:"primaryColor"`
 	SecondaryColor string     `json:"secondaryColor"`
 	AccentColor    string     `json:"accentColor"`
 	Conference     Conference `json:"conference"`
+	Active         bool       `json:"active"`
 }
 
 type ManOfTheMatchVote struct {
-	ID         string  `json:"id"`
+	UUID       string  `json:"uuid"`
 	Match      *Match  `json:"match"`
 	User       *User   `json:"user"`
 	FirstPick  *Player `json:"firstPick"`
@@ -27,7 +29,7 @@ type ManOfTheMatchVote struct {
 }
 
 type Match struct {
-	ID                 string               `json:"id"`
+	UUID               string               `json:"uuid"`
 	Kickoff            string               `json:"kickoff"`
 	HomeClub           *Club                `json:"homeClub"`
 	AwayClub           *Club                `json:"awayClub"`
@@ -39,7 +41,7 @@ type Match struct {
 }
 
 type Membership struct {
-	ID    string         `json:"id"`
+	UUID  string         `json:"uuid"`
 	User  *User          `json:"user"`
 	Year  int            `json:"year"`
 	Type  MembershipType `json:"type"`
@@ -47,7 +49,7 @@ type Membership struct {
 }
 
 type Player struct {
-	ID        string   `json:"id"`
+	UUID      string   `json:"uuid"`
 	FirstName string   `json:"firstName"`
 	LastName  string   `json:"lastName"`
 	Position  Position `json:"position"`
@@ -56,7 +58,7 @@ type Player struct {
 }
 
 type RevGuess struct {
-	ID        string  `json:"id"`
+	UUID      string  `json:"uuid"`
 	Match     *Match  `json:"match"`
 	User      *User   `json:"user"`
 	HomeGoals int     `json:"homeGoals"`
@@ -65,17 +67,19 @@ type RevGuess struct {
 }
 
 type User struct {
-	ID          string        `json:"id"`
-	Email       string        `json:"email"`
-	FirstName   string        `json:"firstName"`
-	LastName    string        `json:"lastName"`
-	Address1    string        `json:"address1"`
-	Address2    *string       `json:"address2"`
-	City        string        `json:"city"`
-	State       *string       `json:"state"`
-	PostalCode  string        `json:"postalCode"`
-	Country     string        `json:"country"`
-	Memberships []*Membership `json:"memberships"`
+	UUID             string        `json:"uuid"`
+	Email            string        `json:"email"`
+	FirstName        string        `json:"firstName"`
+	LastName         string        `json:"lastName"`
+	Address1         string        `json:"address1"`
+	Address2         *string       `json:"address2"`
+	City             string        `json:"city"`
+	Province         *string       `json:"province"`
+	PostalCode       string        `json:"postalCode"`
+	Country          string        `json:"country"`
+	Admin            bool          `json:"admin"`
+	MembershipNumber int           `json:"membershipNumber"`
+	Memberships      []*Membership `json:"memberships"`
 }
 
 type Conference string
@@ -255,20 +259,18 @@ func (e Position) MarshalGQL(w io.Writer) {
 type Role string
 
 const (
-	RoleAdmin        Role = "Admin"
-	RoleExecBoard    Role = "ExecBoard"
-	RoleAtLargeBoard Role = "AtLargeBoard"
+	RoleExecutiveBoard Role = "ExecutiveBoard"
+	RoleAtLargeBoard   Role = "AtLargeBoard"
 )
 
 var AllRole = []Role{
-	RoleAdmin,
-	RoleExecBoard,
+	RoleExecutiveBoard,
 	RoleAtLargeBoard,
 }
 
 func (e Role) IsValid() bool {
 	switch e {
-	case RoleAdmin, RoleExecBoard, RoleAtLargeBoard:
+	case RoleExecutiveBoard, RoleAtLargeBoard:
 		return true
 	}
 	return false
