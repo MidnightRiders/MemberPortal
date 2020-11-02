@@ -1,8 +1,15 @@
+scalar Date
+
 type Query {
   user(id: ID!): User
   users: [User!]
   membership(userID: ID!, year: Int!): Membership
   memberships(userID: ID, year: Int): [Membership!]
+
+  club(id: ID!): Club
+  clubs(conference: Conference): [Club!]
+  match(id: ID!): Match
+  matches(before: Date, after: Date, club: ID): [Match!]
   revGuess(userID: ID!, matchID: ID!): RevGuess
   revGuesses(matchID: ID): [RevGuess!]
   manOfTheMatchVote(userID: ID!, matchID: ID!): ManOfTheMatchVote
@@ -17,16 +24,16 @@ type User {
   address1: String!
   address2: String
   city: String!
-  state: String
+  province: String
   postalCode: String!
   country: String!
+  membershipNumber: Int!
 
   memberships: [Membership!]
 }
 
 enum Role {
-  Admin
-  ExecBoard
+  ExecutiveBoard
   AtLargeBoard
 }
 
@@ -121,7 +128,7 @@ type Mutation {
     address1: String!,
     address2: String,
     city: String!,
-    state: String,
+    province: String,
     postalCode: String!,
     country: String!
   ): User!

@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: fresh
+    depends_on:
+      - rdbms
+    environment:
+      PORT: '5991'
+      POSTGRESQL_URL: postgres://midnight_riders_dev:insecure_dev_password@rdbms:5432?sslmode=disable
+    ports:
+      - '5991:5991'
+    volumes:
+      - .:/go/src/github.com/MidnightRiders/MemberPortal/server
+  rdbms:
+    image: 'postgres:9.6.19-alpine'
+    environment:
+      POSTGRES_USER: midnight_riders_dev
+      POSTGRES_PASSWORD: insecure_dev_password
+      POSTGRES_DB: midnight_riders_dev
+    ports:
+      - '5992:5432'
+    volumes:
+      - data:/var/lib/postgresql/data
+  start_rdbms:
+    command: rdbms:5432
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - rdbms
+volumes:
+  data:

@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+cd "$(dirname "$0")/.."
+
 script/setup
 
-docker run --rm midnightriders-server:dev go test ./...
+docker-compose run --service-ports web go test ./...
