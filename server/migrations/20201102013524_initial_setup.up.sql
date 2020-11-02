@@ -41,7 +41,7 @@ CREATE TABLE users (
     address2 VARCHAR (128),
     city VARCHAR (64),
     province VARCHAR (64),
-    postalCode VARCHAR (16),
+    postal_code VARCHAR (16),
     country VARCHAR (64),
     membership_number SERIAL UNIQUE NOT NULL
 );

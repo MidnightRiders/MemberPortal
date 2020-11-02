@@ -9,7 +9,7 @@ services:
       - rdbms
     environment:
       PORT: '5991'
-      POSTGRESQL_URL: postgres://midnight_riders_dev:insecure_dev_password@rdbms:5432/midnight_riders_dev?sslmode=disable
+      DATABASE_URL: postgres://midnight_riders_dev:insecure_dev_password@rdbms:5432/midnight_riders_dev?sslmode=disable
     ports:
       - '5991:5991'
     volumes:
