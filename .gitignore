@@ -30,4 +30,5 @@ config/secrets.yml
 coverage/
 
 node_modules/
-.vscode
+**/.vscode/*
+yarn-error.log
