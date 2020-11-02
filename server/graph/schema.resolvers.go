@@ -39,6 +39,22 @@ func (r *queryResolver) Memberships(ctx context.Context, userID *string, year *i
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *queryResolver) Club(ctx context.Context, id string) (*model.Club, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Clubs(ctx context.Context, conference *model.Conference) ([]*model.Club, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Match(ctx context.Context, id string) (*model.Match, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *queryResolver) Matches(ctx context.Context, before *string, after *string, club *string) ([]*model.Match, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) RevGuess(ctx context.Context, userID string, matchID string) (*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }

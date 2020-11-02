@@ -1,0 +1,35 @@
+BEGIN;
+
+DROP INDEX IF EXISTS motm_per_user;
+DROP INDEX IF EXISTS motm_third_pick;
+DROP INDEX IF EXISTS motm_second_pick;
+DROP INDEX IF EXISTS motm_first_pick;
+DROP INDEX IF EXISTS motm_match;
+DROP INDEX IF EXISTS motm_user;
+DROP TABLE IF EXISTS man_of_the_match_votes;
+DROP INDEX IF EXISTS rev_guess_per_user;
+DROP INDEX IF EXISTS rev_guess_match;
+DROP INDEX IF EXISTS rev_guess_user;
+DROP TABLE IF EXISTS rev_guesses;
+DROP INDEX IF EXISTS match_away_club;
+DROP INDEX IF EXISTS match_home_club;
+DROP TABLE IF EXISTS matches;
+DROP TYPE IF EXISTS match_status;
+DROP INDEX IF EXISTS player_club;
+DROP TABLE IF EXISTS players;
+DROP TYPE IF EXISTS player_position;
+DROP INDEX IF EXISTS admin_users;
+DROP TABLE IF EXISTS admins;
+DROP INDEX IF EXISTS user_membership_year;
+DROP INDEX IF EXISTS membership_type;
+DROP INDEX IF EXISTS membership_role;
+DROP INDEX IF EXISTS membership_user;
+DROP TABLE IF EXISTS memberships;
+DROP TYPE IF EXISTS membership_role;
+DROP TYPE IF EXISTS membership_type;
+DROP TABLE IF EXISTS users;
+DROP INDEX IF EXISTS club_conference;
+DROP TABLE IF EXISTS clubs;
+DROP TYPE IF EXISTS conference;
+
+COMMIT;

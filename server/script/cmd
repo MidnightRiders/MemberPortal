@@ -1,0 +1,25 @@
+#!/bin/bash -e
+
+cd "$(dirname "$0")/.."
+
+script/setup
+
+services=( rdbms web )
+services_to_stop=()
+for s in "${services[@]}"; do
+    if ! docker-compose ps | awk '{print $1}' | grep -q "$s"; then
+        services_to_stop+=( "$s" )
+    fi
+done
+
+docker-compose run --rm start_rdbms
+docker-compose run --rm --service-ports web "${@}"
+
+if [ "${#services}" = "${#services_to_stop}" ]; then
+    docker-compose down
+else
+    for s in "${services_to_stop[@]}"; do
+        docker-compose stop "$s"
+        docker-compose rm "$s"
+    done
+fi

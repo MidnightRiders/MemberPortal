@@ -1,5 +1,12 @@
 #!/bin/sh -e
 
+cd "$(dirname "$0")/.."
+
 script/setup
 
-docker run --rm midnightriders-server:dev fresh
+docker-compose run --rm start_rdbms
+docker-compose up
+
+ec="$?"
+docker-compose down
+exit "$ec"

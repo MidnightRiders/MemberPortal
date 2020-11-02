@@ -96,8 +96,12 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
+		Club               func(childComplexity int, id string) int
+		Clubs              func(childComplexity int, conference *model.Conference) int
 		ManOfTheMatchVote  func(childComplexity int, userID string, matchID string) int
 		ManOfTheMatchVotes func(childComplexity int, matchID *string) int
+		Match              func(childComplexity int, id string) int
+		Matches            func(childComplexity int, before *string, after *string, club *string) int
 		Membership         func(childComplexity int, userID string, year int) int
 		Memberships        func(childComplexity int, userID *string, year *int) int
 		RevGuess           func(childComplexity int, userID string, matchID string) int
@@ -140,6 +144,10 @@ type QueryResolver interface {
 	Users(ctx context.Context) ([]*model.User, error)
 	Membership(ctx context.Context, userID string, year int) (*model.Membership, error)
 	Memberships(ctx context.Context, userID *string, year *int) ([]*model.Membership, error)
+	Club(ctx context.Context, id string) (*model.Club, error)
+	Clubs(ctx context.Context, conference *model.Conference) ([]*model.Club, error)
+	Match(ctx context.Context, id string) (*model.Match, error)
+	Matches(ctx context.Context, before *string, after *string, club *string) ([]*model.Match, error)
 	RevGuess(ctx context.Context, userID string, matchID string) (*model.RevGuess, error)
 	RevGuesses(ctx context.Context, matchID *string) ([]*model.RevGuess, error)
 	ManOfTheMatchVote(ctx context.Context, userID string, matchID string) (*model.ManOfTheMatchVote, error)
@@ -421,6 +429,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Player.Position(childComplexity), true
 
+	case "Query.club":
+		if e.complexity.Query.Club == nil {
+			break
+		}
+
+		args, err := ec.field_Query_club_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Club(childComplexity, args["id"].(string)), true
+
+	case "Query.clubs":
+		if e.complexity.Query.Clubs == nil {
+			break
+		}
+
+		args, err := ec.field_Query_clubs_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Clubs(childComplexity, args["conference"].(*model.Conference)), true
+
 	case "Query.manOfTheMatchVote":
 		if e.complexity.Query.ManOfTheMatchVote == nil {
 			break
@@ -444,6 +476,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.ManOfTheMatchVotes(childComplexity, args["matchID"].(*string)), true
+
+	case "Query.match":
+		if e.complexity.Query.Match == nil {
+			break
+		}
+
+		args, err := ec.field_Query_match_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Match(childComplexity, args["id"].(string)), true
+
+	case "Query.matches":
+		if e.complexity.Query.Matches == nil {
+			break
+		}
+
+		args, err := ec.field_Query_matches_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Matches(childComplexity, args["before"].(*string), args["after"].(*string), args["club"].(*string)), true
 
 	case "Query.membership":
 		if e.complexity.Query.Membership == nil {
@@ -695,11 +751,18 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema.graphqls", Input: `type Query {
+	{Name: "graph/schema.graphqls", Input: `scalar Date
+
+type Query {
   user(id: ID!): User
   users: [User!]
   membership(userID: ID!, year: Int!): Membership
   memberships(userID: ID, year: Int): [Membership!]
+
+  club(id: ID!): Club
+  clubs(conference: Conference): [Club!]
+  match(id: ID!): Match
+  matches(before: Date, after: Date, club: ID): [Match!]
   revGuess(userID: ID!, matchID: ID!): RevGuess
   revGuesses(matchID: ID): [RevGuess!]
   manOfTheMatchVote(userID: ID!, matchID: ID!): ManOfTheMatchVote
@@ -1051,6 +1114,36 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
+func (ec *executionContext) field_Query_club_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_clubs_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *model.Conference
+	if tmp, ok := rawArgs["conference"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("conference"))
+		arg0, err = ec.unmarshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["conference"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Query_manOfTheMatchVote_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -1087,6 +1180,54 @@ func (ec *executionContext) field_Query_manOfTheMatchVotes_args(ctx context.Cont
 		}
 	}
 	args["matchID"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_match_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_matches_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["before"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
+		arg0, err = ec.unmarshalODate2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["before"] = arg0
+	var arg1 *string
+	if tmp, ok := rawArgs["after"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
+		arg1, err = ec.unmarshalODate2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["after"] = arg1
+	var arg2 *string
+	if tmp, ok := rawArgs["club"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("club"))
+		arg2, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["club"] = arg2
 	return args, nil
 }
 
@@ -2599,6 +2740,162 @@ func (ec *executionContext) _Query_memberships(ctx context.Context, field graphq
 	res := resTmp.([]*model.Membership)
 	fc.Result = res
 	return ec.marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_club(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_club_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Club(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Club)
+	fc.Result = res
+	return ec.marshalOClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_clubs(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_clubs_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Clubs(rctx, args["conference"].(*model.Conference))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Club)
+	fc.Result = res
+	return ec.marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClubᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_match(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_match_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Match(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Match)
+	fc.Result = res
+	return ec.marshalOMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Query_matches(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   true,
+		IsResolver: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Query_matches_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Matches(rctx, args["before"].(*string), args["after"].(*string), args["club"].(*string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.([]*model.Match)
+	fc.Result = res
+	return ec.marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatchᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_revGuess(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -4852,6 +5149,50 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				res = ec._Query_memberships(ctx, field)
 				return res
 			})
+		case "club":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_club(ctx, field)
+				return res
+			})
+		case "clubs":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_clubs(ctx, field)
+				return res
+			})
+		case "match":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_match(ctx, field)
+				return res
+			})
+		case "matches":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_matches(ctx, field)
+				return res
+			})
 		case "revGuess":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
@@ -5729,6 +6070,84 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
+func (ec *executionContext) marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClubᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Club) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx context.Context, sel ast.SelectionSet, v *model.Club) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Club(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx context.Context, v interface{}) (*model.Conference, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(model.Conference)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx context.Context, sel ast.SelectionSet, v *model.Conference) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalODate2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalODate2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalString(*v)
+}
+
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -5804,6 +6223,53 @@ func (ec *executionContext) marshalOManOfTheMatchVote2ᚖgithubᚗcomᚋMidnight
 		return graphql.Null
 	}
 	return ec._ManOfTheMatchVote(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatchᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Match) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalOMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx context.Context, sel ast.SelectionSet, v *model.Match) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._Match(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Membership) graphql.Marshaler {
