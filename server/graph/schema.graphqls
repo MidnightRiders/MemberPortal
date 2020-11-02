@@ -3,21 +3,22 @@ scalar Date
 type Query {
   user(uuid: ID!): User
   users: [User!]
-  membership(useruuid: ID!, year: Int!): Membership
-  memberships(userID: ID, year: Int): [Membership!]
+  membership(uuid: ID, userUUID: ID, year: Int): Membership
+  memberships(userUUID: ID, year: Int): [Membership!]
 
   club(uuid: ID!): Club
   clubs(conference: Conference): [Club!]
   match(uuid: ID!): Match
   matches(before: Date, after: Date, club: ID): [Match!]
-  revGuess(useruuid: ID!, matchuuid: ID!): RevGuess
+  revGuess(userUUID: ID!, matchUUID: ID!): RevGuess
   revGuesses(matchID: ID): [RevGuess!]
-  manOfTheMatchVote(useruuid: ID!, matchuuid: ID!): ManOfTheMatchVote
+  manOfTheMatchVote(userUUID: ID!, matchUUID: ID!): ManOfTheMatchVote
   manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
 }
 
 type User {
   uuid: ID!
+  username: String!
   email: String!
   firstName: String!
   lastName: String!
@@ -125,6 +126,7 @@ type ManOfTheMatchVote {
 
 type Mutation {
   createUser(
+    username: String!,
     email: String!,
     firstName: String!,
     lastName: String!,
@@ -138,18 +140,18 @@ type Mutation {
   ): User!
 
   createRevGuess(
-    useruuid: ID!,
-    matchuuid: ID!,
+    userUUID: ID!,
+    matchUUID: ID!,
     homeGoals: Int!,
     awayGoals: Int!,
     comment: String
   ): RevGuess!
 
   createManOfTheMatchVote(
-    useruuid: ID!,
-    matchuuid: ID!,
-    firstPickuuid: ID!,
-    secondPickID: ID,
-    thirdPickID: ID
+    userUUID: ID!,
+    matchUUID: ID!,
+    firstPickUUID: ID!,
+    secondPickUUID: ID,
+    thirdPickUUID: ID
   ): ManOfTheMatchVote
 }
