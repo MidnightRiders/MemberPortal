@@ -40,14 +40,6 @@ type Match struct {
 	ManOfTheMatchVotes []*ManOfTheMatchVote `json:"manOfTheMatchVotes"`
 }
 
-type Membership struct {
-	UUID  string         `json:"uuid"`
-	User  *User          `json:"user"`
-	Year  int            `json:"year"`
-	Type  MembershipType `json:"type"`
-	Roles []Role         `json:"roles"`
-}
-
 type Player struct {
 	UUID      string   `json:"uuid"`
 	FirstName string   `json:"firstName"`
@@ -64,23 +56,6 @@ type RevGuess struct {
 	HomeGoals int     `json:"homeGoals"`
 	AwayGoals int     `json:"awayGoals"`
 	Comment   *string `json:"comment"`
-}
-
-type User struct {
-	UUID             string        `json:"uuid"`
-	Username         string        `json:"username"`
-	Email            string        `json:"email"`
-	FirstName        string        `json:"firstName"`
-	LastName         string        `json:"lastName"`
-	Address1         string        `json:"address1"`
-	Address2         *string       `json:"address2"`
-	City             string        `json:"city"`
-	Province         *string       `json:"province"`
-	PostalCode       string        `json:"postalCode"`
-	Country          string        `json:"country"`
-	Admin            bool          `json:"admin"`
-	MembershipNumber int           `json:"membershipNumber"`
-	Memberships      []*Membership `json:"memberships"`
 }
 
 type Conference string
