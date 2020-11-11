@@ -5,13 +5,22 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/MidnightRiders/MemberPortal/server/graph/generated"
 	"github.com/MidnightRiders/MemberPortal/server/graph/model"
-	"github.com/MidnightRiders/MemberPortal/server/internal/db"
 )
+
+func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {
+	row := r.DB.QueryRowContext(ctx, "SELECT "+model.UserColumns+" FROM users WHERE uuid = ?", obj.UserUUID)
+	user := model.UserFromRow(row)
+	if user == nil {
+		return nil, errors.New("Could not find user with UUID matching UserUUID of membership")
+	}
+	return user, nil
+}
 
 func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) (*model.User, error) {
 	panic(fmt.Errorf("not implemented"))
@@ -26,84 +35,61 @@ func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userUUID
 }
 
 func (r *queryResolver) User(ctx context.Context, uuid string) (*model.User, error) {
-	db, err := db.FromContext(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	row := db.QueryRowContext(ctx, "SELECT "+userColumns+" FROM users WHERE uuid = ? LIMIT 1", uuid)
+	row := r.DB.QueryRowContext(ctx, "SELECT "+model.UserColumns+" FROM users WHERE uuid = ? LIMIT 1", uuid)
 	if row == nil {
 		return nil, nil
 	}
 
-	user := &model.User{}
-	row.Scan(
-		user.UUID,
-		user.Email,
-		user.FirstName,
-		user.LastName,
-		// TODO: this is only visible to admins and board members
-		user.Address1,
-		user.Address2,
-		user.City,
-		user.Province,
-		user.PostalCode,
-		user.Country,
-	)
-
-	if user.UUID == "" {
-		return nil, nil
-	}
-
-	return user, nil
+	return model.UserFromRow(row), nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	users := []*model.User{}
-	db, err := db.FromContext(ctx)
-	if err != nil {
-		return users, err
-	}
 
-	resp, err := db.QueryContext(ctx, "SELECT "+userColumns+" FROM users")
+	resp, err := r.DB.QueryContext(ctx, "SELECT "+model.UserColumns+" FROM users")
 	if err != nil {
 		return users, err
 	}
 	defer resp.Close()
 
 	for resp.Next() {
-		user := &model.User{}
-		resp.Scan(
-			user.UUID,
-			user.Email,
-			user.FirstName,
-			user.LastName,
-			// TODO: this is only visible to admins and board members
-			user.Address1,
-			user.Address2,
-			user.City,
-			user.Province,
-			user.PostalCode,
-			user.Country,
-		)
-		users = append(users, user)
+		if user := model.UserFromRow(resp); user != nil {
+			users = append(users, user)
+		}
 	}
 	return users, nil
 }
 
 func (r *queryResolver) Membership(ctx context.Context, uuid *string, userUUID *string, year *int) (*model.Membership, error) {
-	panic(fmt.Errorf("not implemented"))
+	query := "SELECT " + model.MembershipColumns + " FROM memberships"
+	conditions := []string{}
+	args := []interface{}{}
+
+	if uuid != nil {
+		conditions = append(conditions, "uuid = ?")
+		args = append(args, *uuid)
+	}
+	if userUUID != nil {
+		conditions = append(conditions, "user_uuid = ?")
+		args = append(args, *userUUID)
+	}
+	if year != nil {
+		conditions = append(conditions, "year = ?")
+		args = append(args, *year)
+	}
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
+
+	row := r.DB.QueryRowContext(ctx, query, args...)
+
+	return model.MembershipFromRow(row), nil
 }
 
 func (r *queryResolver) Memberships(ctx context.Context, userUUID *string, year *int) ([]*model.Membership, error) {
 	memberships := []*model.Membership{}
 
-	db, err := db.FromContext(ctx)
-	if err != nil {
-		return memberships, err
-	}
-
-	query := "SELECT " + membershipColumns + " FROM memberships"
+	query := "SELECT " + model.MembershipColumns + " FROM memberships"
 	conditions := []string{}
 	args := []interface{}{}
 	if userUUID != nil {
@@ -114,18 +100,19 @@ func (r *queryResolver) Memberships(ctx context.Context, userUUID *string, year 
 		conditions = append(conditions, "year = ?")
 		args = append(args, *year)
 	}
-	query += " " + strings.Join(conditions, " AND ")
+	if len(conditions) > 0 {
+		query += " WHERE " + strings.Join(conditions, " AND ")
+	}
 
-	resp, err := db.QueryContext(ctx, query, args...)
+	resp, err := r.DB.QueryContext(ctx, query, args...)
 	if err != nil {
 		return memberships, err
 	}
 
 	for resp.Next() {
-		membership := &model.Membership{}
-		resp.Scan(
-			membership.UUID,
-		)
+		if membership := model.MembershipFromRow(resp); membership != nil {
+			memberships = append(memberships, membership)
+		}
 	}
 	return memberships, nil
 }
@@ -162,11 +149,15 @@ func (r *queryResolver) ManOfTheMatchVotes(ctx context.Context, matchID *string)
 	panic(fmt.Errorf("not implemented"))
 }
 
+// Membership returns generated.MembershipResolver implementation.
+func (r *Resolver) Membership() generated.MembershipResolver { return &membershipResolver{r} }
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
+type membershipResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
