@@ -8,9 +8,11 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/MidnightRiders/MemberPortal/server/graph/generated"
 	"github.com/MidnightRiders/MemberPortal/server/graph/model"
+	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 )
 
 func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {
@@ -20,6 +22,25 @@ func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*
 		return nil, errors.New("Could not find user with UUID matching UserUUID of membership")
 	}
 	return user, nil
+}
+
+func (r *mutationResolver) LogIn(ctx context.Context, username string, password string) (*model.Session, error) {
+	sess, err := auth.LogIn(ctx, r.DB, auth.LogInPayload{Username: username, Password: password}, r.Env)
+	if err != nil {
+		return nil, err
+	}
+	return &model.Session{
+		Token:   sess.UUID,
+		Expires: sess.Expires.UTC().Format(time.RFC3339),
+	}, nil
+}
+
+func (r *mutationResolver) LogOut(ctx context.Context) (bool, error) {
+	result := auth.LogOut(ctx, r.DB, r.Env)
+	if result == false {
+		return false, errors.New("An error was encountered while logging out")
+	}
+	return true, nil
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) (*model.User, error) {

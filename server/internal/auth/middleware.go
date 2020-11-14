@@ -11,10 +11,10 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/internal/memberships"
 )
 
-type session struct {
-	UUID        string
-	ArrivalUUID string
-	Expires     time.Time
+type Session struct {
+	UUID     string
+	UserUUID string
+	Expires  time.Time
 }
 
 // ExpireTime is a reusable time for expiring cookies
@@ -23,8 +23,7 @@ var ExpireTime time.Time = time.Date(1995, 12, 1, 12, 0, 0, 0, time.UTC)
 // TimeNow wraps time.Now so it can be stubbed for testing
 var TimeNow func() time.Time = time.Now
 
-func setCookie(w http.ResponseWriter, r *http.Request, uuid string, expires time.Time) {
-	domain := r.URL.Hostname()
+func setCookie(w http.ResponseWriter, domain string, uuid string, expires time.Time) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session",
 		Domain:   domain,
@@ -55,7 +54,7 @@ func strYrs() []string {
 
 // CreateMiddleware returns a Middleware function for authenticating
 // requests
-func CreateMiddleware(db *sql.DB) func(http.Handler) http.Handler {
+func CreateMiddleware(db *sql.DB, domain string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
@@ -64,15 +63,15 @@ func CreateMiddleware(db *sql.DB) func(http.Handler) http.Handler {
 			if err == nil && authCookie.Value != "" {
 				sessionUUID := authCookie.Value
 				row := db.QueryRowContext(ctx, fmt.Sprintf(userWithCurrentMembershipQuery, strings.Join(strYrs(), ",")), sessionUUID)
-				sess := session{}
+				sess := Session{}
 				currentMember := false
 				err := row.Scan(
 					&sess.UUID,
-					&sess.ArrivalUUID,
+					&sess.UserUUID,
 					&sess.Expires,
 					&currentMember,
 				)
-				if err == nil && sess.Expires.After(TimeNow()) && sess.ArrivalUUID != "" {
+				if err == nil && sess.Expires.After(TimeNow()) && sess.UserUUID != "" {
 					expires := TimeNow().Add(24 * time.Hour)
 					go func(db *sql.DB) {
 						db.Exec("UPDATE sessions SET expires = ? WHERE uuid = ?", expires, sessionUUID)
@@ -80,13 +79,13 @@ func CreateMiddleware(db *sql.DB) func(http.Handler) http.Handler {
 					sessionInfo.CurrentMember = currentMember
 					sessionInfo.Expires = &expires
 					sessionInfo.LoggedIn = true
-					sessionInfo.UUID = sess.ArrivalUUID
-					setCookie(w, r.WithContext(AddToContext(ctx, sessionInfo)), sess.UUID, expires)
+					sessionInfo.UUID = sess.UserUUID
+					setCookie(w, domain, sess.UUID, expires)
 				} else {
 					go func(db *sql.DB) {
 						db.Exec("DELETE FROM sessions WHERE uuid = ?", sessionUUID)
 					}(db)
-					setCookie(w, r, "", ExpireTime)
+					setCookie(w, domain, "", ExpireTime)
 				}
 			}
 			next.ServeHTTP(w, r.WithContext(AddToContext(ctx, sessionInfo)))

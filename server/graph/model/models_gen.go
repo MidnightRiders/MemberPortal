@@ -58,6 +58,11 @@ type RevGuess struct {
 	Comment   *string `json:"comment"`
 }
 
+type Session struct {
+	Expires string `json:"expires"`
+	Token   string `json:"token"`
+}
+
 type Conference string
 
 const (
