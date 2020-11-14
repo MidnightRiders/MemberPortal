@@ -1,64 +1,19 @@
 package auth_test
 
 import (
-	"bytes"
 	"database/sql"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 	"time"
 
-	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	"github.com/MidnightRiders/MemberPortal/server/internal/memberships"
+	"github.com/MidnightRiders/MemberPortal/server/internal/testhelpers"
+
+	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
 )
-
-type reqParams struct {
-	method  string
-	path    string
-	headers map[string]string
-	cookies []*http.Cookie
-	body    string
-}
-
-func buildReq(p reqParams) *http.Request {
-	method := p.method
-	if method == "" {
-		method = http.MethodGet
-	}
-	path := p.path
-	if path == "" {
-		path = "/"
-	}
-	if strings.HasPrefix(path, "/") {
-		path = "https://members.midnightriders.com" + path
-	}
-	req, _ := http.NewRequest(method, path, bytes.NewReader([]byte(p.body)))
-	if p.cookies != nil {
-		for _, cookie := range p.cookies {
-			req.AddCookie(cookie)
-		}
-	}
-	if p.headers != nil {
-		for key, val := range p.headers {
-			req.Header.Add(key, val)
-		}
-	}
-	return req
-}
-
-func assertEqualCookie(test *testing.T, expectedCookie http.Cookie, receivedCookie *http.Cookie) {
-	if assert.NotNil(test, receivedCookie) {
-		assert.Equal(test, expectedCookie.Name, receivedCookie.Name)
-		assert.Equal(test, expectedCookie.Domain, receivedCookie.Domain)
-		assert.Equal(test, expectedCookie.Value, receivedCookie.Value)
-		assert.Equal(test, expectedCookie.Expires, receivedCookie.Expires)
-		assert.Equal(test, expectedCookie.SameSite, receivedCookie.SameSite)
-		assert.Equal(test, expectedCookie.Secure, receivedCookie.Secure)
-	}
-}
 
 func TestCreateMiddleware(t *testing.T) {
 	testCases := []struct {
@@ -73,7 +28,7 @@ func TestCreateMiddleware(t *testing.T) {
 		{
 			it: "adds empty Info to context when no cookie is set",
 
-			req: buildReq(reqParams{}),
+			req: testhelpers.BuildReq(testhelpers.ReqParams{}),
 
 			proxiedAssertions: func(test *testing.T) http.HandlerFunc {
 				return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -89,8 +44,8 @@ func TestCreateMiddleware(t *testing.T) {
 		{
 			it: "adds empty Info to context and invalidates when invalid cookie is set",
 
-			req: buildReq(reqParams{
-				cookies: []*http.Cookie{
+			req: testhelpers.BuildReq(testhelpers.ReqParams{
+				Cookies: []*http.Cookie{
 					{
 						Name:  "session",
 						Value: "awpeuripewurpawoeiru",
@@ -109,9 +64,9 @@ func TestCreateMiddleware(t *testing.T) {
 
 				assert.Equal(test, len(cookies), 1)
 
-				assertEqualCookie(test, http.Cookie{
+				testhelpers.AssertEqualCookie(test, http.Cookie{
 					Name:     "session",
-					Domain:   "members.midnightriders.com",
+					Domain:   "midnightriders.com",
 					Value:    "",
 					Expires:  auth.ExpireTime,
 					SameSite: http.SameSiteStrictMode,
@@ -148,8 +103,8 @@ func TestCreateMiddleware(t *testing.T) {
 
 				return db, dbCalled, nil
 			},
-			req: buildReq(reqParams{
-				cookies: []*http.Cookie{
+			req: testhelpers.BuildReq(testhelpers.ReqParams{
+				Cookies: []*http.Cookie{
 					{
 						Name:  "session",
 						Value: "2bd02a90-2384-11eb-9dc9-7bccc7b63366",
@@ -168,9 +123,9 @@ func TestCreateMiddleware(t *testing.T) {
 
 				assert.Equal(test, len(cookies), 1)
 
-				assertEqualCookie(test, http.Cookie{
+				testhelpers.AssertEqualCookie(test, http.Cookie{
 					Name:     "session",
-					Domain:   "members.midnightriders.com",
+					Domain:   "midnightriders.com",
 					Value:    "",
 					Expires:  auth.ExpireTime,
 					SameSite: http.SameSiteStrictMode,
@@ -210,8 +165,8 @@ func TestCreateMiddleware(t *testing.T) {
 
 				return db, dbCalled, nil
 			},
-			req: buildReq(reqParams{
-				cookies: []*http.Cookie{
+			req: testhelpers.BuildReq(testhelpers.ReqParams{
+				Cookies: []*http.Cookie{
 					{
 						Name:  "session",
 						Value: "2bd02a90-2384-11eb-9dc9-7bccc7b63366",
@@ -236,9 +191,9 @@ func TestCreateMiddleware(t *testing.T) {
 
 				assert.Equal(test, len(cookies), 1)
 
-				assertEqualCookie(test, http.Cookie{
+				testhelpers.AssertEqualCookie(test, http.Cookie{
 					Name:     "session",
-					Domain:   "members.midnightriders.com",
+					Domain:   "midnightriders.com",
 					Value:    "2bd02a90-2384-11eb-9dc9-7bccc7b63366",
 					Expires:  time.Date(2020, 7, 30, 20, 29, 0, 0, time.UTC),
 					SameSite: http.SameSiteStrictMode,
@@ -283,7 +238,7 @@ func TestCreateMiddleware(t *testing.T) {
 					test.Fatal(err)
 				}
 				defer db.Close()
-				middleware := auth.CreateMiddleware(db)
+				middleware := auth.CreateMiddleware(db, ".midnightriders.com")
 				w := httptest.NewRecorder()
 
 				var inner http.HandlerFunc

@@ -52,11 +52,13 @@ func main() {
 
 	e := env.FromString(os.Getenv("APP_ENV"))
 	log.Printf("Inferred environment is %s", e.ToString())
+	domain := os.Getenv("DOMAIN")
 
 	cfg := generated.Config{
 		Resolvers: &graph.Resolver{
-			DB:  db,
-			Env: e,
+			DB:     db,
+			Domain: domain,
+			Env:    e,
 		},
 	}
 
@@ -67,7 +69,7 @@ func main() {
 		http.Handle("/playground", playground.Handler("GraphQL playground", "/"))
 		log.Printf("connect to http://localhost:%s/playground for GraphQL playground", port)
 	}
-	authMiddleware := auth.CreateMiddleware(db)
+	authMiddleware := auth.CreateMiddleware(db, domain)
 	http.Handle("/", authMiddleware(srv))
 
 	log.Fatal(http.ListenAndServe(":"+port, nil))

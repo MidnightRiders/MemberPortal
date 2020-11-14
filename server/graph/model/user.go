@@ -37,5 +37,6 @@ func UserFromRow(row scannable) *User {
 	if user.UUID == "" {
 		return nil
 	}
+
 	return user
 }

@@ -12,6 +12,7 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	DB  *sql.DB
-	Env env.Env
+	DB     *sql.DB
+	Domain string
+	Env    env.Env
 }

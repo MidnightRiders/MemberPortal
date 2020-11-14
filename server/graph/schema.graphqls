@@ -124,7 +124,15 @@ type ManOfTheMatchVote {
   thirdPick: Player
 }
 
+type Session {
+  expires: Date!
+  token: ID!
+}
+
 type Mutation {
+  logIn(username: String!, password: String!): Session!
+  logOut: Boolean!
+
   createUser(
     username: String!,
     email: String!,
