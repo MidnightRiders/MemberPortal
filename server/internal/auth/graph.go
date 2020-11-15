@@ -36,24 +36,25 @@ type LogInPayload struct {
 func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session, error) {
 	row := db.QueryRowContext(
 		ctx,
-		"SELECT u.uuid, u.password_digest, u.pepper, m.uuid FROM users u WHERE u.username = ?",
+		"SELECT u.uuid, u.password_digest, u.pepper, m.uuid as membership_uuid FROM users u WHERE u.username = ?",
 		p.Username,
 	)
 	var userUUID, passwordDigest, pepper, membershipUUID string
 	err := row.Scan(&userUUID, &passwordDigest, &pepper, &membershipUUID)
 	if err != nil {
 		if err != sql.ErrNoRows {
-			log.Printf("Could not find User for username \"%s\"", p.Username)
-			return nil, errors.New("Invalid username or password")
+			log.Printf("Error looking up user for login: %v", err)
 		}
-		return nil, nil
+		return nil, errors.New("Invalid username or password")
 	}
 
 	salt := os.Getenv("PASSWORD_SALT")
 	seasoned := []byte(p.Password + salt + pepper)
 	err = bcrypt.CompareHashAndPassword([]byte(passwordDigest), seasoned)
 	if err != nil {
-		log.Printf("Error comparing hashed passwords: %v", err)
+		if err != bcrypt.ErrMismatchedHashAndPassword {
+			log.Printf("Error comparing hashed passwords: %v", err)
+		}
 		return nil, errors.New("Invalid username or password")
 	}
 
@@ -98,7 +99,7 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 // LogOut expires a cookie and removes the session from the database
 func LogOut(ctx context.Context, db *sql.DB, e env.Env) bool {
 	info := FromContext(ctx)
-	if info == nil {
+	if info == nil || !info.LoggedIn || info.UUID == "" {
 		return false
 	}
 
@@ -112,7 +113,7 @@ func LogOut(ctx context.Context, db *sql.DB, e env.Env) bool {
 		log.Printf("Error getting rows affected from deleted session: %v", err)
 		return false
 	}
-	if n == 0 {
+	if n <= 0 {
 		log.Println("Rows affected when logging out was zero")
 		return false
 	}

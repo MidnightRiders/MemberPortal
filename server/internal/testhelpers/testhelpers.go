@@ -60,6 +60,9 @@ func createAssertionResultCapturer() (*bool, func(bool) bool) {
 func AssertEqualCookie(test *testing.T, expectedCookie http.Cookie, receivedCookie *http.Cookie) bool {
 	result, capture := createAssertionResultCapturer()
 	if capture(assert.NotNil(test, receivedCookie)) {
+		if expectedCookie.Value == "match-uuid" && receivedCookie.Value != "" {
+			expectedCookie.Value = receivedCookie.Value
+		}
 		capture(assert.Equal(test, expectedCookie.Name, receivedCookie.Name))
 		capture(assert.Equal(test, expectedCookie.Domain, receivedCookie.Domain))
 		capture(assert.Equal(test, expectedCookie.Value, receivedCookie.Value))
