@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"strconv"
+	"time"
 )
 
 type Club struct {
@@ -59,8 +60,8 @@ type RevGuess struct {
 }
 
 type Session struct {
-	Expires string `json:"expires"`
-	Token   string `json:"token"`
+	Expires time.Time `json:"expires"`
+	Token   string    `json:"token"`
 }
 
 type Conference string

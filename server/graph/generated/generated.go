@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"sync"
 	"sync/atomic"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
@@ -87,7 +88,7 @@ type ComplexityRoot struct {
 	Mutation struct {
 		CreateManOfTheMatchVote func(childComplexity int, userUUID string, matchUUID string, firstPickUUID string, secondPickUUID *string, thirdPickUUID *string) int
 		CreateRevGuess          func(childComplexity int, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) int
-		CreateUser              func(childComplexity int, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) int
+		CreateUser              func(childComplexity int, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) int
 		LogIn                   func(childComplexity int, username string, password string) int
 		LogOut                  func(childComplexity int) int
 	}
@@ -107,7 +108,7 @@ type ComplexityRoot struct {
 		ManOfTheMatchVote  func(childComplexity int, userUUID string, matchUUID string) int
 		ManOfTheMatchVotes func(childComplexity int, matchID *string) int
 		Match              func(childComplexity int, uuid string) int
-		Matches            func(childComplexity int, before *string, after *string, club *string) int
+		Matches            func(childComplexity int, before *time.Time, after *time.Time, club *string) int
 		Membership         func(childComplexity int, uuid *string, userUUID *string, year *int) int
 		Memberships        func(childComplexity int, userUUID *string, year *int) int
 		RevGuess           func(childComplexity int, userUUID string, matchUUID string) int
@@ -154,7 +155,7 @@ type MembershipResolver interface {
 type MutationResolver interface {
 	LogIn(ctx context.Context, username string, password string) (*model.Session, error)
 	LogOut(ctx context.Context) (bool, error)
-	CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) (*model.User, error)
+	CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) (*model.User, error)
 	CreateRevGuess(ctx context.Context, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error)
 	CreateManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string, firstPickUUID string, secondPickUUID *string, thirdPickUUID *string) (*model.ManOfTheMatchVote, error)
 }
@@ -166,7 +167,7 @@ type QueryResolver interface {
 	Club(ctx context.Context, uuid string) (*model.Club, error)
 	Clubs(ctx context.Context, conference *model.Conference) ([]*model.Club, error)
 	Match(ctx context.Context, uuid string) (*model.Match, error)
-	Matches(ctx context.Context, before *string, after *string, club *string) ([]*model.Match, error)
+	Matches(ctx context.Context, before *time.Time, after *time.Time, club *string) ([]*model.Match, error)
 	RevGuess(ctx context.Context, userUUID string, matchUUID string) (*model.RevGuess, error)
 	RevGuesses(ctx context.Context, matchID *string) ([]*model.RevGuess, error)
 	ManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string) (*model.ManOfTheMatchVote, error)
@@ -418,7 +419,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateUser(childComplexity, args["username"].(string), args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(*string), args["postalCode"].(string), args["country"].(string)), true
+		return e.complexity.Mutation.CreateUser(childComplexity, args["username"].(string), args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(string), args["postalCode"].(string), args["country"].(string)), true
 
 	case "Mutation.logIn":
 		if e.complexity.Mutation.LogIn == nil {
@@ -551,7 +552,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Matches(childComplexity, args["before"].(*string), args["after"].(*string), args["club"].(*string)), true
+		return e.complexity.Query.Matches(childComplexity, args["before"].(*time.Time), args["after"].(*time.Time), args["club"].(*string)), true
 
 	case "Query.membership":
 		if e.complexity.Query.Membership == nil {
@@ -838,7 +839,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema.graphqls", Input: `scalar Date
+	{Name: "graph/schema.graphqls", Input: `scalar Time
 
 type Query {
   user(uuid: ID!): User
@@ -849,7 +850,7 @@ type Query {
   club(uuid: ID!): Club
   clubs(conference: Conference): [Club!]
   match(uuid: ID!): Match
-  matches(before: Date, after: Date, club: ID): [Match!]
+  matches(before: Time, after: Time, club: ID): [Match!]
   revGuess(userUUID: ID!, matchUUID: ID!): RevGuess
   revGuesses(matchID: ID): [RevGuess!]
   manOfTheMatchVote(userUUID: ID!, matchUUID: ID!): ManOfTheMatchVote
@@ -965,7 +966,7 @@ type ManOfTheMatchVote {
 }
 
 type Session {
-  expires: Date!
+  expires: Time!
   token: ID!
 }
 
@@ -982,7 +983,7 @@ type Mutation {
     address2: String,
     city: String!,
     password: String!,
-    province: String,
+    province: String!,
     postalCode: String!,
     country: String!
   ): User!
@@ -1188,10 +1189,10 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 		}
 	}
 	args["password"] = arg7
-	var arg8 *string
+	var arg8 string
 	if tmp, ok := rawArgs["province"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("province"))
-		arg8, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		arg8, err = ec.unmarshalNString2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1344,19 +1345,19 @@ func (ec *executionContext) field_Query_match_args(ctx context.Context, rawArgs 
 func (ec *executionContext) field_Query_matches_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *string
+	var arg0 *time.Time
 	if tmp, ok := rawArgs["before"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("before"))
-		arg0, err = ec.unmarshalODate2ᚖstring(ctx, tmp)
+		arg0, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
 	args["before"] = arg0
-	var arg1 *string
+	var arg1 *time.Time
 	if tmp, ok := rawArgs["after"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("after"))
-		arg1, err = ec.unmarshalODate2ᚖstring(ctx, tmp)
+		arg1, err = ec.unmarshalOTime2ᚖtimeᚐTime(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2584,7 +2585,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateUser(rctx, args["username"].(string), args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(*string), args["postalCode"].(string), args["country"].(string))
+		return ec.resolvers.Mutation().CreateUser(rctx, args["username"].(string), args["email"].(string), args["firstName"].(string), args["lastName"].(string), args["address1"].(string), args["address2"].(*string), args["city"].(string), args["password"].(string), args["province"].(string), args["postalCode"].(string), args["country"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3183,7 +3184,7 @@ func (ec *executionContext) _Query_matches(ctx context.Context, field graphql.Co
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Matches(rctx, args["before"].(*string), args["after"].(*string), args["club"].(*string))
+		return ec.resolvers.Query().Matches(rctx, args["before"].(*time.Time), args["after"].(*time.Time), args["club"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3661,9 +3662,9 @@ func (ec *executionContext) _Session_expires(ctx context.Context, field graphql.
 		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(time.Time)
 	fc.Result = res
-	return ec.marshalNDate2string(ctx, field.Selections, res)
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Session_token(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
@@ -6199,21 +6200,6 @@ func (ec *executionContext) marshalNConference2githubᚗcomᚋMidnightRidersᚋM
 	return v
 }
 
-func (ec *executionContext) unmarshalNDate2string(ctx context.Context, v interface{}) (string, error) {
-	res, err := graphql.UnmarshalString(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalNDate2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalString(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-	}
-	return res
-}
-
 func (ec *executionContext) unmarshalNDateTime2string(ctx context.Context, v interface{}) (string, error) {
 	res, err := graphql.UnmarshalString(v)
 	return res, graphql.ErrorOnPath(ctx, err)
@@ -6364,6 +6350,21 @@ func (ec *executionContext) unmarshalNString2string(ctx context.Context, v inter
 
 func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
 	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
+}
+
+func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v interface{}) (time.Time, error) {
+	res, err := graphql.UnmarshalTime(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel ast.SelectionSet, v time.Time) graphql.Marshaler {
+	res := graphql.MarshalTime(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6702,21 +6703,6 @@ func (ec *executionContext) marshalOConference2ᚖgithubᚗcomᚋMidnightRiders�
 	return v
 }
 
-func (ec *executionContext) unmarshalODate2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalString(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalODate2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return graphql.MarshalString(*v)
-}
-
 func (ec *executionContext) unmarshalOID2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
 	if v == nil {
 		return nil, nil
@@ -6974,6 +6960,21 @@ func (ec *executionContext) marshalOString2ᚖstring(ctx context.Context, sel as
 		return graphql.Null
 	}
 	return graphql.MarshalString(*v)
+}
+
+func (ec *executionContext) unmarshalOTime2ᚖtimeᚐTime(ctx context.Context, v interface{}) (*time.Time, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalTime(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel ast.SelectionSet, v *time.Time) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalTime(*v)
 }
 
 func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {

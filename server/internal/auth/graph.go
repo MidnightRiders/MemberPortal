@@ -13,7 +13,7 @@ import (
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/cookie"
 	"github.com/MidnightRiders/MemberPortal/server/internal/env"
-	uuid "github.com/satori/go.uuid"
+	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 )
 
 // Level describes the level of authentication
@@ -58,9 +58,9 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 		return nil, errors.New("Invalid username or password")
 	}
 
-	expires := TimeNow().Add(7 * 24 * time.Hour)
+	expires := stubbables.TimeNow().Add(7 * 24 * time.Hour)
 
-	sessionUUID := uuid.NewV1().String()
+	sessionUUID := stubbables.UUIDv1()
 	_, err = db.ExecContext(ctx, "INSERT INTO sessions VALUES (uuid = ?, user_uuid = ?, expires = ?)", sessionUUID, userUUID, expires)
 	if err != nil {
 		log.Printf("Error creating session: %v", err)
