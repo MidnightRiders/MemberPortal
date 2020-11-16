@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"errors"
 	"net/http"
-	"os"
 	"testing"
 	"time"
 
@@ -53,19 +52,13 @@ type logInSetup struct {
 }
 
 func TestLogIn(t *testing.T) {
-	tn := auth.TimeNow
-	defer func() {
-		auth.TimeNow = tn
-	}()
-	auth.TimeNow = func() time.Time {
-		return time.Date(2020, 7, 29, 8, 29, 0, 0, time.Local)
-	}
-	ps := os.Getenv("PASSWORD_SALT")
-	defer func() {
-		os.Setenv("PASSWORD_SALT", ps)
-	}()
+	now := time.Date(2020, 7, 29, 8, 29, 0, 0, time.Local)
+	tdtime := testhelpers.StubTimeNow(&now)
+	defer tdtime()
 	salt := "stubbed-password-salt"
-	os.Setenv("PASSWORD_SALT", salt)
+	tdsalt := testhelpers.StubEnvVar("PASSWORD_SALT", salt)
+	defer tdsalt()
+
 	expires := time.Date(2020, 8, 5, 8, 29, 0, 0, time.Local)
 	stubbedUUID := "xxxx-xxxx-xxxxx-xxxx"
 

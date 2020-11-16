@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
-	"github.com/MidnightRiders/MemberPortal/server/internal/memberships"
 	"github.com/MidnightRiders/MemberPortal/server/internal/testhelpers"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -204,20 +203,9 @@ func TestCreateMiddleware(t *testing.T) {
 		},
 	}
 
-	atn := auth.TimeNow
-	mtn := memberships.TimeNow
-	auth.TimeNow = func() time.Time {
-		return time.Date(2020, 7, 29, 20, 29, 0, 0, time.UTC)
-	}
-	memberships.TimeNow = func() time.Time {
-		return time.Date(2020, 7, 29, 20, 29, 0, 0, time.UTC)
-	}
-	defer func() {
-		auth.TimeNow = atn
-	}()
-	defer func() {
-		memberships.TimeNow = mtn
-	}()
+	now := time.Date(2020, 7, 29, 20, 29, 0, 0, time.UTC)
+	tnteardown := testhelpers.StubTimeNow(&now)
+	defer tnteardown()
 
 	t.Run("parallel group", func(g *testing.T) {
 		for _, tc := range testCases {

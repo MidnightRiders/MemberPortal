@@ -3,9 +3,12 @@ package testhelpers
 import (
 	"bytes"
 	"net/http"
+	"os"
 	"strings"
 	"testing"
+	"time"
 
+	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -82,4 +85,52 @@ func AssertEqualCookies(test *testing.T, expectedCookies []http.Cookie, received
 		capture(AssertEqualCookie(test, ck, receivedCookies[i]))
 	}
 	return *result
+}
+
+// StubTimeNow stubs stubbables.TimeNow and returns the teardown
+func StubTimeNow(tm *time.Time) func() {
+	var t time.Time
+	if tm == nil {
+		t = time.Date(2020, 7, 29, 8, 29, 0, 0, time.UTC)
+	} else {
+		t = *tm
+	}
+	tn := stubbables.TimeNow
+	stubbables.TimeNow = func() time.Time {
+		return t
+	}
+	return func() {
+		stubbables.TimeNow = tn
+	}
+}
+
+// StubUUIDv1 stubs stubbables.UUIDv1 and returns the teardown
+func StubUUIDv1(value string) func() {
+	uv1 := stubbables.UUIDv1
+	stubbables.UUIDv1 = func() string {
+		return value
+	}
+	return func() {
+		stubbables.UUIDv1 = uv1
+	}
+}
+
+// StubRandomStr stubs stubbables.RandomStr and returns the teardown
+func StubRandomStr(value string) func() {
+	rs := stubbables.RandomStr
+	stubbables.RandomStr = func(int) string {
+		return value
+	}
+	return func() {
+		stubbables.RandomStr = rs
+	}
+}
+
+// StubEnvVar stubs an env var and returns a teardown
+func StubEnvVar(key string, val string) func() {
+	v := os.Getenv(key)
+	os.Setenv(key, val)
+	return func() {
+		os.Setenv(key, v)
+	}
 }

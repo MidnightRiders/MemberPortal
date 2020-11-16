@@ -13,6 +13,7 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/graph/generated"
 	"github.com/MidnightRiders/MemberPortal/server/graph/model"
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
+	"github.com/MidnightRiders/MemberPortal/server/internal/users"
 )
 
 func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {
@@ -31,7 +32,7 @@ func (r *mutationResolver) LogIn(ctx context.Context, username string, password 
 	}
 	return &model.Session{
 		Token:   sess.UUID,
-		Expires: sess.Expires.UTC().Format(time.RFC3339),
+		Expires: sess.Expires.UTC(),
 	}, nil
 }
 
@@ -43,8 +44,24 @@ func (r *mutationResolver) LogOut(ctx context.Context) (bool, error) {
 	return true, nil
 }
 
-func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province *string, postalCode string, country string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) (*model.User, error) {
+	uuid, err := users.Create(ctx, r.DB, users.CreateProps{
+		Username:  username,
+		Password:  password,
+		Email:     email,
+		FirstName: firstName,
+		LastName:  lastName,
+		Address1:  address1,
+		Address2:  address2,
+		City:      city,
+		Province:  province,
+		Country:   country,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return r.Query().User(ctx, uuid)
 }
 
 func (r *mutationResolver) CreateRevGuess(ctx context.Context, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error) {
@@ -150,7 +167,7 @@ func (r *queryResolver) Match(ctx context.Context, uuid string) (*model.Match, e
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Matches(ctx context.Context, before *string, after *string, club *string) ([]*model.Match, error) {
+func (r *queryResolver) Matches(ctx context.Context, before *time.Time, after *time.Time, club *string) ([]*model.Match, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/memberships"
+	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 )
 
 type Session struct {
@@ -19,9 +20,6 @@ type Session struct {
 
 // ExpireTime is a reusable time for expiring cookies
 var ExpireTime time.Time = time.Date(1995, 12, 1, 12, 0, 0, 0, time.UTC)
-
-// TimeNow wraps time.Now so it can be stubbed for testing
-var TimeNow func() time.Time = time.Now
 
 func setCookie(w http.ResponseWriter, domain string, uuid string, expires time.Time) {
 	http.SetCookie(w, &http.Cookie{
@@ -71,8 +69,8 @@ func CreateMiddleware(db *sql.DB, domain string) func(http.Handler) http.Handler
 					&sess.Expires,
 					&currentMember,
 				)
-				if err == nil && sess.Expires.After(TimeNow()) && sess.UserUUID != "" {
-					expires := TimeNow().Add(24 * time.Hour)
+				if err == nil && sess.Expires.After(stubbables.TimeNow()) && sess.UserUUID != "" {
+					expires := stubbables.TimeNow().Add(24 * time.Hour)
 					go func(db *sql.DB) {
 						db.Exec("UPDATE sessions SET expires = ? WHERE uuid = ?", expires, sessionUUID)
 					}(db)
