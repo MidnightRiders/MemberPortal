@@ -121,8 +121,8 @@ CREATE INDEX match_away_club
 
 CREATE TABLE rev_guesses (
     uuid UUID PRIMARY KEY,
-    user_uuid UUID NOT NULL REFERENCES users (uuid),
-    match_uuid UUID NOT NULL REFERENCES matches (uuid),
+    user_uuid UUID NOT NULL REFERENCES users (uuid) ON DELETE CASCADE,
+    match_uuid UUID NOT NULL REFERENCES matches (uuid) ON DELETE CASCADE,
     home_goals SMALLINT NOT NULL,
     away_goals SMALLINT NOT NULL,
     comment VARCHAR (255) NOT NULL
@@ -139,11 +139,11 @@ CREATE UNIQUE INDEX rev_guess_per_user
 
 CREATE TABLE man_of_the_match_votes (
     uuid UUID PRIMARY KEY,
-    user_uuid UUID NOT NULL REFERENCES users (uuid),
-    match_uuid UUID NOT NULL REFERENCES matches (uuid),
-    first_pick_uuid UUID NOT NULL REFERENCES players (uuid),
-    second_pick_uuid UUID REFERENCES players (uuid),
-    third_pick_uuid UUID REFERENCES players (uuid)
+    user_uuid UUID NOT NULL REFERENCES users (uuid) ON DELETE CASCADE,
+    match_uuid UUID NOT NULL REFERENCES matches (uuid) ON DELETE CASCADE,
+    first_pick_uuid UUID NOT NULL REFERENCES players (uuid) ON DELETE SET NULL,
+    second_pick_uuid UUID REFERENCES players (uuid) ON DELETE SET NULL,
+    third_pick_uuid UUID REFERENCES players (uuid) ON DELETE SET NULL
 );
 
 CREATE INDEX motm_user
