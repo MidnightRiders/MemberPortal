@@ -13,6 +13,7 @@ var contextKey ctxKey = "auth"
 type Info struct {
 	CurrentMember bool
 	Expires       *time.Time
+	IsAdmin       bool
 	LoggedIn      bool
 	UUID          string
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -13,7 +13,9 @@ import (
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/cookie"
 	"github.com/MidnightRiders/MemberPortal/server/internal/env"
+	"github.com/MidnightRiders/MemberPortal/server/internal/memberships"
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
+	"github.com/sirupsen/logrus"
 )
 
 // Level describes the level of authentication
@@ -36,14 +38,21 @@ type LogInPayload struct {
 func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session, error) {
 	row := db.QueryRowContext(
 		ctx,
-		"SELECT u.uuid, u.password_digest, u.pepper, m.uuid as membership_uuid FROM users u WHERE u.username = ?",
+		"SELECT u.uuid, u.password_digest, u.pepper, m.uuid as membership_uuid, a.uuid IS NOT NULL as is_admin "+
+			"FROM users u "+
+			"LEFT JOIN memberships m ON m.arrival_uuid = a.uuid "+
+			fmt.Sprintf("AND m.year IN (%s) ", memberships.CurrentMembershipYears().ToString())+
+			"LEFT JOIN admins a "+
+			"ON a.user_uuid = u.uuid "+
+			"WHERE u.username = ?",
 		p.Username,
 	)
 	var userUUID, passwordDigest, pepper, membershipUUID string
-	err := row.Scan(&userUUID, &passwordDigest, &pepper, &membershipUUID)
+	var isAdmin bool
+	err := row.Scan(&userUUID, &passwordDigest, &pepper, &membershipUUID, &isAdmin)
 	if err != nil {
 		if err != sql.ErrNoRows {
-			log.Printf("Error looking up user for login: %v", err)
+			logrus.WithError(err).Error("Error looking up user for login")
 		}
 		return nil, errors.New("Invalid username or password")
 	}
@@ -53,7 +62,7 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 	err = bcrypt.CompareHashAndPassword([]byte(passwordDigest), seasoned)
 	if err != nil {
 		if err != bcrypt.ErrMismatchedHashAndPassword {
-			log.Printf("Error comparing hashed passwords: %v", err)
+			logrus.WithError(err).Error("Error comparing hashed passwords")
 		}
 		return nil, errors.New("Invalid username or password")
 	}
@@ -63,15 +72,8 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 	sessionUUID := stubbables.UUIDv1()
 	_, err = db.ExecContext(ctx, "INSERT INTO sessions VALUES (uuid = ?, user_uuid = ?, expires = ?)", sessionUUID, userUUID, expires)
 	if err != nil {
-		log.Printf("Error creating session: %v", err)
+		logrus.WithError(err).Error("Error creating session")
 		return nil, errors.New("Unexpected error creating new session")
-	}
-
-	info := Info{
-		UUID:          userUUID,
-		Expires:       &expires,
-		LoggedIn:      true,
-		CurrentMember: membershipUUID != "",
 	}
 
 	domain := ".midnightriders.com"
@@ -79,7 +81,7 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 		domain = "localhost"
 	}
 
-	cookie.Add(AddToContext(ctx, info), http.Cookie{
+	cookie.Add(ctx, http.Cookie{
 		Domain:   domain,
 		Expires:  expires,
 		Name:     "session",
@@ -90,9 +92,10 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 	})
 
 	return &Session{
-		UUID:     sessionUUID,
-		UserUUID: userUUID,
 		Expires:  expires,
+		IsAdmin:  isAdmin,
+		UserUUID: userUUID,
+		UUID:     sessionUUID,
 	}, nil
 }
 
@@ -103,18 +106,19 @@ func LogOut(ctx context.Context, db *sql.DB, e env.Env) bool {
 		return false
 	}
 
+	lg := logrus.WithField("info", info)
 	result, err := db.ExecContext(ctx, "DELETE FROM sessions WHERE uuid = ?", info.UUID)
 	if err != nil {
-		log.Printf("Error deleting session: %v", err)
+		lg.WithError(err).Error("Error deleting session")
 		return false
 	}
 	n, err := result.RowsAffected()
 	if err != nil {
-		log.Printf("Error getting rows affected from deleted session: %v", err)
+		lg.WithError(err).Error("Error getting rows affected from deleted session")
 		return false
 	}
 	if n <= 0 {
-		log.Println("Rows affected when logging out was zero")
+		lg.Error("Rows affected when logging out was zero")
 		return false
 	}
 
