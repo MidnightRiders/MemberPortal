@@ -5,12 +5,11 @@ go 1.15
 require (
 	github.com/99designs/gqlgen v0.13.0
 	github.com/DATA-DOG/go-sqlmock v1.5.0
-	github.com/golang-migrate/migrate/v4 v4.13.0
-	github.com/jackc/pgx v3.6.2+incompatible
-	github.com/jackc/pgx/v4 v4.0.0-pre1.0.20190824185557-6972a5742186
+	github.com/golang-migrate/migrate/v4 v4.14.1
+	github.com/jackc/pgx/v4 v4.9.2
 	github.com/satori/go.uuid v1.2.0
-	github.com/stretchr/testify v1.5.1
+	github.com/sirupsen/logrus v1.7.0
+	github.com/stretchr/testify v1.6.1
 	github.com/vektah/gqlparser/v2 v2.1.0
-	golang.org/x/crypto v0.0.0-20200709230013-948cd5f35899
-	gotest.tools v2.2.0+incompatible
+	golang.org/x/crypto v0.0.0-20201124201722-c8d3bf9c5392
 )

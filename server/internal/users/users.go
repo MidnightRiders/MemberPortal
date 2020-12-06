@@ -5,13 +5,13 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"regexp"
 	"sort"
 	"strings"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -121,7 +121,7 @@ func Create(ctx context.Context, db *sql.DB, props CreateProps) (string, error) 
 	pepper := stubbables.RandomStr(128)
 	digest, err := bcrypt.GenerateFromPassword([]byte(props.Password+salt+pepper), bcrypt.DefaultCost)
 	if err != nil {
-		log.Printf("Error generating digest from password: %v", err)
+		logrus.WithError(err).Error("Error generating digest from password")
 		return "", errors.New("There was an unexpected error creating the user")
 	}
 

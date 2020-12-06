@@ -84,13 +84,13 @@ func TestLogIn(t *testing.T) {
 			it: "returns nil and error if password does not match",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid"})
+				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
 				pepper := "fake-pepper"
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
-				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d")
+				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
 				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 			}, auth.LogInPayload{"foo", "wrong-password"}, env.Prod),
 
@@ -101,13 +101,13 @@ func TestLogIn(t *testing.T) {
 			it: "returns nil and error if new session cannot be created",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid"})
+				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
 				pepper := "fake-pepper"
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
-				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d")
+				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
 				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
@@ -123,13 +123,13 @@ func TestLogIn(t *testing.T) {
 			it: "returns Session and adds cookie to context if successful",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid"})
+				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
 				pepper := "fake-pepper"
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
-				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d")
+				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
 				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
@@ -142,6 +142,44 @@ func TestLogIn(t *testing.T) {
 				UUID:     stubbedUUID,
 				Expires:  expires,
 				UserUUID: "360cfc56-ef91-4458-811c-897eab8f7b3c",
+			},
+			wantCookies: []http.Cookie{
+				{
+					Domain:   ".midnightriders.com",
+					Expires:  expires,
+					Name:     "session",
+					Path:     "/",
+					SameSite: http.SameSiteStrictMode,
+					Secure:   true,
+					Value:    "match-uuid",
+				},
+			},
+			wantErr: "",
+		},
+		{
+			it: "returns Session with admin and adds cookie to context if successful",
+
+			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
+				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
+				pepper := "fake-pepper"
+				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
+				if err != nil {
+					panic(err)
+				}
+				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", true)
+				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectExec("INSERT INTO sessions").WithArgs(
+					sqlmock.AnyArg(),
+					"360cfc56-ef91-4458-811c-897eab8f7b3c",
+					expires,
+				).WillReturnResult(sqlmock.NewResult(0, 1))
+			}, auth.LogInPayload{"foo", "bad-password"}, env.Prod),
+
+			want: &auth.Session{
+				Expires:  expires,
+				IsAdmin:  true,
+				UserUUID: "360cfc56-ef91-4458-811c-897eab8f7b3c",
+				UUID:     stubbedUUID,
 			},
 			wantCookies: []http.Cookie{
 				{

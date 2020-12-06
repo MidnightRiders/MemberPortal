@@ -12,10 +12,12 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 )
 
+// Session describes the current user's session
 type Session struct {
-	UUID     string
-	UserUUID string
 	Expires  time.Time
+	IsAdmin  bool
+	UserUUID string
+	UUID     string
 }
 
 // ExpireTime is a reusable time for expiring cookies

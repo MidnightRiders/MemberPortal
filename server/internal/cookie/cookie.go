@@ -3,6 +3,8 @@ package cookie
 import (
 	"context"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
 type ctxKey string
@@ -28,7 +30,10 @@ func AddToContext(ctx context.Context, cookies *[]http.Cookie) context.Context {
 
 // Add takes a context and adds a cookie to it
 func Add(ctx context.Context, ck ...http.Cookie) {
-	ptr := ctx.Value(contextKey).(*[]http.Cookie)
+	ptr, ok := ctx.Value(contextKey).(*[]http.Cookie)
+	if !ok {
+		logrus.Error("Could not coerce context Cookies to pointer")
+	}
 	cookies := append(*ptr, ck...)
 	*ptr = cookies
 }

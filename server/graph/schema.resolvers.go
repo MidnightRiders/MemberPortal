@@ -72,6 +72,14 @@ func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userUUID
 	panic(fmt.Errorf("not implemented"))
 }
 
+func (r *mutationResolver) InitiatePasswordReset(ctx context.Context, email string) (*string, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) ResetPassword(ctx context.Context, email string, password string, token string) (bool, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *queryResolver) User(ctx context.Context, uuid string) (*model.User, error) {
 	row := r.DB.QueryRowContext(ctx, "SELECT "+model.UserColumns+" FROM users WHERE uuid = ? LIMIT 1", uuid)
 	if row == nil {

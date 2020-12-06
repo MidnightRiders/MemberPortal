@@ -1,4 +1,5 @@
 scalar Time
+scalar Void
 
 type Query {
   user(uuid: ID!): User
@@ -126,11 +127,12 @@ type ManOfTheMatchVote {
 
 type Session {
   expires: Time!
+  isAdmin: Boolean!
   token: ID!
 }
 
 type Mutation {
-  logIn(username: String!, password: String!): Session!
+  logIn(username: String!, password: String!): Session
   logOut: Boolean!
 
   createUser(
@@ -162,4 +164,14 @@ type Mutation {
     secondPickUUID: ID,
     thirdPickUUID: ID
   ): ManOfTheMatchVote
+
+  initiatePasswordReset(
+    email: String!
+  ): Void
+
+  resetPassword(
+    email: String!,
+    password: String!
+    token: String!
+  ): Boolean!
 }
