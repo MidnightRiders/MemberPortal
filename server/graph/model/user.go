@@ -1,6 +1,6 @@
 package model
 
-var UserColumns string = "uuid, email, first_name, last_name, address1, address2, city, province, postal_code, country"
+var UserColumns string = "uuid, email, username, first_name, last_name, address1, address2, city, province, postal_code, country, membership_number"
 
 type User struct {
 	UUID             string        `json:"uuid"`
@@ -22,17 +22,19 @@ type User struct {
 func UserFromRow(row scannable) *User {
 	user := &User{}
 	row.Scan(
-		user.UUID,
-		user.Email,
-		user.FirstName,
-		user.LastName,
+		&user.UUID,
+		&user.Email,
+		&user.Username,
+		&user.FirstName,
+		&user.LastName,
 		// TODO: this is only visible to admins and board members
-		user.Address1,
-		user.Address2,
-		user.City,
-		user.Province,
-		user.PostalCode,
-		user.Country,
+		&user.Address1,
+		&user.Address2,
+		&user.City,
+		&user.Province,
+		&user.PostalCode,
+		&user.Country,
+		&user.MembershipNumber,
 	)
 	if user.UUID == "" {
 		return nil
