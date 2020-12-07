@@ -1,0 +1,19 @@
+enum MatchStatus {
+  Upcoming
+  Delayed
+  Postponed
+  Started
+  Finished
+}
+
+type Match {
+  uuid: ID!
+  kickoff: DateTime!
+  homeClub: Club!
+  awayClub: Club!
+  homeGoals: Int
+  awayGoals: Int
+  status: MatchStatus!
+  revGuesses: [RevGuess!]
+  manOfTheMatchVotes: [ManOfTheMatchVote!]
+}

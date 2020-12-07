@@ -26,12 +26,13 @@ const defaultPort = "8080"
 func init() {
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.SetOutput(os.Stdout)
+	logrus.SetFormatter(&logrus.JSONFormatter{})
 }
 
 func main() {
 	db, err := sql.Open("pgx", os.Getenv("DATABASE_URL"))
 	if err != nil {
-		logrus.WithError(err).Fatalf("Unable to connect to database: %v", err)
+		logrus.WithError(err).Fatal("Unable to connect to database")
 	}
 	defer db.Close()
 

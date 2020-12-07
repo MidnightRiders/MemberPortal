@@ -1,0 +1,64 @@
+scalar DateTime
+scalar Time
+scalar Null
+
+type Query {
+  user(uuid: ID!): User
+  users: [User!]
+  membership(uuid: ID, userUUID: ID, year: Int): Membership
+  memberships(userUUID: ID, year: Int): [Membership!]
+
+  club(uuid: ID!): Club
+  clubs(conference: Conference): [Club!]
+  match(uuid: ID!): Match
+  matches(before: Time, after: Time, club: ID): [Match!]
+  revGuess(userUUID: ID!, matchUUID: ID!): RevGuess
+  revGuesses(matchID: ID): [RevGuess!]
+  manOfTheMatchVote(userUUID: ID!, matchUUID: ID!): ManOfTheMatchVote
+  manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
+}
+
+type Mutation {
+  logIn(username: String!, password: String!): Session
+  logOut: Boolean!
+
+  createUser(
+    username: String!,
+    email: String!,
+    firstName: String!,
+    lastName: String!,
+    address1: String!,
+    address2: String,
+    city: String!,
+    password: String!,
+    province: String!,
+    postalCode: String!,
+    country: String!
+  ): User!
+
+  createRevGuess(
+    userUUID: ID!,
+    matchUUID: ID!,
+    homeGoals: Int!,
+    awayGoals: Int!,
+    comment: String
+  ): RevGuess!
+
+  createManOfTheMatchVote(
+    userUUID: ID!,
+    matchUUID: ID!,
+    firstPickUUID: ID!,
+    secondPickUUID: ID,
+    thirdPickUUID: ID
+  ): ManOfTheMatchVote
+
+  initiatePasswordReset(
+    email: String!
+  ): Null
+
+  resetPassword(
+    email: String!,
+    password: String!
+    token: String!
+  ): Boolean!
+}

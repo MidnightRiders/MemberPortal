@@ -130,6 +130,7 @@ type ComplexityRoot struct {
 
 	Session struct {
 		Expires func(childComplexity int) int
+		IsAdmin func(childComplexity int) int
 		Token   func(childComplexity int) int
 	}
 
@@ -698,6 +699,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Session.Expires(childComplexity), true
 
+	case "Session.isAdmin":
+		if e.complexity.Session.IsAdmin == nil {
+			break
+		}
+
+		return e.complexity.Session.IsAdmin(childComplexity), true
+
 	case "Session.token":
 		if e.complexity.Session.Token == nil {
 			break
@@ -867,62 +875,7 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 }
 
 var sources = []*ast.Source{
-	{Name: "graph/schema.graphqls", Input: `scalar Time
-scalar Void
-
-type Query {
-  user(uuid: ID!): User
-  users: [User!]
-  membership(uuid: ID, userUUID: ID, year: Int): Membership
-  memberships(userUUID: ID, year: Int): [Membership!]
-
-  club(uuid: ID!): Club
-  clubs(conference: Conference): [Club!]
-  match(uuid: ID!): Match
-  matches(before: Time, after: Time, club: ID): [Match!]
-  revGuess(userUUID: ID!, matchUUID: ID!): RevGuess
-  revGuesses(matchID: ID): [RevGuess!]
-  manOfTheMatchVote(userUUID: ID!, matchUUID: ID!): ManOfTheMatchVote
-  manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
-}
-
-type User {
-  uuid: ID!
-  username: String!
-  email: String!
-  firstName: String!
-  lastName: String!
-  address1: String!
-  address2: String
-  city: String!
-  province: String
-  postalCode: String!
-  country: String!
-  admin: Boolean!
-  membershipNumber: Int!
-
-  memberships: [Membership!]
-}
-
-enum Role {
-  ExecutiveBoard
-  AtLargeBoard
-}
-
-enum MembershipType {
-  Individual
-  Family
-}
-
-type Membership {
-  uuid: ID!
-  user: User!
-  year: Int!
-  type: MembershipType!
-  role: Role
-}
-
-enum Conference {
+	{Name: "gql/Club.gql", Input: `enum Conference {
   Eastern
   Western
 }
@@ -953,10 +906,17 @@ type Player {
   club: Club!
   active: Boolean!
 }
-
-scalar DateTime
-
-enum MatchStatus {
+`, BuiltIn: false},
+	{Name: "gql/ManOfTheMatchVote.gql", Input: `type ManOfTheMatchVote {
+  uuid: ID!
+  match: Match!
+  user: User!
+  firstPick: Player!
+  secondPick: Player
+  thirdPick: Player
+}
+`, BuiltIn: false},
+	{Name: "gql/Match.gql", Input: `enum MatchStatus {
   Upcoming
   Delayed
   Postponed
@@ -975,8 +935,26 @@ type Match {
   revGuesses: [RevGuess!]
   manOfTheMatchVotes: [ManOfTheMatchVote!]
 }
+`, BuiltIn: false},
+	{Name: "gql/Membership.gql", Input: `enum Role {
+  ExecutiveBoard
+  AtLargeBoard
+}
 
-type RevGuess {
+enum MembershipType {
+  Individual
+  Family
+}
+
+type Membership {
+  uuid: ID!
+  user: User!
+  year: Int!
+  type: MembershipType!
+  role: Role
+}
+`, BuiltIn: false},
+	{Name: "gql/RevGuess.gql", Input: `type RevGuess {
   uuid: ID!
   match: Match!
   user: User!
@@ -984,19 +962,49 @@ type RevGuess {
   awayGoals: Int!
   comment: String
 }
-
-type ManOfTheMatchVote {
-  uuid: ID!
-  match: Match!
-  user: User!
-  firstPick: Player!
-  secondPick: Player
-  thirdPick: Player
-}
-
-type Session {
+`, BuiltIn: false},
+	{Name: "gql/Session.gql", Input: `type Session {
   expires: Time!
+  isAdmin: Boolean!
   token: ID!
+}
+`, BuiltIn: false},
+	{Name: "gql/User.gql", Input: `type User {
+  uuid: ID!
+  username: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  address1: String!
+  address2: String
+  city: String!
+  province: String
+  postalCode: String!
+  country: String!
+  admin: Boolean!
+  membershipNumber: Int!
+
+  memberships: [Membership!]
+}
+`, BuiltIn: false},
+	{Name: "gql/schema.graphqls", Input: `scalar DateTime
+scalar Time
+scalar Null
+
+type Query {
+  user(uuid: ID!): User
+  users: [User!]
+  membership(uuid: ID, userUUID: ID, year: Int): Membership
+  memberships(userUUID: ID, year: Int): [Membership!]
+
+  club(uuid: ID!): Club
+  clubs(conference: Conference): [Club!]
+  match(uuid: ID!): Match
+  matches(before: Time, after: Time, club: ID): [Match!]
+  revGuess(userUUID: ID!, matchUUID: ID!): RevGuess
+  revGuesses(matchID: ID): [RevGuess!]
+  manOfTheMatchVote(userUUID: ID!, matchUUID: ID!): ManOfTheMatchVote
+  manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
 }
 
 type Mutation {
@@ -1035,7 +1043,7 @@ type Mutation {
 
   initiatePasswordReset(
     email: String!
-  ): Void
+  ): Null
 
   resetPassword(
     email: String!,
@@ -2803,7 +2811,7 @@ func (ec *executionContext) _Mutation_initiatePasswordReset(ctx context.Context,
 	}
 	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalOVoid2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalONull2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_resetPassword(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3830,6 +3838,41 @@ func (ec *executionContext) _Session_expires(ctx context.Context, field graphql.
 	res := resTmp.(time.Time)
 	fc.Result = res
 	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Session_isAdmin(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "Session",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsAdmin, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Session_token(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
@@ -5990,6 +6033,11 @@ func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "isAdmin":
+			out.Values[i] = ec._Session_isAdmin(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "token":
 			out.Values[i] = ec._Session_token(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -7029,6 +7077,21 @@ func (ec *executionContext) marshalOMembership2ᚖgithubᚗcomᚋMidnightRiders�
 	return ec._Membership(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalONull2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := graphql.UnmarshalString(v)
+	return &res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalONull2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return graphql.MarshalString(*v)
+}
+
 func (ec *executionContext) marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPlayer(ctx context.Context, sel ast.SelectionSet, v *model.Player) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -7184,21 +7247,6 @@ func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemb
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalOVoid2ᚖstring(ctx context.Context, v interface{}) (*string, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := graphql.UnmarshalString(v)
-	return &res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOVoid2ᚖstring(ctx context.Context, sel ast.SelectionSet, v *string) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return graphql.MarshalString(*v)
 }
 
 func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐEnumValueᚄ(ctx context.Context, sel ast.SelectionSet, v []introspection.EnumValue) graphql.Marshaler {

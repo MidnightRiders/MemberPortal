@@ -1,0 +1,31 @@
+enum Conference {
+  Eastern
+  Western
+}
+
+type Club {
+  uuid: ID!
+  abbreviation: String!
+  name: String!
+  primaryColor: String!
+  secondaryColor: String!
+  accentColor: String!
+  conference: Conference!
+  active: Boolean!
+}
+
+enum Position {
+  Goalkeeper
+  Defender
+  Midfielder
+  Attacker
+}
+
+type Player {
+  uuid: ID!
+  firstName: String!
+  lastName: String!
+  position: Position!
+  club: Club!
+  active: Boolean!
+}
