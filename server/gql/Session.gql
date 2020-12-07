@@ -1,0 +1,5 @@
+type Session {
+  expires: Time!
+  isAdmin: Boolean!
+  token: ID!
+}

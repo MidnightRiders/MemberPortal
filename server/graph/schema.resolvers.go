@@ -16,15 +16,6 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/internal/users"
 )
 
-func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {
-	row := r.DB.QueryRowContext(ctx, "SELECT "+model.UserColumns+" FROM users WHERE uuid = ?", obj.UserUUID)
-	user := model.UserFromRow(row)
-	if user == nil {
-		return nil, errors.New("Could not find user with UUID matching UserUUID of membership")
-	}
-	return user, nil
-}
-
 func (r *mutationResolver) LogIn(ctx context.Context, username string, password string) (*model.Session, error) {
 	sess, err := auth.LogIn(ctx, r.DB, auth.LogInPayload{Username: username, Password: password}, r.Env)
 	if err != nil {
@@ -195,15 +186,11 @@ func (r *queryResolver) ManOfTheMatchVotes(ctx context.Context, matchID *string)
 	panic(fmt.Errorf("not implemented"))
 }
 
-// Membership returns generated.MembershipResolver implementation.
-func (r *Resolver) Membership() generated.MembershipResolver { return &membershipResolver{r} }
-
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-type membershipResolver struct{ *Resolver }
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

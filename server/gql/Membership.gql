@@ -1,0 +1,17 @@
+enum Role {
+  ExecutiveBoard
+  AtLargeBoard
+}
+
+enum MembershipType {
+  Individual
+  Family
+}
+
+type Membership {
+  uuid: ID!
+  user: User!
+  year: Int!
+  type: MembershipType!
+  role: Role
+}

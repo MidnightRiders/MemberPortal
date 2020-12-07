@@ -61,6 +61,7 @@ type RevGuess struct {
 
 type Session struct {
 	Expires time.Time `json:"expires"`
+	IsAdmin bool      `json:"isAdmin"`
 	Token   string    `json:"token"`
 }
 

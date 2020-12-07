@@ -1,0 +1,8 @@
+type ManOfTheMatchVote {
+  uuid: ID!
+  match: Match!
+  user: User!
+  firstPick: Player!
+  secondPick: Player
+  thirdPick: Player
+}

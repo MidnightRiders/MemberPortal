@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"os"
 	"regexp"
 	"sort"
@@ -134,11 +133,11 @@ func Create(ctx context.Context, db *sql.DB, props CreateProps) (string, error) 
 		uuid, props.Username, props.Email, digest, pepper, props.FirstName, props.LastName, props.Address1, props.Address2, props.City, props.Province, props.PostalCode, props.Country, // TODO: props.MembershipNumber,
 	)
 	if err != nil {
-		fmt.Printf("Error creating user: %v", err)
+		logrus.WithError(err).Error("Error creating user")
 		return "", errors.New("There was an unexpected error creating the user")
 	}
 	if rows, err := result.RowsAffected(); err != nil || rows == 0 {
-		fmt.Printf("Error getting affected rows (%d): %v", rows, err)
+		logrus.WithError(err).WithField("rows", rows).Error("Error getting affected rows")
 		return "", errors.New("There was an unexpected error creating the user")
 	}
 

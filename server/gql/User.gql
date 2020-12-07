@@ -1,0 +1,17 @@
+type User {
+  uuid: ID!
+  username: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  address1: String!
+  address2: String
+  city: String!
+  province: String
+  postalCode: String!
+  country: String!
+  admin: Boolean!
+  membershipNumber: Int!
+
+  memberships: [Membership!]
+}
