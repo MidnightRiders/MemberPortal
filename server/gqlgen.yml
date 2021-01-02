@@ -54,3 +54,5 @@ models:
       - github.com/99designs/gqlgen/graphql.Int32
   Null:
     model: github.com/99designs/gqlgen/graphql.Null
+  Role:
+    model: github.com/MidnightRiders/MemberPortal/server/internal/auth.Role

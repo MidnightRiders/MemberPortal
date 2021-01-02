@@ -77,7 +77,7 @@ func (r *queryResolver) User(ctx context.Context, uuid string) (*model.User, err
 		return nil, nil
 	}
 
-	return model.UserFromRow(row), nil
+	return model.UserFromRow(ctx, row), nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
@@ -90,7 +90,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	defer resp.Close()
 
 	for resp.Next() {
-		if user := model.UserFromRow(resp); user != nil {
+		if user := model.UserFromRow(ctx, resp); user != nil {
 			users = append(users, user)
 		}
 	}
@@ -120,7 +120,7 @@ func (r *queryResolver) Membership(ctx context.Context, uuid *string, userUUID *
 
 	row := r.DB.QueryRowContext(ctx, query, args...)
 
-	return model.MembershipFromRow(row), nil
+	return model.MembershipFromRow(ctx, row), nil
 }
 
 func (r *queryResolver) Memberships(ctx context.Context, userUUID *string, year *int) ([]*model.Membership, error) {
@@ -147,7 +147,7 @@ func (r *queryResolver) Memberships(ctx context.Context, userUUID *string, year 
 	}
 
 	for resp.Next() {
-		if membership := model.MembershipFromRow(resp); membership != nil {
+		if membership := model.MembershipFromRow(ctx, resp); membership != nil {
 			memberships = append(memberships, membership)
 		}
 	}

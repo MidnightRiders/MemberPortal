@@ -9,12 +9,20 @@ type ctxKey string
 
 var contextKey ctxKey = "auth"
 
+type Role string
+
+const (
+	RoleExecutiveBoard Role = "ExecutiveBoard"
+	RoleAtLargeBoard   Role = "AtLargeBoard"
+)
+
 // Info describes the auth state of the current context
 type Info struct {
 	CurrentMember bool
 	Expires       *time.Time
 	IsAdmin       bool
 	LoggedIn      bool
+	Role          Role
 	UUID          string
 }
 

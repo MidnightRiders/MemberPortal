@@ -14,6 +14,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/MidnightRiders/MemberPortal/server/graph/model"
+	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -2573,9 +2574,9 @@ func (ec *executionContext) _Membership_role(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(model.Role)
+	res := resTmp.(auth.Role)
 	fc.Result = res
-	return ec.marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRole(ctx, field.Selections, res)
+	return ec.marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_logIn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7146,14 +7147,14 @@ func (ec *executionContext) marshalORevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋ
 	return ec._RevGuess(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRole(ctx context.Context, v interface{}) (model.Role, error) {
-	var res model.Role
-	err := res.UnmarshalGQL(v)
+func (ec *executionContext) unmarshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, v interface{}) (auth.Role, error) {
+	tmp, err := graphql.UnmarshalString(v)
+	res := auth.Role(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRole(ctx context.Context, sel ast.SelectionSet, v model.Role) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, sel ast.SelectionSet, v auth.Role) graphql.Marshaler {
+	return graphql.MarshalString(string(v))
 }
 
 func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
