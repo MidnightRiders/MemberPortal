@@ -1,5 +1,11 @@
 package model
 
+import (
+	"context"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
+)
+
 var MembershipColumns string = "uuid, user_uuid, year, type, role"
 
 type Membership struct {
@@ -7,10 +13,10 @@ type Membership struct {
 	UserUUID string         `json:"userUUID"`
 	Year     int            `json:"year"`
 	Type     MembershipType `json:"type"`
-	Role     Role           `json:"role"`
+	Role     auth.Role      `json:"role"`
 }
 
-func MembershipFromRow(row scannable) *Membership {
+func MembershipFromRow(_ context.Context, row scannable) *Membership {
 	m := &Membership{}
 	row.Scan(
 		&m.UUID,

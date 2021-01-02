@@ -1,5 +1,11 @@
 package model
 
+import (
+	"context"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
+)
+
 var UserColumns string = "uuid, email, username, first_name, last_name, address1, address2, city, province, postal_code, country, membership_number"
 
 type User struct {
@@ -19,7 +25,21 @@ type User struct {
 	Memberships      []*Membership `json:"memberships"`
 }
 
-func UserFromRow(row scannable) *User {
+func (u *User) Redact(ctx context.Context) {
+	info := auth.FromContext(ctx)
+	if info.IsAdmin {
+		return
+	}
+
+	u.Address1 = ""
+	u.Address2 = nil
+	u.City = ""
+	u.Province = nil
+	u.PostalCode = ""
+	u.Country = ""
+}
+
+func UserFromRow(ctx context.Context, row scannable) *User {
 	user := &User{}
 	row.Scan(
 		&user.UUID,
@@ -27,18 +47,20 @@ func UserFromRow(row scannable) *User {
 		&user.Username,
 		&user.FirstName,
 		&user.LastName,
-		// TODO: this is only visible to admins and board members
+		&user.MembershipNumber,
+
+		// Admin-only
 		&user.Address1,
 		&user.Address2,
 		&user.City,
 		&user.Province,
 		&user.PostalCode,
 		&user.Country,
-		&user.MembershipNumber,
 	)
 	if user.UUID == "" {
 		return nil
 	}
 
+	user.Redact(ctx)
 	return user
 }
