@@ -31,7 +31,9 @@
     .medium-6.columns.right
       = link_to ENV['MEETING_ZOOM_LINK'], class: 'button large expand', target: '_blank' do
         = icon 'video-camera'
-        Join Yearly Meeting on Zoom
+        Zoom: Yearly Meeting
+        %br
+        Feb 13, 2021 1:00pm ET
 
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
