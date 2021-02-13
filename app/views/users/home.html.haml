@@ -27,11 +27,11 @@
         Vote for 2021’s Scarf
   = render 'board_nominations'
 
-  - if current_user.current_member? && ENV['MEETING_ZOOM_LINK'].present? && (params[:show_zoom_link].present? || Time.current.between?(Time.local(2021, 2, 13, 8), Time.local(2021, 2, 13, 15)))
+  - if current_user.current_member? && ENV['MEETING_ZOOM_LINK'].present? && (params[:show_zoom_link].present? || Time.current.between?(Time.zone.local(2021, 2, 13, 8), Time.zone.local(2021, 2, 13, 15)))
     .medium-6.columns.right
       = link_to ENV['MEETING_ZOOM_LINK'], class: 'button large expand', target: '_blank' do
         = icon 'video-camera'
-        Zoom: Yearly Meeting
+        Zoom: General Meeting
         %br
         Feb 13, 2021 1:00pm ET
 
