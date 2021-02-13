@@ -27,6 +27,12 @@
         Vote for 2021’s Scarf
   = render 'board_nominations'
 
+  - if current_user.current_member? && ENV['MEETING_ZOOM_LINK'].present? && (params[:show_zoom_link].present? || Time.current.between?(Time.local(2021, 2, 13, 8), Time.local(2021, 2, 13, 15)))
+    .medium-6.columns.right
+      = link_to ENV['MEETING_ZOOM_LINK'], class: 'button large expand', target: '_blank' do
+        = icon 'video-camera'
+        Join Yearly Meeting on Zoom
+
   %section.medium-6.columns
     = render partial: 'users/info', locals: { user: current_user }
   %section.medium-6.columns
