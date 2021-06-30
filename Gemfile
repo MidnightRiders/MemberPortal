@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.3.7'
+ruby '2.6.6'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.7'
@@ -32,6 +32,9 @@ gem 'rmagick', '~> 4.1.0-rc2'
 
 gem 'aws-sdk', '~> 2.3.0'
 gem 'paperclip', '~> 5.2.1'
+
+gem 'bigdecimal', '~> 1.3.5'
+gem 'mimemagic', '~> 0.3.9'
 
 gem 'nokogiri', '~> 1.10.8'
 
@@ -79,7 +82,7 @@ group :test do
   gem 'selenium-webdriver'
   gem 'timecop'
   gem 'vcr', '~>3.0'
-  gem 'webmock', '~>2.3'
+  gem 'webmock', '~>3.5'
 
   gem 'simplecov', require: false
 end
@@ -95,3 +98,4 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+

@@ -24,6 +24,7 @@ STRIPE_SECRET_KEY=[STRIPE SECRET KEY]
 S3_BUCKET_NAME=[NAME OF AMAZON BUCKET]
 AWS_ACCESS_KEY_ID=[AWS ACCESS KEY]
 AWS_SECRET_ACCESS_KEY=[AWS SECRET KEY]
+API_FOOTBALL_KEY=[API-FOOTBALL KEY]
 ```
 
 The Stripe and AWS credentials are unnecessary for a large portion of the project, and all you'll really

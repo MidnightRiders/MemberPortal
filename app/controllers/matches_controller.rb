@@ -55,28 +55,32 @@ class MatchesController < ApplicationController
 
   # GET /matches/sync
   def sync
-    match_data = JSON.parse(
-      URI.parse('http://mls-data-gatherer.herokuapp.com/').read,
-      symbolize_names: true
-    )[:fixtures]
+    uri = URI.parse("https://v3.football.api-sports.io/fixtures?league=253&season=#{Date.current.year}")
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    request = Net::HTTP::Get.new(uri)
+    request['x-apisports-key'] = ENV['API_FOOTBALL_KEY']
+    resp = http.request(request)
+    
+    match_data = JSON.parse(resp.read_body, symbolize_names: true)[:response]
     clubs = Club.all.map { |c| [c.api_id, c] }.to_h
     errors = []
     changed = 0
     added = 0
-    match_data.each do |fixture|
-      match = Match.find_or_initialize_by(uid: fixture[:id]) do |m|
-        m.home_team = clubs[fixture[:HomeTeam][:id].to_i]
-        m.away_team = clubs[fixture[:AwayTeam][:id].to_i]
-        m.location = clubs[fixture[:HomeTeam][:id].to_i].name
+    match_data.each do |data|
+      match = Match.find_or_initialize_by(uid: data[:fixture][:id]) do |m|
+        m.home_team = clubs[data[:teams][:home][:id]]
+        m.away_team = clubs[data[:teams][:away][:id]]
+        m.location = data[:fixture][:venue][:name].presence || clubs[data[:teams][:home][:id]].name
       end
-      match.kickoff = Time.zone.parse(fixture[:matchDate])
-      if fixture[:status] == '6'
-        match.home_goals = fixture[:homeScore]
-        match.away_goals = fixture[:awayScore]
+      match.kickoff = Time.zone.parse(data[:fixture][:date])
+      if data[:fixture][:status][:short].in? %w[FT AET PEN]
+        match.home_goals = data[:goals][:home]
+        match.away_goals = data[:goals][:away]
       end
       added += 1 if match.new_record?
       changed += 1 if !match.new_record? && match.changed?
-      errors += match.errors.full_messages.map { |m| "#{fixture[:id]}: #{m}" } unless match.save
+      errors += match.errors.full_messages.map { |m| "#{data[:id]}: #{m}" } unless match.save
     end
     flash[:notice] = "#{match_data.length} matches synced: #{added} added, #{changed} changed."
     flash[:error] = errors.join(', ') if errors.any?
@@ -132,22 +136,6 @@ class MatchesController < ApplicationController
   end
 
   private
-
-  def auto_update_match(score, match)
-    if score.present?
-      match.update_attributes(score) ? true : Rails.logger.info(match.errors.to_yaml) && false
-    else
-      Rails.logger.warn 'No match found:'
-      Rails.logger.info match.to_yaml
-    end
-  end
-
-  def auto_update_week(date, matches)
-    importer = MatchScoreRetriever.new
-    matches.map do |match|
-      auto_update_match(importer.match_info_for(match), match)
-    end
-  end
 
   def check_for_matches_to_update
     redirect_to matches_path, flash: { notice: 'There were no matches to update.' } if matches_to_update.empty?

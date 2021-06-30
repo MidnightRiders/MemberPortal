@@ -1,8 +1,8 @@
-FROM ruby:2.3.7-alpine
+FROM ruby:2.6.6-alpine
 LABEL maintainer "Midnight Riders<webczar@midnightriders.com>"
 
 RUN apk update
-RUN apk add --virtual build-dependencies \
+RUN apk add --no-cache --virtual build-dependencies \
   build-base \
   nodejs \
   postgresql-dev \
@@ -12,11 +12,12 @@ RUN apk add --virtual build-dependencies \
   imagemagick6 \
   imagemagick6-c++ \
   imagemagick6-dev \
-  imagemagick6-libs
+  imagemagick6-libs && \
+  rm -rf /var/cache/apk/*
 
 WORKDIR /tmp
 COPY Gemfile Gemfile.lock /tmp/
-RUN gem install bundler
+RUN gem install bundler --version 1.17.3
 RUN bundle install
 RUN apk del build-base
 
