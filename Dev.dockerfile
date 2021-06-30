@@ -16,9 +16,10 @@ RUN apk add --no-cache --virtual build-dependencies \
   rm -rf /var/cache/apk/*
 
 WORKDIR /tmp
-COPY Gemfile Gemfile.lock /tmp/
 RUN gem install bundler --version 1.17.3
-RUN bundle install
+COPY Gemfile Gemfile.lock /tmp/
+ENV BUNDLE_PATH /bundler-cache
+RUN bundle check || bundle install
 RUN apk del build-base
 
 WORKDIR /usr/src/member-portal
