@@ -1,4 +1,4 @@
-MidnightRiders::Application.routes.draw do
+Rails.application.routes.draw do
   get 'stylesheets/club', constraints: { format: :css }
   resources :players
 
