@@ -3,7 +3,7 @@ jobs:
   build:
     parallelism: 3
     docker:
-      - image: circleci/ruby:2.6.6-jessie-node-browsers
+      - image: circleci/ruby:2.6.6-node-browsers
         environment:
           COVERAGE: true
           BUNDLE_PATH: vendor/bundle
@@ -68,7 +68,7 @@ jobs:
             - codeclimate.*.json
   upload-coverage:
     docker:
-      - image: circleci/ruby:2.5.1-stretch-node
+      - image: circleci/ruby:2.6.6-node
     environment:
       CC_TEST_REPORTER_ID: c3ff91e23ea0fea718bb62dae0a8a5440dc082d5d2bb508af6b33d0babac479a
     working_directory: ~/bikeindex/bike_index
