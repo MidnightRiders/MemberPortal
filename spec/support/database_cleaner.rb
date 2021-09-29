@@ -1,6 +1,9 @@
 RSpec.configure do |config|
 
   config.before(:suite) do
+    DatabaseCleaner.url_allowlist = [
+      proc { |uri| URI.parse(uri).path =~ /_test$/ }
+    ]
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with :truncation
     Rails.application.load_seed

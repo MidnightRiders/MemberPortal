@@ -1,8 +1,9 @@
 FROM ruby:2.6.6-alpine
-LABEL maintainer "Midnight Riders<webczar@midnightriders.com>"
+LABEL maintainer="Midnight Riders<webczar@midnightriders.com>"
 
 RUN apk update
-RUN apk add --no-cache --virtual build-dependencies \
+RUN apk add --no-cache --virtual \
+  build-dependencies \
   build-base \
   nodejs \
   postgresql-dev \
@@ -18,8 +19,7 @@ RUN apk add --no-cache --virtual build-dependencies \
 WORKDIR /tmp
 RUN gem install bundler --version 1.17.3
 COPY Gemfile Gemfile.lock /tmp/
-ENV BUNDLE_PATH /bundler-cache
-RUN bundle check || bundle install
+RUN bundle install
 RUN apk del build-base
 
 WORKDIR /usr/src/member-portal

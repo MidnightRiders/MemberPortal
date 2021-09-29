@@ -51,8 +51,6 @@ module MidnightRiders
       }
     }
 
-    config.active_record.raise_in_transactional_callbacks = true
-
     config.log_level = ENV['LOG_LEVEL']&.downcase&.to_sym || :debug
   end
 end

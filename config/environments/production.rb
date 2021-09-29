@@ -33,7 +33,6 @@ Rails.application.configure do
   config.cache_classes = true
   config.serve_static_files = true
   config.assets.digest = true
-  config.assets.version = '1.0'
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = 'http://assets.example.com'

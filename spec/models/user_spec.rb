@@ -14,7 +14,7 @@ describe User do
       expect(subject.errors).to include(:first_name, :last_name, :username, :password)
     end
     it 'should not accept an invalid member_since year' do
-      user = FactoryGirl.build(:user)
+      user = FactoryBot.build(:user)
       user.member_since = 1990
       expect(user).to_not be_valid
       user.member_since = Date.current.year + 1
@@ -29,7 +29,7 @@ describe User do
     let(:user) { nil }
 
     context 'for admin user' do
-      let(:user) { FactoryGirl.create(:user, :admin) }
+      let(:user) { FactoryBot.create(:user, :admin) }
       it 'can manage Matches, Users, Players, Clubs' do
         expect(ability).to be_able_to(:manage, [Match, User, Player, Club])
       end
@@ -39,15 +39,15 @@ describe User do
     end
 
     context 'for normal user' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       it 'can manage itself' do
         expect(ability).to be_able_to(:manage, user)
       end
       it 'can\'t manage another user' do
-        expect(ability).not_to be_able_to(:manage, FactoryGirl.create(:user))
+        expect(ability).not_to be_able_to(:manage, FactoryBot.create(:user))
       end
       it 'can show another user' do
-        expect(ability).to be_able_to(:show, FactoryGirl.create(:user))
+        expect(ability).to be_able_to(:show, FactoryBot.create(:user))
       end
       it 'can\'t manage Clubs, Players, Matches' do
         expect(ability).not_to be_able_to(:manage, [Club, Player, Match])
@@ -65,7 +65,7 @@ describe User do
         expect(ability).to be_able_to(:create, :Registration)
       end
       it 'can\'t view any user' do
-        expect(ability).not_to be_able_to(:view, FactoryGirl.create(:user))
+        expect(ability).not_to be_able_to(:view, FactoryBot.create(:user))
       end
       it 'can\'t index Matches, Users, Players, Clubs' do
         expect(ability).not_to be_able_to(:index, [Match, User, Player, Club])
@@ -75,7 +75,7 @@ describe User do
 
   describe 'generate_temporary_password!' do
     context 'new user' do
-      let(:user) { FactoryGirl.build(:user).tap { |u| u.password = nil } }
+      let(:user) { FactoryBot.build(:user).tap { |u| u.password = nil } }
 
       it 'generates a password' do
         expect { user.generate_temporary_password! }.to change(user, :password)
@@ -87,7 +87,7 @@ describe User do
     end
 
     context 'existing user' do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
 
       it 'does not generate a password' do
         expect { user.generate_temporary_password! }.not_to change(user, :password)
@@ -100,7 +100,7 @@ describe User do
   end
 
   it_behaves_like 'Commerce::Purchaser' do
-    let(:purchaser) { FactoryGirl.create(:user) }
+    let(:purchaser) { FactoryBot.create(:user) }
   end
 
   pending 'current_privileges'
@@ -135,7 +135,7 @@ describe User do
           { first_name: 'Alice', last_name: 'Quinn', email: 'niffin@yahoo.com', membership_type: 'Family', address: '12 Blah Ct', city: 'Brooklyn', state: 'NY', postal_code: '11202' }
         ]
       }
-      let!(:admin_user) { FactoryGirl.create(:user, :admin) }
+      let!(:admin_user) { FactoryBot.create(:user, :admin) }
 
       it 'imports Individual and Family users' do
         expect { User.import(users_hash, override_id: admin_user.id) }.to change(User, :count).by(3)
@@ -145,7 +145,7 @@ describe User do
       end
       it 'doesn\'t grant memberships to members with current memberships' do
         user = users_hash.select { |u| u[:membership_type] != 'Relative' }.sample
-        FactoryGirl.create(:user).tap { |u| u.email = user[:email] }.save
+        FactoryBot.create(:user).tap { |u| u.email = user[:email] }.save
 
         expect { User.import(users_hash, override_id: admin_user.id) }.to change(Membership, :count).by(2)
       end
@@ -163,7 +163,7 @@ describe User do
     end
 
     describe 'from_hash' do
-      let(:hash) { FactoryGirl.build(:user).attributes.slice(*User::IMPORTABLE_ATTRIBUTES) }
+      let(:hash) { FactoryBot.build(:user).attributes.slice(*User::IMPORTABLE_ATTRIBUTES) }
 
       it 'creates a new User with a valid hash of new information' do
         expect { User.from_hash(hash) }.to change(User, :count).by(1)
