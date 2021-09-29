@@ -115,7 +115,7 @@ class MembershipsController < ApplicationController
   end
 
   def prepare_new_form
-    @year = Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
+    @year = Membership.new_membership_year
     @cards = @user.stripe_customer.cards.data if @user.stripe_customer.present?
   end
 
