@@ -105,12 +105,16 @@ class Membership < ActiveRecord::Base
     %w(Individual Family Relative).map { |type| "#{type}: #{breakdown[[season, type]] || 0}" }.join(' | ')
   end
 
+  def self.new_membership_year
+    Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
+  end
+  
   def self.price
     '1061'
   end
-
+  
   private
-
+  
   def paid_for?
     return true if is_a?(Relative) || overriding_admin.present?
     super

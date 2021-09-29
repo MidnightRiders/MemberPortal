@@ -112,7 +112,7 @@ class User < ActiveRecord::Base
 
   # Grants a +Membership+ for the current year. Part of import.
   def grant_membership!(type: 'Individual', privileges: [], granted_by: nil, family_id: nil)
-    membership = memberships.where(year: Time.current.year).first_or_initialize
+    membership = memberships.where(year: Membership.new_membership_year).first_or_initialize
     membership.override ||= granted_by
     membership.privileges = privileges
     membership.type ||= type.titleize
