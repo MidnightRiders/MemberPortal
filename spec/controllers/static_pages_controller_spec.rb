@@ -8,7 +8,7 @@ describe StaticPagesController do
 
     context 'signed out' do
       it 'redirects to sign in' do
-        get 'home'
+        get :home
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -16,14 +16,14 @@ describe StaticPagesController do
 
   describe 'GET "faq"' do
     it 'returns http success' do
-      get 'faq'
+      get :faq
       expect(response).to be_success
     end
   end
 
   describe 'GET "contact"' do
     it 'returns http success' do
-      get 'contact'
+      get :contact
       expect(response).to be_success
     end
   end
@@ -32,14 +32,14 @@ describe StaticPagesController do
     context 'signed in' do
       it 'should show' do
         sign_in FactoryBot.create(:user)
-        get 'standings'
+        get :standings
         expect(response).to be_success
       end
     end
 
     context 'signed out' do
       it 'should redirect' do
-        get 'standings'
+        get :standings
         expect(response).to redirect_to(root_path)
       end
     end
@@ -54,7 +54,7 @@ describe StaticPagesController do
 
     context 'signed out' do
       it 'should redirect to root without emailing' do
-        post 'nominate', nomination: nomination
+        post :nominate, params: { nomination: nomination }
 
         expect(UserMailer).not_to receive(:new_board_nomination_email)
         expect(response).to redirect_to(root_path)
@@ -69,7 +69,7 @@ describe StaticPagesController do
         expect(UserMailer).to receive(:new_board_nomination_email).with(user, nomination).and_return(mail_double)
         expect(mail_double).to receive(:deliver_now)
 
-        post 'nominate', nomination: nomination
+        post :nominate, params: { nomination: nomination }
       end
 
       it 'should redirect to user home' do
@@ -77,7 +77,7 @@ describe StaticPagesController do
 
         allow(UserMailer).to receive_message_chain('new_board_nomination_email.deliver_now')
 
-        post 'nominate', nomination: nomination
+        post :nominate, params: { nomination: nomination }
 
         expect(response).to redirect_to(user_home_path)
         expect(flash[:notice]).to eq 'Thank you for your nomination.'
@@ -86,7 +86,7 @@ describe StaticPagesController do
       it 'should redirect without sending if name not provided' do
         sign_in user
 
-        post 'nominate'
+        post :nominate
 
         expect(response).to redirect_to(user_home_path)
         expect(flash[:error]).to eq 'Need all information for nominee.'

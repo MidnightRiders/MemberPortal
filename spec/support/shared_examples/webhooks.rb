@@ -5,7 +5,7 @@ shared_examples_for 'Ignored Webhooks' do |event_code|
     allow(Rails.logger).to receive(:info)
     expect(Rails.logger).to receive(:warn).with(a_string_including('not in accepted webhooks'))
 
-    post :webhooks, event
+    post :webhooks, params: event
 
     expect(response).to have_http_status(:success)
   end
@@ -17,7 +17,7 @@ shared_examples_for 'Non-Customer Webhooks' do |event_code|
   it 'returns 200 with logger error for no Stripe::Customer' do
     expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')
 
-    post :webhooks, event
+    post :webhooks, params: event
 
     expect(response).to have_http_status(:success)
   end

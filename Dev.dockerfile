@@ -5,15 +5,17 @@ RUN apk update
 RUN apk add --no-cache --virtual \
   build-dependencies \
   build-base \
+  firefox-esr \
+  imagemagick6 \
+  imagemagick6-c++ \
+  imagemagick6-dev \
+  imagemagick6-libs \
   nodejs \
   postgresql-dev \
   ruby-nokogiri \
   tzdata \
-  build-base \
-  imagemagick6 \
-  imagemagick6-c++ \
-  imagemagick6-dev \
-  imagemagick6-libs && \
+  xvfb \
+  && \
   rm -rf /var/cache/apk/*
 
 WORKDIR /tmp

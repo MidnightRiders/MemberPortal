@@ -11,7 +11,7 @@ gem 'pg'
 
 gem 'autoprefixer-rails'
 gem 'coffee-rails'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 4.7.0'
 gem 'foundation-rails', '< 6.0'
 gem 'haml-rails'
 gem 'jquery-rails'
@@ -20,7 +20,6 @@ gem 'sass-rails'
 gem 'uglifier'
 
 gem 'draper'
-gem 'icalendar'
 gem 'iconv'
 
 gem 'date_time_attribute'

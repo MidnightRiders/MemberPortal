@@ -3,7 +3,7 @@ require 'spec_helper'
 describe StylesheetsController do
   describe 'GET "clubs"' do
     it 'returns CSS' do
-      get 'club', format: 'css'
+      get :club, params: { format: :css }
       expect(response.headers['Content-Type']).to eq('text/css; charset=utf-8')
     end
   end
