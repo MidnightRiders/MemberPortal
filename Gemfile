@@ -36,7 +36,7 @@ gem 'paperclip', '~> 5.2.1'
 gem 'bigdecimal', '~> 1.3.5'
 gem 'mimemagic', '~> 0.3.9'
 
-gem 'nokogiri', '~> 1.10.8'
+gem 'nokogiri', '~> 1.12.5'
 
 # Users/auth
 gem 'cancancan', '~>1.10.1'
