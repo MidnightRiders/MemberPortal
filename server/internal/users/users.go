@@ -9,9 +9,10 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 )
 
 var letters = func() string {
@@ -121,24 +122,37 @@ func Create(ctx context.Context, db *sql.DB, props CreateProps) (string, error) 
 	digest, err := bcrypt.GenerateFromPassword([]byte(props.Password+salt+pepper), bcrypt.DefaultCost)
 	if err != nil {
 		logrus.WithError(err).Error("Error generating digest from password")
-		return "", errors.New("There was an unexpected error creating the user")
+		return "", errors.New("there was an unexpected error creating the user")
 	}
 
 	uuid := stubbables.UUIDv1()
 	result, err := db.ExecContext(
 		ctx,
 		"INSERT INTO users "+
-			"(uuid, username, email, password_digest, pepper, first_name, last_name, address1, address2, city, province, postal_code, country) "+
+			"(uuid, username, email, password_digest, pepper, first_name, last_name, "+
+			"address1, address2, city, province, postal_code, country) "+
 			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-		uuid, props.Username, props.Email, digest, pepper, props.FirstName, props.LastName, props.Address1, props.Address2, props.City, props.Province, props.PostalCode, props.Country, // TODO: props.MembershipNumber,
+		uuid,
+		props.Username,
+		props.Email,
+		digest,
+		pepper,
+		props.FirstName,
+		props.LastName,
+		props.Address1,
+		props.Address2,
+		props.City,
+		props.Province,
+		props.PostalCode,
+		props.Country, // TODO: props.MembershipNumber,
 	)
 	if err != nil {
 		logrus.WithError(err).Error("Error creating user")
-		return "", errors.New("There was an unexpected error creating the user")
+		return "", errors.New("there was an unexpected error creating the user")
 	}
 	if rows, err := result.RowsAffected(); err != nil || rows == 0 {
 		logrus.WithError(err).WithField("rows", rows).Error("Error getting affected rows")
-		return "", errors.New("There was an unexpected error creating the user")
+		return "", errors.New("there was an unexpected error creating the user")
 	}
 
 	return uuid, nil

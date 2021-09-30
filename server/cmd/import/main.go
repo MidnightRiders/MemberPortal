@@ -42,12 +42,12 @@ func main() {
 		if _, err = os.Stat(dir + "/" + table + ".json"); os.IsNotExist(err) {
 			log.Fatalf(`Directory %s is missing %s.json`, dir, table)
 		}
-		f, err := os.Open(dir + "/" + table + ".json")
+		f, err := os.Open(dir + "/" + table + ".json") //nolint:gosec // this is a safe string reference
 		if err != nil {
 			log.Fatalf(`Could not open %s/%s.json: %v`, dir, table, err)
 		}
 		defer f.Close()
-		body, err := ioutil.ReadAll(f)
+		body, _ := ioutil.ReadAll(f)
 		var val []map[string]interface{}
 		if err := json.Unmarshal(body, &val); err != nil {
 			log.Fatalf(`Could not unmarshal JSON from %s/%s.json: %v`, dir, table, err)
