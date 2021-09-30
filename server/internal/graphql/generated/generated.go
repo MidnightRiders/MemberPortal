@@ -13,8 +13,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/MidnightRiders/MemberPortal/server/graph/model"
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -1375,7 +1375,7 @@ func (ec *executionContext) field_Query_clubs_args(ctx context.Context, rawArgs 
 	var arg0 *model.Conference
 	if tmp, ok := rawArgs["conference"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("conference"))
-		arg0, err = ec.unmarshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx, tmp)
+		arg0, err = ec.unmarshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐConference(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -1862,7 +1862,7 @@ func (ec *executionContext) _Club_conference(ctx context.Context, field graphql.
 	}
 	res := resTmp.(model.Conference)
 	fc.Result = res
-	return ec.marshalNConference2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx, field.Selections, res)
+	return ec.marshalNConference2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐConference(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Club_active(ctx context.Context, field graphql.CollectedField, obj *model.Club) (ret graphql.Marshaler) {
@@ -1967,7 +1967,7 @@ func (ec *executionContext) _ManOfTheMatchVote_match(ctx context.Context, field 
 	}
 	res := resTmp.(*model.Match)
 	fc.Result = res
-	return ec.marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx, field.Selections, res)
+	return ec.marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatch(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ManOfTheMatchVote_user(ctx context.Context, field graphql.CollectedField, obj *model.ManOfTheMatchVote) (ret graphql.Marshaler) {
@@ -2002,7 +2002,7 @@ func (ec *executionContext) _ManOfTheMatchVote_user(ctx context.Context, field g
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ManOfTheMatchVote_firstPick(ctx context.Context, field graphql.CollectedField, obj *model.ManOfTheMatchVote) (ret graphql.Marshaler) {
@@ -2037,7 +2037,7 @@ func (ec *executionContext) _ManOfTheMatchVote_firstPick(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Player)
 	fc.Result = res
-	return ec.marshalNPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPlayer(ctx, field.Selections, res)
+	return ec.marshalNPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPlayer(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ManOfTheMatchVote_secondPick(ctx context.Context, field graphql.CollectedField, obj *model.ManOfTheMatchVote) (ret graphql.Marshaler) {
@@ -2069,7 +2069,7 @@ func (ec *executionContext) _ManOfTheMatchVote_secondPick(ctx context.Context, f
 	}
 	res := resTmp.(*model.Player)
 	fc.Result = res
-	return ec.marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPlayer(ctx, field.Selections, res)
+	return ec.marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPlayer(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _ManOfTheMatchVote_thirdPick(ctx context.Context, field graphql.CollectedField, obj *model.ManOfTheMatchVote) (ret graphql.Marshaler) {
@@ -2101,7 +2101,7 @@ func (ec *executionContext) _ManOfTheMatchVote_thirdPick(ctx context.Context, fi
 	}
 	res := resTmp.(*model.Player)
 	fc.Result = res
-	return ec.marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPlayer(ctx, field.Selections, res)
+	return ec.marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPlayer(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Match_uuid(ctx context.Context, field graphql.CollectedField, obj *model.Match) (ret graphql.Marshaler) {
@@ -2206,7 +2206,7 @@ func (ec *executionContext) _Match_homeClub(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Club)
 	fc.Result = res
-	return ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx, field.Selections, res)
+	return ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClub(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Match_awayClub(ctx context.Context, field graphql.CollectedField, obj *model.Match) (ret graphql.Marshaler) {
@@ -2241,7 +2241,7 @@ func (ec *executionContext) _Match_awayClub(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Club)
 	fc.Result = res
-	return ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx, field.Selections, res)
+	return ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClub(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Match_homeGoals(ctx context.Context, field graphql.CollectedField, obj *model.Match) (ret graphql.Marshaler) {
@@ -2340,7 +2340,7 @@ func (ec *executionContext) _Match_status(ctx context.Context, field graphql.Col
 	}
 	res := resTmp.(model.MatchStatus)
 	fc.Result = res
-	return ec.marshalNMatchStatus2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatchStatus(ctx, field.Selections, res)
+	return ec.marshalNMatchStatus2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatchStatus(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Match_revGuesses(ctx context.Context, field graphql.CollectedField, obj *model.Match) (ret graphql.Marshaler) {
@@ -2372,7 +2372,7 @@ func (ec *executionContext) _Match_revGuesses(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.RevGuess)
 	fc.Result = res
-	return ec.marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuessᚄ(ctx, field.Selections, res)
+	return ec.marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuessᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Match_manOfTheMatchVotes(ctx context.Context, field graphql.CollectedField, obj *model.Match) (ret graphql.Marshaler) {
@@ -2404,7 +2404,7 @@ func (ec *executionContext) _Match_manOfTheMatchVotes(ctx context.Context, field
 	}
 	res := resTmp.([]*model.ManOfTheMatchVote)
 	fc.Result = res
-	return ec.marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVoteᚄ(ctx, field.Selections, res)
+	return ec.marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVoteᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Membership_uuid(ctx context.Context, field graphql.CollectedField, obj *model.Membership) (ret graphql.Marshaler) {
@@ -2474,7 +2474,7 @@ func (ec *executionContext) _Membership_user(ctx context.Context, field graphql.
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Membership_year(ctx context.Context, field graphql.CollectedField, obj *model.Membership) (ret graphql.Marshaler) {
@@ -2544,7 +2544,7 @@ func (ec *executionContext) _Membership_type(ctx context.Context, field graphql.
 	}
 	res := resTmp.(model.MembershipType)
 	fc.Result = res
-	return ec.marshalNMembershipType2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipType(ctx, field.Selections, res)
+	return ec.marshalNMembershipType2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembershipType(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Membership_role(ctx context.Context, field graphql.CollectedField, obj *model.Membership) (ret graphql.Marshaler) {
@@ -2615,7 +2615,7 @@ func (ec *executionContext) _Mutation_logIn(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Session)
 	fc.Result = res
-	return ec.marshalOSession2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐSession(ctx, field.Selections, res)
+	return ec.marshalOSession2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_logOut(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2692,7 +2692,7 @@ func (ec *executionContext) _Mutation_createUser(ctx context.Context, field grap
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createRevGuess(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2734,7 +2734,7 @@ func (ec *executionContext) _Mutation_createRevGuess(ctx context.Context, field 
 	}
 	res := resTmp.(*model.RevGuess)
 	fc.Result = res
-	return ec.marshalNRevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuess(ctx, field.Selections, res)
+	return ec.marshalNRevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuess(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createManOfTheMatchVote(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2773,7 +2773,7 @@ func (ec *executionContext) _Mutation_createManOfTheMatchVote(ctx context.Contex
 	}
 	res := resTmp.(*model.ManOfTheMatchVote)
 	fc.Result = res
-	return ec.marshalOManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVote(ctx, field.Selections, res)
+	return ec.marshalOManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVote(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_initiatePasswordReset(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2994,7 +2994,7 @@ func (ec *executionContext) _Player_position(ctx context.Context, field graphql.
 	}
 	res := resTmp.(model.Position)
 	fc.Result = res
-	return ec.marshalNPosition2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPosition(ctx, field.Selections, res)
+	return ec.marshalNPosition2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPosition(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Player_club(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
@@ -3029,7 +3029,7 @@ func (ec *executionContext) _Player_club(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Club)
 	fc.Result = res
-	return ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx, field.Selections, res)
+	return ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClub(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Player_active(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
@@ -3103,7 +3103,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_users(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3135,7 +3135,7 @@ func (ec *executionContext) _Query_users(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.User)
 	fc.Result = res
-	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUserᚄ(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUserᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_membership(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3174,7 +3174,7 @@ func (ec *executionContext) _Query_membership(ctx context.Context, field graphql
 	}
 	res := resTmp.(*model.Membership)
 	fc.Result = res
-	return ec.marshalOMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembership(ctx, field.Selections, res)
+	return ec.marshalOMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembership(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_memberships(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3213,7 +3213,7 @@ func (ec *executionContext) _Query_memberships(ctx context.Context, field graphq
 	}
 	res := resTmp.([]*model.Membership)
 	fc.Result = res
-	return ec.marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipᚄ(ctx, field.Selections, res)
+	return ec.marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembershipᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_club(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3252,7 +3252,7 @@ func (ec *executionContext) _Query_club(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(*model.Club)
 	fc.Result = res
-	return ec.marshalOClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx, field.Selections, res)
+	return ec.marshalOClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClub(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_clubs(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3291,7 +3291,7 @@ func (ec *executionContext) _Query_clubs(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.([]*model.Club)
 	fc.Result = res
-	return ec.marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClubᚄ(ctx, field.Selections, res)
+	return ec.marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClubᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_match(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3330,7 +3330,7 @@ func (ec *executionContext) _Query_match(ctx context.Context, field graphql.Coll
 	}
 	res := resTmp.(*model.Match)
 	fc.Result = res
-	return ec.marshalOMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx, field.Selections, res)
+	return ec.marshalOMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatch(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_matches(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3369,7 +3369,7 @@ func (ec *executionContext) _Query_matches(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.([]*model.Match)
 	fc.Result = res
-	return ec.marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatchᚄ(ctx, field.Selections, res)
+	return ec.marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatchᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_revGuess(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3408,7 +3408,7 @@ func (ec *executionContext) _Query_revGuess(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.RevGuess)
 	fc.Result = res
-	return ec.marshalORevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuess(ctx, field.Selections, res)
+	return ec.marshalORevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuess(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_revGuesses(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3447,7 +3447,7 @@ func (ec *executionContext) _Query_revGuesses(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.RevGuess)
 	fc.Result = res
-	return ec.marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuessᚄ(ctx, field.Selections, res)
+	return ec.marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuessᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_manOfTheMatchVote(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3486,7 +3486,7 @@ func (ec *executionContext) _Query_manOfTheMatchVote(ctx context.Context, field 
 	}
 	res := resTmp.(*model.ManOfTheMatchVote)
 	fc.Result = res
-	return ec.marshalOManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVote(ctx, field.Selections, res)
+	return ec.marshalOManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVote(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_manOfTheMatchVotes(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3525,7 +3525,7 @@ func (ec *executionContext) _Query_manOfTheMatchVotes(ctx context.Context, field
 	}
 	res := resTmp.([]*model.ManOfTheMatchVote)
 	fc.Result = res
-	return ec.marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVoteᚄ(ctx, field.Selections, res)
+	return ec.marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVoteᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3666,7 +3666,7 @@ func (ec *executionContext) _RevGuess_match(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(*model.Match)
 	fc.Result = res
-	return ec.marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx, field.Selections, res)
+	return ec.marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatch(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _RevGuess_user(ctx context.Context, field graphql.CollectedField, obj *model.RevGuess) (ret graphql.Marshaler) {
@@ -3701,7 +3701,7 @@ func (ec *executionContext) _RevGuess_user(ctx context.Context, field graphql.Co
 	}
 	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx, field.Selections, res)
+	return ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _RevGuess_homeGoals(ctx context.Context, field graphql.CollectedField, obj *model.RevGuess) (ret graphql.Marshaler) {
@@ -4389,7 +4389,7 @@ func (ec *executionContext) _User_memberships(ctx context.Context, field graphql
 	}
 	res := resTmp.([]*model.Membership)
 	fc.Result = res
-	return ec.marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipᚄ(ctx, field.Selections, res)
+	return ec.marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembershipᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -4527,6 +4527,41 @@ func (ec *executionContext) ___Directive_args(ctx context.Context, field graphql
 	res := resTmp.([]introspection.InputValue)
 	fc.Result = res
 	return ec.marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐInputValueᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) ___Directive_isRepeatable(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:     "__Directive",
+		Field:      field,
+		Args:       nil,
+		IsMethod:   false,
+		IsResolver: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsRepeatable, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___EnumValue_name(ctx context.Context, field graphql.CollectedField, obj *introspection.EnumValue) (ret graphql.Marshaler) {
@@ -6166,6 +6201,11 @@ func (ec *executionContext) ___Directive(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "isRepeatable":
+			out.Values[i] = ec.___Directive_isRepeatable(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -6398,7 +6438,7 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx context.Context, sel ast.SelectionSet, v *model.Club) graphql.Marshaler {
+func (ec *executionContext) marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClub(ctx context.Context, sel ast.SelectionSet, v *model.Club) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6408,13 +6448,13 @@ func (ec *executionContext) marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemb
 	return ec._Club(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNConference2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx context.Context, v interface{}) (model.Conference, error) {
+func (ec *executionContext) unmarshalNConference2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐConference(ctx context.Context, v interface{}) (model.Conference, error) {
 	var res model.Conference
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNConference2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx context.Context, sel ast.SelectionSet, v model.Conference) graphql.Marshaler {
+func (ec *executionContext) marshalNConference2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐConference(ctx context.Context, sel ast.SelectionSet, v model.Conference) graphql.Marshaler {
 	return v
 }
 
@@ -6463,7 +6503,7 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) marshalNManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVote(ctx context.Context, sel ast.SelectionSet, v *model.ManOfTheMatchVote) graphql.Marshaler {
+func (ec *executionContext) marshalNManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVote(ctx context.Context, sel ast.SelectionSet, v *model.ManOfTheMatchVote) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6473,7 +6513,7 @@ func (ec *executionContext) marshalNManOfTheMatchVote2ᚖgithubᚗcomᚋMidnight
 	return ec._ManOfTheMatchVote(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx context.Context, sel ast.SelectionSet, v *model.Match) graphql.Marshaler {
+func (ec *executionContext) marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatch(ctx context.Context, sel ast.SelectionSet, v *model.Match) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6483,17 +6523,17 @@ func (ec *executionContext) marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMem
 	return ec._Match(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNMatchStatus2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatchStatus(ctx context.Context, v interface{}) (model.MatchStatus, error) {
+func (ec *executionContext) unmarshalNMatchStatus2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatchStatus(ctx context.Context, v interface{}) (model.MatchStatus, error) {
 	var res model.MatchStatus
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMatchStatus2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatchStatus(ctx context.Context, sel ast.SelectionSet, v model.MatchStatus) graphql.Marshaler {
+func (ec *executionContext) marshalNMatchStatus2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatchStatus(ctx context.Context, sel ast.SelectionSet, v model.MatchStatus) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembership(ctx context.Context, sel ast.SelectionSet, v *model.Membership) graphql.Marshaler {
+func (ec *executionContext) marshalNMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembership(ctx context.Context, sel ast.SelectionSet, v *model.Membership) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6503,17 +6543,17 @@ func (ec *executionContext) marshalNMembership2ᚖgithubᚗcomᚋMidnightRiders�
 	return ec._Membership(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNMembershipType2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipType(ctx context.Context, v interface{}) (model.MembershipType, error) {
+func (ec *executionContext) unmarshalNMembershipType2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembershipType(ctx context.Context, v interface{}) (model.MembershipType, error) {
 	var res model.MembershipType
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNMembershipType2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipType(ctx context.Context, sel ast.SelectionSet, v model.MembershipType) graphql.Marshaler {
+func (ec *executionContext) marshalNMembershipType2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembershipType(ctx context.Context, sel ast.SelectionSet, v model.MembershipType) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPlayer(ctx context.Context, sel ast.SelectionSet, v *model.Player) graphql.Marshaler {
+func (ec *executionContext) marshalNPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPlayer(ctx context.Context, sel ast.SelectionSet, v *model.Player) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6523,21 +6563,21 @@ func (ec *executionContext) marshalNPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMe
 	return ec._Player(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNPosition2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPosition(ctx context.Context, v interface{}) (model.Position, error) {
+func (ec *executionContext) unmarshalNPosition2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPosition(ctx context.Context, v interface{}) (model.Position, error) {
 	var res model.Position
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPosition2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPosition(ctx context.Context, sel ast.SelectionSet, v model.Position) graphql.Marshaler {
+func (ec *executionContext) marshalNPosition2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPosition(ctx context.Context, sel ast.SelectionSet, v model.Position) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) marshalNRevGuess2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuess(ctx context.Context, sel ast.SelectionSet, v model.RevGuess) graphql.Marshaler {
+func (ec *executionContext) marshalNRevGuess2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuess(ctx context.Context, sel ast.SelectionSet, v model.RevGuess) graphql.Marshaler {
 	return ec._RevGuess(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNRevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuess(ctx context.Context, sel ast.SelectionSet, v *model.RevGuess) graphql.Marshaler {
+func (ec *executionContext) marshalNRevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuess(ctx context.Context, sel ast.SelectionSet, v *model.RevGuess) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6577,11 +6617,11 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) marshalNUser2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			ec.Errorf(ctx, "must not be null")
@@ -6629,6 +6669,13 @@ func (ec *executionContext) marshalN__Directive2ᚕgithubᚗcomᚋ99designsᚋgq
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
@@ -6702,6 +6749,13 @@ func (ec *executionContext) marshalN__DirectiveLocation2ᚕstringᚄ(ctx context
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
@@ -6751,6 +6805,13 @@ func (ec *executionContext) marshalN__InputValue2ᚕgithubᚗcomᚋ99designsᚋg
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
@@ -6792,6 +6853,13 @@ func (ec *executionContext) marshalN__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgen�
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
@@ -6844,7 +6912,7 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 	return graphql.MarshalBoolean(*v)
 }
 
-func (ec *executionContext) marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClubᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Club) graphql.Marshaler {
+func (ec *executionContext) marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClubᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Club) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6871,7 +6939,7 @@ func (ec *executionContext) marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋM
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx, sel, v[i])
+			ret[i] = ec.marshalNClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClub(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6881,17 +6949,24 @@ func (ec *executionContext) marshalOClub2ᚕᚖgithubᚗcomᚋMidnightRidersᚋM
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
-func (ec *executionContext) marshalOClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐClub(ctx context.Context, sel ast.SelectionSet, v *model.Club) graphql.Marshaler {
+func (ec *executionContext) marshalOClub2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐClub(ctx context.Context, sel ast.SelectionSet, v *model.Club) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Club(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx context.Context, v interface{}) (*model.Conference, error) {
+func (ec *executionContext) unmarshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐConference(ctx context.Context, v interface{}) (*model.Conference, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -6900,7 +6975,7 @@ func (ec *executionContext) unmarshalOConference2ᚖgithubᚗcomᚋMidnightRider
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐConference(ctx context.Context, sel ast.SelectionSet, v *model.Conference) graphql.Marshaler {
+func (ec *executionContext) marshalOConference2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐConference(ctx context.Context, sel ast.SelectionSet, v *model.Conference) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6937,7 +7012,7 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 	return graphql.MarshalInt(*v)
 }
 
-func (ec *executionContext) marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVoteᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ManOfTheMatchVote) graphql.Marshaler {
+func (ec *executionContext) marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVoteᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.ManOfTheMatchVote) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -6964,7 +7039,7 @@ func (ec *executionContext) marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidni
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVote(ctx, sel, v[i])
+			ret[i] = ec.marshalNManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVote(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -6974,17 +7049,24 @@ func (ec *executionContext) marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidni
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
-func (ec *executionContext) marshalOManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐManOfTheMatchVote(ctx context.Context, sel ast.SelectionSet, v *model.ManOfTheMatchVote) graphql.Marshaler {
+func (ec *executionContext) marshalOManOfTheMatchVote2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVote(ctx context.Context, sel ast.SelectionSet, v *model.ManOfTheMatchVote) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._ManOfTheMatchVote(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatchᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Match) graphql.Marshaler {
+func (ec *executionContext) marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatchᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Match) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7011,7 +7093,7 @@ func (ec *executionContext) marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋ
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx, sel, v[i])
+			ret[i] = ec.marshalNMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatch(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -7021,17 +7103,24 @@ func (ec *executionContext) marshalOMatch2ᚕᚖgithubᚗcomᚋMidnightRidersᚋ
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
-func (ec *executionContext) marshalOMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMatch(ctx context.Context, sel ast.SelectionSet, v *model.Match) graphql.Marshaler {
+func (ec *executionContext) marshalOMatch2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMatch(ctx context.Context, sel ast.SelectionSet, v *model.Match) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Match(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembershipᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Membership) graphql.Marshaler {
+func (ec *executionContext) marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembershipᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Membership) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7058,7 +7147,7 @@ func (ec *executionContext) marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRide
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembership(ctx, sel, v[i])
+			ret[i] = ec.marshalNMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembership(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -7068,10 +7157,17 @@ func (ec *executionContext) marshalOMembership2ᚕᚖgithubᚗcomᚋMidnightRide
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
-func (ec *executionContext) marshalOMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐMembership(ctx context.Context, sel ast.SelectionSet, v *model.Membership) graphql.Marshaler {
+func (ec *executionContext) marshalOMembership2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐMembership(ctx context.Context, sel ast.SelectionSet, v *model.Membership) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7093,14 +7189,14 @@ func (ec *executionContext) marshalONull2ᚖstring(ctx context.Context, sel ast.
 	return graphql.MarshalString(*v)
 }
 
-func (ec *executionContext) marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐPlayer(ctx context.Context, sel ast.SelectionSet, v *model.Player) graphql.Marshaler {
+func (ec *executionContext) marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPlayer(ctx context.Context, sel ast.SelectionSet, v *model.Player) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._Player(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuessᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.RevGuess) graphql.Marshaler {
+func (ec *executionContext) marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuessᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.RevGuess) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7127,7 +7223,7 @@ func (ec *executionContext) marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRiders
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNRevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuess(ctx, sel, v[i])
+			ret[i] = ec.marshalNRevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuess(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -7137,10 +7233,17 @@ func (ec *executionContext) marshalORevGuess2ᚕᚖgithubᚗcomᚋMidnightRiders
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
-func (ec *executionContext) marshalORevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐRevGuess(ctx context.Context, sel ast.SelectionSet, v *model.RevGuess) graphql.Marshaler {
+func (ec *executionContext) marshalORevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRevGuess(ctx context.Context, sel ast.SelectionSet, v *model.RevGuess) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7157,7 +7260,7 @@ func (ec *executionContext) marshalORole2githubᚗcomᚋMidnightRidersᚋMemberP
 	return graphql.MarshalString(string(v))
 }
 
-func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
+func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7203,7 +7306,7 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 	return graphql.MarshalTime(*v)
 }
 
-func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUserᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7230,7 +7333,7 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋMidnightRidersᚋM
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx, sel, v[i])
+			ret[i] = ec.marshalNUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -7240,10 +7343,17 @@ func (ec *executionContext) marshalOUser2ᚕᚖgithubᚗcomᚋMidnightRidersᚋM
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
-func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋgraphᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
+func (ec *executionContext) marshalOUser2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -7287,6 +7397,13 @@ func (ec *executionContext) marshalO__EnumValue2ᚕgithubᚗcomᚋ99designsᚋgq
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
@@ -7327,6 +7444,13 @@ func (ec *executionContext) marshalO__Field2ᚕgithubᚗcomᚋ99designsᚋgqlgen
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
@@ -7367,6 +7491,13 @@ func (ec *executionContext) marshalO__InputValue2ᚕgithubᚗcomᚋ99designsᚋg
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 
@@ -7414,6 +7545,13 @@ func (ec *executionContext) marshalO__Type2ᚕgithubᚗcomᚋ99designsᚋgqlgen�
 
 	}
 	wg.Wait()
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
 	return ret
 }
 

@@ -15,10 +15,10 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/sirupsen/logrus"
 
-	"github.com/MidnightRiders/MemberPortal/server/graph"
-	"github.com/MidnightRiders/MemberPortal/server/graph/generated"
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	"github.com/MidnightRiders/MemberPortal/server/internal/env"
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql"
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/generated"
 )
 
 const defaultPort = "8080"
@@ -63,7 +63,7 @@ func main() {
 	domain := os.Getenv("DOMAIN")
 
 	cfg := generated.Config{
-		Resolvers: &graph.Resolver{
+		Resolvers: &graphql.Resolver{
 			DB:     db,
 			Domain: domain,
 			Env:    e,

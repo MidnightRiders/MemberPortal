@@ -1,4 +1,4 @@
-package graph
+package graphql
 
 // This file will be automatically regenerated based on the schema, any resolver implementations
 // will be copied through when generating and any unknown code will be moved to the end.
@@ -7,8 +7,8 @@ import (
 	"context"
 	"errors"
 
-	"github.com/MidnightRiders/MemberPortal/server/graph/generated"
-	"github.com/MidnightRiders/MemberPortal/server/graph/model"
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/generated"
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 )
 
 func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {
