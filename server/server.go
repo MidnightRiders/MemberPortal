@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/99designs/gqlgen/graphql"
+	gql "github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/golang-migrate/migrate/v4"
@@ -72,9 +72,9 @@ func main() {
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(cfg))
 	// srv.Use(extension.FixedComplexityLimit(5))
-	srv.AroundOperations(func(ctx context.Context, next graphql.OperationHandler) graphql.ResponseHandler {
+	srv.AroundOperations(func(ctx context.Context, next gql.OperationHandler) gql.ResponseHandler {
 		if !auth.FromContext(ctx).IsAdmin {
-			graphql.GetOperationContext(ctx).DisableIntrospection = true
+			gql.GetOperationContext(ctx).DisableIntrospection = true
 		}
 
 		return next(ctx)

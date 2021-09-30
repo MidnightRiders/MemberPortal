@@ -256,7 +256,6 @@ func createLogOutSetup(ctx context.Context, prepareDB func(mock sqlmock.Sqlmock)
 }
 
 func TestLogOut(t *testing.T) {
-
 	testCases := []struct {
 		it    string
 		setup logOutSetup

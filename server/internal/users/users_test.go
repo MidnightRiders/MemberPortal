@@ -8,9 +8,10 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/MidnightRiders/MemberPortal/server/internal/testhelpers"
 	"github.com/MidnightRiders/MemberPortal/server/internal/users"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestPasswordIsValid(t *testing.T) {
@@ -145,8 +146,9 @@ func TestCreate(t *testing.T) {
 
 			setup: createSetup(context.Background(), users.CreateProps{}, nil),
 
-			want:    "",
-			wantErr: "The following fields are invalid: address1, city, country, email, firstName, lastName, password, postalCode, province, username",
+			want: "",
+			wantErr: "The following fields are invalid: address1, city, country, email, " +
+				"firstName, lastName, password, postalCode, province, username",
 		},
 		{
 			it: "rejects invalid fields",
@@ -164,8 +166,9 @@ func TestCreate(t *testing.T) {
 				Username:   "!!!!!!!!",
 			}, nil),
 
-			want:    "",
-			wantErr: "The following fields are invalid: address1, city, country, email, firstName, lastName, password, postalCode, province, username",
+			want: "",
+			wantErr: "The following fields are invalid: address1, city, country, email, " +
+				"firstName, lastName, password, postalCode, province, username",
 		},
 		{
 			it: "returns nil and error if it cannot create a user",
@@ -183,7 +186,19 @@ func TestCreate(t *testing.T) {
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
 				mock.ExpectExec("INSERT INTO users").WithArgs(
-					uuid, "ttwellman", "test@test.com", sqlmock.AnyArg(), pepper, "Taylor", "Twellman", "123 Test Ln", nil, "Boston", "MA", "02101", "United States",
+					uuid,
+					"ttwellman",
+					"test@test.com",
+					sqlmock.AnyArg(),
+					pepper,
+					"Taylor",
+					"Twellman",
+					"123 Test Ln",
+					nil,
+					"Boston",
+					"MA",
+					"02101",
+					"United States",
 				).WillReturnError(errors.New("couldn't do it"))
 			}),
 
@@ -206,7 +221,19 @@ func TestCreate(t *testing.T) {
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
 				mock.ExpectExec("INSERT INTO users").WithArgs(
-					uuid, "ttwellman", "test@test.com", sqlmock.AnyArg(), pepper, "Taylor", "Twellman", "123 Test Ln", nil, "Boston", "MA", "02101", "United States",
+					uuid,
+					"ttwellman",
+					"test@test.com",
+					sqlmock.AnyArg(),
+					pepper,
+					"Taylor",
+					"Twellman",
+					"123 Test Ln",
+					nil,
+					"Boston",
+					"MA",
+					"02101",
+					"United States",
 				).WillReturnResult(sqlmock.NewResult(0, 0))
 			}),
 
@@ -229,7 +256,19 @@ func TestCreate(t *testing.T) {
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
 				mock.ExpectExec("INSERT INTO users").WithArgs(
-					uuid, "ttwellman", "test@test.com", sqlmock.AnyArg(), pepper, "Taylor", "Twellman", "123 Test Ln", nil, "Boston", "MA", "02101", "United States",
+					uuid,
+					"ttwellman",
+					"test@test.com",
+					sqlmock.AnyArg(),
+					pepper,
+					"Taylor",
+					"Twellman",
+					"123 Test Ln",
+					nil,
+					"Boston",
+					"MA",
+					"02101",
+					"United States",
 				).WillReturnResult(sqlmock.NewResult(1, 1))
 			}),
 
