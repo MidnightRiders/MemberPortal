@@ -7,8 +7,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"strings"
 	"time"
+
+	"github.com/sirupsen/logrus"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/generated"
@@ -22,7 +23,7 @@ func (r *mutationResolver) LogIn(ctx context.Context, username string, password 
 		return nil, err
 	}
 	return &model.Session{
-		Token:   sess.UUID,
+		Token:   sess.ULID,
 		Expires: sess.Expires.UTC(),
 	}, nil
 }
@@ -36,7 +37,7 @@ func (r *mutationResolver) LogOut(ctx context.Context) (bool, error) {
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) (*model.User, error) {
-	uuid, err := users.Create(ctx, r.DB, users.CreateProps{
+	ulid, err := users.Create(ctx, r.DB, users.CreateProps{
 		Username:  username,
 		Password:  password,
 		Email:     email,
@@ -52,14 +53,14 @@ func (r *mutationResolver) CreateUser(ctx context.Context, username string, emai
 		return nil, err
 	}
 
-	return r.Query().User(ctx, uuid)
+	return r.Query().User(ctx, ulid)
 }
 
-func (r *mutationResolver) CreateRevGuess(ctx context.Context, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error) {
+func (r *mutationResolver) CreateRevGuess(ctx context.Context, userULID string, matchULID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string, firstPickUUID string, secondPickUUID *string, thirdPickUUID *string) (*model.ManOfTheMatchVote, error) {
+func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userULID string, matchULID string, firstPickULID string, secondPickULID *string, thirdPickULID *string) (*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -71,90 +72,65 @@ func (r *mutationResolver) ResetPassword(ctx context.Context, email string, pass
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) User(ctx context.Context, uuid string) (*model.User, error) {
-	row := r.DB.QueryRowContext(ctx, "SELECT "+model.UserColumns+" FROM users WHERE uuid = ? LIMIT 1", uuid)
-	if row == nil {
-		return nil, nil
+func (r *queryResolver) User(ctx context.Context, ulid string) (*model.User, error) {
+	var u *model.User
+	if result := r.DB.WithContext(ctx).First(u, "ulid = ?", ulid); result.Error != nil {
+		logrus.WithContext(ctx).WithError(result.Error).Error("error finding user")
+		return nil, errors.New("could not find user")
 	}
 
-	return model.UserFromRow(ctx, row), nil
+	return u, nil
 }
 
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
-	users := []*model.User{}
+	var usrs []*model.User
 
-	resp, err := r.DB.QueryContext(ctx, "SELECT "+model.UserColumns+" FROM users")
-	if err != nil {
-		return users, err
+	if result := r.DB.WithContext(ctx).Find(&usrs); result.Error != nil {
+		return nil, result.Error
 	}
-	defer resp.Close()
 
-	for resp.Next() {
-		if user := model.UserFromRow(ctx, resp); user != nil {
-			users = append(users, user)
-		}
-	}
-	return users, nil
+	return usrs, nil
 }
 
-func (r *queryResolver) Membership(ctx context.Context, uuid *string, userUUID *string, year *int) (*model.Membership, error) {
-	query := "SELECT " + model.MembershipColumns + " FROM memberships"
-	conditions := []string{}
-	args := []interface{}{}
-
-	if uuid != nil {
-		conditions = append(conditions, "uuid = ?")
-		args = append(args, *uuid)
+func (r *queryResolver) Membership(ctx context.Context, ulid *string, userULID *string, year *int) (*model.Membership, error) {
+	m := model.Membership{}
+	query := r.DB.WithContext(ctx)
+	if ulid != nil {
+		query = query.Where("ulid = ?", *ulid)
 	}
-	if userUUID != nil {
-		conditions = append(conditions, "user_uuid = ?")
-		args = append(args, *userUUID)
+	if userULID != nil {
+		query = query.Where("user_ulid = ?", *userULID)
 	}
 	if year != nil {
-		conditions = append(conditions, "year = ?")
-		args = append(args, *year)
-	}
-	if len(conditions) > 0 {
-		query += " WHERE " + strings.Join(conditions, " AND ")
+		query = query.Where("year = ?", *year)
 	}
 
-	row := r.DB.QueryRowContext(ctx, query, args...)
+	if result := query.First(&m); result.Error != nil {
+		return nil, result.Error
+	}
 
-	return model.MembershipFromRow(ctx, row), nil
+	return &m, nil
 }
 
-func (r *queryResolver) Memberships(ctx context.Context, userUUID *string, year *int) ([]*model.Membership, error) {
-	memberships := []*model.Membership{}
+func (r *queryResolver) Memberships(ctx context.Context, userULID *string, year *int) ([]*model.Membership, error) {
+	var memberships []*model.Membership
 
-	query := "SELECT " + model.MembershipColumns + " FROM memberships"
-	conditions := []string{}
-	args := []interface{}{}
-	if userUUID != nil {
-		conditions = append(conditions, "user_uuid = ?")
-		args = append(args, *userUUID)
+	query := r.DB.WithContext(ctx)
+	if userULID != nil {
+		query = query.Where("user_ulid = ?", *userULID)
 	}
 	if year != nil {
-		conditions = append(conditions, "year = ?")
-		args = append(args, *year)
-	}
-	if len(conditions) > 0 {
-		query += " WHERE " + strings.Join(conditions, " AND ")
+		query = query.Where("year = ?", *year)
 	}
 
-	resp, err := r.DB.QueryContext(ctx, query, args...)
-	if err != nil {
-		return memberships, err
+	if result := query.Find(&memberships); result.Error != nil {
+		return nil, result.Error
 	}
 
-	for resp.Next() {
-		if membership := model.MembershipFromRow(ctx, resp); membership != nil {
-			memberships = append(memberships, membership)
-		}
-	}
 	return memberships, nil
 }
 
-func (r *queryResolver) Club(ctx context.Context, uuid string) (*model.Club, error) {
+func (r *queryResolver) Club(ctx context.Context, ulid string) (*model.Club, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -162,7 +138,7 @@ func (r *queryResolver) Clubs(ctx context.Context, conference *model.Conference)
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) Match(ctx context.Context, uuid string) (*model.Match, error) {
+func (r *queryResolver) Match(ctx context.Context, ulid string) (*model.Match, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -170,7 +146,7 @@ func (r *queryResolver) Matches(ctx context.Context, before *time.Time, after *t
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) RevGuess(ctx context.Context, userUUID string, matchUUID string) (*model.RevGuess, error) {
+func (r *queryResolver) RevGuess(ctx context.Context, userULID string, matchULID string) (*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -178,7 +154,7 @@ func (r *queryResolver) RevGuesses(ctx context.Context, matchID *string) ([]*mod
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) ManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string) (*model.ManOfTheMatchVote, error) {
+func (r *queryResolver) ManOfTheMatchVote(ctx context.Context, userULID string, matchULID string) (*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

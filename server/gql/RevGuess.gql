@@ -1,5 +1,5 @@
 type RevGuess {
-  uuid: ID!
+  ulid: ID!
   match: Match!
   user: User!
   homeGoals: Int!

@@ -3,8 +3,6 @@ package stubbables
 import (
 	"math/rand"
 	"time"
-
-	uuid "github.com/satori/go.uuid"
 )
 
 // Stubbables is a package of reusable functions that are
@@ -12,11 +10,6 @@ import (
 
 // TimeNow wraps time.Now
 var TimeNow = time.Now
-
-// UUIDv1 wraps uuid.NewV1().String
-var UUIDv1 = func() string {
-	return uuid.NewV1().String()
-}
 
 var chars = func() string {
 	str := ""

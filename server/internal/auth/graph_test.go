@@ -9,17 +9,23 @@ import (
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/stretchr/testify/assert"
+	"golang.org/x/crypto/bcrypt"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	"github.com/MidnightRiders/MemberPortal/server/internal/cookie"
 	"github.com/MidnightRiders/MemberPortal/server/internal/env"
 	"github.com/MidnightRiders/MemberPortal/server/internal/testhelpers"
-	"golang.org/x/crypto/bcrypt"
-
-	"github.com/stretchr/testify/assert"
 )
 
 func createLogInSetup(ctx context.Context, prepareDB func(sqlmock.Sqlmock), p auth.LogInPayload, e env.Env) logInSetup {
 	db, mock, err := sqlmock.New()
+	if err != nil {
+		panic(err)
+	}
+	gdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db}))
 	if err != nil {
 		panic(err)
 	}
@@ -28,11 +34,11 @@ func createLogInSetup(ctx context.Context, prepareDB func(sqlmock.Sqlmock), p au
 		prepareDB(mock)
 		expectMock = mock.ExpectationsWereMet
 	}
-	cookies := []http.Cookie{}
+	var cookies []http.Cookie
 
 	return logInSetup{
 		ctx: cookie.AddToContext(ctx, &cookies),
-		db:  db,
+		db:  gdb,
 		p:   p,
 		e:   e,
 
@@ -43,7 +49,7 @@ func createLogInSetup(ctx context.Context, prepareDB func(sqlmock.Sqlmock), p au
 
 type logInSetup struct {
 	ctx context.Context
-	db  *sql.DB
+	db  *gorm.DB
 	p   auth.LogInPayload
 	e   env.Env
 
@@ -60,7 +66,7 @@ func TestLogIn(t *testing.T) {
 	defer tdsalt()
 
 	expires := time.Date(2020, 8, 5, 8, 29, 0, 0, time.Local)
-	stubbedUUID := "xxxx-xxxx-xxxxx-xxxx"
+	stubbedULID := "xxxx-xxxx-xxxxx-xxxx"
 
 	testCases := []struct {
 		it    string
@@ -74,7 +80,7 @@ func TestLogIn(t *testing.T) {
 			it: "returns nil and error if no user found",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnError(sql.ErrNoRows)
+				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnError(sql.ErrNoRows)
 			}, auth.LogInPayload{"foo", "bar"}, env.Prod),
 
 			want:    nil,
@@ -84,14 +90,14 @@ func TestLogIn(t *testing.T) {
 			it: "returns nil and error if password does not match",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
+				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
 				pepper := "fake-pepper"
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
 				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
-				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 			}, auth.LogInPayload{"foo", "wrong-password"}, env.Prod),
 
 			want:    nil,
@@ -101,14 +107,14 @@ func TestLogIn(t *testing.T) {
 			it: "returns nil and error if new session cannot be created",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
+				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
 				pepper := "fake-pepper"
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
 				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
-				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
@@ -123,14 +129,14 @@ func TestLogIn(t *testing.T) {
 			it: "returns Session and adds cookie to context if successful",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
+				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
 				pepper := "fake-pepper"
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
 				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
-				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
@@ -139,9 +145,9 @@ func TestLogIn(t *testing.T) {
 			}, auth.LogInPayload{"foo", "bad-password"}, env.Prod),
 
 			want: &auth.Session{
-				UUID:     stubbedUUID,
+				ULID:     stubbedULID,
 				Expires:  expires,
-				UserUUID: "360cfc56-ef91-4458-811c-897eab8f7b3c",
+				UserULID: "360cfc56-ef91-4458-811c-897eab8f7b3c",
 			},
 			wantCookies: []http.Cookie{
 				{
@@ -151,7 +157,7 @@ func TestLogIn(t *testing.T) {
 					Path:     "/",
 					SameSite: http.SameSiteStrictMode,
 					Secure:   true,
-					Value:    "match-uuid",
+					Value:    "match-ulid",
 				},
 			},
 			wantErr: "",
@@ -160,14 +166,14 @@ func TestLogIn(t *testing.T) {
 			it: "returns Session with admin and adds cookie to context if successful",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				rows := sqlmock.NewRows([]string{"uuid", "password_digest", "pepper", "membership_uuid", "is_admin"})
+				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
 				pepper := "fake-pepper"
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
 				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", true)
-				mock.ExpectQuery("SELECT u.uuid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
@@ -178,8 +184,8 @@ func TestLogIn(t *testing.T) {
 			want: &auth.Session{
 				Expires:  expires,
 				IsAdmin:  true,
-				UserUUID: "360cfc56-ef91-4458-811c-897eab8f7b3c",
-				UUID:     stubbedUUID,
+				UserULID: "360cfc56-ef91-4458-811c-897eab8f7b3c",
+				ULID:     stubbedULID,
 			},
 			wantCookies: []http.Cookie{
 				{
@@ -189,7 +195,7 @@ func TestLogIn(t *testing.T) {
 					Path:     "/",
 					SameSite: http.SameSiteStrictMode,
 					Secure:   true,
-					Value:    "match-uuid",
+					Value:    "match-ulid",
 				},
 			},
 			wantErr: "",
@@ -206,13 +212,14 @@ func TestLogIn(t *testing.T) {
 				got, err := auth.LogIn(testCase.setup.ctx, testCase.setup.db, testCase.setup.p, testCase.setup.e)
 
 				if got != nil {
-					got.UUID = stubbedUUID
+					got.ULID = stubbedULID
 				}
 
 				assert.NoError(test, testCase.setup.expectMock())
-				gotCookies := []*http.Cookie{}
+				var gotCookies []*http.Cookie
 				for _, ck := range *testCase.setup.cookies {
-					gotCookies = append(gotCookies, &ck)
+					c := ck
+					gotCookies = append(gotCookies, &c)
 				}
 				testhelpers.AssertEqualCookies(test, testCase.wantCookies, gotCookies)
 				if testCase.wantErr == "" {
@@ -228,7 +235,7 @@ func TestLogIn(t *testing.T) {
 
 type logOutSetup struct {
 	ctx context.Context
-	db  *sql.DB
+	db  *gorm.DB
 	e   env.Env
 
 	cookies    *[]http.Cookie
@@ -243,11 +250,15 @@ func createLogOutSetup(ctx context.Context, prepareDB func(mock sqlmock.Sqlmock)
 	if prepareDB != nil {
 		prepareDB(mock)
 	}
-	cookies := []http.Cookie{}
+	gdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db}), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+	var cookies []http.Cookie
 
 	return logOutSetup{
 		ctx: cookie.AddToContext(ctx, &cookies),
-		db:  db,
+		db:  gdb,
 		e:   env.Prod,
 
 		cookies:    &cookies,
@@ -276,7 +287,7 @@ func TestLogOut(t *testing.T) {
 			setup: createLogOutSetup(
 				auth.AddToContext(context.Background(), auth.Info{
 					LoggedIn: true,
-					UUID:     "cb75830f-a5a4-4440-8079-097da4500e95",
+					ULID:     "cb75830f-a5a4-4440-8079-097da4500e95",
 				}),
 				func(mock sqlmock.Sqlmock) {
 					mock.ExpectExec("DELETE FROM sessions").WithArgs(
@@ -292,7 +303,7 @@ func TestLogOut(t *testing.T) {
 			setup: createLogOutSetup(
 				auth.AddToContext(context.Background(), auth.Info{
 					LoggedIn: true,
-					UUID:     "cb75830f-a5a4-4440-8079-097da4500e95",
+					ULID:     "cb75830f-a5a4-4440-8079-097da4500e95",
 				}),
 				func(mock sqlmock.Sqlmock) {
 					mock.ExpectExec("DELETE FROM sessions").WithArgs(
@@ -308,7 +319,7 @@ func TestLogOut(t *testing.T) {
 			setup: createLogOutSetup(
 				auth.AddToContext(context.Background(), auth.Info{
 					LoggedIn: true,
-					UUID:     "cb75830f-a5a4-4440-8079-097da4500e95",
+					ULID:     "cb75830f-a5a4-4440-8079-097da4500e95",
 				}),
 				func(mock sqlmock.Sqlmock) {
 					mock.ExpectExec("DELETE FROM sessions").WithArgs(

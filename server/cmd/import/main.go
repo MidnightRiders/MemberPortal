@@ -9,8 +9,9 @@ import (
 	"os"
 	"strings"
 
-	"github.com/gofrs/uuid"
 	_ "github.com/jackc/pgx/v4/stdlib"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/ulid"
 )
 
 func main() {
@@ -69,7 +70,7 @@ func main() {
 
 	query := `
 		INSERT INTO
-			users (username, first_name, last_name, email, address1, city, province, postal_code, country, membership_number, uuid)
+			users (username, first_name, last_name, email, address1, city, province, postal_code, country, membership_number, ulid)
 			VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 )
 	`
 	stmt, err := tx.Prepare(query)
@@ -77,6 +78,7 @@ func main() {
 		log.Fatalf("Error preparing Users query: %v", err)
 	}
 	defer stmt.Close()
+	generator := ulid.NewGenerator()
 	for _, user := range oldTables["users"] {
 		args := make([]interface{}, 11)
 		for i, field := range []string{"username", "first_name", "last_name", "email", "address", "province", "postal_code", "country"} {
@@ -88,7 +90,7 @@ func main() {
 			}
 		}
 		args[9] = int(user["id"].(float64))
-		args[10] = uuid.Must(uuid.NewV1()).String()
+		args[10] = generator.String()
 		if _, err := stmt.Exec(args...); err != nil {
 			log.Fatalf("Error inserting user %s: %v", user["username"], err)
 		}

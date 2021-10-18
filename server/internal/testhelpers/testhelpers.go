@@ -8,8 +8,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
+	oklog "github.com/oklog/ulid/v2"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
+	"github.com/MidnightRiders/MemberPortal/server/internal/ulid"
 )
 
 // ReqParams are params for BuildReq
@@ -63,7 +66,7 @@ func createAssertionResultCapturer() (*bool, func(bool) bool) {
 func AssertEqualCookie(test *testing.T, expectedCookie http.Cookie, receivedCookie *http.Cookie) bool {
 	result, capture := createAssertionResultCapturer()
 	if capture(assert.NotNil(test, receivedCookie)) {
-		if expectedCookie.Value == "match-uuid" && receivedCookie.Value != "" {
+		if expectedCookie.Value == "match-ulid" && receivedCookie.Value != "" {
 			expectedCookie.Value = receivedCookie.Value
 		}
 		capture(assert.Equal(test, expectedCookie.Name, receivedCookie.Name))
@@ -104,17 +107,6 @@ func StubTimeNow(tm *time.Time) func() {
 	}
 }
 
-// StubUUIDv1 stubs stubbables.UUIDv1 and returns the teardown
-func StubUUIDv1(value string) func() {
-	uv1 := stubbables.UUIDv1
-	stubbables.UUIDv1 = func() string {
-		return value
-	}
-	return func() {
-		stubbables.UUIDv1 = uv1
-	}
-}
-
 // StubRandomStr stubs stubbables.RandomStr and returns the teardown
 func StubRandomStr(value string) func() {
 	rs := stubbables.RandomStr
@@ -129,8 +121,41 @@ func StubRandomStr(value string) func() {
 // StubEnvVar stubs an env var and returns a teardown
 func StubEnvVar(key string, val string) func() {
 	v := os.Getenv(key)
-	os.Setenv(key, val)
+	err := os.Setenv(key, val)
+	if err != nil {
+		panic(err)
+	}
 	return func() {
-		os.Setenv(key, v)
+		err := os.Setenv(key, v)
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
+type stubbedULIDGenerator struct {
+	val oklog.ULID
+}
+
+func (g *stubbedULIDGenerator) New() oklog.ULID {
+	return g.val
+}
+
+func (g *stubbedULIDGenerator) String() string {
+	return g.val.String()
+}
+
+// StubULIDGenerator stubs the ULID Generator to return a predicatable string
+func StubULIDGenerator(val string) func() {
+	v := ulid.NewGenerator
+	u, err := oklog.Parse(val)
+	if err != nil {
+		panic(err)
+	}
+	ulid.NewGenerator = func() ulid.Generator {
+		return &stubbedULIDGenerator{val: u}
+	}
+	return func() {
+		ulid.NewGenerator = v
 	}
 }

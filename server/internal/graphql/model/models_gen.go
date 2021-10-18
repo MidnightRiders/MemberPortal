@@ -6,11 +6,10 @@ import (
 	"fmt"
 	"io"
 	"strconv"
-	"time"
 )
 
 type Club struct {
-	UUID           string     `json:"uuid"`
+	ULID           string     `json:"ulid"`
 	Abbreviation   string     `json:"abbreviation"`
 	Name           string     `json:"name"`
 	PrimaryColor   string     `json:"primaryColor"`
@@ -21,7 +20,7 @@ type Club struct {
 }
 
 type ManOfTheMatchVote struct {
-	UUID       string  `json:"uuid"`
+	ULID       string  `json:"ulid"`
 	Match      *Match  `json:"match"`
 	User       *User   `json:"user"`
 	FirstPick  *Player `json:"firstPick"`
@@ -30,7 +29,7 @@ type ManOfTheMatchVote struct {
 }
 
 type Match struct {
-	UUID               string               `json:"uuid"`
+	ULID               string               `json:"ulid"`
 	Kickoff            string               `json:"kickoff"`
 	HomeClub           *Club                `json:"homeClub"`
 	AwayClub           *Club                `json:"awayClub"`
@@ -42,7 +41,7 @@ type Match struct {
 }
 
 type Player struct {
-	UUID      string   `json:"uuid"`
+	ULID      string   `json:"ulid"`
 	FirstName string   `json:"firstName"`
 	LastName  string   `json:"lastName"`
 	Position  Position `json:"position"`
@@ -51,18 +50,12 @@ type Player struct {
 }
 
 type RevGuess struct {
-	UUID      string  `json:"uuid"`
+	ULID      string  `json:"ulid"`
 	Match     *Match  `json:"match"`
 	User      *User   `json:"user"`
 	HomeGoals int     `json:"homeGoals"`
 	AwayGoals int     `json:"awayGoals"`
 	Comment   *string `json:"comment"`
-}
-
-type Session struct {
-	Expires time.Time `json:"expires"`
-	IsAdmin bool      `json:"isAdmin"`
-	Token   string    `json:"token"`
 }
 
 type Conference string

@@ -25,9 +25,9 @@ func CurrentMembershipYears() MembershipYears {
 
 // ToString converts the list of years, which are ints, to strings
 func (yrs MembershipYears) ToString() string {
-	y := []string{}
-	for _, yr := range yrs {
-		y = append(y, strconv.Itoa(yr))
+	y := make([]string, len(yrs))
+	for i, yr := range yrs {
+		y[i] = strconv.Itoa(yr)
 	}
 	return strings.Join(y, ", ")
 }

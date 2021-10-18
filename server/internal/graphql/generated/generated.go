@@ -13,10 +13,10 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
-	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
-	gqlparser "github.com/vektah/gqlparser/v2"
+	"github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -54,7 +54,7 @@ type ComplexityRoot struct {
 		Name           func(childComplexity int) int
 		PrimaryColor   func(childComplexity int) int
 		SecondaryColor func(childComplexity int) int
-		UUID           func(childComplexity int) int
+		ULID           func(childComplexity int) int
 	}
 
 	ManOfTheMatchVote struct {
@@ -62,7 +62,7 @@ type ComplexityRoot struct {
 		Match      func(childComplexity int) int
 		SecondPick func(childComplexity int) int
 		ThirdPick  func(childComplexity int) int
-		UUID       func(childComplexity int) int
+		ULID       func(childComplexity int) int
 		User       func(childComplexity int) int
 	}
 
@@ -75,20 +75,20 @@ type ComplexityRoot struct {
 		ManOfTheMatchVotes func(childComplexity int) int
 		RevGuesses         func(childComplexity int) int
 		Status             func(childComplexity int) int
-		UUID               func(childComplexity int) int
+		ULID               func(childComplexity int) int
 	}
 
 	Membership struct {
 		Role func(childComplexity int) int
 		Type func(childComplexity int) int
-		UUID func(childComplexity int) int
+		ULID func(childComplexity int) int
 		User func(childComplexity int) int
 		Year func(childComplexity int) int
 	}
 
 	Mutation struct {
-		CreateManOfTheMatchVote func(childComplexity int, userUUID string, matchUUID string, firstPickUUID string, secondPickUUID *string, thirdPickUUID *string) int
-		CreateRevGuess          func(childComplexity int, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) int
+		CreateManOfTheMatchVote func(childComplexity int, userULID string, matchULID string, firstPickULID string, secondPickULID *string, thirdPickULID *string) int
+		CreateRevGuess          func(childComplexity int, userULID string, matchULID string, homeGoals int, awayGoals int, comment *string) int
 		CreateUser              func(childComplexity int, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) int
 		InitiatePasswordReset   func(childComplexity int, email string) int
 		LogIn                   func(childComplexity int, username string, password string) int
@@ -102,21 +102,21 @@ type ComplexityRoot struct {
 		FirstName func(childComplexity int) int
 		LastName  func(childComplexity int) int
 		Position  func(childComplexity int) int
-		UUID      func(childComplexity int) int
+		ULID      func(childComplexity int) int
 	}
 
 	Query struct {
-		Club               func(childComplexity int, uuid string) int
+		Club               func(childComplexity int, ulid string) int
 		Clubs              func(childComplexity int, conference *model.Conference) int
-		ManOfTheMatchVote  func(childComplexity int, userUUID string, matchUUID string) int
+		ManOfTheMatchVote  func(childComplexity int, userULID string, matchULID string) int
 		ManOfTheMatchVotes func(childComplexity int, matchID *string) int
-		Match              func(childComplexity int, uuid string) int
+		Match              func(childComplexity int, ulid string) int
 		Matches            func(childComplexity int, before *time.Time, after *time.Time, club *string) int
-		Membership         func(childComplexity int, uuid *string, userUUID *string, year *int) int
-		Memberships        func(childComplexity int, userUUID *string, year *int) int
-		RevGuess           func(childComplexity int, userUUID string, matchUUID string) int
+		Membership         func(childComplexity int, ulid *string, userULID *string, year *int) int
+		Memberships        func(childComplexity int, userULID *string, year *int) int
+		RevGuess           func(childComplexity int, userULID string, matchULID string) int
 		RevGuesses         func(childComplexity int, matchID *string) int
-		User               func(childComplexity int, uuid string) int
+		User               func(childComplexity int, ulid string) int
 		Users              func(childComplexity int) int
 	}
 
@@ -125,7 +125,7 @@ type ComplexityRoot struct {
 		Comment   func(childComplexity int) int
 		HomeGoals func(childComplexity int) int
 		Match     func(childComplexity int) int
-		UUID      func(childComplexity int) int
+		ULID      func(childComplexity int) int
 		User      func(childComplexity int) int
 	}
 
@@ -148,7 +148,7 @@ type ComplexityRoot struct {
 		Memberships      func(childComplexity int) int
 		PostalCode       func(childComplexity int) int
 		Province         func(childComplexity int) int
-		UUID             func(childComplexity int) int
+		ULID             func(childComplexity int) int
 		Username         func(childComplexity int) int
 	}
 }
@@ -160,23 +160,23 @@ type MutationResolver interface {
 	LogIn(ctx context.Context, username string, password string) (*model.Session, error)
 	LogOut(ctx context.Context) (bool, error)
 	CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) (*model.User, error)
-	CreateRevGuess(ctx context.Context, userUUID string, matchUUID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error)
-	CreateManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string, firstPickUUID string, secondPickUUID *string, thirdPickUUID *string) (*model.ManOfTheMatchVote, error)
+	CreateRevGuess(ctx context.Context, userULID string, matchULID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error)
+	CreateManOfTheMatchVote(ctx context.Context, userULID string, matchULID string, firstPickULID string, secondPickULID *string, thirdPickULID *string) (*model.ManOfTheMatchVote, error)
 	InitiatePasswordReset(ctx context.Context, email string) (*string, error)
 	ResetPassword(ctx context.Context, email string, password string, token string) (bool, error)
 }
 type QueryResolver interface {
-	User(ctx context.Context, uuid string) (*model.User, error)
+	User(ctx context.Context, ulid string) (*model.User, error)
 	Users(ctx context.Context) ([]*model.User, error)
-	Membership(ctx context.Context, uuid *string, userUUID *string, year *int) (*model.Membership, error)
-	Memberships(ctx context.Context, userUUID *string, year *int) ([]*model.Membership, error)
-	Club(ctx context.Context, uuid string) (*model.Club, error)
+	Membership(ctx context.Context, ulid *string, userULID *string, year *int) (*model.Membership, error)
+	Memberships(ctx context.Context, userULID *string, year *int) ([]*model.Membership, error)
+	Club(ctx context.Context, ulid string) (*model.Club, error)
 	Clubs(ctx context.Context, conference *model.Conference) ([]*model.Club, error)
-	Match(ctx context.Context, uuid string) (*model.Match, error)
+	Match(ctx context.Context, ulid string) (*model.Match, error)
 	Matches(ctx context.Context, before *time.Time, after *time.Time, club *string) ([]*model.Match, error)
-	RevGuess(ctx context.Context, userUUID string, matchUUID string) (*model.RevGuess, error)
+	RevGuess(ctx context.Context, userULID string, matchULID string) (*model.RevGuess, error)
 	RevGuesses(ctx context.Context, matchID *string) ([]*model.RevGuess, error)
-	ManOfTheMatchVote(ctx context.Context, userUUID string, matchUUID string) (*model.ManOfTheMatchVote, error)
+	ManOfTheMatchVote(ctx context.Context, userULID string, matchULID string) (*model.ManOfTheMatchVote, error)
 	ManOfTheMatchVotes(ctx context.Context, matchID *string) ([]*model.ManOfTheMatchVote, error)
 }
 
@@ -244,12 +244,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Club.SecondaryColor(childComplexity), true
 
-	case "Club.uuid":
-		if e.complexity.Club.UUID == nil {
+	case "Club.ulid":
+		if e.complexity.Club.ULID == nil {
 			break
 		}
 
-		return e.complexity.Club.UUID(childComplexity), true
+		return e.complexity.Club.ULID(childComplexity), true
 
 	case "ManOfTheMatchVote.firstPick":
 		if e.complexity.ManOfTheMatchVote.FirstPick == nil {
@@ -279,12 +279,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.ManOfTheMatchVote.ThirdPick(childComplexity), true
 
-	case "ManOfTheMatchVote.uuid":
-		if e.complexity.ManOfTheMatchVote.UUID == nil {
+	case "ManOfTheMatchVote.ulid":
+		if e.complexity.ManOfTheMatchVote.ULID == nil {
 			break
 		}
 
-		return e.complexity.ManOfTheMatchVote.UUID(childComplexity), true
+		return e.complexity.ManOfTheMatchVote.ULID(childComplexity), true
 
 	case "ManOfTheMatchVote.user":
 		if e.complexity.ManOfTheMatchVote.User == nil {
@@ -349,12 +349,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Match.Status(childComplexity), true
 
-	case "Match.uuid":
-		if e.complexity.Match.UUID == nil {
+	case "Match.ulid":
+		if e.complexity.Match.ULID == nil {
 			break
 		}
 
-		return e.complexity.Match.UUID(childComplexity), true
+		return e.complexity.Match.ULID(childComplexity), true
 
 	case "Membership.role":
 		if e.complexity.Membership.Role == nil {
@@ -370,12 +370,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Membership.Type(childComplexity), true
 
-	case "Membership.uuid":
-		if e.complexity.Membership.UUID == nil {
+	case "Membership.ulid":
+		if e.complexity.Membership.ULID == nil {
 			break
 		}
 
-		return e.complexity.Membership.UUID(childComplexity), true
+		return e.complexity.Membership.ULID(childComplexity), true
 
 	case "Membership.user":
 		if e.complexity.Membership.User == nil {
@@ -401,7 +401,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateManOfTheMatchVote(childComplexity, args["userUUID"].(string), args["matchUUID"].(string), args["firstPickUUID"].(string), args["secondPickUUID"].(*string), args["thirdPickUUID"].(*string)), true
+		return e.complexity.Mutation.CreateManOfTheMatchVote(childComplexity, args["userULID"].(string), args["matchULID"].(string), args["firstPickULID"].(string), args["secondPickULID"].(*string), args["thirdPickULID"].(*string)), true
 
 	case "Mutation.createRevGuess":
 		if e.complexity.Mutation.CreateRevGuess == nil {
@@ -413,7 +413,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateRevGuess(childComplexity, args["userUUID"].(string), args["matchUUID"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string)), true
+		return e.complexity.Mutation.CreateRevGuess(childComplexity, args["userULID"].(string), args["matchULID"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string)), true
 
 	case "Mutation.createUser":
 		if e.complexity.Mutation.CreateUser == nil {
@@ -505,12 +505,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Player.Position(childComplexity), true
 
-	case "Player.uuid":
-		if e.complexity.Player.UUID == nil {
+	case "Player.ulid":
+		if e.complexity.Player.ULID == nil {
 			break
 		}
 
-		return e.complexity.Player.UUID(childComplexity), true
+		return e.complexity.Player.ULID(childComplexity), true
 
 	case "Query.club":
 		if e.complexity.Query.Club == nil {
@@ -522,7 +522,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Club(childComplexity, args["uuid"].(string)), true
+		return e.complexity.Query.Club(childComplexity, args["ulid"].(string)), true
 
 	case "Query.clubs":
 		if e.complexity.Query.Clubs == nil {
@@ -546,7 +546,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ManOfTheMatchVote(childComplexity, args["userUUID"].(string), args["matchUUID"].(string)), true
+		return e.complexity.Query.ManOfTheMatchVote(childComplexity, args["userULID"].(string), args["matchULID"].(string)), true
 
 	case "Query.manOfTheMatchVotes":
 		if e.complexity.Query.ManOfTheMatchVotes == nil {
@@ -570,7 +570,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Match(childComplexity, args["uuid"].(string)), true
+		return e.complexity.Query.Match(childComplexity, args["ulid"].(string)), true
 
 	case "Query.matches":
 		if e.complexity.Query.Matches == nil {
@@ -594,7 +594,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Membership(childComplexity, args["uuid"].(*string), args["userUUID"].(*string), args["year"].(*int)), true
+		return e.complexity.Query.Membership(childComplexity, args["ulid"].(*string), args["userULID"].(*string), args["year"].(*int)), true
 
 	case "Query.memberships":
 		if e.complexity.Query.Memberships == nil {
@@ -606,7 +606,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Memberships(childComplexity, args["userUUID"].(*string), args["year"].(*int)), true
+		return e.complexity.Query.Memberships(childComplexity, args["userULID"].(*string), args["year"].(*int)), true
 
 	case "Query.revGuess":
 		if e.complexity.Query.RevGuess == nil {
@@ -618,7 +618,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.RevGuess(childComplexity, args["userUUID"].(string), args["matchUUID"].(string)), true
+		return e.complexity.Query.RevGuess(childComplexity, args["userULID"].(string), args["matchULID"].(string)), true
 
 	case "Query.revGuesses":
 		if e.complexity.Query.RevGuesses == nil {
@@ -642,7 +642,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.User(childComplexity, args["uuid"].(string)), true
+		return e.complexity.Query.User(childComplexity, args["ulid"].(string)), true
 
 	case "Query.users":
 		if e.complexity.Query.Users == nil {
@@ -679,12 +679,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RevGuess.Match(childComplexity), true
 
-	case "RevGuess.uuid":
-		if e.complexity.RevGuess.UUID == nil {
+	case "RevGuess.ulid":
+		if e.complexity.RevGuess.ULID == nil {
 			break
 		}
 
-		return e.complexity.RevGuess.UUID(childComplexity), true
+		return e.complexity.RevGuess.ULID(childComplexity), true
 
 	case "RevGuess.user":
 		if e.complexity.RevGuess.User == nil {
@@ -798,12 +798,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Province(childComplexity), true
 
-	case "User.uuid":
-		if e.complexity.User.UUID == nil {
+	case "User.ulid":
+		if e.complexity.User.ULID == nil {
 			break
 		}
 
-		return e.complexity.User.UUID(childComplexity), true
+		return e.complexity.User.ULID(childComplexity), true
 
 	case "User.username":
 		if e.complexity.User.Username == nil {
@@ -882,7 +882,7 @@ var sources = []*ast.Source{
 }
 
 type Club {
-  uuid: ID!
+  ulid: ID!
   abbreviation: String!
   name: String!
   primaryColor: String!
@@ -900,7 +900,7 @@ enum Position {
 }
 
 type Player {
-  uuid: ID!
+  ulid: ID!
   firstName: String!
   lastName: String!
   position: Position!
@@ -909,7 +909,7 @@ type Player {
 }
 `, BuiltIn: false},
 	{Name: "gql/ManOfTheMatchVote.gql", Input: `type ManOfTheMatchVote {
-  uuid: ID!
+  ulid: ID!
   match: Match!
   user: User!
   firstPick: Player!
@@ -926,7 +926,7 @@ type Player {
 }
 
 type Match {
-  uuid: ID!
+  ulid: ID!
   kickoff: DateTime!
   homeClub: Club!
   awayClub: Club!
@@ -948,7 +948,7 @@ enum MembershipType {
 }
 
 type Membership {
-  uuid: ID!
+  ulid: ID!
   user: User!
   year: Int!
   type: MembershipType!
@@ -956,7 +956,7 @@ type Membership {
 }
 `, BuiltIn: false},
 	{Name: "gql/RevGuess.gql", Input: `type RevGuess {
-  uuid: ID!
+  ulid: ID!
   match: Match!
   user: User!
   homeGoals: Int!
@@ -971,7 +971,7 @@ type Membership {
 }
 `, BuiltIn: false},
 	{Name: "gql/User.gql", Input: `type User {
-  uuid: ID!
+  ulid: ID!
   username: String!
   email: String!
   firstName: String!
@@ -993,18 +993,18 @@ scalar Time
 scalar Null
 
 type Query {
-  user(uuid: ID!): User
+  user(ulid: ID!): User
   users: [User!]
-  membership(uuid: ID, userUUID: ID, year: Int): Membership
-  memberships(userUUID: ID, year: Int): [Membership!]
+  membership(ulid: ID, userULID: ID, year: Int): Membership
+  memberships(userULID: ID, year: Int): [Membership!]
 
-  club(uuid: ID!): Club
+  club(ulid: ID!): Club
   clubs(conference: Conference): [Club!]
-  match(uuid: ID!): Match
+  match(ulid: ID!): Match
   matches(before: Time, after: Time, club: ID): [Match!]
-  revGuess(userUUID: ID!, matchUUID: ID!): RevGuess
+  revGuess(userULID: ID!, matchULID: ID!): RevGuess
   revGuesses(matchID: ID): [RevGuess!]
-  manOfTheMatchVote(userUUID: ID!, matchUUID: ID!): ManOfTheMatchVote
+  manOfTheMatchVote(userULID: ID!, matchULID: ID!): ManOfTheMatchVote
   manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
 }
 
@@ -1027,19 +1027,19 @@ type Mutation {
   ): User!
 
   createRevGuess(
-    userUUID: ID!,
-    matchUUID: ID!,
+    userULID: ID!,
+    matchULID: ID!,
     homeGoals: Int!,
     awayGoals: Int!,
     comment: String
   ): RevGuess!
 
   createManOfTheMatchVote(
-    userUUID: ID!,
-    matchUUID: ID!,
-    firstPickUUID: ID!,
-    secondPickUUID: ID,
-    thirdPickUUID: ID
+    userULID: ID!,
+    matchULID: ID!,
+    firstPickULID: ID!,
+    secondPickULID: ID,
+    thirdPickULID: ID
   ): ManOfTheMatchVote
 
   initiatePasswordReset(
@@ -1064,50 +1064,50 @@ func (ec *executionContext) field_Mutation_createManOfTheMatchVote_args(ctx cont
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["userUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
+	if tmp, ok := rawArgs["userULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userULID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userUUID"] = arg0
+	args["userULID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
+	if tmp, ok := rawArgs["matchULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchULID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchUUID"] = arg1
+	args["matchULID"] = arg1
 	var arg2 string
-	if tmp, ok := rawArgs["firstPickUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstPickUUID"))
+	if tmp, ok := rawArgs["firstPickULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("firstPickULID"))
 		arg2, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["firstPickUUID"] = arg2
+	args["firstPickULID"] = arg2
 	var arg3 *string
-	if tmp, ok := rawArgs["secondPickUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondPickUUID"))
+	if tmp, ok := rawArgs["secondPickULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("secondPickULID"))
 		arg3, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["secondPickUUID"] = arg3
+	args["secondPickULID"] = arg3
 	var arg4 *string
-	if tmp, ok := rawArgs["thirdPickUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("thirdPickUUID"))
+	if tmp, ok := rawArgs["thirdPickULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("thirdPickULID"))
 		arg4, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["thirdPickUUID"] = arg4
+	args["thirdPickULID"] = arg4
 	return args, nil
 }
 
@@ -1115,23 +1115,23 @@ func (ec *executionContext) field_Mutation_createRevGuess_args(ctx context.Conte
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["userUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
+	if tmp, ok := rawArgs["userULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userULID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userUUID"] = arg0
+	args["userULID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
+	if tmp, ok := rawArgs["matchULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchULID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchUUID"] = arg1
+	args["matchULID"] = arg1
 	var arg2 int
 	if tmp, ok := rawArgs["homeGoals"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("homeGoals"))
@@ -1358,14 +1358,14 @@ func (ec *executionContext) field_Query_club_args(ctx context.Context, rawArgs m
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["uuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uuid"))
+	if tmp, ok := rawArgs["ulid"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ulid"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["uuid"] = arg0
+	args["ulid"] = arg0
 	return args, nil
 }
 
@@ -1388,23 +1388,23 @@ func (ec *executionContext) field_Query_manOfTheMatchVote_args(ctx context.Conte
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["userUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
+	if tmp, ok := rawArgs["userULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userULID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userUUID"] = arg0
+	args["userULID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
+	if tmp, ok := rawArgs["matchULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchULID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchUUID"] = arg1
+	args["matchULID"] = arg1
 	return args, nil
 }
 
@@ -1427,14 +1427,14 @@ func (ec *executionContext) field_Query_match_args(ctx context.Context, rawArgs 
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["uuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uuid"))
+	if tmp, ok := rawArgs["ulid"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ulid"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["uuid"] = arg0
+	args["ulid"] = arg0
 	return args, nil
 }
 
@@ -1475,23 +1475,23 @@ func (ec *executionContext) field_Query_membership_args(ctx context.Context, raw
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *string
-	if tmp, ok := rawArgs["uuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uuid"))
+	if tmp, ok := rawArgs["ulid"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ulid"))
 		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["uuid"] = arg0
+	args["ulid"] = arg0
 	var arg1 *string
-	if tmp, ok := rawArgs["userUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
+	if tmp, ok := rawArgs["userULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userULID"))
 		arg1, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userUUID"] = arg1
+	args["userULID"] = arg1
 	var arg2 *int
 	if tmp, ok := rawArgs["year"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("year"))
@@ -1508,14 +1508,14 @@ func (ec *executionContext) field_Query_memberships_args(ctx context.Context, ra
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *string
-	if tmp, ok := rawArgs["userUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
+	if tmp, ok := rawArgs["userULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userULID"))
 		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userUUID"] = arg0
+	args["userULID"] = arg0
 	var arg1 *int
 	if tmp, ok := rawArgs["year"]; ok {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("year"))
@@ -1532,23 +1532,23 @@ func (ec *executionContext) field_Query_revGuess_args(ctx context.Context, rawAr
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["userUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userUUID"))
+	if tmp, ok := rawArgs["userULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("userULID"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["userUUID"] = arg0
+	args["userULID"] = arg0
 	var arg1 string
-	if tmp, ok := rawArgs["matchUUID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchUUID"))
+	if tmp, ok := rawArgs["matchULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchULID"))
 		arg1, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchUUID"] = arg1
+	args["matchULID"] = arg1
 	return args, nil
 }
 
@@ -1571,14 +1571,14 @@ func (ec *executionContext) field_Query_user_args(ctx context.Context, rawArgs m
 	var err error
 	args := map[string]interface{}{}
 	var arg0 string
-	if tmp, ok := rawArgs["uuid"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("uuid"))
+	if tmp, ok := rawArgs["ulid"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ulid"))
 		arg0, err = ec.unmarshalNID2string(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["uuid"] = arg0
+	args["ulid"] = arg0
 	return args, nil
 }
 
@@ -1620,7 +1620,7 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _Club_uuid(ctx context.Context, field graphql.CollectedField, obj *model.Club) (ret graphql.Marshaler) {
+func (ec *executionContext) _Club_ulid(ctx context.Context, field graphql.CollectedField, obj *model.Club) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1638,7 +1638,7 @@ func (ec *executionContext) _Club_uuid(ctx context.Context, field graphql.Collec
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UUID, nil
+		return obj.ULID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1900,7 +1900,7 @@ func (ec *executionContext) _Club_active(ctx context.Context, field graphql.Coll
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _ManOfTheMatchVote_uuid(ctx context.Context, field graphql.CollectedField, obj *model.ManOfTheMatchVote) (ret graphql.Marshaler) {
+func (ec *executionContext) _ManOfTheMatchVote_ulid(ctx context.Context, field graphql.CollectedField, obj *model.ManOfTheMatchVote) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1918,7 +1918,7 @@ func (ec *executionContext) _ManOfTheMatchVote_uuid(ctx context.Context, field g
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UUID, nil
+		return obj.ULID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2104,7 +2104,7 @@ func (ec *executionContext) _ManOfTheMatchVote_thirdPick(ctx context.Context, fi
 	return ec.marshalOPlayer2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐPlayer(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Match_uuid(ctx context.Context, field graphql.CollectedField, obj *model.Match) (ret graphql.Marshaler) {
+func (ec *executionContext) _Match_ulid(ctx context.Context, field graphql.CollectedField, obj *model.Match) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2122,7 +2122,7 @@ func (ec *executionContext) _Match_uuid(ctx context.Context, field graphql.Colle
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UUID, nil
+		return obj.ULID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2407,7 +2407,7 @@ func (ec *executionContext) _Match_manOfTheMatchVotes(ctx context.Context, field
 	return ec.marshalOManOfTheMatchVote2ᚕᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐManOfTheMatchVoteᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Membership_uuid(ctx context.Context, field graphql.CollectedField, obj *model.Membership) (ret graphql.Marshaler) {
+func (ec *executionContext) _Membership_ulid(ctx context.Context, field graphql.CollectedField, obj *model.Membership) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2425,7 +2425,7 @@ func (ec *executionContext) _Membership_uuid(ctx context.Context, field graphql.
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UUID, nil
+		return obj.ULID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2574,7 +2574,7 @@ func (ec *executionContext) _Membership_role(ctx context.Context, field graphql.
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(auth.Role)
+	res := resTmp.(model.Role)
 	fc.Result = res
 	return ec.marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx, field.Selections, res)
 }
@@ -2720,7 +2720,7 @@ func (ec *executionContext) _Mutation_createRevGuess(ctx context.Context, field 
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateRevGuess(rctx, args["userUUID"].(string), args["matchUUID"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string))
+		return ec.resolvers.Mutation().CreateRevGuess(rctx, args["userULID"].(string), args["matchULID"].(string), args["homeGoals"].(int), args["awayGoals"].(int), args["comment"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2762,7 +2762,7 @@ func (ec *executionContext) _Mutation_createManOfTheMatchVote(ctx context.Contex
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CreateManOfTheMatchVote(rctx, args["userUUID"].(string), args["matchUUID"].(string), args["firstPickUUID"].(string), args["secondPickUUID"].(*string), args["thirdPickUUID"].(*string))
+		return ec.resolvers.Mutation().CreateManOfTheMatchVote(rctx, args["userULID"].(string), args["matchULID"].(string), args["firstPickULID"].(string), args["secondPickULID"].(*string), args["thirdPickULID"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2857,7 +2857,7 @@ func (ec *executionContext) _Mutation_resetPassword(ctx context.Context, field g
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Player_uuid(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
+func (ec *executionContext) _Player_ulid(ctx context.Context, field graphql.CollectedField, obj *model.Player) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2875,7 +2875,7 @@ func (ec *executionContext) _Player_uuid(ctx context.Context, field graphql.Coll
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UUID, nil
+		return obj.ULID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3092,7 +3092,7 @@ func (ec *executionContext) _Query_user(ctx context.Context, field graphql.Colle
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().User(rctx, args["uuid"].(string))
+		return ec.resolvers.Query().User(rctx, args["ulid"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3163,7 +3163,7 @@ func (ec *executionContext) _Query_membership(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Membership(rctx, args["uuid"].(*string), args["userUUID"].(*string), args["year"].(*int))
+		return ec.resolvers.Query().Membership(rctx, args["ulid"].(*string), args["userULID"].(*string), args["year"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3202,7 +3202,7 @@ func (ec *executionContext) _Query_memberships(ctx context.Context, field graphq
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Memberships(rctx, args["userUUID"].(*string), args["year"].(*int))
+		return ec.resolvers.Query().Memberships(rctx, args["userULID"].(*string), args["year"].(*int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3241,7 +3241,7 @@ func (ec *executionContext) _Query_club(ctx context.Context, field graphql.Colle
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Club(rctx, args["uuid"].(string))
+		return ec.resolvers.Query().Club(rctx, args["ulid"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3319,7 +3319,7 @@ func (ec *executionContext) _Query_match(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Match(rctx, args["uuid"].(string))
+		return ec.resolvers.Query().Match(rctx, args["ulid"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3397,7 +3397,7 @@ func (ec *executionContext) _Query_revGuess(ctx context.Context, field graphql.C
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().RevGuess(rctx, args["userUUID"].(string), args["matchUUID"].(string))
+		return ec.resolvers.Query().RevGuess(rctx, args["userULID"].(string), args["matchULID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3475,7 +3475,7 @@ func (ec *executionContext) _Query_manOfTheMatchVote(ctx context.Context, field 
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ManOfTheMatchVote(rctx, args["userUUID"].(string), args["matchUUID"].(string))
+		return ec.resolvers.Query().ManOfTheMatchVote(rctx, args["userULID"].(string), args["matchULID"].(string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3599,7 +3599,7 @@ func (ec *executionContext) _Query___schema(ctx context.Context, field graphql.C
 	return ec.marshalO__Schema2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚋintrospectionᚐSchema(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _RevGuess_uuid(ctx context.Context, field graphql.CollectedField, obj *model.RevGuess) (ret graphql.Marshaler) {
+func (ec *executionContext) _RevGuess_ulid(ctx context.Context, field graphql.CollectedField, obj *model.RevGuess) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -3617,7 +3617,7 @@ func (ec *executionContext) _RevGuess_uuid(ctx context.Context, field graphql.Co
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UUID, nil
+		return obj.ULID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3911,7 +3911,7 @@ func (ec *executionContext) _Session_token(ctx context.Context, field graphql.Co
 	return ec.marshalNID2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_uuid(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_ulid(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -3929,7 +3929,7 @@ func (ec *executionContext) _User_uuid(ctx context.Context, field graphql.Collec
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.UUID, nil
+		return obj.ULID, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5533,8 +5533,8 @@ func (ec *executionContext) _Club(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Club")
-		case "uuid":
-			out.Values[i] = ec._Club_uuid(ctx, field, obj)
+		case "ulid":
+			out.Values[i] = ec._Club_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -5595,8 +5595,8 @@ func (ec *executionContext) _ManOfTheMatchVote(ctx context.Context, sel ast.Sele
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("ManOfTheMatchVote")
-		case "uuid":
-			out.Values[i] = ec._ManOfTheMatchVote_uuid(ctx, field, obj)
+		case "ulid":
+			out.Values[i] = ec._ManOfTheMatchVote_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -5641,8 +5641,8 @@ func (ec *executionContext) _Match(ctx context.Context, sel ast.SelectionSet, ob
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Match")
-		case "uuid":
-			out.Values[i] = ec._Match_uuid(ctx, field, obj)
+		case "ulid":
+			out.Values[i] = ec._Match_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -5696,8 +5696,8 @@ func (ec *executionContext) _Membership(ctx context.Context, sel ast.SelectionSe
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Membership")
-		case "uuid":
-			out.Values[i] = ec._Membership_uuid(ctx, field, obj)
+		case "ulid":
+			out.Values[i] = ec._Membership_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
@@ -5801,8 +5801,8 @@ func (ec *executionContext) _Player(ctx context.Context, sel ast.SelectionSet, o
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Player")
-		case "uuid":
-			out.Values[i] = ec._Player_uuid(ctx, field, obj)
+		case "ulid":
+			out.Values[i] = ec._Player_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -6015,8 +6015,8 @@ func (ec *executionContext) _RevGuess(ctx context.Context, sel ast.SelectionSet,
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("RevGuess")
-		case "uuid":
-			out.Values[i] = ec._RevGuess_uuid(ctx, field, obj)
+		case "ulid":
+			out.Values[i] = ec._RevGuess_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -6101,8 +6101,8 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("User")
-		case "uuid":
-			out.Values[i] = ec._User_uuid(ctx, field, obj)
+		case "ulid":
+			out.Values[i] = ec._User_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -7250,13 +7250,13 @@ func (ec *executionContext) marshalORevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋ
 	return ec._RevGuess(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, v interface{}) (auth.Role, error) {
+func (ec *executionContext) unmarshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, v interface{}) (model.Role, error) {
 	tmp, err := graphql.UnmarshalString(v)
-	res := auth.Role(tmp)
+	res := model.Role(tmp)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, sel ast.SelectionSet, v auth.Role) graphql.Marshaler {
+func (ec *executionContext) marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, sel ast.SelectionSet, v model.Role) graphql.Marshaler {
 	return graphql.MarshalString(string(v))
 }
 

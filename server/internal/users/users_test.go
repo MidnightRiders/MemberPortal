@@ -2,13 +2,14 @@ package users_test
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"testing"
 	"time"
 
 	"github.com/DATA-DOG/go-sqlmock"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/testhelpers"
 	"github.com/MidnightRiders/MemberPortal/server/internal/users"
@@ -97,7 +98,7 @@ func TestPasswordIsValid(t *testing.T) {
 
 type setup struct {
 	ctx   context.Context
-	db    *sql.DB
+	db    *gorm.DB
 	props users.CreateProps
 
 	expectMock func() error
@@ -108,6 +109,10 @@ func createSetup(ctx context.Context, props users.CreateProps, prepareDB func(mo
 	if err != nil {
 		panic(err)
 	}
+	gdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db}), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 
 	if prepareDB != nil {
 		prepareDB(mock)
@@ -115,7 +120,7 @@ func createSetup(ctx context.Context, props users.CreateProps, prepareDB func(mo
 
 	return setup{
 		ctx:   ctx,
-		db:    db,
+		db:    gdb,
 		props: props,
 
 		expectMock: mock.ExpectationsWereMet,
@@ -126,8 +131,8 @@ func TestCreate(t *testing.T) {
 	now := time.Date(2020, 7, 29, 8, 29, 0, 0, time.UTC)
 	tnteardown := testhelpers.StubTimeNow(&now)
 	defer tnteardown()
-	uuid := "xxxxxxxx-xxxxxxxx-xxxxxxxxxxx"
-	uvteardown := testhelpers.StubUUIDv1(uuid)
+	ulid := "01fj8qvkerzz0zxym43tkea8ag"
+	uvteardown := testhelpers.StubULIDGenerator(ulid)
 	defer uvteardown()
 	pepper := "xxxxxxxxxxxxxxxxxxxxxxx"
 	rsteardown := testhelpers.StubRandomStr(pepper)
@@ -186,7 +191,7 @@ func TestCreate(t *testing.T) {
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
 				mock.ExpectExec("INSERT INTO users").WithArgs(
-					uuid,
+					ulid,
 					"ttwellman",
 					"test@test.com",
 					sqlmock.AnyArg(),
@@ -221,7 +226,7 @@ func TestCreate(t *testing.T) {
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
 				mock.ExpectExec("INSERT INTO users").WithArgs(
-					uuid,
+					ulid,
 					"ttwellman",
 					"test@test.com",
 					sqlmock.AnyArg(),
@@ -241,7 +246,7 @@ func TestCreate(t *testing.T) {
 			wantErr: "There was an unexpected error creating the user",
 		},
 		{
-			it: "returns uuid and nil if it creates the user",
+			it: "returns ulid and nil if it creates the user",
 
 			setup: createSetup(context.Background(), users.CreateProps{
 				Address1:   "123 Test Ln",
@@ -256,7 +261,7 @@ func TestCreate(t *testing.T) {
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
 				mock.ExpectExec("INSERT INTO users").WithArgs(
-					uuid,
+					ulid,
 					"ttwellman",
 					"test@test.com",
 					sqlmock.AnyArg(),
@@ -272,7 +277,7 @@ func TestCreate(t *testing.T) {
 				).WillReturnResult(sqlmock.NewResult(1, 1))
 			}),
 
-			want:    uuid,
+			want:    ulid,
 			wantErr: "",
 		},
 	}
