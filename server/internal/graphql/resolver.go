@@ -2,7 +2,7 @@
 package graphql
 
 import (
-	"database/sql"
+	"gorm.io/gorm"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/env"
 )
@@ -12,7 +12,7 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct {
-	DB     *sql.DB
+	DB     *gorm.DB
 	Domain string
 	Env    env.Env
 }

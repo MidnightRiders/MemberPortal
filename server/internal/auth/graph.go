@@ -2,20 +2,20 @@ package auth
 
 import (
 	"context"
-	"database/sql"
 	"errors"
-	"fmt"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/cookie"
 	"github.com/MidnightRiders/MemberPortal/server/internal/env"
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 	"github.com/MidnightRiders/MemberPortal/server/internal/memberships"
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
-	"github.com/sirupsen/logrus"
 )
 
 // Level describes the level of authentication
@@ -35,31 +35,40 @@ type LogInPayload struct {
 }
 
 // LogIn performs login from a GraphQL request
-func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session, error) {
-	row := db.QueryRowContext(
-		ctx,
-		"SELECT u.uuid, u.password_digest, u.pepper, m.uuid as membership_uuid, a.uuid IS NOT NULL as is_admin "+
-			"FROM users u "+
-			"LEFT JOIN memberships m ON m.arrival_uuid = a.uuid "+
-			fmt.Sprintf("AND m.year IN (%s) ", memberships.CurrentMembershipYears().ToString())+
-			"LEFT JOIN admins a "+
-			"ON a.user_uuid = u.uuid "+
-			"WHERE u.username = ?",
-		p.Username,
-	)
-	var userUUID, passwordDigest, pepper, membershipUUID string
-	var isAdmin bool
-	err := row.Scan(&userUUID, &passwordDigest, &pepper, &membershipUUID, &isAdmin)
-	if err != nil {
-		if err != sql.ErrNoRows {
-			logrus.WithError(err).Error("Error looking up user for login")
-		}
-		return nil, errors.New("Invalid username or password")
+func LogIn(ctx context.Context, db *gorm.DB, p LogInPayload, e env.Env) (*Session, error) {
+	u := model.User{}
+	if result := db.WithContext(ctx).Joins(
+		"Membership", db.Where("year in ?", memberships.CurrentMembershipYears()),
+	).First(
+		&u, "username = ?", p.Username,
+	); result.Error != nil {
+		logrus.WithContext(ctx).WithError(result.Error).Warn("could not find user for LogIn")
+		return nil, errors.New("invalid username or password")
 	}
+	isAdmin := len(u.Memberships) > 0
+	//row := pg.QueryRowContext(
+	//	ctx,
+	//	"SELECT u.ulid, u.password_digest, u.pepper, m.ulid as membership_ulid, a.ulid IS NOT NULL as is_admin "+
+	//		"FROM users u "+
+	//		"LEFT JOIN memberships m ON m.arrival_ulid = a.ulid "+
+	//		fmt.Sprintf("AND m.year IN (%s) ", memberships.CurrentMembershipYears().ToString())+
+	//		"LEFT JOIN admins a "+
+	//		"ON a.user_ulid = u.ulid "+
+	//		"WHERE u.username = ?",
+	//	p.Username,
+	//)
+	//var userULID, passwordDigest, pepper, membershipULID string
+	//err := row.Scan(&userULID, &passwordDigest, &pepper, &membershipULID, &isAdmin)
+	//if err != nil {
+	//	if err != sql.ErrNoRows {
+	//		logrus.WithError(err).Error("Error looking up user for login")
+	//	}
+	//	return nil, errors.New("Invalid username or password")
+	//}
 
 	salt := os.Getenv("PASSWORD_SALT")
-	seasoned := []byte(p.Password + salt + pepper)
-	err = bcrypt.CompareHashAndPassword([]byte(passwordDigest), seasoned)
+	seasoned := []byte(p.Password + salt + u.Pepper)
+	err := bcrypt.CompareHashAndPassword([]byte(u.PasswordDigest), seasoned)
 	if err != nil {
 		if err != bcrypt.ErrMismatchedHashAndPassword {
 			logrus.WithError(err).Error("Error comparing hashed passwords")
@@ -69,11 +78,10 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 
 	expires := stubbables.TimeNow().Add(7 * 24 * time.Hour)
 
-	sessionUUID := stubbables.UUIDv1()
-	_, err = db.ExecContext(ctx, "INSERT INTO sessions VALUES (uuid = ?, user_uuid = ?, expires = ?)", sessionUUID, userUUID, expires)
-	if err != nil {
-		logrus.WithError(err).Error("Error creating session")
-		return nil, errors.New("Unexpected error creating new session")
+	s := model.Session{UserULID: u.ULID, Expires: expires, IsAdmin: isAdmin}
+	if result := db.Create(&s); result.Error != nil {
+		logrus.WithError(result.Error).Error("error creating session")
+		return nil, errors.New("unexpected error creating new session")
 	}
 
 	domain := ".midnightriders.com"
@@ -88,36 +96,31 @@ func LogIn(ctx context.Context, db *sql.DB, p LogInPayload, e env.Env) (*Session
 		Path:     "/",
 		SameSite: http.SameSiteStrictMode,
 		Secure:   true,
-		Value:    sessionUUID,
+		Value:    s.ULID,
 	})
 
 	return &Session{
 		Expires:  expires,
 		IsAdmin:  isAdmin,
-		UserUUID: userUUID,
-		UUID:     sessionUUID,
+		UserULID: u.ULID,
+		ULID:     s.ULID,
 	}, nil
 }
 
 // LogOut expires a cookie and removes the session from the database
-func LogOut(ctx context.Context, db *sql.DB, e env.Env) bool {
+func LogOut(ctx context.Context, db *gorm.DB, e env.Env) bool {
 	info := FromContext(ctx)
-	if info == nil || !info.LoggedIn || info.UUID == "" {
+	if info == nil || !info.LoggedIn || info.ULID == "" {
 		return false
 	}
 
 	lg := logrus.WithField("info", info)
-	result, err := db.ExecContext(ctx, "DELETE FROM sessions WHERE uuid = ?", info.UUID)
-	if err != nil {
-		lg.WithError(err).Error("Error deleting session")
+	result := db.Delete(&model.Session{Base: model.Base{ULID: info.ULID}})
+	if result.Error != nil {
+		lg.WithError(result.Error).Error("error deleting session")
 		return false
 	}
-	n, err := result.RowsAffected()
-	if err != nil {
-		lg.WithError(err).Error("Error getting rows affected from deleted session")
-		return false
-	}
-	if n <= 0 {
+	if result.RowsAffected == 1 {
 		lg.Error("Rows affected when logging out was zero")
 		return false
 	}

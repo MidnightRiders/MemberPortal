@@ -9,7 +9,7 @@ enum MembershipType {
 }
 
 type Membership {
-  uuid: ID!
+  ulid: ID!
   user: User!
   year: Int!
   type: MembershipType!

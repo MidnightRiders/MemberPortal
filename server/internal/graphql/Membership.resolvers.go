@@ -7,15 +7,17 @@ import (
 	"context"
 	"errors"
 
+	"github.com/sirupsen/logrus"
+
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/generated"
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 )
 
 func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {
-	row := r.DB.QueryRowContext(ctx, "SELECT "+model.UserColumns+" FROM users WHERE uuid = ?", obj.UserUUID)
-	user := model.UserFromRow(ctx, row)
-	if user == nil {
-		return nil, errors.New("Could not find user with UUID matching UserUUID of membership")
+	var user *model.User
+	if result := r.DB.First(user, "ulid = ?", obj.UserULID); result.Error != nil {
+		logrus.WithContext(ctx).WithError(result.Error).Error("error getting user")
+		return nil, errors.New("could not find user with ULID matching UserULID of membership")
 	}
 	return user, nil
 }

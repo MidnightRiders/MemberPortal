@@ -4,7 +4,7 @@ enum Conference {
 }
 
 type Club {
-  uuid: ID!
+  ulid: ID!
   abbreviation: String!
   name: String!
   primaryColor: String!
@@ -22,7 +22,7 @@ enum Position {
 }
 
 type Player {
-  uuid: ID!
+  ulid: ID!
   firstName: String!
   lastName: String!
   position: Position!

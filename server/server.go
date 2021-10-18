@@ -2,55 +2,43 @@ package main
 
 import (
 	"context"
-	"database/sql"
 	"net/http"
 	"os"
 
 	gql "github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/golang-migrate/migrate/v4"
-	"github.com/golang-migrate/migrate/v4/database/postgres"
-	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/sirupsen/logrus"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	"github.com/MidnightRiders/MemberPortal/server/internal/env"
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql"
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/generated"
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 )
 
 const defaultPort = "8080"
 
-func init() {
+func init() { //nolint:gochecknoinits
 	logrus.SetLevel(logrus.DebugLevel)
 	logrus.SetOutput(os.Stdout)
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 }
 
 func main() {
-	db, err := sql.Open("pgx", os.Getenv("DATABASE_URL"))
+	db, err := gorm.Open(postgres.Open(os.Getenv("DATABASE_URL")), &gorm.Config{})
 	if err != nil {
 		logrus.WithError(err).Fatal("Unable to connect to database")
 	}
-	defer db.Close()
-
-	driver, err := postgres.WithInstance(db, &postgres.Config{})
-	if err != nil {
-		logrus.WithError(err).Fatal("Error initializing Postgres driver")
-	}
-
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://migrations",
-		"postgres",
-		driver,
-	)
-	if err != nil {
-		logrus.WithError(err).Error("Error initializing migrations")
-	}
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
-		logrus.WithError(err).Error("Error executing migrations")
+	if err := db.AutoMigrate(
+		&model.User{},
+		&model.Membership{},
+		&model.Session{},
+	); err != nil {
+		logrus.WithError(err).Fatal("Unable to AutoMigrate")
 	}
 
 	port := os.Getenv("PORT")

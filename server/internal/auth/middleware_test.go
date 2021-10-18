@@ -7,6 +7,9 @@ import (
 	"testing"
 	"time"
 
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	"github.com/MidnightRiders/MemberPortal/server/internal/testhelpers"
 
@@ -19,7 +22,7 @@ func TestCreateMiddleware(t *testing.T) {
 		it string
 
 		req       *http.Request
-		prepareDB func() (*sql.DB, func(*testing.T), error)
+		prepareDB func() (*gorm.DB, func(*testing.T), error)
 
 		proxiedAssertions  func(*testing.T) http.HandlerFunc
 		responseAssertions func(*testing.T, *httptest.ResponseRecorder)
@@ -77,17 +80,21 @@ func TestCreateMiddleware(t *testing.T) {
 		{
 			it: "adds empty Info to context and invalidates when expired cookie is set",
 
-			prepareDB: func() (*sql.DB, func(*testing.T), error) {
+			prepareDB: func() (*gorm.DB, func(*testing.T), error) {
 				db, mock, err := sqlmock.New()
 				if err != nil {
-					return db, func(*testing.T) {}, err
+					return nil, func(*testing.T) {}, err
+				}
+				gdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db}), &gorm.Config{})
+				if err != nil {
+					return gdb, func(*testing.T) {}, err
 				}
 
 				mock.ExpectQuery(
-					"SELECT s.uuid, s.user_uuid, s.expires, m.uuid IS NOT NULL as current_member.*\\(2020\\)",
+					"SELECT s.ulid, s.user_ulid, s.expires, m.ulid IS NOT NULL as current_member.*\\(2020\\)",
 				).WithArgs(
 					"2bd02a90-2384-11eb-9dc9-7bccc7b63366",
-				).WillReturnRows(sqlmock.NewRows([]string{"uuid", "user_uuid", "expires", "current_member"}).AddRow(
+				).WillReturnRows(sqlmock.NewRows([]string{"ulid", "user_ulid", "expires", "current_member"}).AddRow(
 					"2bd02a90-2384-11eb-9dc9-7bccc7b63366",
 					"c13b3760-2388-11eb-bf34-89ffdb72692c",
 					auth.ExpireTime,
@@ -100,7 +107,7 @@ func TestCreateMiddleware(t *testing.T) {
 					assert.NoError(test, err)
 				}
 
-				return db, dbCalled, nil
+				return gdb, dbCalled, nil
 			},
 			req: testhelpers.BuildReq(testhelpers.ReqParams{
 				Cookies: []*http.Cookie{
@@ -136,17 +143,21 @@ func TestCreateMiddleware(t *testing.T) {
 		{
 			it: "adds populated Info to context and updates expiration when valid cookie is set",
 
-			prepareDB: func() (*sql.DB, func(*testing.T), error) {
+			prepareDB: func() (*gorm.DB, func(*testing.T), error) {
 				db, mock, err := sqlmock.New()
 				if err != nil {
-					return db, func(*testing.T) {}, err
+					return nil, func(*testing.T) {}, err
+				}
+				gdb, err := gorm.Open(postgres.New(postgres.Config{Conn: db}), &gorm.Config{})
+				if err != nil {
+					return gdb, func(*testing.T) {}, err
 				}
 
 				mock.ExpectQuery(
-					"SELECT s.uuid, s.user_uuid, s.expires, m.uuid IS NOT NULL as current_member.*\\(2020\\)",
+					"SELECT s.ulid, s.user_ulid, s.expires, m.ulid IS NOT NULL as current_member.*\\(2020\\)",
 				).WithArgs(
 					"2bd02a90-2384-11eb-9dc9-7bccc7b63366",
-				).WillReturnRows(sqlmock.NewRows([]string{"uuid", "user_uuid", "expires", "current_member"}).AddRow(
+				).WillReturnRows(sqlmock.NewRows([]string{"ulid", "user_ulid", "expires", "current_member"}).AddRow(
 					"2bd02a90-2384-11eb-9dc9-7bccc7b63366",
 					"c13b3760-2388-11eb-bf34-89ffdb72692c",
 					time.Date(2020, 7, 30, 12, 0, 0, 0, time.UTC),
@@ -162,7 +173,7 @@ func TestCreateMiddleware(t *testing.T) {
 					assert.NoError(test, err)
 				}
 
-				return db, dbCalled, nil
+				return gdb, dbCalled, nil
 			},
 			req: testhelpers.BuildReq(testhelpers.ReqParams{
 				Cookies: []*http.Cookie{
@@ -180,7 +191,7 @@ func TestCreateMiddleware(t *testing.T) {
 						CurrentMember: true,
 						Expires:       &exp,
 						LoggedIn:      true,
-						UUID:          "c13b3760-2388-11eb-bf34-89ffdb72692c",
+						ULID:          "c13b3760-2388-11eb-bf34-89ffdb72692c",
 					}, *auth.FromContext(r.Context()))
 					w.WriteHeader(http.StatusOK)
 				})
@@ -214,18 +225,21 @@ func TestCreateMiddleware(t *testing.T) {
 			g.Run(testCase.it, func(test *testing.T) {
 				test.Parallel()
 
-				var db *sql.DB
+				var db *gorm.DB
 				mockExpectation := func(*testing.T) {}
 				var err error
 				if testCase.prepareDB == nil {
-					db, _, err = sqlmock.New()
+					var _db *sql.DB
+					_db, _, err = sqlmock.New()
+					if err == nil {
+						db, err = gorm.Open(postgres.New(postgres.Config{Conn: _db}), &gorm.Config{})
+					}
 				} else {
 					db, mockExpectation, err = testCase.prepareDB()
 				}
 				if err != nil {
 					test.Fatal(err)
 				}
-				defer db.Close()
 				middleware := auth.CreateMiddleware(db, ".midnightriders.com")
 				w := httptest.NewRecorder()
 

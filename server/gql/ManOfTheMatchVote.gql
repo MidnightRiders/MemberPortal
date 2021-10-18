@@ -1,5 +1,5 @@
 type ManOfTheMatchVote {
-  uuid: ID!
+  ulid: ID!
   match: Match!
   user: User!
   firstPick: Player!

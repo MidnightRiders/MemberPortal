@@ -7,7 +7,7 @@ enum MatchStatus {
 }
 
 type Match {
-  uuid: ID!
+  ulid: ID!
   kickoff: DateTime!
   homeClub: Club!
   awayClub: Club!

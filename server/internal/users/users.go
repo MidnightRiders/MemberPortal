@@ -2,7 +2,6 @@ package users
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"os"
 	"regexp"
@@ -11,7 +10,9 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 )
 
@@ -91,7 +92,7 @@ func (e *CreateUserError) AddInvalidField(field string) {
 }
 
 // Create creates a new user
-func Create(ctx context.Context, db *sql.DB, props CreateProps) (string, error) {
+func Create(ctx context.Context, db *gorm.DB, props CreateProps) (string, error) {
 	var validationErr *CreateUserError
 	for name, valid := range map[string]bool{
 		"username":   usernameRegexp.MatchString(props.Username),
@@ -125,35 +126,28 @@ func Create(ctx context.Context, db *sql.DB, props CreateProps) (string, error) 
 		return "", errors.New("there was an unexpected error creating the user")
 	}
 
-	uuid := stubbables.UUIDv1()
-	result, err := db.ExecContext(
-		ctx,
-		"INSERT INTO users "+
-			"(uuid, username, email, password_digest, pepper, first_name, last_name, "+
-			"address1, address2, city, province, postal_code, country) "+
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-		uuid,
-		props.Username,
-		props.Email,
-		digest,
-		pepper,
-		props.FirstName,
-		props.LastName,
-		props.Address1,
-		props.Address2,
-		props.City,
-		props.Province,
-		props.PostalCode,
-		props.Country, // TODO: props.MembershipNumber,
-	)
-	if err != nil {
+	user := model.User{
+		Username:   props.Username,
+		Email:      props.Email,
+		FirstName:  props.FirstName,
+		LastName:   props.LastName,
+		Address1:   props.Address1,
+		Address2:   props.Address2,
+		City:       props.City,
+		Province:   &props.Province,
+		PostalCode: props.PostalCode,
+		Country:    props.Country,
+		// TODO: props.MembershipNumber,
+
+		PasswordDigest: string(digest),
+		Pepper:         pepper,
+	}
+
+	result := db.WithContext(ctx).Create(&user)
+	if err := result.Error; err != nil {
 		logrus.WithError(err).Error("Error creating user")
 		return "", errors.New("there was an unexpected error creating the user")
 	}
-	if rows, err := result.RowsAffected(); err != nil || rows == 0 {
-		logrus.WithError(err).WithField("rows", rows).Error("Error getting affected rows")
-		return "", errors.New("there was an unexpected error creating the user")
-	}
 
-	return uuid, nil
+	return user.ULID, nil
 }

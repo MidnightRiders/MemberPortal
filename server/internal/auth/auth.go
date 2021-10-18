@@ -3,18 +3,13 @@ package auth
 import (
 	"context"
 	"time"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 )
 
 type ctxKey string
 
 var contextKey ctxKey = "auth"
-
-type Role string
-
-const (
-	RoleExecutiveBoard Role = "ExecutiveBoard"
-	RoleAtLargeBoard   Role = "AtLargeBoard"
-)
 
 // Info describes the auth state of the current context
 type Info struct {
@@ -22,8 +17,8 @@ type Info struct {
 	Expires       *time.Time
 	IsAdmin       bool
 	LoggedIn      bool
-	Role          Role
-	UUID          string
+	Role          model.Role
+	ULID          string
 }
 
 // AddToContext adds Info to a given context

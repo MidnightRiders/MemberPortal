@@ -1,13 +1,13 @@
 package auth
 
 import (
-	"database/sql"
-	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
+	"gorm.io/gorm"
+
+	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 	"github.com/MidnightRiders/MemberPortal/server/internal/memberships"
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 )
@@ -16,33 +16,24 @@ import (
 type Session struct {
 	Expires  time.Time
 	IsAdmin  bool
-	UserUUID string
-	UUID     string
+	UserULID string
+	ULID     string
 }
 
 // ExpireTime is a reusable time for expiring cookies
 var ExpireTime time.Time = time.Date(1995, 12, 1, 12, 0, 0, 0, time.UTC)
 
-func setCookie(w http.ResponseWriter, domain string, uuid string, expires time.Time) {
+func setCookie(w http.ResponseWriter, domain string, ulid string, expires time.Time) {
 	http.SetCookie(w, &http.Cookie{
 		Name:     "session",
 		Domain:   domain,
 		Path:     "/",
-		Value:    uuid,
+		Value:    ulid,
 		Expires:  expires,
 		SameSite: http.SameSiteStrictMode,
 		Secure:   true,
 	})
 }
-
-var userWithCurrentMembershipQuery = strings.Trim(`
-SELECT s.uuid, s.user_uuid, s.expires, m.uuid IS NOT NULL as current_member
-FROM sessions s
-	LEFT JOIN memberships m ON m.user_uuid = s.user_uuid AND m.year IN (%s)
-WHERE s.uuid = ?
-ORDER BY m.year DESC
-GROUP BY s.user_uuid
-`, " \n")
 
 func strYrs() []string {
 	a := []string{}
@@ -52,38 +43,40 @@ func strYrs() []string {
 	return a
 }
 
+const dayHours = 24 * time.Hour
+
 // CreateMiddleware returns a Middleware function for authenticating
 // requests
-func CreateMiddleware(db *sql.DB, domain string) func(http.Handler) http.Handler {
+func CreateMiddleware(db *gorm.DB, domain string) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
 			authCookie, err := r.Cookie("session")
 			sessionInfo := Info{}
 			if err == nil && authCookie.Value != "" {
-				sessionUUID := authCookie.Value
-				row := db.QueryRowContext(ctx, fmt.Sprintf(userWithCurrentMembershipQuery, strings.Join(strYrs(), ",")), sessionUUID)
-				sess := Session{}
+				sessionULID := authCookie.Value
+				sess := model.Session{}
+				result := db.WithContext(ctx).Preload(
+					"User",
+				).Preload(
+					"User.Memberships", db.Where("year IN ?", strYrs()),
+				).First(&sess, "ulid = ?", sessionULID)
+				err := result.Error
 				currentMember := false
-				err := row.Scan(
-					&sess.UUID,
-					&sess.UserUUID,
-					&sess.Expires,
-					&currentMember,
-				)
-				if err == nil && sess.Expires.After(stubbables.TimeNow()) && sess.UserUUID != "" {
-					expires := stubbables.TimeNow().Add(24 * time.Hour)
-					go func(db *sql.DB) {
-						db.Exec("UPDATE sessions SET expires = ? WHERE uuid = ?", expires, sessionUUID)
+				if err == nil && sess.Expires.After(stubbables.TimeNow()) && sess.UserULID != "" {
+					currentMember = len(sess.User.Memberships) > 0
+					expires := stubbables.TimeNow().Add(dayHours)
+					go func(db *gorm.DB) {
+						db.Model(&model.Session{}).Where("ulid = ?", sessionULID).Update("expires = ?", expires)
 					}(db)
 					sessionInfo.CurrentMember = currentMember
 					sessionInfo.Expires = &expires
 					sessionInfo.LoggedIn = true
-					sessionInfo.UUID = sess.UserUUID
-					setCookie(w, domain, sess.UUID, expires)
+					sessionInfo.ULID = sess.UserULID
+					setCookie(w, domain, sess.ULID, expires)
 				} else {
-					go func(db *sql.DB) {
-						db.Exec("DELETE FROM sessions WHERE uuid = ?", sessionUUID)
+					go func(db *gorm.DB) {
+						db.WithContext(ctx).Delete(&model.Session{}, sessionULID)
 					}(db)
 					setCookie(w, domain, "", ExpireTime)
 				}
