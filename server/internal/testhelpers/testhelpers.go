@@ -2,6 +2,7 @@ package testhelpers
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"os"
 	"strings"
@@ -37,7 +38,7 @@ func BuildReq(p ReqParams) *http.Request {
 	if strings.HasPrefix(path, "/") {
 		path = "https://members.midnightriders.com" + path
 	}
-	req, _ := http.NewRequest(method, path, bytes.NewReader([]byte(p.Body)))
+	req, _ := http.NewRequestWithContext(context.Background(), method, path, bytes.NewReader([]byte(p.Body)))
 	if p.Cookies != nil {
 		for _, cookie := range p.Cookies {
 			req.AddCookie(cookie)
@@ -85,7 +86,11 @@ func AssertEqualCookies(test *testing.T, expectedCookies []http.Cookie, received
 	result, capture := createAssertionResultCapturer()
 	capture(assert.Len(test, receivedCookies, len(expectedCookies)))
 	for i, ck := range expectedCookies {
-		capture(AssertEqualCookie(test, ck, receivedCookies[i]))
+		if capture(assert.GreaterOrEqual(
+			test, len(receivedCookies), i+1, "expected received cookies to have length of at least", i+1),
+		) {
+			capture(AssertEqualCookie(test, ck, receivedCookies[i]))
+		}
 	}
 	return *result
 }

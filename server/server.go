@@ -7,6 +7,7 @@ import (
 
 	gql "github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
+	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/sirupsen/logrus"
@@ -35,6 +36,11 @@ func main() {
 	}
 	if err := db.AutoMigrate(
 		&model.User{},
+		&model.Admin{},
+		&model.Club{},
+		&model.Player{},
+		&model.ManOfTheMatchVote{},
+		&model.RevGuess{},
 		&model.Membership{},
 		&model.Session{},
 	); err != nil {
@@ -68,13 +74,14 @@ func main() {
 		return next(ctx)
 	})
 
-	authMiddleware := auth.CreateMiddleware(db, domain)
-	http.Handle("/", authMiddleware(srv))
-
 	if e != env.Prod {
+		srv.Use(extension.Introspection{})
 		http.Handle("/playground", playground.Handler("GraphQL playground", "/"))
 		logrus.Infof("connect to http://localhost:%s/playground for GraphQL playground", port)
 	}
+
+	authMiddleware := auth.CreateMiddleware(db, domain)
+	http.Handle("/", authMiddleware(srv))
 
 	logrus.Infof("Listening on http://localhost:%s", port)
 	if err = http.ListenAndServe(":"+port, nil); err != nil {

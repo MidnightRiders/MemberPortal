@@ -1,12 +1,5 @@
 package model
 
-type Role string
-
-const (
-	RoleExecutiveBoard Role = "ExecutiveBoard"
-	RoleAtLargeBoard   Role = "AtLargeBoard"
-)
-
 type Membership struct {
 	Base
 	UserULID string         `json:"userULID" gorm:"column:user_ulid"`

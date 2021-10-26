@@ -13,10 +13,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/vektah/gqlparser/v2"
-	"github.com/vektah/gqlparser/v2/ast"
-
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
+	gqlparser "github.com/vektah/gqlparser/v2"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -37,6 +36,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Match() MatchResolver
 	Membership() MembershipResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
@@ -87,8 +87,8 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CreateManOfTheMatchVote func(childComplexity int, userULID string, matchULID string, firstPickULID string, secondPickULID *string, thirdPickULID *string) int
-		CreateRevGuess          func(childComplexity int, userULID string, matchULID string, homeGoals int, awayGoals int, comment *string) int
+		CreateManOfTheMatchVote func(childComplexity int, userUlid string, matchUlid string, firstPickUlid string, secondPickUlid *string, thirdPickUlid *string) int
+		CreateRevGuess          func(childComplexity int, userUlid string, matchUlid string, homeGoals int, awayGoals int, comment *string) int
 		CreateUser              func(childComplexity int, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) int
 		InitiatePasswordReset   func(childComplexity int, email string) int
 		LogIn                   func(childComplexity int, username string, password string) int
@@ -108,14 +108,14 @@ type ComplexityRoot struct {
 	Query struct {
 		Club               func(childComplexity int, ulid string) int
 		Clubs              func(childComplexity int, conference *model.Conference) int
-		ManOfTheMatchVote  func(childComplexity int, userULID string, matchULID string) int
-		ManOfTheMatchVotes func(childComplexity int, matchID *string) int
+		ManOfTheMatchVote  func(childComplexity int, userUlid string, matchUlid string) int
+		ManOfTheMatchVotes func(childComplexity int, matchUlid *string) int
 		Match              func(childComplexity int, ulid string) int
 		Matches            func(childComplexity int, before *time.Time, after *time.Time, club *string) int
-		Membership         func(childComplexity int, ulid *string, userULID *string, year *int) int
-		Memberships        func(childComplexity int, userULID *string, year *int) int
-		RevGuess           func(childComplexity int, userULID string, matchULID string) int
-		RevGuesses         func(childComplexity int, matchID *string) int
+		Membership         func(childComplexity int, ulid *string, userUlid *string, year *int) int
+		Memberships        func(childComplexity int, userUlid *string, year *int) int
+		RevGuess           func(childComplexity int, userUlid string, matchUlid string) int
+		RevGuesses         func(childComplexity int, matchUlid *string) int
 		User               func(childComplexity int, ulid string) int
 		Users              func(childComplexity int) int
 	}
@@ -153,6 +153,9 @@ type ComplexityRoot struct {
 	}
 }
 
+type MatchResolver interface {
+	Kickoff(ctx context.Context, obj *model.Match) (string, error)
+}
 type MembershipResolver interface {
 	User(ctx context.Context, obj *model.Membership) (*model.User, error)
 }
@@ -160,24 +163,24 @@ type MutationResolver interface {
 	LogIn(ctx context.Context, username string, password string) (*model.Session, error)
 	LogOut(ctx context.Context) (bool, error)
 	CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) (*model.User, error)
-	CreateRevGuess(ctx context.Context, userULID string, matchULID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error)
-	CreateManOfTheMatchVote(ctx context.Context, userULID string, matchULID string, firstPickULID string, secondPickULID *string, thirdPickULID *string) (*model.ManOfTheMatchVote, error)
+	CreateRevGuess(ctx context.Context, userUlid string, matchUlid string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error)
+	CreateManOfTheMatchVote(ctx context.Context, userUlid string, matchUlid string, firstPickUlid string, secondPickUlid *string, thirdPickUlid *string) (*model.ManOfTheMatchVote, error)
 	InitiatePasswordReset(ctx context.Context, email string) (*string, error)
 	ResetPassword(ctx context.Context, email string, password string, token string) (bool, error)
 }
 type QueryResolver interface {
 	User(ctx context.Context, ulid string) (*model.User, error)
 	Users(ctx context.Context) ([]*model.User, error)
-	Membership(ctx context.Context, ulid *string, userULID *string, year *int) (*model.Membership, error)
-	Memberships(ctx context.Context, userULID *string, year *int) ([]*model.Membership, error)
+	Membership(ctx context.Context, ulid *string, userUlid *string, year *int) (*model.Membership, error)
+	Memberships(ctx context.Context, userUlid *string, year *int) ([]*model.Membership, error)
 	Club(ctx context.Context, ulid string) (*model.Club, error)
 	Clubs(ctx context.Context, conference *model.Conference) ([]*model.Club, error)
 	Match(ctx context.Context, ulid string) (*model.Match, error)
 	Matches(ctx context.Context, before *time.Time, after *time.Time, club *string) ([]*model.Match, error)
-	RevGuess(ctx context.Context, userULID string, matchULID string) (*model.RevGuess, error)
-	RevGuesses(ctx context.Context, matchID *string) ([]*model.RevGuess, error)
-	ManOfTheMatchVote(ctx context.Context, userULID string, matchULID string) (*model.ManOfTheMatchVote, error)
-	ManOfTheMatchVotes(ctx context.Context, matchID *string) ([]*model.ManOfTheMatchVote, error)
+	RevGuess(ctx context.Context, userUlid string, matchUlid string) (*model.RevGuess, error)
+	RevGuesses(ctx context.Context, matchUlid *string) ([]*model.RevGuess, error)
+	ManOfTheMatchVote(ctx context.Context, userUlid string, matchUlid string) (*model.ManOfTheMatchVote, error)
+	ManOfTheMatchVotes(ctx context.Context, matchUlid *string) ([]*model.ManOfTheMatchVote, error)
 }
 
 type executableSchema struct {
@@ -558,7 +561,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.ManOfTheMatchVotes(childComplexity, args["matchID"].(*string)), true
+		return e.complexity.Query.ManOfTheMatchVotes(childComplexity, args["matchULID"].(*string)), true
 
 	case "Query.match":
 		if e.complexity.Query.Match == nil {
@@ -630,7 +633,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.RevGuesses(childComplexity, args["matchID"].(*string)), true
+		return e.complexity.Query.RevGuesses(childComplexity, args["matchULID"].(*string)), true
 
 	case "Query.user":
 		if e.complexity.Query.User == nil {
@@ -1003,9 +1006,9 @@ type Query {
   match(ulid: ID!): Match
   matches(before: Time, after: Time, club: ID): [Match!]
   revGuess(userULID: ID!, matchULID: ID!): RevGuess
-  revGuesses(matchID: ID): [RevGuess!]
+  revGuesses(matchULID: ID): [RevGuess!]
   manOfTheMatchVote(userULID: ID!, matchULID: ID!): ManOfTheMatchVote
-  manOfTheMatchVotes(matchID: ID): [ManOfTheMatchVote!]
+  manOfTheMatchVotes(matchULID: ID): [ManOfTheMatchVote!]
 }
 
 type Mutation {
@@ -1412,14 +1415,14 @@ func (ec *executionContext) field_Query_manOfTheMatchVotes_args(ctx context.Cont
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *string
-	if tmp, ok := rawArgs["matchID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchID"))
+	if tmp, ok := rawArgs["matchULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchULID"))
 		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchID"] = arg0
+	args["matchULID"] = arg0
 	return args, nil
 }
 
@@ -1556,14 +1559,14 @@ func (ec *executionContext) field_Query_revGuesses_args(ctx context.Context, raw
 	var err error
 	args := map[string]interface{}{}
 	var arg0 *string
-	if tmp, ok := rawArgs["matchID"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchID"))
+	if tmp, ok := rawArgs["matchULID"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("matchULID"))
 		arg0, err = ec.unmarshalOID2ᚖstring(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["matchID"] = arg0
+	args["matchULID"] = arg0
 	return args, nil
 }
 
@@ -2150,14 +2153,14 @@ func (ec *executionContext) _Match_kickoff(ctx context.Context, field graphql.Co
 		Object:     "Match",
 		Field:      field,
 		Args:       nil,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Kickoff, nil
+		return ec.resolvers.Match().Kickoff(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2576,7 +2579,7 @@ func (ec *executionContext) _Membership_role(ctx context.Context, field graphql.
 	}
 	res := resTmp.(model.Role)
 	fc.Result = res
-	return ec.marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx, field.Selections, res)
+	return ec.marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRole(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_logIn(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3436,7 +3439,7 @@ func (ec *executionContext) _Query_revGuesses(ctx context.Context, field graphql
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().RevGuesses(rctx, args["matchID"].(*string))
+		return ec.resolvers.Query().RevGuesses(rctx, args["matchULID"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3514,7 +3517,7 @@ func (ec *executionContext) _Query_manOfTheMatchVotes(ctx context.Context, field
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().ManOfTheMatchVotes(rctx, args["matchID"].(*string))
+		return ec.resolvers.Query().ManOfTheMatchVotes(rctx, args["matchULID"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5644,22 +5647,31 @@ func (ec *executionContext) _Match(ctx context.Context, sel ast.SelectionSet, ob
 		case "ulid":
 			out.Values[i] = ec._Match_ulid(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "kickoff":
-			out.Values[i] = ec._Match_kickoff(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Match_kickoff(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
+				return res
+			})
 		case "homeClub":
 			out.Values[i] = ec._Match_homeClub(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "awayClub":
 			out.Values[i] = ec._Match_awayClub(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "homeGoals":
 			out.Values[i] = ec._Match_homeGoals(ctx, field, obj)
@@ -5668,7 +5680,7 @@ func (ec *executionContext) _Match(ctx context.Context, sel ast.SelectionSet, ob
 		case "status":
 			out.Values[i] = ec._Match_status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "revGuesses":
 			out.Values[i] = ec._Match_revGuesses(ctx, field, obj)
@@ -7250,14 +7262,14 @@ func (ec *executionContext) marshalORevGuess2ᚖgithubᚗcomᚋMidnightRidersᚋ
 	return ec._RevGuess(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, v interface{}) (model.Role, error) {
-	tmp, err := graphql.UnmarshalString(v)
-	res := model.Role(tmp)
+func (ec *executionContext) unmarshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRole(ctx context.Context, v interface{}) (model.Role, error) {
+	var res model.Role
+	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋauthᚐRole(ctx context.Context, sel ast.SelectionSet, v model.Role) graphql.Marshaler {
-	return graphql.MarshalString(string(v))
+func (ec *executionContext) marshalORole2githubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐRole(ctx context.Context, sel ast.SelectionSet, v model.Role) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) marshalOSession2ᚖgithubᚗcomᚋMidnightRidersᚋMemberPortalᚋserverᚋinternalᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {

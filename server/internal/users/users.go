@@ -27,7 +27,7 @@ var letters = func() string {
 var nonLetters = " 1234567890-=_+`;',./[]\\<>?:\"{}|~!@#$%^&*()"
 
 var legalChars = func() []string {
-	chars := []string{}
+	var chars []string
 	for _, c := range letters {
 		chars = append(chars, string(c), "")
 	}
@@ -41,12 +41,15 @@ var legalCharReplacer = strings.NewReplacer(legalChars...)
 
 var usernameRegexp = regexp.MustCompile(`(?i)^[a-z0-9-_\.]{8,24}$`)
 
+const minPasswordLen = 12
+const maxPasswordLen = 60
+
 // PasswordIsValid validates a given password
 func PasswordIsValid(password string) bool {
-	if len(password) < 12 {
+	if len(password) < minPasswordLen {
 		return false
 	}
-	if len(password) > 60 {
+	if len(password) > maxPasswordLen {
 		return false
 	}
 	if !strings.ContainsAny(password, letters) {
@@ -91,6 +94,8 @@ func (e *CreateUserError) AddInvalidField(field string) {
 	e.InvalidFields = append(e.InvalidFields, field)
 }
 
+const pepperLen = 128
+
 // Create creates a new user
 func Create(ctx context.Context, db *gorm.DB, props CreateProps) (string, error) {
 	var validationErr *CreateUserError
@@ -119,7 +124,7 @@ func Create(ctx context.Context, db *gorm.DB, props CreateProps) (string, error)
 	}
 
 	salt := os.Getenv("PASSWORD_SALT")
-	pepper := stubbables.RandomStr(128)
+	pepper := stubbables.RandomStr(pepperLen)
 	digest, err := bcrypt.GenerateFromPassword([]byte(props.Password+salt+pepper), bcrypt.DefaultCost)
 	if err != nil {
 		logrus.WithError(err).Error("Error generating digest from password")

@@ -8,56 +8,6 @@ import (
 	"strconv"
 )
 
-type Club struct {
-	ULID           string     `json:"ulid"`
-	Abbreviation   string     `json:"abbreviation"`
-	Name           string     `json:"name"`
-	PrimaryColor   string     `json:"primaryColor"`
-	SecondaryColor string     `json:"secondaryColor"`
-	AccentColor    string     `json:"accentColor"`
-	Conference     Conference `json:"conference"`
-	Active         bool       `json:"active"`
-}
-
-type ManOfTheMatchVote struct {
-	ULID       string  `json:"ulid"`
-	Match      *Match  `json:"match"`
-	User       *User   `json:"user"`
-	FirstPick  *Player `json:"firstPick"`
-	SecondPick *Player `json:"secondPick"`
-	ThirdPick  *Player `json:"thirdPick"`
-}
-
-type Match struct {
-	ULID               string               `json:"ulid"`
-	Kickoff            string               `json:"kickoff"`
-	HomeClub           *Club                `json:"homeClub"`
-	AwayClub           *Club                `json:"awayClub"`
-	HomeGoals          *int                 `json:"homeGoals"`
-	AwayGoals          *int                 `json:"awayGoals"`
-	Status             MatchStatus          `json:"status"`
-	RevGuesses         []*RevGuess          `json:"revGuesses"`
-	ManOfTheMatchVotes []*ManOfTheMatchVote `json:"manOfTheMatchVotes"`
-}
-
-type Player struct {
-	ULID      string   `json:"ulid"`
-	FirstName string   `json:"firstName"`
-	LastName  string   `json:"lastName"`
-	Position  Position `json:"position"`
-	Club      *Club    `json:"club"`
-	Active    bool     `json:"active"`
-}
-
-type RevGuess struct {
-	ULID      string  `json:"ulid"`
-	Match     *Match  `json:"match"`
-	User      *User   `json:"user"`
-	HomeGoals int     `json:"homeGoals"`
-	AwayGoals int     `json:"awayGoals"`
-	Comment   *string `json:"comment"`
-}
-
 type Conference string
 
 const (
@@ -229,5 +179,46 @@ func (e *Position) UnmarshalGQL(v interface{}) error {
 }
 
 func (e Position) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type Role string
+
+const (
+	RoleExecutiveBoard Role = "ExecutiveBoard"
+	RoleAtLargeBoard   Role = "AtLargeBoard"
+)
+
+var AllRole = []Role{
+	RoleExecutiveBoard,
+	RoleAtLargeBoard,
+}
+
+func (e Role) IsValid() bool {
+	switch e {
+	case RoleExecutiveBoard, RoleAtLargeBoard:
+		return true
+	}
+	return false
+}
+
+func (e Role) String() string {
+	return string(e)
+}
+
+func (e *Role) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = Role(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid Role", str)
+	}
+	return nil
+}
+
+func (e Role) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }

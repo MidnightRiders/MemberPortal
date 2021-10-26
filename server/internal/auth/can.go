@@ -15,5 +15,7 @@ func (i *Info) Can(action Action) bool {
 		return true
 	}
 
+	// TODO: other stuff
+
 	return false
 }

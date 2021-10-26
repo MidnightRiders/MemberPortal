@@ -7,8 +7,12 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
 )
 
+// October is the last month of the regular season, so it's the last month
+// when new memberships apply to the current year
+const endOfSeasonMonth = 10
+
 func isEndOfSeason() bool {
-	return stubbables.TimeNow().Month() > 10
+	return stubbables.TimeNow().Month() > endOfSeasonMonth
 }
 
 // MembershipYears is a list of years that can have added functionality

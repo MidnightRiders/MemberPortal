@@ -9,12 +9,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/MidnightRiders/MemberPortal/server/internal/auth"
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/generated"
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 	"github.com/MidnightRiders/MemberPortal/server/internal/users"
+	"github.com/sirupsen/logrus"
 )
 
 func (r *mutationResolver) LogIn(ctx context.Context, username string, password string) (*model.Session, error) {
@@ -30,24 +29,25 @@ func (r *mutationResolver) LogIn(ctx context.Context, username string, password 
 
 func (r *mutationResolver) LogOut(ctx context.Context) (bool, error) {
 	result := auth.LogOut(ctx, r.DB, r.Env)
-	if result == false {
-		return false, errors.New("An error was encountered while logging out")
+	if !result {
+		return false, errors.New("an error was encountered while logging out")
 	}
 	return true, nil
 }
 
 func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) (*model.User, error) {
 	ulid, err := users.Create(ctx, r.DB, users.CreateProps{
-		Username:  username,
-		Password:  password,
-		Email:     email,
-		FirstName: firstName,
-		LastName:  lastName,
-		Address1:  address1,
-		Address2:  address2,
-		City:      city,
-		Province:  province,
-		Country:   country,
+		Username:   username,
+		Password:   password,
+		Email:      email,
+		FirstName:  firstName,
+		LastName:   lastName,
+		Address1:   address1,
+		Address2:   address2,
+		City:       city,
+		PostalCode: postalCode,
+		Province:   province,
+		Country:    country,
 	})
 	if err != nil {
 		return nil, err
@@ -56,11 +56,11 @@ func (r *mutationResolver) CreateUser(ctx context.Context, username string, emai
 	return r.Query().User(ctx, ulid)
 }
 
-func (r *mutationResolver) CreateRevGuess(ctx context.Context, userULID string, matchULID string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error) {
+func (r *mutationResolver) CreateRevGuess(ctx context.Context, userUlid string, matchUlid string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userULID string, matchULID string, firstPickULID string, secondPickULID *string, thirdPickULID *string) (*model.ManOfTheMatchVote, error) {
+func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userUlid string, matchUlid string, firstPickUlid string, secondPickUlid *string, thirdPickUlid *string) (*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
@@ -92,14 +92,14 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	return usrs, nil
 }
 
-func (r *queryResolver) Membership(ctx context.Context, ulid *string, userULID *string, year *int) (*model.Membership, error) {
+func (r *queryResolver) Membership(ctx context.Context, ulid *string, userUlid *string, year *int) (*model.Membership, error) {
 	m := model.Membership{}
 	query := r.DB.WithContext(ctx)
 	if ulid != nil {
 		query = query.Where("ulid = ?", *ulid)
 	}
-	if userULID != nil {
-		query = query.Where("user_ulid = ?", *userULID)
+	if userUlid != nil {
+		query = query.Where("user_ulid = ?", *userUlid)
 	}
 	if year != nil {
 		query = query.Where("year = ?", *year)
@@ -112,12 +112,12 @@ func (r *queryResolver) Membership(ctx context.Context, ulid *string, userULID *
 	return &m, nil
 }
 
-func (r *queryResolver) Memberships(ctx context.Context, userULID *string, year *int) ([]*model.Membership, error) {
+func (r *queryResolver) Memberships(ctx context.Context, userUlid *string, year *int) ([]*model.Membership, error) {
 	var memberships []*model.Membership
 
 	query := r.DB.WithContext(ctx)
-	if userULID != nil {
-		query = query.Where("user_ulid = ?", *userULID)
+	if userUlid != nil {
+		query = query.Where("user_ulid = ?", *userUlid)
 	}
 	if year != nil {
 		query = query.Where("year = ?", *year)
@@ -146,19 +146,19 @@ func (r *queryResolver) Matches(ctx context.Context, before *time.Time, after *t
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) RevGuess(ctx context.Context, userULID string, matchULID string) (*model.RevGuess, error) {
+func (r *queryResolver) RevGuess(ctx context.Context, userUlid string, matchUlid string) (*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) RevGuesses(ctx context.Context, matchID *string) ([]*model.RevGuess, error) {
+func (r *queryResolver) RevGuesses(ctx context.Context, matchUlid *string) ([]*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) ManOfTheMatchVote(ctx context.Context, userULID string, matchULID string) (*model.ManOfTheMatchVote, error) {
+func (r *queryResolver) ManOfTheMatchVote(ctx context.Context, userUlid string, matchUlid string) (*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
-func (r *queryResolver) ManOfTheMatchVotes(ctx context.Context, matchID *string) ([]*model.ManOfTheMatchVote, error) {
+func (r *queryResolver) ManOfTheMatchVotes(ctx context.Context, matchUlid *string) ([]*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 

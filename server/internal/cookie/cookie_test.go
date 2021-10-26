@@ -2,6 +2,7 @@ package cookie_test
 
 import (
 	"bytes"
+	"context"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -77,10 +78,12 @@ func TestMiddleware(t *testing.T) {
 				test.Parallel()
 
 				w := httptest.NewRecorder()
-				r, _ := http.NewRequest("GET", "/", bytes.NewReader([]byte("")))
+				r, _ := http.NewRequestWithContext(context.Background(), "GET", "/", bytes.NewReader([]byte("")))
 				cookie.Middleware(testCase.handler).ServeHTTP(w, r)
+				res := w.Result()
+				defer res.Body.Close()
 
-				testhelpers.AssertEqualCookies(test, testCase.expectedCookies, w.Result().Cookies())
+				testhelpers.AssertEqualCookies(test, testCase.expectedCookies, res.Cookies())
 			})
 		}
 	})
