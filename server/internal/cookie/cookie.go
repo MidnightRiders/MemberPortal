@@ -14,11 +14,12 @@ var contextKey ctxKey = "cookies"
 // Middleware allows for setting cookies in
 func Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		cookies := []http.Cookie{}
+		var cookies []http.Cookie
 		next.ServeHTTP(w, r.WithContext(AddToContext(r.Context(), &cookies)))
 
 		for _, ck := range cookies {
-			http.SetCookie(w, &ck)
+			cookie := ck
+			http.SetCookie(w, &cookie)
 		}
 	})
 }

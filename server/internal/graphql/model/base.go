@@ -12,7 +12,7 @@ import (
 
 // Base is the core GORM model that all GORM entities should embed.
 type Base struct {
-	ULID      string `gorm:"column:ulid;size:32;primarykey"`
+	ULID      string `json:"ulid" gorm:"column:ulid;size:32;primarykey"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`

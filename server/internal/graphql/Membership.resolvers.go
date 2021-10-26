@@ -7,10 +7,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/sirupsen/logrus"
-
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/generated"
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
+	"github.com/sirupsen/logrus"
 )
 
 func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {

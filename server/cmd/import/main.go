@@ -47,8 +47,10 @@ func main() {
 		if err != nil {
 			log.Fatalf(`Could not open %s/%s.json: %v`, dir, table, err)
 		}
-		defer f.Close()
 		body, _ := ioutil.ReadAll(f)
+		if err := f.Close(); err != nil {
+			log.Println("error closing file:", err.Error())
+		}
 		var val []map[string]interface{}
 		if err := json.Unmarshal(body, &val); err != nil {
 			log.Fatalf(`Could not unmarshal JSON from %s/%s.json: %v`, dir, table, err)
@@ -70,7 +72,19 @@ func main() {
 
 	query := `
 		INSERT INTO
-			users (username, first_name, last_name, email, address1, city, province, postal_code, country, membership_number, ulid)
+			users (
+				username,
+				first_name,
+				last_name,
+				email,
+				address1,
+				city,
+				province,
+				postal_code,
+				country,
+				membership_number,
+				ulid
+			)
 			VALUES ( $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11 )
 	`
 	stmt, err := tx.Prepare(query)
@@ -81,7 +95,16 @@ func main() {
 	generator := ulid.NewGenerator()
 	for _, user := range oldTables["users"] {
 		args := make([]interface{}, 11)
-		for i, field := range []string{"username", "first_name", "last_name", "email", "address", "province", "postal_code", "country"} {
+		for i, field := range []string{
+			"username",
+			"first_name",
+			"last_name",
+			"email",
+			"address",
+			"province",
+			"postal_code",
+			"country",
+		} {
 			v, ok := user[field].(string)
 			if ok {
 				args[i] = strings.Trim(v, " \n\t")

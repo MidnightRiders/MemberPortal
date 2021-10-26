@@ -1,3 +1,5 @@
+// Package auth provides helpers for authenticating and
+// confirming capabilities of authenticated users
 package auth
 
 import (

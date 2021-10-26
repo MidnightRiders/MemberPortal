@@ -1,3 +1,4 @@
+// Package graphql provides GraphQL types
 //go:generate go run github.com/99designs/gqlgen
 package graphql
 

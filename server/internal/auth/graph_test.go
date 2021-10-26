@@ -20,7 +20,7 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/internal/testhelpers"
 )
 
-func createLogInSetup(ctx context.Context, prepareDB func(sqlmock.Sqlmock), p auth.LogInPayload, e env.Env) logInSetup {
+func createLogInSetup(ctx context.Context, prepareDB func(sqlmock.Sqlmock), p auth.LogInPayload) logInSetup {
 	db, mock, err := sqlmock.New()
 	if err != nil {
 		panic(err)
@@ -40,7 +40,7 @@ func createLogInSetup(ctx context.Context, prepareDB func(sqlmock.Sqlmock), p au
 		ctx: cookie.AddToContext(ctx, &cookies),
 		db:  gdb,
 		p:   p,
-		e:   e,
+		e:   env.Prod,
 
 		cookies:    &cookies,
 		expectMock: expectMock,
@@ -56,6 +56,8 @@ type logInSetup struct {
 	cookies    *[]http.Cookie
 	expectMock func() error
 }
+
+const fakePepper = "fake-pepper"
 
 func TestLogIn(t *testing.T) {
 	now := time.Date(2020, 7, 29, 8, 29, 0, 0, time.Local)
@@ -81,7 +83,7 @@ func TestLogIn(t *testing.T) {
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
 				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnError(sql.ErrNoRows)
-			}, auth.LogInPayload{"foo", "bar"}, env.Prod),
+			}, auth.LogInPayload{"foo", "bar"}),
 
 			want:    nil,
 			wantErr: "Invalid username or password",
@@ -91,14 +93,16 @@ func TestLogIn(t *testing.T) {
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
 				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
-				pepper := "fake-pepper"
+				pepper := fakePepper
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
-				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
+				rows.AddRow(
+					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false,
+				)
 				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
-			}, auth.LogInPayload{"foo", "wrong-password"}, env.Prod),
+			}, auth.LogInPayload{Username: "foo", Password: "wrong-password"}),
 
 			want:    nil,
 			wantErr: "Invalid username or password",
@@ -108,19 +112,22 @@ func TestLogIn(t *testing.T) {
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
 				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
-				pepper := "fake-pepper"
+				pepper := fakePepper
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
-				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
+				rows.AddRow(
+					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false,
+				)
 				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
 					time.Date(2020, 8, 5, 8, 29, 0, 0, time.Local),
 				).WillReturnError(errors.New("couldn't create session"))
-			}, auth.LogInPayload{"foo", "bad-password"}, env.Prod),
+				mock.ExpectRollback()
+			}, auth.LogInPayload{Username: "foo", Password: "bad-password"}),
 
 			want:    nil,
 			wantErr: "Unexpected error creating new session",
@@ -130,19 +137,22 @@ func TestLogIn(t *testing.T) {
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
 				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
-				pepper := "fake-pepper"
+				pepper := fakePepper
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
-				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false)
+				rows.AddRow(
+					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false,
+				)
 				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
 					expires,
 				).WillReturnResult(sqlmock.NewResult(0, 1))
-			}, auth.LogInPayload{"foo", "bad-password"}, env.Prod),
+				mock.ExpectCommit()
+			}, auth.LogInPayload{Username: "foo", Password: "bad-password"}),
 
 			want: &auth.Session{
 				ULID:     stubbedULID,
@@ -167,19 +177,22 @@ func TestLogIn(t *testing.T) {
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
 				rows := sqlmock.NewRows([]string{"ulid", "password_digest", "pepper", "membership_ulid", "is_admin"})
-				pepper := "fake-pepper"
+				pepper := fakePepper
 				hashed, err := bcrypt.GenerateFromPassword([]byte("bad-password"+salt+pepper), bcrypt.DefaultCost)
 				if err != nil {
 					panic(err)
 				}
-				rows.AddRow("360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", true)
+				rows.AddRow(
+					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", true,
+				)
 				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
 					expires,
 				).WillReturnResult(sqlmock.NewResult(0, 1))
-			}, auth.LogInPayload{"foo", "bad-password"}, env.Prod),
+				mock.ExpectCommit()
+			}, auth.LogInPayload{Username: "foo", Password: "bad-password"}),
 
 			want: &auth.Session{
 				Expires:  expires,
@@ -352,8 +365,9 @@ func TestLogOut(t *testing.T) {
 				got := auth.LogOut(testCase.setup.ctx, testCase.setup.db, testCase.setup.e)
 
 				assert.NoError(test, testCase.setup.expectMock())
-				gotCookies := []*http.Cookie{}
-				for _, ck := range *testCase.setup.cookies {
+				var gotCookies []*http.Cookie
+				for _, c := range *testCase.setup.cookies {
+					ck := c
 					gotCookies = append(gotCookies, &ck)
 				}
 				testhelpers.AssertEqualCookies(test, testCase.wantCookies, gotCookies)

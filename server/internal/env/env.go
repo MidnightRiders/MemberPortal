@@ -1,3 +1,4 @@
+// Package env just provides enums for the environment
 package env
 
 import "strings"

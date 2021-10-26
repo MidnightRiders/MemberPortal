@@ -38,33 +38,16 @@ type LogInPayload struct {
 func LogIn(ctx context.Context, db *gorm.DB, p LogInPayload, e env.Env) (*Session, error) {
 	u := model.User{}
 	if result := db.WithContext(ctx).Joins(
-		"Membership", db.Where("year in ?", memberships.CurrentMembershipYears()),
+		"Memberships", db.Where("year in ?", memberships.CurrentMembershipYears()),
+	).Joins(
+		"Admins",
 	).First(
 		&u, "username = ?", p.Username,
 	); result.Error != nil {
 		logrus.WithContext(ctx).WithError(result.Error).Warn("could not find user for LogIn")
 		return nil, errors.New("invalid username or password")
 	}
-	isAdmin := len(u.Memberships) > 0
-	//row := pg.QueryRowContext(
-	//	ctx,
-	//	"SELECT u.ulid, u.password_digest, u.pepper, m.ulid as membership_ulid, a.ulid IS NOT NULL as is_admin "+
-	//		"FROM users u "+
-	//		"LEFT JOIN memberships m ON m.arrival_ulid = a.ulid "+
-	//		fmt.Sprintf("AND m.year IN (%s) ", memberships.CurrentMembershipYears().ToString())+
-	//		"LEFT JOIN admins a "+
-	//		"ON a.user_ulid = u.ulid "+
-	//		"WHERE u.username = ?",
-	//	p.Username,
-	//)
-	//var userULID, passwordDigest, pepper, membershipULID string
-	//err := row.Scan(&userULID, &passwordDigest, &pepper, &membershipULID, &isAdmin)
-	//if err != nil {
-	//	if err != sql.ErrNoRows {
-	//		logrus.WithError(err).Error("Error looking up user for login")
-	//	}
-	//	return nil, errors.New("Invalid username or password")
-	//}
+	isAdmin := len(u.Admins) > 0
 
 	salt := os.Getenv("PASSWORD_SALT")
 	seasoned := []byte(p.Password + salt + u.Pepper)
@@ -73,7 +56,7 @@ func LogIn(ctx context.Context, db *gorm.DB, p LogInPayload, e env.Env) (*Sessio
 		if err != bcrypt.ErrMismatchedHashAndPassword {
 			logrus.WithError(err).Error("Error comparing hashed passwords")
 		}
-		return nil, errors.New("Invalid username or password")
+		return nil, errors.New("invalid username or password")
 	}
 
 	expires := stubbables.TimeNow().Add(7 * 24 * time.Hour)

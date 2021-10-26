@@ -131,7 +131,7 @@ func TestCreate(t *testing.T) {
 	now := time.Date(2020, 7, 29, 8, 29, 0, 0, time.UTC)
 	tnteardown := testhelpers.StubTimeNow(&now)
 	defer tnteardown()
-	ulid := "01fj8qvkerzz0zxym43tkea8ag"
+	ulid := "01FJ8QVKERZZ0ZXYM43TKEA8AG"
 	uvteardown := testhelpers.StubULIDGenerator(ulid)
 	defer uvteardown()
 	pepper := "xxxxxxxxxxxxxxxxxxxxxxx"
@@ -190,12 +190,14 @@ func TestCreate(t *testing.T) {
 				Province:   "MA",
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec("INSERT INTO users").WithArgs(
+				mock.ExpectBegin()
+				mock.ExpectExec(`INSERT INTO "users"`).WithArgs(
 					ulid,
+					sqlmock.AnyArg(),
+					sqlmock.AnyArg(),
+					nil,
 					"ttwellman",
 					"test@test.com",
-					sqlmock.AnyArg(),
-					pepper,
 					"Taylor",
 					"Twellman",
 					"123 Test Ln",
@@ -204,42 +206,12 @@ func TestCreate(t *testing.T) {
 					"MA",
 					"02101",
 					"United States",
+					false,
+					0,
+					sqlmock.AnyArg(),
+					pepper,
 				).WillReturnError(errors.New("couldn't do it"))
-			}),
-
-			want:    "",
-			wantErr: "There was an unexpected error creating the user",
-		},
-		{
-			it: "returns nil and error if it zero rows were affected",
-
-			setup: createSetup(context.Background(), users.CreateProps{
-				Address1:   "123 Test Ln",
-				City:       "Boston",
-				Country:    "United States",
-				Email:      "test@test.com",
-				FirstName:  "Taylor",
-				LastName:   "Twellman",
-				Password:   "b1cycle-kickin",
-				PostalCode: "02101",
-				Province:   "MA",
-				Username:   "ttwellman",
-			}, func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec("INSERT INTO users").WithArgs(
-					ulid,
-					"ttwellman",
-					"test@test.com",
-					sqlmock.AnyArg(),
-					pepper,
-					"Taylor",
-					"Twellman",
-					"123 Test Ln",
-					nil,
-					"Boston",
-					"MA",
-					"02101",
-					"United States",
-				).WillReturnResult(sqlmock.NewResult(0, 0))
+				mock.ExpectRollback()
 			}),
 
 			want:    "",
@@ -260,12 +232,14 @@ func TestCreate(t *testing.T) {
 				Province:   "MA",
 				Username:   "ttwellman",
 			}, func(mock sqlmock.Sqlmock) {
-				mock.ExpectExec("INSERT INTO users").WithArgs(
+				mock.ExpectBegin()
+				mock.ExpectExec(`INSERT INTO "users"`).WithArgs(
 					ulid,
+					sqlmock.AnyArg(),
+					sqlmock.AnyArg(),
+					nil,
 					"ttwellman",
 					"test@test.com",
-					sqlmock.AnyArg(),
-					pepper,
 					"Taylor",
 					"Twellman",
 					"123 Test Ln",
@@ -274,7 +248,12 @@ func TestCreate(t *testing.T) {
 					"MA",
 					"02101",
 					"United States",
+					false,
+					0,
+					sqlmock.AnyArg(),
+					pepper,
 				).WillReturnResult(sqlmock.NewResult(1, 1))
+				mock.ExpectCommit()
 			}),
 
 			want:    ulid,
