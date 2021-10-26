@@ -7,7 +7,6 @@ import (
 
 	gql "github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/handler/extension"
 	"github.com/99designs/gqlgen/graphql/playground"
 	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/sirupsen/logrus"
@@ -67,7 +66,7 @@ func main() {
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(cfg))
 	// srv.Use(extension.FixedComplexityLimit(5))
 	srv.AroundOperations(func(ctx context.Context, next gql.OperationHandler) gql.ResponseHandler {
-		if !auth.FromContext(ctx).IsAdmin {
+		if e == env.Prod && !auth.FromContext(ctx).IsAdmin {
 			gql.GetOperationContext(ctx).DisableIntrospection = true
 		}
 
@@ -75,7 +74,6 @@ func main() {
 	})
 
 	if e != env.Prod {
-		srv.Use(extension.Introspection{})
 		http.Handle("/playground", playground.Handler("GraphQL playground", "/"))
 		logrus.Infof("connect to http://localhost:%s/playground for GraphQL playground", port)
 	}
