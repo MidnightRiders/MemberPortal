@@ -58,7 +58,10 @@ jobs:
           at: "$CIRCLE_WORKING_DIRECTORY"
       - run:
           name: Format Java Report
-          command: ./cc-test-reporter format-coverage -t jacoco -o "codeclimate.$CIRCLE_NODE_INDEX.json"
+          command: |
+            pwd
+            ls -a .
+            ./cc-test-reporter format-coverage ./testReport.xml -t jacoco -o "codeclimate.$CIRCLE_NODE_INDEX.json"
       - run:
           name: Report Coverage
           command: ./cc-test-reporter sum-coverage --output - codeclimate.*.json | ./cc-test-reporter --debug --input -
