@@ -1,0 +1,16 @@
+version: 2.0
+jobs:
+  build:
+    docker: []
+    steps: []
+
+workflows:
+  version: 2
+
+  commit:
+    jobs:
+      - build
+      - upload-coverage:
+          requires:
+             - build
+
