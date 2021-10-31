@@ -19,6 +19,8 @@ jobs:
           name: Test
           working_directory: ./api
           command: gradle test
+      - store_test_results:
+          path: ./build/test-results/test
       - save_cache:
           paths:
             - ./api/.gradle
