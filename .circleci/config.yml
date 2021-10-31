@@ -71,7 +71,7 @@ jobs:
           command: |
             pwd
             ls -a .
-            ./cc-test-reporter format-coverage ../testReport.xml -t jacoco -o "codeclimate.$CIRCLE_NODE_INDEX.json"
+            ./cc-test-reporter format-coverage ../testReport.xml --add-prefix ../src/main/ -t jacoco -o "codeclimate.$CIRCLE_NODE_INDEX.json"
       - run:
           name: Report Coverage
           command: ./coverage/cc-test-reporter sum-coverage --output - codeclimate.*.json | ./cc-test-reporter --debug --input -
