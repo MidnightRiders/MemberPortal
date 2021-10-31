@@ -46,6 +46,7 @@ jobs:
       - run:
           name: Download CC Test Reporter
           command: |
+            mkdir -p coverage
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./coverage/cc-test-reporter
             chmod +x ./coverage/cc-test-reporter
       - run:
