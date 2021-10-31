@@ -31,7 +31,7 @@ jobs:
           name: Format Java Report
           working_directory: ./api
           command: |
-            ../cc-test-reporter format-coverage ./testReport.xml --debug -t jacoco -o ./codeclimate.$CIRCLE_NODE_INDEX.json
+            ../cc-test-reporter format-coverage ./testReport.xml --debug -p ./main/src -t jacoco -o ./codeclimate.$CIRCLE_NODE_INDEX.json
       - persist_to_workspace:
           root: .
           paths: 
