@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  server:
+    command: script/docker/server
+    environment:
+      DEBUG: "${DEBUG:-false}"
+      DATABASE_URL: postgres://postgres:password@db:5432/midnight_riders_dev
+      KTOR_DEV: 'true'
+    image: gradle:7.2.0-jdk11
+    ports:
+      - '8080:8080'
+    volumes:
+      - '.:/usr/src/app'
+    working_dir: /usr/src/app
+  db:
+    image: postgres:13.4-alpine3.14
+    environment:
+      POSTGRES_DB: midnight_riders_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - '5432:5432'

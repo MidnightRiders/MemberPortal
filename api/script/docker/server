@@ -1,0 +1,12 @@
+#!/bin/bash -e
+
+gradleRun() {
+  if [ "$DEBUG" = "true" ]; then
+    JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" gradle run
+  else
+    gradle run
+  fi
+}
+
+gradle build -t & \
+  gradleRun
