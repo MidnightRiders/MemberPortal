@@ -4,9 +4,10 @@ jobs:
     docker:
       - image: gradle:7.2.0-jdk11
     steps:
+      - checkout
       - run:
           name: Lint
-          command: gradle lint
+          command: gradle detekt
       - run:
           name: Test
           command: gradle test
@@ -22,13 +23,16 @@ jobs:
 
   notify-coverage-start:
     docker:
-        - image: ubuntu:21.04
+        - image: curlimages/curl:7.79.1
     steps:
       - run:
           name: Download CC Test Reporter
           command: |
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             chmod +x ./cc-test-reporter
+      - run:
+          name: Inform CircleCI
+          command: ./cc-test-reporter before-build
       - persist_to_workspace:
           root: .
           paths: 
@@ -36,7 +40,7 @@ jobs:
   
   report-coverage:
     docker:
-      - image: ubuntu:21.04
+      - image: curlimages/curl:7.79.1
     steps:
       - run:
           name: Format Java Report
