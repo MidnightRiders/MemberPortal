@@ -27,10 +27,16 @@ jobs:
           paths:
             - ./api/.gradle
           key: gradle-repo-check-v1-{{ .Branch }}-{{ checksum "api/gradle.lockfile" }}
+      - run:
+          name: Format Java Report
+          working_directory: ./api
+          command: |
+            ../cc-test-reporter format-coverage ./testReport.xml --debug -t jacoco -o ./codeclimate.$CIRCLE_NODE_INDEX.json
       - persist_to_workspace:
-          root: ./api
+          root: .
           paths: 
-            - testReport.xml
+            - ./api/testReport.xml
+            - './api/codeclimate.*.json'
 
   # TODO
   # test-typescript:
@@ -61,18 +67,11 @@ jobs:
       - image: cimg/base:2021.10-20.04
     resource_class: small
     steps:
-      - checkout
       - attach_workspace:
           at: .
       - run:
-          name: Format Java Report
-          command: |
-            pwd
-            ls -a .
-            ./cc-test-reporter format-coverage ./testReport.xml -t jacoco -o "codeclimate.$CIRCLE_NODE_INDEX.json"
-      - run:
           name: Report Coverage
-          command: ./cc-test-reporter sum-coverage --output - codeclimate.*.json | ./cc-test-reporter --debug --input -
+          command: ./cc-test-reporter sum-coverage --output - */codeclimate.*.json | ./cc-test-reporter --debug --input -
 
 workflows:
   version: 2
