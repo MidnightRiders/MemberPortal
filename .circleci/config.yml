@@ -43,7 +43,10 @@ jobs:
   report-coverage:
     docker:
       - image: curlimages/curl:7.79.1
+    working_directory: /usr/src/reporting
     steps:
+      - attach_workspace:
+          at: /usr/src/reporting
       - run:
           name: Format Java Report
           command: ./cc-test-reporter format-coverage -t jacoco -o "codeclimate.$CIRCLE_NODE_INDEX.json"
