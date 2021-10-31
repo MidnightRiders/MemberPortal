@@ -3,6 +3,7 @@ jobs:
   test-java:
     docker:
       - image: gradle:7.2.0-jdk11
+    resource_class: small
     steps:
       - checkout
       - restore_cache:
@@ -38,6 +39,7 @@ jobs:
   notify-coverage-start:
     docker:
         - image: curlimages/curl:7.79.1
+    resource_class: small
     steps:
       - run:
           name: Download CC Test Reporter
@@ -55,6 +57,7 @@ jobs:
   report-coverage:
     docker:
       - image: curlimages/curl:7.79.1
+    resource_class: small
     steps:
       - attach_workspace:
           at: .
