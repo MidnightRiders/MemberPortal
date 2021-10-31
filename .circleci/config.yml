@@ -7,12 +7,14 @@ jobs:
       - checkout
       - run:
           name: Lint
+          working_directory: ./api
           command: gradle detekt
       - run:
           name: Test
+          working_directory: ./api
           command: gradle test
       - persist_to_workspace:
-          root: .
+          root: ./api
           paths: 
             - testReport.xml
 
