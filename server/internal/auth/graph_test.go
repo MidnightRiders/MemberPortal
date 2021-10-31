@@ -82,11 +82,11 @@ func TestLogIn(t *testing.T) {
 			it: "returns nil and error if no user found",
 
 			setup: createLogInSetup(context.Background(), func(mock sqlmock.Sqlmock) {
-				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnError(sql.ErrNoRows)
-			}, auth.LogInPayload{"foo", "bar"}),
+				mock.ExpectQuery(`SELECT "users"`).WithArgs([]int{2020}, "foo").WillReturnError(sql.ErrNoRows)
+			}, auth.LogInPayload{Username: "foo", Password: "bar"}),
 
 			want:    nil,
-			wantErr: "Invalid username or password",
+			wantErr: "invalid username or password",
 		},
 		{
 			it: "returns nil and error if password does not match",
@@ -101,11 +101,11 @@ func TestLogIn(t *testing.T) {
 				rows.AddRow(
 					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false,
 				)
-				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery(`SELECT "users"\.`).WithArgs([]int{2020}, "foo").WillReturnRows(rows)
 			}, auth.LogInPayload{Username: "foo", Password: "wrong-password"}),
 
 			want:    nil,
-			wantErr: "Invalid username or password",
+			wantErr: "invalid username or password",
 		},
 		{
 			it: "returns nil and error if new session cannot be created",
@@ -120,7 +120,7 @@ func TestLogIn(t *testing.T) {
 				rows.AddRow(
 					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false,
 				)
-				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery(`SELECT "users"\.`).WithArgs([]int{2020}, "foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
@@ -130,7 +130,7 @@ func TestLogIn(t *testing.T) {
 			}, auth.LogInPayload{Username: "foo", Password: "bad-password"}),
 
 			want:    nil,
-			wantErr: "Unexpected error creating new session",
+			wantErr: "unexpected error creating new session",
 		},
 		{
 			it: "returns Session and adds cookie to context if successful",
@@ -145,7 +145,7 @@ func TestLogIn(t *testing.T) {
 				rows.AddRow(
 					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", false,
 				)
-				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery(`SELECT "users"\.`).WithArgs([]int{2020}, "foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
@@ -185,7 +185,7 @@ func TestLogIn(t *testing.T) {
 				rows.AddRow(
 					"360cfc56-ef91-4458-811c-897eab8f7b3c", string(hashed), pepper, "041aaf72-40a9-4f32-8539-d5c4ee591f0d", true,
 				)
-				mock.ExpectQuery("SELECT u.ulid, u.password_digest").WithArgs("foo").WillReturnRows(rows)
+				mock.ExpectQuery(`SELECT "users"\.`).WithArgs([]int{2020}, "foo").WillReturnRows(rows)
 				mock.ExpectExec("INSERT INTO sessions").WithArgs(
 					sqlmock.AnyArg(),
 					"360cfc56-ef91-4458-811c-897eab8f7b3c",
