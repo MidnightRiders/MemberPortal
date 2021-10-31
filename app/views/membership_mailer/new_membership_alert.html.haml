@@ -1,9 +1,0 @@
-%p A new #{styled_link_to "#{@membership.year} #{@membership.type} Membership", user_membership_url(@user, @membership)} has been created for:
-%p.text-center
-  = styled_link_to "#{@user.first_name} #{@user.last_name} (@#{@user.username})", user_url(@user)
-  %br
-  = mail_to @user.email
-%p Actions:
-%ul
-  %li= styled_link_to 'New Memberships', transactions_url
-  %li= styled_link_to 'All Transactions', transactions_url(view: 'detailed')
