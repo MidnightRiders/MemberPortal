@@ -1,16 +1,59 @@
 version: 2.0
 jobs:
-  build:
-    docker: []
-    steps: []
+  build-java:
+    docker:
+      - image: gradle:7.2.0-jdk11
+    steps:
+      - run:
+          name: Lint
+          command: gradle lint
+      - run:
+          name: Test
+          command: gradle test
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - testReport.xml
+
+  # TODO
+  # build-typescript:
+  #   docker: []
+  #   steps: []
+
+  notify-coverage-start:
+    docker:
+        - image: ubuntu:21.04
+    steps:
+      - run:
+          name: Download CC Test Reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - cc-test-reporter
+  
+  report-coverage:
+    docker:
+      - image: ubuntu:21.04
+    steps:
+      - run:
+          name: Format Java Report
+          command: ./cc-test-reporter format-coverage -t jacoco -o "codeclimate.$CIRCLE_NODE_INDEX.json"
+      - run:
+          name: Report Coverage
+          command: ./cc-test-reporter sum-coverage --output - codeclimate.*.json | ./cc-test-reporter --debug --input -
 
 workflows:
   version: 2
 
   commit:
     jobs:
-      - build
-      - upload-coverage:
+      - notify-coverage-start
+      - build-java
+      - report-coverage:
           requires:
-             - build
+            - notify-coverage-start
+            - build-java
 

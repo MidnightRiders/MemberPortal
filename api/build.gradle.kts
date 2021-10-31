@@ -1,7 +1,9 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
+    jacoco
     java
     kotlin("jvm") version "1.5.31"
 
@@ -56,13 +58,12 @@ java {
     sourceCompatibility = JavaVersion.VERSION_11
 }
 
-tasks.compileKotlin {
+tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
         targetCompatibility = "11"
     }
 }
-
 
 detekt {
     toolVersion = Versions.detekt
@@ -93,4 +94,23 @@ tasks.register<Detekt>("detektFormat") {
         sarif.enabled = true
         html.enabled = true
     }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    finalizedBy(tasks.jacocoTestReport)
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(false)
+        xml.outputLocation.set(file("testReport.xml"))
+    }
+    dependsOn(tasks.test)
+}
+
+jacoco {
+    toolVersion = "0.8.7"
 }
