@@ -1,10 +1,16 @@
 version: 2.0
 jobs:
-  build-java:
+  test-java:
     docker:
       - image: gradle:7.2.0-jdk11
     steps:
       - checkout
+      - restore_cache:
+          keys:
+            # when lock file changes, use increasingly general patterns to restore cache
+            - gradle-repo-check-v1-{{ .Branch }}-{{ checksum "api/gradle.lockfile" }}
+            - gradle-repo-check-v1-{{ .Branch }}-
+            - gradle-repo-check-v1-
       - run:
           name: Lint
           working_directory: ./api
@@ -13,13 +19,17 @@ jobs:
           name: Test
           working_directory: ./api
           command: gradle test
+      - save_cache:
+          paths:
+            - ./api/.gradle
+          key: gradle-repo-check-v1-{{ .Branch }}-{{ checksum "api/gradle.lockfile" }}
       - persist_to_workspace:
           root: ./api
           paths: 
             - testReport.xml
 
   # TODO
-  # build-typescript:
+  # test-typescript:
   #   docker: []
   #   steps: []
 
@@ -59,9 +69,9 @@ workflows:
   commit:
     jobs:
       - notify-coverage-start
-      - build-java
+      - test-java
       - report-coverage:
           requires:
             - notify-coverage-start
-            - build-java
+            - test-java
 

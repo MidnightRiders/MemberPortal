@@ -53,6 +53,10 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:${Versions.kotlin}")
 }
 
+dependencyLocking {
+    lockAllConfigurations()
+}
+
 java {
     targetCompatibility = JavaVersion.VERSION_11
     sourceCompatibility = JavaVersion.VERSION_11
