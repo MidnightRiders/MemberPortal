@@ -57,7 +57,7 @@ jobs:
       - image: curlimages/curl:7.79.1
     steps:
       - attach_workspace:
-          at: "$CIRCLE_WORKING_DIRECTORY"
+          at: .
       - run:
           name: Format Java Report
           command: |
