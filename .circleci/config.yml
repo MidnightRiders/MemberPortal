@@ -73,7 +73,7 @@ jobs:
           at: .
       - run:
           name: Report Coverage
-          command: ./cc-test-reporter sum-coverage --output - */codeclimate.*.json | ./cc-test-reporter --debug --input -
+          command: ./cc-test-reporter sum-coverage --output - */codeclimate.*.json | ./cc-test-reporter upload-coverage --debug --input -
 
 workflows:
   version: 2
