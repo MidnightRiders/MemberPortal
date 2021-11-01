@@ -23,6 +23,7 @@ fun main() {
             }
             developmentMode = devMode
             module {
+                initDB()
                 configureRouting()
                 configureSecurity()
                 configureSerialization()

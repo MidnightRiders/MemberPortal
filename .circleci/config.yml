@@ -87,4 +87,3 @@ workflows:
       - report-coverage:
           requires:
             - test-java
-

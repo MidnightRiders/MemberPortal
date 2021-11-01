@@ -18,6 +18,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://jitpack.io") }
 }
 
 private object Versions {
@@ -28,6 +29,8 @@ private object Versions {
     const val exposed = "0.35.1"
     const val hikari = "5.0.0"
     const val postgresql = "42.2.2"
+    const val ulid = "2.0.0.0"
+    const val kodein = "7.9.0"
 
     const val detekt = "1.18.1"
     const val junit = "5.7.0"
@@ -46,6 +49,9 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
     implementation("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
     implementation("org.postgresql:postgresql:${Versions.postgresql}")
+    implementation("com.github.guepardoapps:kulid:${Versions.ulid}")
+    implementation("org.kodein.di:kodein-di-jvm:${Versions.kodein}")
+
     implementation("io.gitlab.arturbosch.detekt:detekt-formatting:${Versions.detekt}")
 
     testImplementation("org.junit.jupiter:junit-jupiter:${Versions.junit}")
