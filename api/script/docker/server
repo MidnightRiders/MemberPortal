@@ -8,5 +8,7 @@ gradleRun() {
   fi
 }
 
-gradle build -t & \
-  gradleRun
+gradle clean jar
+
+gradleRun &
+  gradle jar -t

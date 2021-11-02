@@ -4,7 +4,7 @@ services:
     command: script/docker/server
     environment:
       DEBUG: "${DEBUG:-false}"
-      DATABASE_URL: postgres://postgres:password@db:5432/midnight_riders_dev
+      DATABASE_URL: postgresql://postgres:password@db:5432/midnight_riders_dev
       KTOR_DEV: 'true'
     image: gradle:7.2.0-jdk11
     ports:
@@ -20,4 +20,7 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - '5432:5432'
-
+    volumes:
+      - 'data:/var/lib/postgresql/data'
+volumes:
+  data:

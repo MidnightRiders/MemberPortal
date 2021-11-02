@@ -1,0 +1,14 @@
+#!/bin/bash
+
+cd "$(dirname "$0")/.." || exit 1
+
+docker-compose up -d db
+
+sleep 5
+
+docker-compose up
+ec="$?"
+
+docker-compose down
+
+exit "$ec"
