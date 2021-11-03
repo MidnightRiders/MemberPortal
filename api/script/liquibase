@@ -1,0 +1,17 @@
+#!/bin/bash -e
+
+cd "$(dirname "$0")/../"
+
+script/setup
+
+args=( "$@" )
+if [ "${#args}" -lt 1 ]; then
+  args=(tasks --group liquibase)
+fi
+
+docker-compose run --rm start_db
+
+docker-compose run \
+  --rm \
+  server \
+  gradle "${@}"

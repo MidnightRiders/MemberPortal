@@ -2,9 +2,9 @@
 
 cd "$(dirname "$0")/.." || exit 1
 
-docker-compose up -d db
+script/setup
 
-sleep 5
+docker-compose run --rm start_db
 
 docker-compose up
 ec="$?"

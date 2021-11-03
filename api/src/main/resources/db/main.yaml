@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: changelogs/202111022254-add-users.yaml
+      relativeToChangelogFile: true

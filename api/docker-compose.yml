@@ -8,7 +8,7 @@ services:
       KTOR_DEV: 'true'
     image: gradle:7.2.0-jdk11
     ports:
-      - '8080:8080'
+      - '5991:8080'
     volumes:
       - '.:/usr/src/app'
     working_dir: /usr/src/app
@@ -19,8 +19,14 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
-      - '5432:5432'
+      - '5993:5432'
     volumes:
       - 'data:/var/lib/postgresql/data'
+  start_db:
+    image: dadarek/wait-for-dependencies
+    depends_on:
+      - db
+    command: db:5432
+
 volumes:
   data:

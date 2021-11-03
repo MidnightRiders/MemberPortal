@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: 202111022254
+      remarks: Add Users table
+      author: bensaufley
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: ulid
+                  type: varchar(26)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: username
+                  type: varchar(64 BYTE)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password_digest
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
