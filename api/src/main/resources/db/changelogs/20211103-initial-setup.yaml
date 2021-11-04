@@ -1,0 +1,81 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20211103 Initial Setup
+      remarks: Adding initial models
+      author: '@bensaufley'
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: varchar(26)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: member_id
+                  type: integer
+                  constraints:
+                    autoIncrement: true
+                    nullable: false
+                    unique: true
+              - column:
+                  name: email
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: username
+                  type: varchar(64 BYTE)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password_digest
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(255)
+              - column:
+                  name: last_name
+                  type: varchar(255)
+              - column:
+                  name: address
+                  type: varchar(255)
+              - column:
+                  name: city
+                  type: varchar(255)
+              - column:
+                  name: state
+                  type: varchar(255)
+              - column:
+                  name: postal_code
+                  type: varchar(255)
+              - column:
+                  name: country
+                  type: varchar(255)
+              - column:
+                  name: phone
+                  type: integer
+              - column:
+                  name: member_since
+                  type: integer
+              - column:
+                  name: stripe_customer_token
+                  type: varchar(255)
+              - column:
+                  name: created_at
+                  type: datetime
+                  constraints:
+                    defaultValueComputed: CURRENT_TIMESTAMP
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: datetime
+                  constraints:
+                    defaultValueComputed: CURRENT_TIMESTAMP
+                    nullable: false

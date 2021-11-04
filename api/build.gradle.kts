@@ -52,6 +52,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:${Versions.exposed}")
     implementation("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
     implementation("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
+    implementation("org.jetbrains.exposed:exposed-java-time:${Versions.exposed}")
     implementation("org.kodein.di:kodein-di-jvm:${Versions.kodein}")
     implementation("org.postgresql:postgresql:${Versions.postgresql}")
 

@@ -1,4 +1,4 @@
 databaseChangeLog:
   - include:
-      file: changelogs/202111022254-add-users.yaml
+      file: changelogs/20211103-initial-setup.yaml
       relativeToChangelogFile: true
