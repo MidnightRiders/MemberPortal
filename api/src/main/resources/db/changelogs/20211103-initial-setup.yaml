@@ -4,6 +4,8 @@ databaseChangeLog:
       remarks: Adding initial models
       author: '@bensaufley'
       changes:
+        - include:
+            file:
         - createTable:
             tableName: users
             columns:
@@ -70,12 +72,12 @@ databaseChangeLog:
               - column:
                   name: created_at
                   type: datetime
+                  defaultValueComputed: 'NOW()'
                   constraints:
-                    defaultValueComputed: CURRENT_TIMESTAMP
                     nullable: false
               - column:
                   name: updated_at
                   type: datetime
+                  defaultValueComputed: 'NOW()'
                   constraints:
-                    defaultValueComputed: CURRENT_TIMESTAMP
                     nullable: false

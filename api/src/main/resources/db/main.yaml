@@ -2,3 +2,9 @@ databaseChangeLog:
   - include:
       file: changelogs/20211103-initial-setup.yaml
       relativeToChangelogFile: true
+  - include:
+      file: changelogs/20211103-function-update-timestamp.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changelogs/20211103-trigger-users-updated-at.sql
+      relativeToChangelogFile: true
