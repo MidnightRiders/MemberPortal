@@ -2,13 +2,13 @@
 
 gradleRun() {
   if [ "$DEBUG" = "true" ]; then
-    JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" gradle run
+    JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005" gradle run -t
   else
-    gradle run
+    gradle run -t
   fi
 }
 
-gradle clean jar
+gradle jar
 
 gradleRun &
   gradle jar -t

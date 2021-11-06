@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 20211103 Initial Setup
+      id: 20211103 Add Users
       remarks: Adding initial models
       author: '@bensaufley'
       changes:
@@ -35,11 +35,6 @@ databaseChangeLog:
                     nullable: false
                     unique: true
               - column:
-                  name: password_digest
-                  type: varchar(255)
-                  constraints:
-                    nullable: false
-              - column:
                   name: first_name
                   type: varchar(255)
               - column:
@@ -66,9 +61,21 @@ databaseChangeLog:
               - column:
                   name: member_since
                   type: integer
+
               - column:
                   name: stripe_customer_token
                   type: varchar(255)
+              - column:
+                  name: password_pepper
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password_digest
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
               - column:
                   name: created_at
                   type: datetime

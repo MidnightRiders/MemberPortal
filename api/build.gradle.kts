@@ -6,6 +6,7 @@ plugins {
     jacoco
     java
     kotlin("jvm") version "1.5.31"
+    war
 
     id("io.gitlab.arturbosch.detekt") version "1.18.1"
     id("org.liquibase.gradle") version "2.0.4"
@@ -29,6 +30,8 @@ private object Versions {
 
     const val exposed = "0.35.1"
     const val hikari = "5.0.0"
+    const val jbcrypt = "0.4"
+    const val kgraphql = "0.17.14"
     const val kodein = "7.9.0"
     const val liquibase = "4.4.3"
     const val postgresql = "42.2.2"
@@ -40,6 +43,8 @@ private object Versions {
 }
 
 dependencies {
+    implementation("com.apurebase:kgraphql:${Versions.kgraphql}")
+    implementation("com.apurebase:kgraphql-ktor:${Versions.kgraphql}")
     implementation("ch.qos.logback:logback-classic:${Versions.logback}")
     implementation("com.github.guepardoapps:kulid:${Versions.ulid}")
     implementation("com.zaxxer:HikariCP:${Versions.hikari}")
@@ -53,7 +58,9 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
     implementation("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
     implementation("org.jetbrains.exposed:exposed-java-time:${Versions.exposed}")
+    implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:${Versions.kodein}")
     implementation("org.kodein.di:kodein-di-jvm:${Versions.kodein}")
+    implementation("org.mindrot:jbcrypt:${Versions.jbcrypt}")
     implementation("org.postgresql:postgresql:${Versions.postgresql}")
 
     // Liquibase
@@ -91,7 +98,7 @@ liquibase {
             val defaultPort = 5432
             val dbUrl = System.getenv("DATABASE_URL") ?: "postgresql://username:password@localhost:5432/database"
             val jdbcUrlRegex = Regex(
-                "^(?<protocol>postgresql://)?(?:(?<username>.+?):(?<password>.+?)@)?(?<host>.+?)"+
+                "^(?:postgres(?:ql)?://)?(?:(?<username>.+?):(?<password>.+?)@)?(?<host>.+?)"+
                     "(?::(?<port>[0-9]+))?/(?<dbname>.*?)(?:\\?(?<query>.+))?$",
             )
             val groups = jdbcUrlRegex.matchEntire(dbUrl)!!.groups
@@ -99,7 +106,7 @@ liquibase {
             val host = groups["host"]!!.value
             val password = groups["password"]!!.value
             val port = groups["port"]?.value?.toInt() ?: defaultPort
-            val protocol = groups["protocol"]?.value ?: "postgresql://"
+            val protocol = "postgresql://"
             val query = groups["query"]?.value ?: ""
             val username = groups["username"]!!.value
 

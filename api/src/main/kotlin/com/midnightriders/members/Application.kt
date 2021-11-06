@@ -1,5 +1,7 @@
 package com.midnightriders.members
 
+import com.midnightriders.members.plugins.configureDI
+import com.midnightriders.members.plugins.configureGraphQL
 import com.midnightriders.members.plugins.configureRouting
 import com.midnightriders.members.plugins.configureSecurity
 import com.midnightriders.members.plugins.configureSerialization
@@ -24,6 +26,8 @@ fun main() {
             developmentMode = devMode
             module {
                 initDB()
+                configureDI()
+                configureGraphQL()
                 configureRouting()
                 configureSecurity()
                 configureSerialization()

@@ -7,7 +7,6 @@ internal class DBConfig(
     val host: String
     val password: String
     val port: Int
-    val protocol: String
     val query: String
     val username: String
 
@@ -20,14 +19,13 @@ internal class DBConfig(
         host = jdbcParts["host"]!!.value
         password = jdbcParts["password"]!!.value
         port = jdbcParts["port"]?.value?.toInt() ?: defaultPort
-        protocol = jdbcParts["protocol"]?.value ?: "postgresql://"
         query = jdbcParts["query"]?.value ?: ""
         username = jdbcParts["username"]!!.value
     }
 
     val jdbcUrl: String
         get() {
-            return "jdbc:$protocol$host:$port/$dbname?$query"
+            return "jdbc:postgresql://$host:$port/$dbname?$query"
         }
 
     override fun toString(): String {
@@ -36,7 +34,6 @@ internal class DBConfig(
             "host" to host,
             "password" to password.replace(Regex("."), "x"),
             "port" to port,
-            "protocol" to protocol,
             "query" to query,
             "username" to username,
         ).toString()
@@ -46,7 +43,7 @@ internal class DBConfig(
         private const val defaultPort = 5432
 
         private val jdbcUrlRegex = Regex(
-            "^(?<protocol>postgresql://)?(?:(?<username>.+?):(?<password>.+?)@)?(?<host>.+?)"+
+            "^(?:postgres(?:ql)?://)?(?:(?<username>.+?):(?<password>.+?)@)?(?<host>.+?)"+
                 "(?::(?<port>[0-9]+))?/(?<dbname>.*?)(?:\\?(?<query>.+))?$",
         )
     }

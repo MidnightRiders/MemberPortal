@@ -6,6 +6,7 @@ services:
       DEBUG: "${DEBUG:-false}"
       DATABASE_URL: postgresql://postgres:password@db:5432/midnight_riders_dev
       KTOR_DEV: 'true'
+      PASSWORD_SALT: some-kind-of-dev-salt
     image: gradle:7.2.0-jdk11
     ports:
       - '5991:8080'

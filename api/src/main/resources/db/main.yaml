@@ -1,6 +1,6 @@
 databaseChangeLog:
   - include:
-      file: changelogs/20211103-initial-setup.yaml
+      file: changelogs/20211103-add-users.yaml
       relativeToChangelogFile: true
   - include:
       file: changelogs/20211103-function-update-timestamp.sql
