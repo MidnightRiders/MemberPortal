@@ -1,0 +1,22 @@
+#!/bin/bash -e
+
+cd "$(dirname "$0")/../"
+
+jar=( build/libs/midnight-riders-member-portal*-all.jar )
+
+if [ -z "$SKIP_BUILD" ] && [ "$1" != "-f" ]; then
+  script/build
+  jar=( build/libs/midnight-riders-member-portal*-all.jar )
+elif [ "${#jar}" -lt 1 ]; then
+  echo -e '\e[33mWarning:\e[0m no jar was found. Running build even though you have specified skip with SKIP_BUILD or -f'
+  script/build
+  jar=( build/libs/midnight-riders-member-portal*-all.jar )
+
+  if [ "${#jar}" -lt 1 ]; then
+    echo -e '\e31mError:\e[0m no jar found after build. Cannot deploy.' >&2
+    exit 1
+  fi
+fi
+
+# TODO: enable staging/prod deploys. For now, only staging supported by this application
+heroku deploy:jar "${jar[0]}" --jdk 11 --app riders-member-portal-staging
