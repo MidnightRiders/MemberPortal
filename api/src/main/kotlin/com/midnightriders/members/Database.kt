@@ -1,6 +1,5 @@
 package com.midnightriders.members
 
-import com.midnightriders.members.config.DBConfig
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.application.Application
@@ -16,11 +15,9 @@ private val logger = LoggerFactory.getLogger("Application.initDB")
 
 fun Application.initDB() {
     val hikariConfig = HikariConfig().also {
-        val cfg = DBConfig(environment.config.property("hikari.jdbcUrl").getString())
-        logger.debug("jdbc parts: {}", cfg)
-        it.jdbcUrl = cfg.jdbcUrl
-        it.username = cfg.username
-        it.password = cfg.password
+        it.jdbcUrl = System.getenv("JDBC_DATABASE_URL")
+        it.username = System.getenv("JDBC_DATABASE_USERNAME")
+        it.password = System.getenv("JDBC_DATABASE_PASSWORD")
     }
     val hikariDataSource = HikariDataSource(hikariConfig)
     val ra = CompositeResourceAccessor(FileSystemResourceAccessor(), ClassLoaderResourceAccessor())
@@ -31,5 +28,5 @@ fun Application.initDB() {
     )
     lqb.update("main")
     Database.connect(hikariDataSource)
-    LoggerFactory.getLogger(Application::class.simpleName).info("Initialized Database")
+    logger.info("Initialized Database")
 }

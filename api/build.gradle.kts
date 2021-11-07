@@ -92,31 +92,12 @@ java {
 liquibase {
     activities {
         create("main") {
-            // This mostly duplicates com.midnightriders.members.config.DBConfig, but
-            // I can't find a way to import that or reuse that across Gradle and here,
-            // despite no extra dependencies or imports—it's a pure Kotlin class.
-            @Suppress("MagicNumber")
-            val defaultPort = 5432
-            val dbUrl = System.getenv("DATABASE_URL") ?: "postgresql://username:password@localhost:5432/database"
-            val jdbcUrlRegex = Regex(
-                "^(?:postgres(?:ql)?://)?(?:(?<username>.+?):(?<password>.+?)@)?(?<host>.+?)"+
-                    "(?::(?<port>[0-9]+))?/(?<dbname>.*?)(?:\\?(?<query>.+))?$",
-            )
-            val groups = jdbcUrlRegex.matchEntire(dbUrl)!!.groups
-            val dbname = groups["dbname"]!!.value
-            val host = groups["host"]!!.value
-            val password = groups["password"]!!.value
-            val port = groups["port"]?.value?.toInt() ?: defaultPort
-            val protocol = "postgresql://"
-            val query = groups["query"]?.value ?: ""
-            val username = groups["username"]!!.value
-
             arguments = mapOf(
                 "logLevel" to "debug",
                 "changeLogFile" to "src/main/resources/db/main.yaml",
-                "url" to "jdbc:$protocol$host:$port/$dbname?$query",
-                "username" to username,
-                "password" to password
+                "url" to System.getenv("JDBC_DATABASE_URL"),
+                "username" to System.getenv("JDBC_DATABASE_USERNAME"),
+                "password" to System.getenv("JDBC_DATABASE_PASSWORD"),
             )
         }
     }
