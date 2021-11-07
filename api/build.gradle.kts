@@ -1,4 +1,5 @@
 import io.gitlab.arturbosch.detekt.Detekt
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -6,9 +7,9 @@ plugins {
     jacoco
     java
     kotlin("jvm") version "1.5.31"
-    war
 
     id("io.gitlab.arturbosch.detekt") version "1.18.1"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
     id("org.liquibase.gradle") version "2.0.4"
 }
 
@@ -125,6 +126,12 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
         targetCompatibility = "11"
+    }
+}
+
+tasks.withType<ShadowJar> {
+    manifest {
+        attributes("Main-Class" to "com.midnightriders.members.ApplicationKt")
     }
 }
 
