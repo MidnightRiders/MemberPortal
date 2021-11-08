@@ -48,15 +48,15 @@ internal class UserService {
     }
 }
 
-private const val PEPPER_LENGTH = 128
+private const val PEPPER_LENGTH_BYTES = 16 // 128 bits
 
 private val secureRandom = SecureRandom()
 
 private fun hashPass(password: String, salt: String): Pair<String, String> {
-    val bts = ByteArray(124)
+    val bts = ByteArray(PEPPER_LENGTH_BYTES)
     secureRandom.nextBytes(bts)
     val pepper = bts.toString()
-    val digest = BCrypt.hashpw(password+salt+pepper, BCrypt.gensalt())
+    val digest = BCrypt.hashpw(password + salt + pepper, BCrypt.gensalt())
     return pepper to digest
 }
 

@@ -4,7 +4,9 @@ services:
     command: script/docker/server
     environment:
       DEBUG: "${DEBUG:-false}"
-      DATABASE_URL: postgresql://postgres:password@db:5432/midnight_riders_dev
+      JDBC_DATABASE_URL: jdbc:postgresql://db:5432/midnight_riders_dev?username=postgres&password=password
+      JDBC_USERNAME: postgres
+      JDBC_PASSWORD: password
       KTOR_DEV: 'true'
       PASSWORD_SALT: some-kind-of-dev-salt
     image: gradle:7.2.0-jdk11
