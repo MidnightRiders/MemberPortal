@@ -1,11 +1,11 @@
 #
 # This file configures the New Relic Agent.  New Relic monitors Ruby, Java,
-# .NET, PHP, Python and Node applications with deep visibility and low
+# .NET, PHP, Python, Node, and Go applications with deep visibility and low
 # overhead.  For more information, visit www.newrelic.com.
 #
-# Generated June 29, 2017
+# Generated November 24, 2021
 #
-# This configuration file is custom generated for app22806799@heroku.com_1
+# This configuration file is custom generated for NewRelic Administration
 #
 # For full documentation of agent configuration options, please refer to
 # https://docs.newrelic.com/docs/agents/ruby-agent/installation-configuration/ruby-agent-configuration
@@ -16,7 +16,10 @@ common: &default_settings
 
   # Your application name. Renaming here affects where data displays in New
   # Relic.  For more details, see https://docs.newrelic.com/docs/apm/new-relic-apm/maintenance/renaming-applications
-  app_name: Midnight Riders Member Portal
+  app_name: Midnight Riders Rails Member Portal
+
+  distributed_tracing:
+    enabled: true
 
   # To disable the agent regardless of other settings, uncomment the following:
   # agent_enabled: false
@@ -30,7 +33,7 @@ common: &default_settings
 # If your application has other named environments, configure them here.
 development:
   <<: *default_settings
-  app_name: Midnight Riders Member Portal (Development)
+  app_name: Midnight Riders Rails Member Portal (Development)
 
 test:
   <<: *default_settings
@@ -39,7 +42,7 @@ test:
 
 staging:
   <<: *default_settings
-  app_name: Midnight Riders Member Portal (Staging)
+  app_name: Midnight Riders Rails Member Portal (Staging)
 
 production:
   <<: *default_settings
