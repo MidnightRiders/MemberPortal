@@ -44,9 +44,9 @@ private object Versions {
 }
 
 dependencies {
-    implementation("com.apurebase:kgraphql:${Versions.kgraphql}")
-    implementation("com.apurebase:kgraphql-ktor:${Versions.kgraphql}")
     implementation("ch.qos.logback:logback-classic:${Versions.logback}")
+    implementation("com.apurebase:kgraphql-ktor:${Versions.kgraphql}")
+    implementation("com.apurebase:kgraphql:${Versions.kgraphql}")
     implementation("com.github.guepardoapps:kulid:${Versions.ulid}")
     implementation("com.zaxxer:HikariCP:${Versions.hikari}")
     implementation("io.ktor:ktor-auth-jwt:${Versions.ktor}")
@@ -57,8 +57,8 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:${Versions.ktor}")
     implementation("org.jetbrains.exposed:exposed-core:${Versions.exposed}")
     implementation("org.jetbrains.exposed:exposed-dao:${Versions.exposed}")
-    implementation("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
     implementation("org.jetbrains.exposed:exposed-java-time:${Versions.exposed}")
+    implementation("org.jetbrains.exposed:exposed-jdbc:${Versions.exposed}")
     implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:${Versions.kodein}")
     implementation("org.kodein.di:kodein-di-jvm:${Versions.kodein}")
     implementation("org.mindrot:jbcrypt:${Versions.jbcrypt}")
