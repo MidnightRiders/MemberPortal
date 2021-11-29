@@ -1,0 +1,6 @@
+[submodule "vendor/rbs/gem_rbs_collection"]
+	path = vendor/rbs/gem_rbs_collection
+	url = https://github.com/ruby/gem_rbs_collection.git
+[submodule "sig/vendor/gem_rbs_collection"]
+	path = sig/vendor/gem_rbs_collection
+	url = https://github.com/ruby/gem_rbs_collection.git

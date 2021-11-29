@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     transient do
       with_membership true
@@ -22,7 +22,7 @@ FactoryGirl.define do
     end
 
     after :create do |u, evaluator|
-      FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample) if evaluator.with_membership
+      FactoryBot.create(:membership, user_id: u.id, type: %w(Individual Family).sample) if evaluator.with_membership
     end
 
     trait :admin do

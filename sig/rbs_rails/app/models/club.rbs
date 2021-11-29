@@ -1,0 +1,268 @@
+class Club < ActiveRecord::Base
+  extend _ActiveRecord_Relation_ClassMethods[Club, ActiveRecord_Relation, Integer]
+
+  attr_accessor id(): Integer
+  def id_changed?: () -> bool
+  def id_change: () -> [ Integer?, Integer? ]
+  def id_will_change!: () -> void
+  def id_was: () -> Integer?
+  def id_previously_changed?: () -> bool
+  def id_previous_change: () -> Array[Integer?]?
+  def id_previously_was: () -> Integer?
+  def id_before_last_save: () -> Integer?
+  def id_change_to_be_saved: () -> Array[Integer?]?
+  def id_in_database: () -> Integer?
+  def saved_change_to_id: () -> Array[Integer?]?
+  def saved_change_to_id?: () -> bool
+  def will_save_change_to_id?: () -> bool
+  def restore_id!: () -> void
+  def clear_id_change: () -> void
+
+  attr_accessor name(): String?
+  def name_changed?: () -> bool
+  def name_change: () -> [ String?, String? ]
+  def name_will_change!: () -> void
+  def name_was: () -> String?
+  def name_previously_changed?: () -> bool
+  def name_previous_change: () -> Array[String?]?
+  def name_previously_was: () -> String?
+  def name_before_last_save: () -> String?
+  def name_change_to_be_saved: () -> Array[String?]?
+  def name_in_database: () -> String?
+  def saved_change_to_name: () -> Array[String?]?
+  def saved_change_to_name?: () -> bool
+  def will_save_change_to_name?: () -> bool
+  def restore_name!: () -> void
+  def clear_name_change: () -> void
+
+  attr_accessor conference(): String?
+  def conference_changed?: () -> bool
+  def conference_change: () -> [ String?, String? ]
+  def conference_will_change!: () -> void
+  def conference_was: () -> String?
+  def conference_previously_changed?: () -> bool
+  def conference_previous_change: () -> Array[String?]?
+  def conference_previously_was: () -> String?
+  def conference_before_last_save: () -> String?
+  def conference_change_to_be_saved: () -> Array[String?]?
+  def conference_in_database: () -> String?
+  def saved_change_to_conference: () -> Array[String?]?
+  def saved_change_to_conference?: () -> bool
+  def will_save_change_to_conference?: () -> bool
+  def restore_conference!: () -> void
+  def clear_conference_change: () -> void
+
+  attr_accessor primary_color(): Integer?
+  def primary_color_changed?: () -> bool
+  def primary_color_change: () -> [ Integer?, Integer? ]
+  def primary_color_will_change!: () -> void
+  def primary_color_was: () -> Integer?
+  def primary_color_previously_changed?: () -> bool
+  def primary_color_previous_change: () -> Array[Integer?]?
+  def primary_color_previously_was: () -> Integer?
+  def primary_color_before_last_save: () -> Integer?
+  def primary_color_change_to_be_saved: () -> Array[Integer?]?
+  def primary_color_in_database: () -> Integer?
+  def saved_change_to_primary_color: () -> Array[Integer?]?
+  def saved_change_to_primary_color?: () -> bool
+  def will_save_change_to_primary_color?: () -> bool
+  def restore_primary_color!: () -> void
+  def clear_primary_color_change: () -> void
+
+  attr_accessor secondary_color(): Integer?
+  def secondary_color_changed?: () -> bool
+  def secondary_color_change: () -> [ Integer?, Integer? ]
+  def secondary_color_will_change!: () -> void
+  def secondary_color_was: () -> Integer?
+  def secondary_color_previously_changed?: () -> bool
+  def secondary_color_previous_change: () -> Array[Integer?]?
+  def secondary_color_previously_was: () -> Integer?
+  def secondary_color_before_last_save: () -> Integer?
+  def secondary_color_change_to_be_saved: () -> Array[Integer?]?
+  def secondary_color_in_database: () -> Integer?
+  def saved_change_to_secondary_color: () -> Array[Integer?]?
+  def saved_change_to_secondary_color?: () -> bool
+  def will_save_change_to_secondary_color?: () -> bool
+  def restore_secondary_color!: () -> void
+  def clear_secondary_color_change: () -> void
+
+  attr_accessor accent_color(): Integer?
+  def accent_color_changed?: () -> bool
+  def accent_color_change: () -> [ Integer?, Integer? ]
+  def accent_color_will_change!: () -> void
+  def accent_color_was: () -> Integer?
+  def accent_color_previously_changed?: () -> bool
+  def accent_color_previous_change: () -> Array[Integer?]?
+  def accent_color_previously_was: () -> Integer?
+  def accent_color_before_last_save: () -> Integer?
+  def accent_color_change_to_be_saved: () -> Array[Integer?]?
+  def accent_color_in_database: () -> Integer?
+  def saved_change_to_accent_color: () -> Array[Integer?]?
+  def saved_change_to_accent_color?: () -> bool
+  def will_save_change_to_accent_color?: () -> bool
+  def restore_accent_color!: () -> void
+  def clear_accent_color_change: () -> void
+
+  attr_accessor abbrv(): String?
+  def abbrv_changed?: () -> bool
+  def abbrv_change: () -> [ String?, String? ]
+  def abbrv_will_change!: () -> void
+  def abbrv_was: () -> String?
+  def abbrv_previously_changed?: () -> bool
+  def abbrv_previous_change: () -> Array[String?]?
+  def abbrv_previously_was: () -> String?
+  def abbrv_before_last_save: () -> String?
+  def abbrv_change_to_be_saved: () -> Array[String?]?
+  def abbrv_in_database: () -> String?
+  def saved_change_to_abbrv: () -> Array[String?]?
+  def saved_change_to_abbrv?: () -> bool
+  def will_save_change_to_abbrv?: () -> bool
+  def restore_abbrv!: () -> void
+  def clear_abbrv_change: () -> void
+
+  attr_accessor created_at(): ActiveSupport::TimeWithZone?
+  def created_at_changed?: () -> bool
+  def created_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def created_at_will_change!: () -> void
+  def created_at_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_previously_changed?: () -> bool
+  def created_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def created_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_created_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_created_at?: () -> bool
+  def will_save_change_to_created_at?: () -> bool
+  def restore_created_at!: () -> void
+  def clear_created_at_change: () -> void
+
+  attr_accessor updated_at(): ActiveSupport::TimeWithZone?
+  def updated_at_changed?: () -> bool
+  def updated_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def updated_at_will_change!: () -> void
+  def updated_at_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_previously_changed?: () -> bool
+  def updated_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def updated_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_updated_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_updated_at?: () -> bool
+  def will_save_change_to_updated_at?: () -> bool
+  def restore_updated_at!: () -> void
+  def clear_updated_at_change: () -> void
+
+  attr_accessor crest_file_name(): String?
+  def crest_file_name_changed?: () -> bool
+  def crest_file_name_change: () -> [ String?, String? ]
+  def crest_file_name_will_change!: () -> void
+  def crest_file_name_was: () -> String?
+  def crest_file_name_previously_changed?: () -> bool
+  def crest_file_name_previous_change: () -> Array[String?]?
+  def crest_file_name_previously_was: () -> String?
+  def crest_file_name_before_last_save: () -> String?
+  def crest_file_name_change_to_be_saved: () -> Array[String?]?
+  def crest_file_name_in_database: () -> String?
+  def saved_change_to_crest_file_name: () -> Array[String?]?
+  def saved_change_to_crest_file_name?: () -> bool
+  def will_save_change_to_crest_file_name?: () -> bool
+  def restore_crest_file_name!: () -> void
+  def clear_crest_file_name_change: () -> void
+
+  attr_accessor crest_content_type(): String?
+  def crest_content_type_changed?: () -> bool
+  def crest_content_type_change: () -> [ String?, String? ]
+  def crest_content_type_will_change!: () -> void
+  def crest_content_type_was: () -> String?
+  def crest_content_type_previously_changed?: () -> bool
+  def crest_content_type_previous_change: () -> Array[String?]?
+  def crest_content_type_previously_was: () -> String?
+  def crest_content_type_before_last_save: () -> String?
+  def crest_content_type_change_to_be_saved: () -> Array[String?]?
+  def crest_content_type_in_database: () -> String?
+  def saved_change_to_crest_content_type: () -> Array[String?]?
+  def saved_change_to_crest_content_type?: () -> bool
+  def will_save_change_to_crest_content_type?: () -> bool
+  def restore_crest_content_type!: () -> void
+  def clear_crest_content_type_change: () -> void
+
+  attr_accessor crest_file_size(): Integer?
+  def crest_file_size_changed?: () -> bool
+  def crest_file_size_change: () -> [ Integer?, Integer? ]
+  def crest_file_size_will_change!: () -> void
+  def crest_file_size_was: () -> Integer?
+  def crest_file_size_previously_changed?: () -> bool
+  def crest_file_size_previous_change: () -> Array[Integer?]?
+  def crest_file_size_previously_was: () -> Integer?
+  def crest_file_size_before_last_save: () -> Integer?
+  def crest_file_size_change_to_be_saved: () -> Array[Integer?]?
+  def crest_file_size_in_database: () -> Integer?
+  def saved_change_to_crest_file_size: () -> Array[Integer?]?
+  def saved_change_to_crest_file_size?: () -> bool
+  def will_save_change_to_crest_file_size?: () -> bool
+  def restore_crest_file_size!: () -> void
+  def clear_crest_file_size_change: () -> void
+
+  attr_accessor crest_updated_at(): ActiveSupport::TimeWithZone?
+  def crest_updated_at_changed?: () -> bool
+  def crest_updated_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def crest_updated_at_will_change!: () -> void
+  def crest_updated_at_was: () -> ActiveSupport::TimeWithZone?
+  def crest_updated_at_previously_changed?: () -> bool
+  def crest_updated_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def crest_updated_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def crest_updated_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def crest_updated_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def crest_updated_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_crest_updated_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_crest_updated_at?: () -> bool
+  def will_save_change_to_crest_updated_at?: () -> bool
+  def restore_crest_updated_at!: () -> void
+  def clear_crest_updated_at_change: () -> void
+
+  attr_accessor api_id(): Integer
+  def api_id_changed?: () -> bool
+  def api_id_change: () -> [ Integer?, Integer? ]
+  def api_id_will_change!: () -> void
+  def api_id_was: () -> Integer?
+  def api_id_previously_changed?: () -> bool
+  def api_id_previous_change: () -> Array[Integer?]?
+  def api_id_previously_was: () -> Integer?
+  def api_id_before_last_save: () -> Integer?
+  def api_id_change_to_be_saved: () -> Array[Integer?]?
+  def api_id_in_database: () -> Integer?
+  def saved_change_to_api_id: () -> Array[Integer?]?
+  def saved_change_to_api_id?: () -> bool
+  def will_save_change_to_api_id?: () -> bool
+  def restore_api_id!: () -> void
+  def clear_api_id_change: () -> void
+
+  def home_matches: () -> Match::ActiveRecord_Associations_CollectionProxy
+  def home_matches=: (Match::ActiveRecord_Associations_CollectionProxy | Array[Match]) -> (Match::ActiveRecord_Associations_CollectionProxy | Array[Match])
+  def home_match_ids: () -> Array[Integer]
+  def home_match_ids=: (Array[Integer]) -> Array[Integer]
+  def away_matches: () -> Match::ActiveRecord_Associations_CollectionProxy
+  def away_matches=: (Match::ActiveRecord_Associations_CollectionProxy | Array[Match]) -> (Match::ActiveRecord_Associations_CollectionProxy | Array[Match])
+  def away_match_ids: () -> Array[Integer]
+  def away_match_ids=: (Array[Integer]) -> Array[Integer]
+  def players: () -> Player::ActiveRecord_Associations_CollectionProxy
+  def players=: (Player::ActiveRecord_Associations_CollectionProxy | Array[Player]) -> (Player::ActiveRecord_Associations_CollectionProxy | Array[Player])
+  def player_ids: () -> Array[Integer]
+  def player_ids=: (Array[Integer]) -> Array[Integer]
+
+  module GeneratedRelationMethods
+  end
+
+  class ActiveRecord_Relation < ActiveRecord::Relation
+    include GeneratedRelationMethods
+    include _ActiveRecord_Relation[Club, Integer]
+    include Enumerable[Club]
+  end
+
+  class ActiveRecord_Associations_CollectionProxy < ActiveRecord::Associations::CollectionProxy
+    include GeneratedRelationMethods
+    include _ActiveRecord_Relation[Club, Integer]
+  end
+end

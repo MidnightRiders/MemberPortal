@@ -1,0 +1,242 @@
+class Match < ActiveRecord::Base
+  extend _ActiveRecord_Relation_ClassMethods[Match, ActiveRecord_Relation, Integer]
+
+  attr_accessor id(): Integer
+  def id_changed?: () -> bool
+  def id_change: () -> [ Integer?, Integer? ]
+  def id_will_change!: () -> void
+  def id_was: () -> Integer?
+  def id_previously_changed?: () -> bool
+  def id_previous_change: () -> Array[Integer?]?
+  def id_previously_was: () -> Integer?
+  def id_before_last_save: () -> Integer?
+  def id_change_to_be_saved: () -> Array[Integer?]?
+  def id_in_database: () -> Integer?
+  def saved_change_to_id: () -> Array[Integer?]?
+  def saved_change_to_id?: () -> bool
+  def will_save_change_to_id?: () -> bool
+  def restore_id!: () -> void
+  def clear_id_change: () -> void
+
+  attr_accessor home_team_id(): Integer?
+  def home_team_id_changed?: () -> bool
+  def home_team_id_change: () -> [ Integer?, Integer? ]
+  def home_team_id_will_change!: () -> void
+  def home_team_id_was: () -> Integer?
+  def home_team_id_previously_changed?: () -> bool
+  def home_team_id_previous_change: () -> Array[Integer?]?
+  def home_team_id_previously_was: () -> Integer?
+  def home_team_id_before_last_save: () -> Integer?
+  def home_team_id_change_to_be_saved: () -> Array[Integer?]?
+  def home_team_id_in_database: () -> Integer?
+  def saved_change_to_home_team_id: () -> Array[Integer?]?
+  def saved_change_to_home_team_id?: () -> bool
+  def will_save_change_to_home_team_id?: () -> bool
+  def restore_home_team_id!: () -> void
+  def clear_home_team_id_change: () -> void
+
+  attr_accessor away_team_id(): Integer?
+  def away_team_id_changed?: () -> bool
+  def away_team_id_change: () -> [ Integer?, Integer? ]
+  def away_team_id_will_change!: () -> void
+  def away_team_id_was: () -> Integer?
+  def away_team_id_previously_changed?: () -> bool
+  def away_team_id_previous_change: () -> Array[Integer?]?
+  def away_team_id_previously_was: () -> Integer?
+  def away_team_id_before_last_save: () -> Integer?
+  def away_team_id_change_to_be_saved: () -> Array[Integer?]?
+  def away_team_id_in_database: () -> Integer?
+  def saved_change_to_away_team_id: () -> Array[Integer?]?
+  def saved_change_to_away_team_id?: () -> bool
+  def will_save_change_to_away_team_id?: () -> bool
+  def restore_away_team_id!: () -> void
+  def clear_away_team_id_change: () -> void
+
+  attr_accessor kickoff(): ActiveSupport::TimeWithZone?
+  def kickoff_changed?: () -> bool
+  def kickoff_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def kickoff_will_change!: () -> void
+  def kickoff_was: () -> ActiveSupport::TimeWithZone?
+  def kickoff_previously_changed?: () -> bool
+  def kickoff_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def kickoff_previously_was: () -> ActiveSupport::TimeWithZone?
+  def kickoff_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def kickoff_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def kickoff_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_kickoff: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_kickoff?: () -> bool
+  def will_save_change_to_kickoff?: () -> bool
+  def restore_kickoff!: () -> void
+  def clear_kickoff_change: () -> void
+
+  attr_accessor location(): String?
+  def location_changed?: () -> bool
+  def location_change: () -> [ String?, String? ]
+  def location_will_change!: () -> void
+  def location_was: () -> String?
+  def location_previously_changed?: () -> bool
+  def location_previous_change: () -> Array[String?]?
+  def location_previously_was: () -> String?
+  def location_before_last_save: () -> String?
+  def location_change_to_be_saved: () -> Array[String?]?
+  def location_in_database: () -> String?
+  def saved_change_to_location: () -> Array[String?]?
+  def saved_change_to_location?: () -> bool
+  def will_save_change_to_location?: () -> bool
+  def restore_location!: () -> void
+  def clear_location_change: () -> void
+
+  attr_accessor home_goals(): Integer?
+  def home_goals_changed?: () -> bool
+  def home_goals_change: () -> [ Integer?, Integer? ]
+  def home_goals_will_change!: () -> void
+  def home_goals_was: () -> Integer?
+  def home_goals_previously_changed?: () -> bool
+  def home_goals_previous_change: () -> Array[Integer?]?
+  def home_goals_previously_was: () -> Integer?
+  def home_goals_before_last_save: () -> Integer?
+  def home_goals_change_to_be_saved: () -> Array[Integer?]?
+  def home_goals_in_database: () -> Integer?
+  def saved_change_to_home_goals: () -> Array[Integer?]?
+  def saved_change_to_home_goals?: () -> bool
+  def will_save_change_to_home_goals?: () -> bool
+  def restore_home_goals!: () -> void
+  def clear_home_goals_change: () -> void
+
+  attr_accessor away_goals(): Integer?
+  def away_goals_changed?: () -> bool
+  def away_goals_change: () -> [ Integer?, Integer? ]
+  def away_goals_will_change!: () -> void
+  def away_goals_was: () -> Integer?
+  def away_goals_previously_changed?: () -> bool
+  def away_goals_previous_change: () -> Array[Integer?]?
+  def away_goals_previously_was: () -> Integer?
+  def away_goals_before_last_save: () -> Integer?
+  def away_goals_change_to_be_saved: () -> Array[Integer?]?
+  def away_goals_in_database: () -> Integer?
+  def saved_change_to_away_goals: () -> Array[Integer?]?
+  def saved_change_to_away_goals?: () -> bool
+  def will_save_change_to_away_goals?: () -> bool
+  def restore_away_goals!: () -> void
+  def clear_away_goals_change: () -> void
+
+  attr_accessor created_at(): ActiveSupport::TimeWithZone?
+  def created_at_changed?: () -> bool
+  def created_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def created_at_will_change!: () -> void
+  def created_at_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_previously_changed?: () -> bool
+  def created_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def created_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_created_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_created_at?: () -> bool
+  def will_save_change_to_created_at?: () -> bool
+  def restore_created_at!: () -> void
+  def clear_created_at_change: () -> void
+
+  attr_accessor updated_at(): ActiveSupport::TimeWithZone?
+  def updated_at_changed?: () -> bool
+  def updated_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def updated_at_will_change!: () -> void
+  def updated_at_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_previously_changed?: () -> bool
+  def updated_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def updated_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_updated_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_updated_at?: () -> bool
+  def will_save_change_to_updated_at?: () -> bool
+  def restore_updated_at!: () -> void
+  def clear_updated_at_change: () -> void
+
+  attr_accessor uid(): String?
+  def uid_changed?: () -> bool
+  def uid_change: () -> [ String?, String? ]
+  def uid_will_change!: () -> void
+  def uid_was: () -> String?
+  def uid_previously_changed?: () -> bool
+  def uid_previous_change: () -> Array[String?]?
+  def uid_previously_was: () -> String?
+  def uid_before_last_save: () -> String?
+  def uid_change_to_be_saved: () -> Array[String?]?
+  def uid_in_database: () -> String?
+  def saved_change_to_uid: () -> Array[String?]?
+  def saved_change_to_uid?: () -> bool
+  def will_save_change_to_uid?: () -> bool
+  def restore_uid!: () -> void
+  def clear_uid_change: () -> void
+
+  attr_accessor season(): Integer?
+  def season_changed?: () -> bool
+  def season_change: () -> [ Integer?, Integer? ]
+  def season_will_change!: () -> void
+  def season_was: () -> Integer?
+  def season_previously_changed?: () -> bool
+  def season_previous_change: () -> Array[Integer?]?
+  def season_previously_was: () -> Integer?
+  def season_before_last_save: () -> Integer?
+  def season_change_to_be_saved: () -> Array[Integer?]?
+  def season_in_database: () -> Integer?
+  def saved_change_to_season: () -> Array[Integer?]?
+  def saved_change_to_season?: () -> bool
+  def will_save_change_to_season?: () -> bool
+  def restore_season!: () -> void
+  def clear_season_change: () -> void
+
+  def mot_ms: () -> MotM::ActiveRecord_Associations_CollectionProxy
+  def mot_ms=: (MotM::ActiveRecord_Associations_CollectionProxy | Array[MotM]) -> (MotM::ActiveRecord_Associations_CollectionProxy | Array[MotM])
+  def mot_m_ids: () -> Array[Integer]
+  def mot_m_ids=: (Array[Integer]) -> Array[Integer]
+  def rev_guesses: () -> RevGuess::ActiveRecord_Associations_CollectionProxy
+  def rev_guesses=: (RevGuess::ActiveRecord_Associations_CollectionProxy | Array[RevGuess]) -> (RevGuess::ActiveRecord_Associations_CollectionProxy | Array[RevGuess])
+  def rev_guess_ids: () -> Array[Integer]
+  def rev_guess_ids=: (Array[Integer]) -> Array[Integer]
+  def pick_ems: () -> PickEm::ActiveRecord_Associations_CollectionProxy
+  def pick_ems=: (PickEm::ActiveRecord_Associations_CollectionProxy | Array[PickEm]) -> (PickEm::ActiveRecord_Associations_CollectionProxy | Array[PickEm])
+  def pick_em_ids: () -> Array[Integer]
+  def pick_em_ids=: (Array[Integer]) -> Array[Integer]
+
+  def home_team: () -> Club
+  def home_team=: (Club?) -> Club?
+  def reload_home_team: () -> Club?
+  def build_home_team: (untyped) -> Club
+  def create_home_team: (untyped) -> Club
+  def create_home_team!: (untyped) -> Club
+  def away_team: () -> Club
+  def away_team=: (Club?) -> Club?
+  def reload_away_team: () -> Club?
+  def build_away_team: (untyped) -> Club
+  def create_away_team: (untyped) -> Club
+  def create_away_team!: (untyped) -> Club
+
+  def self.all_seasons: () -> ActiveRecord_Relation
+  def self.with_clubs: () -> ActiveRecord_Relation
+  def self.completed: () -> ActiveRecord_Relation
+  def self.upcoming: () -> ActiveRecord_Relation
+
+  module GeneratedRelationMethods
+    def all_seasons: () -> ActiveRecord_Relation
+
+    def with_clubs: () -> ActiveRecord_Relation
+
+    def completed: () -> ActiveRecord_Relation
+
+    def upcoming: () -> ActiveRecord_Relation
+  end
+
+  class ActiveRecord_Relation < ActiveRecord::Relation
+    include GeneratedRelationMethods
+    include _ActiveRecord_Relation[Match, Integer]
+    include Enumerable[Match]
+  end
+
+  class ActiveRecord_Associations_CollectionProxy < ActiveRecord::Associations::CollectionProxy
+    include GeneratedRelationMethods
+    include _ActiveRecord_Relation[Match, Integer]
+  end
+end

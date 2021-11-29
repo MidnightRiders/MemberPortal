@@ -15,6 +15,7 @@ ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'ffaker'
+require 'factory_bot_rails'
 require 'capybara/rspec'
 require 'capybara/rails'
 require 'cancan/matchers'

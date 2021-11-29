@@ -10,26 +10,26 @@ describe UsersController do
       end
 
       it 'for individual users' do
-        sign_in FactoryGirl.create(:user)
+        sign_in FactoryBot.create(:user)
         get :index
         expect(response).to redirect_to root_path
       end
 
       it 'for At Large Board users' do
-        sign_in FactoryGirl.create(:user, :at_large_board)
+        sign_in FactoryBot.create(:user, :at_large_board)
         get :index
         expect(response).to redirect_to root_path
       end
     end
     context 'authorized access' do
       it 'for admin users' do
-        sign_in FactoryGirl.create(:user, :admin)
+        sign_in FactoryBot.create(:user, :admin)
         get :index
         expect(response).to be_success
         expect(assigns(:users)).to match_array(User.all)
       end
       it 'for Executive Board users' do
-        sign_in FactoryGirl.create(:user, :executive_board)
+        sign_in FactoryBot.create(:user, :executive_board)
         get :index
         expect(response).to be_success
         expect(assigns(:users)).to match_array(User.all)
@@ -41,7 +41,7 @@ describe UsersController do
   end
 
   describe '#show' do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { FactoryBot.create :user }
     it 'will reject signed-out users' do
       get :show, id: user.to_param
       expect(response).to redirect_to root_path
@@ -55,18 +55,18 @@ describe UsersController do
   end
 
   describe '#edit' do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { FactoryBot.create :user }
     it 'rejects logged-out users' do
       get :edit, id: user
       expect(response).to redirect_to root_path
     end
     it 'rejects unauthorized users' do
-      sign_in FactoryGirl.create(:user)
+      sign_in FactoryBot.create(:user)
       get :edit, id: user
       expect(response).to redirect_to root_path
     end
     it 'allows admin users' do
-      sign_in FactoryGirl.create(:user, :admin)
+      sign_in FactoryBot.create(:user, :admin)
       get :edit, id: user
       expect(response).to be_success
     end
@@ -92,7 +92,7 @@ describe UsersController do
       end
     end
     context 'logged in as regular user' do
-      before(:each) { sign_in FactoryGirl.create(:user) }
+      before(:each) { sign_in FactoryBot.create(:user) }
       it 'redirects users' do
         post :import, file: fixture_file_upload('files/user-import.csv')
 
@@ -105,7 +105,7 @@ describe UsersController do
       end
     end
     context 'logged in as at-large board user' do
-      before(:each) { sign_in FactoryGirl.create(:user, :at_large_board) }
+      before(:each) { sign_in FactoryBot.create(:user, :at_large_board) }
       it 'redirects users' do
         post :import, file: fixture_file_upload('files/user-import.csv')
 
@@ -118,7 +118,7 @@ describe UsersController do
       end
     end
     context 'logged in as admin' do
-      before(:each) { sign_in FactoryGirl.create(:user, :admin) }
+      before(:each) { sign_in FactoryBot.create(:user, :admin) }
       it 'rejects if file missing' do
         post :import
 
@@ -137,7 +137,7 @@ describe UsersController do
       it 'doesn\'t email existing users' do
         user_file = CSV.read(Rails.root.join('spec', 'fixtures', 'files', 'user-import.csv'), headers: true, header_converters: :symbol).map(&:to_h)
         user_file.each do |u|
-          FactoryGirl.build(:user).tap { |user|
+          FactoryBot.build(:user).tap { |user|
             user.email = u[:email]
           }.save
         end

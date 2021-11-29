@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.6.6'
+ruby '3.0.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.7'
+gem 'rails'
 
 # Use postgresql as the database for Active Record
 gem 'hstore_accessor'
@@ -27,29 +27,30 @@ gem 'date_time_attribute'
 
 gem 'will_paginate'
 
-gem 'color', '~> 1.5.1'
-gem 'rmagick', '~> 4.1.0-rc2'
+gem 'color'
+gem 'rmagick'
 
-gem 'aws-sdk', '~> 2.3.0'
-gem 'paperclip', '~> 5.2.1'
+gem 'aws-sdk'
+gem 'paperclip'
 
-gem 'bigdecimal', '~> 1.3.5'
-gem 'mimemagic', '~> 0.3.9'
+gem 'mimemagic'
 
-gem 'nokogiri', '~> 1.12.5'
+gem 'nokogiri'
 
 # Users/auth
-gem 'cancancan', '~>1.10.1'
-gem 'devise', '~>4.7.1'
-gem 'paper_trail'
+gem 'cancancan'
+gem 'devise'
+# Until https://github.com/westonganger/paper_trail-association_tracking/issues/27 is fixed
+gem 'paper_trail', '< 12'
+gem 'paper_trail-association_tracking'
 
-gem 'fuzzy_match', '~> 2.1'
+gem 'fuzzy_match'
 
 # Payments
-gem 'stripe', '~> 3.9'
+gem 'stripe'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder'
 
 # Monitoring
 gem 'newrelic_rpm'
@@ -59,12 +60,16 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+# Typechecking
+gem 'rbs_rails'
+gem 'steep'
+
 group :development, :test do
   # Testing
   gem 'active_record_query_trace'
   gem 'capybara'
-  gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
-  gem 'factory_girl_rails'
+  gem 'dotenv-rails'
+  gem 'factory_bot_rails', require: false
   gem 'ffaker'
   gem 'fivemat'
   gem 'pry-nav'
@@ -81,14 +86,14 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'selenium-webdriver'
   gem 'timecop'
-  gem 'vcr', '~>3.0'
-  gem 'webmock', '~>3.5'
+  gem 'vcr'
+  gem 'webmock'
 
   gem 'simplecov', require: false
 end
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
+# gem 'bcrypt-ruby'
 
 # Use unicorn as the app server
 # gem 'unicorn'
@@ -98,4 +103,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

@@ -1,0 +1,237 @@
+class Membership < ActiveRecord::Base
+  extend _ActiveRecord_Relation_ClassMethods[Membership, ActiveRecord_Relation, Integer]
+
+  attr_accessor id(): Integer
+  def id_changed?: () -> bool
+  def id_change: () -> [ Integer?, Integer? ]
+  def id_will_change!: () -> void
+  def id_was: () -> Integer?
+  def id_previously_changed?: () -> bool
+  def id_previous_change: () -> Array[Integer?]?
+  def id_previously_was: () -> Integer?
+  def id_before_last_save: () -> Integer?
+  def id_change_to_be_saved: () -> Array[Integer?]?
+  def id_in_database: () -> Integer?
+  def saved_change_to_id: () -> Array[Integer?]?
+  def saved_change_to_id?: () -> bool
+  def will_save_change_to_id?: () -> bool
+  def restore_id!: () -> void
+  def clear_id_change: () -> void
+
+  attr_accessor user_id(): Integer?
+  def user_id_changed?: () -> bool
+  def user_id_change: () -> [ Integer?, Integer? ]
+  def user_id_will_change!: () -> void
+  def user_id_was: () -> Integer?
+  def user_id_previously_changed?: () -> bool
+  def user_id_previous_change: () -> Array[Integer?]?
+  def user_id_previously_was: () -> Integer?
+  def user_id_before_last_save: () -> Integer?
+  def user_id_change_to_be_saved: () -> Array[Integer?]?
+  def user_id_in_database: () -> Integer?
+  def saved_change_to_user_id: () -> Array[Integer?]?
+  def saved_change_to_user_id?: () -> bool
+  def will_save_change_to_user_id?: () -> bool
+  def restore_user_id!: () -> void
+  def clear_user_id_change: () -> void
+
+  attr_accessor year(): Integer?
+  def year_changed?: () -> bool
+  def year_change: () -> [ Integer?, Integer? ]
+  def year_will_change!: () -> void
+  def year_was: () -> Integer?
+  def year_previously_changed?: () -> bool
+  def year_previous_change: () -> Array[Integer?]?
+  def year_previously_was: () -> Integer?
+  def year_before_last_save: () -> Integer?
+  def year_change_to_be_saved: () -> Array[Integer?]?
+  def year_in_database: () -> Integer?
+  def saved_change_to_year: () -> Array[Integer?]?
+  def saved_change_to_year?: () -> bool
+  def will_save_change_to_year?: () -> bool
+  def restore_year!: () -> void
+  def clear_year_change: () -> void
+
+  attr_accessor info(): untyped?
+  def info_changed?: () -> bool
+  def info_change: () -> [ untyped?, untyped? ]
+  def info_will_change!: () -> void
+  def info_was: () -> untyped?
+  def info_previously_changed?: () -> bool
+  def info_previous_change: () -> Array[untyped?]?
+  def info_previously_was: () -> untyped?
+  def info_before_last_save: () -> untyped?
+  def info_change_to_be_saved: () -> Array[untyped?]?
+  def info_in_database: () -> untyped?
+  def saved_change_to_info: () -> Array[untyped?]?
+  def saved_change_to_info?: () -> bool
+  def will_save_change_to_info?: () -> bool
+  def restore_info!: () -> void
+  def clear_info_change: () -> void
+
+  attr_accessor created_at(): ActiveSupport::TimeWithZone?
+  def created_at_changed?: () -> bool
+  def created_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def created_at_will_change!: () -> void
+  def created_at_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_previously_changed?: () -> bool
+  def created_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def created_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def created_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def created_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_created_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_created_at?: () -> bool
+  def will_save_change_to_created_at?: () -> bool
+  def restore_created_at!: () -> void
+  def clear_created_at_change: () -> void
+
+  attr_accessor updated_at(): ActiveSupport::TimeWithZone?
+  def updated_at_changed?: () -> bool
+  def updated_at_change: () -> [ ActiveSupport::TimeWithZone?, ActiveSupport::TimeWithZone? ]
+  def updated_at_will_change!: () -> void
+  def updated_at_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_previously_changed?: () -> bool
+  def updated_at_previous_change: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_previously_was: () -> ActiveSupport::TimeWithZone?
+  def updated_at_before_last_save: () -> ActiveSupport::TimeWithZone?
+  def updated_at_change_to_be_saved: () -> Array[ActiveSupport::TimeWithZone?]?
+  def updated_at_in_database: () -> ActiveSupport::TimeWithZone?
+  def saved_change_to_updated_at: () -> Array[ActiveSupport::TimeWithZone?]?
+  def saved_change_to_updated_at?: () -> bool
+  def will_save_change_to_updated_at?: () -> bool
+  def restore_updated_at!: () -> void
+  def clear_updated_at_change: () -> void
+
+  attr_accessor privileges(): untyped?
+  def privileges_changed?: () -> bool
+  def privileges_change: () -> [ untyped?, untyped? ]
+  def privileges_will_change!: () -> void
+  def privileges_was: () -> untyped?
+  def privileges_previously_changed?: () -> bool
+  def privileges_previous_change: () -> Array[untyped?]?
+  def privileges_previously_was: () -> untyped?
+  def privileges_before_last_save: () -> untyped?
+  def privileges_change_to_be_saved: () -> Array[untyped?]?
+  def privileges_in_database: () -> untyped?
+  def saved_change_to_privileges: () -> Array[untyped?]?
+  def saved_change_to_privileges?: () -> bool
+  def will_save_change_to_privileges?: () -> bool
+  def restore_privileges!: () -> void
+  def clear_privileges_change: () -> void
+
+  attr_accessor type(): String?
+  def type_changed?: () -> bool
+  def type_change: () -> [ String?, String? ]
+  def type_will_change!: () -> void
+  def type_was: () -> String?
+  def type_previously_changed?: () -> bool
+  def type_previous_change: () -> Array[String?]?
+  def type_previously_was: () -> String?
+  def type_before_last_save: () -> String?
+  def type_change_to_be_saved: () -> Array[String?]?
+  def type_in_database: () -> String?
+  def saved_change_to_type: () -> Array[String?]?
+  def saved_change_to_type?: () -> bool
+  def will_save_change_to_type?: () -> bool
+  def restore_type!: () -> void
+  def clear_type_change: () -> void
+
+  attr_accessor family_id(): Integer?
+  def family_id_changed?: () -> bool
+  def family_id_change: () -> [ Integer?, Integer? ]
+  def family_id_will_change!: () -> void
+  def family_id_was: () -> Integer?
+  def family_id_previously_changed?: () -> bool
+  def family_id_previous_change: () -> Array[Integer?]?
+  def family_id_previously_was: () -> Integer?
+  def family_id_before_last_save: () -> Integer?
+  def family_id_change_to_be_saved: () -> Array[Integer?]?
+  def family_id_in_database: () -> Integer?
+  def saved_change_to_family_id: () -> Array[Integer?]?
+  def saved_change_to_family_id?: () -> bool
+  def will_save_change_to_family_id?: () -> bool
+  def restore_family_id!: () -> void
+  def clear_family_id_change: () -> void
+
+  attr_accessor refunded(): String?
+  def refunded_changed?: () -> bool
+  def refunded_change: () -> [ String?, String? ]
+  def refunded_will_change!: () -> void
+  def refunded_was: () -> String?
+  def refunded_previously_changed?: () -> bool
+  def refunded_previous_change: () -> Array[String?]?
+  def refunded_previously_was: () -> String?
+  def refunded_before_last_save: () -> String?
+  def refunded_change_to_be_saved: () -> Array[String?]?
+  def refunded_in_database: () -> String?
+  def saved_change_to_refunded: () -> Array[String?]?
+  def saved_change_to_refunded?: () -> bool
+  def will_save_change_to_refunded?: () -> bool
+  def restore_refunded!: () -> void
+  def clear_refunded_change: () -> void
+
+  attr_accessor stripe_charge_id(): String?
+  def stripe_charge_id_changed?: () -> bool
+  def stripe_charge_id_change: () -> [ String?, String? ]
+  def stripe_charge_id_will_change!: () -> void
+  def stripe_charge_id_was: () -> String?
+  def stripe_charge_id_previously_changed?: () -> bool
+  def stripe_charge_id_previous_change: () -> Array[String?]?
+  def stripe_charge_id_previously_was: () -> String?
+  def stripe_charge_id_before_last_save: () -> String?
+  def stripe_charge_id_change_to_be_saved: () -> Array[String?]?
+  def stripe_charge_id_in_database: () -> String?
+  def saved_change_to_stripe_charge_id: () -> Array[String?]?
+  def saved_change_to_stripe_charge_id?: () -> bool
+  def will_save_change_to_stripe_charge_id?: () -> bool
+  def restore_stripe_charge_id!: () -> void
+  def clear_stripe_charge_id_change: () -> void
+
+  attr_accessor stripe_subscription_id(): String?
+  def stripe_subscription_id_changed?: () -> bool
+  def stripe_subscription_id_change: () -> [ String?, String? ]
+  def stripe_subscription_id_will_change!: () -> void
+  def stripe_subscription_id_was: () -> String?
+  def stripe_subscription_id_previously_changed?: () -> bool
+  def stripe_subscription_id_previous_change: () -> Array[String?]?
+  def stripe_subscription_id_previously_was: () -> String?
+  def stripe_subscription_id_before_last_save: () -> String?
+  def stripe_subscription_id_change_to_be_saved: () -> Array[String?]?
+  def stripe_subscription_id_in_database: () -> String?
+  def saved_change_to_stripe_subscription_id: () -> Array[String?]?
+  def saved_change_to_stripe_subscription_id?: () -> bool
+  def will_save_change_to_stripe_subscription_id?: () -> bool
+  def restore_stripe_subscription_id!: () -> void
+  def clear_stripe_subscription_id_change: () -> void
+
+  def user: () -> User
+  def user=: (User?) -> User?
+  def reload_user: () -> User?
+  def build_user: (untyped) -> User
+  def create_user: (untyped) -> User
+  def create_user!: (untyped) -> User
+
+  def self.refunds: () -> ActiveRecord_Relation
+  def self.current: (?untyped year) -> ActiveRecord_Relation
+  def self.for_year: (?untyped year) -> ActiveRecord_Relation
+
+  module GeneratedRelationMethods
+    def refunds: () -> ActiveRecord_Relation
+
+    def current: (?untyped year) -> ActiveRecord_Relation
+
+    def for_year: (?untyped year) -> ActiveRecord_Relation
+  end
+
+  class ActiveRecord_Relation < ActiveRecord::Relation
+    include GeneratedRelationMethods
+    include _ActiveRecord_Relation[Membership, Integer]
+    include Enumerable[Membership]
+  end
+
+  class ActiveRecord_Associations_CollectionProxy < ActiveRecord::Associations::CollectionProxy
+    include GeneratedRelationMethods
+    include _ActiveRecord_Relation[Membership, Integer]
+  end
+end

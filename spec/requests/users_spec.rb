@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'Users' do
   describe 'GET /users/user' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     it 'rejects signed-out users' do
       get user_path(user)
       expect(response).to redirect_to(root_path)
@@ -13,12 +13,12 @@ describe 'Users' do
       expect(page).to have_content(user.address)
     end
     it 'provides full data to admins' do
-      login_as FactoryGirl.create(:user, :admin)
+      login_as FactoryBot.create(:user, :admin)
       visit user_path(user)
       expect(page).to have_content(user.address)
     end
     it 'provides partial data to other users' do
-      login_as FactoryGirl.create(:user)
+      login_as FactoryBot.create(:user)
       visit user_path(user)
       expect(page).to_not have_content(user.address)
       expect(page).to_not have_content(user.email)
@@ -26,7 +26,7 @@ describe 'Users' do
     end
   end
   describe 'GET /users/user.json' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     it 'rejects signed-out users' do
       get user_path(user, format: :json)
       expect(response).to redirect_to(root_path)
@@ -37,12 +37,12 @@ describe 'Users' do
       expect(JSON.parse(response.body)).to include('address', 'phone', 'email')
     end
     it 'provides full data to admins' do
-      login_as FactoryGirl.create(:user, :admin)
+      login_as FactoryBot.create(:user, :admin)
       get user_path(user, format: :json)
       expect(JSON.parse(response.body)).to include('address', 'phone', 'email')
     end
     it 'provides partial data to other users' do
-      login_as FactoryGirl.create(:user)
+      login_as FactoryBot.create(:user)
       get user_path(user, format: :json)
       expect(JSON.parse(response.body)).to_not include('address', 'phone', 'email')
     end
