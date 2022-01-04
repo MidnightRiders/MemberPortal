@@ -58,10 +58,14 @@
       %dt#relatives Can family members have their own logins?
       %dd
         %p
-          Not
-          %em right now.
-          We are currently developing the capability for those with Family memberships to add and administer User accounts
-          for qualifying family members. Stay tuned!
+          Yes! Once you've purchased a Family membership, you may add family members to the membership by inviting them
+          from
+          - if current_user&.current_member?
+            your #{link_to 'Membership page', user_membership_path(current_user, current_user.current_membership)}.
+          - else
+            the page that details your current membership (accessible from the Home page).
+          Your family member will create a new user, or use an existing one, and accept your invitation from their Home
+          screen.
       %dt#merchandise Do I need to sign in to buy merchandise?
       %dd
         %p
