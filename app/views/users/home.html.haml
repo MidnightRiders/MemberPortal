@@ -24,7 +24,7 @@
     .medium-6.columns.right
       = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
         = icon 'check-circle'
-        Vote for 2021’s Scarf
+        Vote for 2022’s Scarf
   = render 'board_nominations'
 
   - if current_user.current_member? && ENV['MEETING_ZOOM_LINK'].present? && (params[:show_zoom_link].present? || Time.current.between?(Time.zone.local(2021, 2, 13, 8), Time.zone.local(2021, 2, 13, 15)))
