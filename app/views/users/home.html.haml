@@ -2,7 +2,7 @@
   should_show_scarf_vote = current_user.current_member? &&
     (
       (
-        Time.current >= Time.zone.local(2022, 1, 4, 9) &&
+        Time.current >= Time.zone.local(2022, 1, 4, 12) &&
         Time.current < Time.zone.local(2022, 1, 15, 17)
        ) ||
       (current_user.privilege?('admin') && params[:show_jotform].present?)
