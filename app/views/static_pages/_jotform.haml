@@ -30,10 +30,10 @@
               .form-single-column{'data-component': 'checkbox'}
                 - scarves.shuffle.each do |(i, img)|
                   .scarf.form-radio-item
-                    %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_3_#{i}", data: { maxselection: '3', minselection: '1' }, name: 'q4_chooseUp[]', type: 'checkbox', value: "Scarf #{i + 1}" }
+                    %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_3_#{i}", data: { maxselection: '3', minselection: '1' }, name: 'q4_chooseUp[]', type: 'checkbox', value: "Scarf #{i}" }
                     %label{ for: "input_3_#{i}", id: "label_input_3_#{i}" }
-                      Scarf ##{i + 1}
-                      %img{ alt: "Midnight Riders 2022 Scarf Contest Scarf ##{i + 1}", src: img, width: 600 }
+                      Scarf ##{i}
+                      %img{ alt: "Midnight Riders 2022 Scarf Contest Scarf ##{i}", src: img, width: 600 }
           = hidden_field_tag 'q4_chooseUp'
           = hidden_field_tag 'q3_email', current_user.email
           %li#id_2.form-line{ data: { type: 'control_button' } }
