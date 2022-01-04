@@ -1,20 +1,5 @@
 :ruby
-  scarves = [
-    image_url('scarves/2022/1.jpg'),
-    image_url('scarves/2022/2.jpg'),
-    image_url('scarves/2022/3.jpg'),
-    image_url('scarves/2022/4.jpg'),
-    image_url('scarves/2022/5.jpg'),
-    image_url('scarves/2022/6.jpg'),
-    image_url('scarves/2022/7.jpg'),
-    image_url('scarves/2022/8.jpg'),
-    image_url('scarves/2022/9.jpg'),
-    image_url('scarves/2022/10.jpg'),
-    image_url('scarves/2022/11.jpg'),
-    image_url('scarves/2022/12.jpg'),
-    image_url('scarves/2022/13.jpg'),
-    image_url('scarves/2022/14.jpg'),
-  ]
+  scarves = (1..14).map { |i| [i, image_url("scarves/2022/#{i}.jpg")] }
 %script{ src: 'https://cdn.jotfor.ms/static/prototype.forms.js', type: 'text/javascript' }
 %script{ src: 'https://cdn.jotfor.ms/static/jotform.forms.js?3.3.22538', type: 'text/javascript' }
 :javascript
@@ -43,9 +28,9 @@
             %h2.text-center! Pick Up&nbsp;to THREE&nbsp;Favorite Scarf&nbsp;Designs
             #cid_5.form-input-wide.jf-required
               .form-single-column{'data-component': 'checkbox'}
-                - scarves.shuffle.each_with_index do |img, i|
+                - scarves.shuffle.each do |(i, img)|
                   .scarf.form-radio-item
-                    %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_3_#{i}", data: { maxselection: '3', minselection: '1' }, name: 'q4_chooseUp[]', type: 'checkbox', value: "Scarf ##{i + 1}" }
+                    %input.form-checkbox{ class: 'validate[required,maxselection,minselection]', id: "input_3_#{i}", data: { maxselection: '3', minselection: '1' }, name: 'q4_chooseUp[]', type: 'checkbox', value: "Scarf #{i + 1}" }
                     %label{ for: "input_3_#{i}", id: "label_input_3_#{i}" }
                       Scarf ##{i + 1}
                       %img{ alt: "Midnight Riders 2022 Scarf Contest Scarf ##{i + 1}", src: img, width: 600 }
