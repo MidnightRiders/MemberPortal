@@ -163,13 +163,13 @@ GEM
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
-    mini_portile2 (2.6.1)
+    mini_portile2 (2.8.0)
     minitest (5.14.4)
     multi_json (1.12.1)
     multipart-post (2.1.1)
     newrelic_rpm (4.2.0.334)
-    nokogiri (1.12.5)
-      mini_portile2 (~> 2.6.1)
+    nokogiri (1.13.4)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     order_query (0.3.3)
       activerecord (>= 4.0, < 6.0)
@@ -194,7 +194,7 @@ GEM
     pry-rails (0.3.4)
       pry (>= 0.9.10)
     public_suffix (4.0.6)
-    racc (1.5.2)
+    racc (1.6.0)
     rack (1.6.13)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -342,7 +342,7 @@ DEPENDENCIES
   launchy
   mimemagic (~> 0.3.9)
   newrelic_rpm
-  nokogiri (~> 1.12.5)
+  nokogiri (~> 1.13.4)
   order_query
   paper_trail
   paperclip (~> 5.2.1)
