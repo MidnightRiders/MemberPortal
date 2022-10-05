@@ -12,6 +12,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// User is the resolver for the user field.
 func (r *membershipResolver) User(ctx context.Context, obj *model.Membership) (*model.User, error) {
 	var user *model.User
 	if result := r.DB.First(user, "ulid = ?", obj.UserULID); result.Error != nil {

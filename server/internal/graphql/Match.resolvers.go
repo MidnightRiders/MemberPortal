@@ -11,6 +11,7 @@ import (
 	"github.com/MidnightRiders/MemberPortal/server/internal/graphql/model"
 )
 
+// Kickoff is the resolver for the kickoff field.
 func (r *matchResolver) Kickoff(ctx context.Context, obj *model.Match) (string, error) {
 	panic(fmt.Errorf("not implemented"))
 }

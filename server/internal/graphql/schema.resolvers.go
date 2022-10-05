@@ -16,6 +16,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// LogIn is the resolver for the logIn field.
 func (r *mutationResolver) LogIn(ctx context.Context, username string, password string) (*model.Session, error) {
 	sess, err := auth.LogIn(ctx, r.DB, auth.LogInPayload{Username: username, Password: password}, r.Env)
 	if err != nil {
@@ -27,6 +28,7 @@ func (r *mutationResolver) LogIn(ctx context.Context, username string, password 
 	}, nil
 }
 
+// LogOut is the resolver for the logOut field.
 func (r *mutationResolver) LogOut(ctx context.Context) (bool, error) {
 	result := auth.LogOut(ctx, r.DB, r.Env)
 	if !result {
@@ -35,6 +37,7 @@ func (r *mutationResolver) LogOut(ctx context.Context) (bool, error) {
 	return true, nil
 }
 
+// CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, username string, email string, firstName string, lastName string, address1 string, address2 *string, city string, password string, province string, postalCode string, country string) (*model.User, error) {
 	ulid, err := users.Create(ctx, r.DB, users.CreateProps{
 		Username:   username,
@@ -56,22 +59,27 @@ func (r *mutationResolver) CreateUser(ctx context.Context, username string, emai
 	return r.Query().User(ctx, ulid)
 }
 
+// CreateRevGuess is the resolver for the createRevGuess field.
 func (r *mutationResolver) CreateRevGuess(ctx context.Context, userUlid string, matchUlid string, homeGoals int, awayGoals int, comment *string) (*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// CreateManOfTheMatchVote is the resolver for the createManOfTheMatchVote field.
 func (r *mutationResolver) CreateManOfTheMatchVote(ctx context.Context, userUlid string, matchUlid string, firstPickUlid string, secondPickUlid *string, thirdPickUlid *string) (*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// InitiatePasswordReset is the resolver for the initiatePasswordReset field.
 func (r *mutationResolver) InitiatePasswordReset(ctx context.Context, email string) (*string, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// ResetPassword is the resolver for the resetPassword field.
 func (r *mutationResolver) ResetPassword(ctx context.Context, email string, password string, token string) (bool, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, ulid string) (*model.User, error) {
 	var u *model.User
 	if result := r.DB.WithContext(ctx).First(u, "ulid = ?", ulid); result.Error != nil {
@@ -82,6 +90,7 @@ func (r *queryResolver) User(ctx context.Context, ulid string) (*model.User, err
 	return u, nil
 }
 
+// Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	var usrs []*model.User
 
@@ -92,6 +101,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 	return usrs, nil
 }
 
+// Membership is the resolver for the membership field.
 func (r *queryResolver) Membership(ctx context.Context, ulid *string, userUlid *string, year *int) (*model.Membership, error) {
 	m := model.Membership{}
 	query := r.DB.WithContext(ctx)
@@ -112,6 +122,7 @@ func (r *queryResolver) Membership(ctx context.Context, ulid *string, userUlid *
 	return &m, nil
 }
 
+// Memberships is the resolver for the memberships field.
 func (r *queryResolver) Memberships(ctx context.Context, userUlid *string, year *int) ([]*model.Membership, error) {
 	var memberships []*model.Membership
 
@@ -130,34 +141,42 @@ func (r *queryResolver) Memberships(ctx context.Context, userUlid *string, year 
 	return memberships, nil
 }
 
+// Club is the resolver for the club field.
 func (r *queryResolver) Club(ctx context.Context, ulid string) (*model.Club, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// Clubs is the resolver for the clubs field.
 func (r *queryResolver) Clubs(ctx context.Context, conference *model.Conference) ([]*model.Club, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// Match is the resolver for the match field.
 func (r *queryResolver) Match(ctx context.Context, ulid string) (*model.Match, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// Matches is the resolver for the matches field.
 func (r *queryResolver) Matches(ctx context.Context, before *time.Time, after *time.Time, club *string) ([]*model.Match, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// RevGuess is the resolver for the revGuess field.
 func (r *queryResolver) RevGuess(ctx context.Context, userUlid string, matchUlid string) (*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// RevGuesses is the resolver for the revGuesses field.
 func (r *queryResolver) RevGuesses(ctx context.Context, matchUlid *string) ([]*model.RevGuess, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// ManOfTheMatchVote is the resolver for the manOfTheMatchVote field.
 func (r *queryResolver) ManOfTheMatchVote(ctx context.Context, userUlid string, matchUlid string) (*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
+// ManOfTheMatchVotes is the resolver for the manOfTheMatchVotes field.
 func (r *queryResolver) ManOfTheMatchVotes(ctx context.Context, matchUlid *string) ([]*model.ManOfTheMatchVote, error) {
 	panic(fmt.Errorf("not implemented"))
 }
