@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+cd "$(dirname "$0")/.."
+
+docker build -f Dev.dockerfile -t midnight-riders-browser:dev .

@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+cd "$(dirname "$0")/.."
+
+script/setup
+
+docker run --rm -it -v "$(pwd):/app" midnight-riders-browser:dev yarn test "$@"

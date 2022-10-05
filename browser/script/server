@@ -1,0 +1,18 @@
+#!/bin/sh -e
+
+cd "$(dirname "$0")/.."
+
+script/setup
+
+docker run \
+  --rm \
+  -it \
+  -v "/app/node_modules" \
+  -v "$(pwd):/app" \
+  -p 5994:3000 \
+  midnight-riders-browser:dev \
+  yarn dev
+
+ec="$?"
+docker-compose down
+exit "$ec"
