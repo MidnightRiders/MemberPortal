@@ -12,7 +12,3 @@ docker run \
   -p 5994:3000 \
   midnight-riders-browser:dev \
   yarn dev
-
-ec="$?"
-docker-compose down
-exit "$ec"
