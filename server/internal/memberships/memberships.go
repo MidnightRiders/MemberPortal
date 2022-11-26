@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/MidnightRiders/MemberPortal/server/internal/stubbables"
+	"github.com/MidnightRiders/MemberPortal/server/internal/utils"
 )
 
 // October is the last month of the regular season, so it's the last month
@@ -29,11 +30,9 @@ func CurrentMembershipYears() MembershipYears {
 
 // ToString converts the list of years, which are ints, to strings
 func (yrs MembershipYears) ToString() string {
-	y := make([]string, len(yrs))
-	for i, yr := range yrs {
-		y[i] = strconv.Itoa(yr)
-	}
-	return strings.Join(y, ", ")
+	return strings.Join(utils.Map(yrs, func(yr int, _ int) string {
+		return strconv.Itoa(yr)
+	}), ", ")
 }
 
 // NewMembershipYear returns the year for which new
