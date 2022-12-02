@@ -20,6 +20,11 @@ jobs:
       - checkout
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
+      - run:
+          name: Install Apt dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y imagemagick
       - restore_cache:
           keys:
             - rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
