@@ -18,8 +18,7 @@ jobs:
           POSTGRES_DB: mr_member_portal_test
     steps:
       - checkout
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
+      - browser-tools/install-firefox
       - run:
           name: Install Apt dependencies
           command: |
