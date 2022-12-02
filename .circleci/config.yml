@@ -24,7 +24,7 @@ jobs:
           name: Install Apt dependencies
           command: |
             sudo apt-get update
-            sudo apt-get install -y imagemagick
+            sudo apt-get install -y imagemagick libmagickwand-dev
       - restore_cache:
           keys:
             - rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
