@@ -12,7 +12,7 @@ jobs:
           PGHOST: 127.0.0.1
           PGUSER: mr-member-portal-test-user
           RAILS_ENV: test
-      - image: cimg/postgres:11.17-alpine
+      - image: cimg/postgres:11.17
         environment:
           POSTGRES_USER: mr-member-portal-test-user
           POSTGRES_DB: mr_member_portal_test
