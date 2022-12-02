@@ -1,4 +1,4 @@
-FROM ruby:2.6.6-alpine
+FROM ruby:2.7.6-alpine
 LABEL maintainer "Midnight Riders<webczar@midnightriders.com>"
 
 RUN apk update

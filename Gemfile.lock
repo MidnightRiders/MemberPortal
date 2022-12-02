@@ -1,37 +1,37 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    actionmailer (4.2.11.1)
-      actionpack (= 4.2.11.1)
-      actionview (= 4.2.11.1)
-      activejob (= 4.2.11.1)
+    actionmailer (4.2.11.3)
+      actionpack (= 4.2.11.3)
+      actionview (= 4.2.11.3)
+      activejob (= 4.2.11.3)
       mail (~> 2.5, >= 2.5.4)
       rails-dom-testing (~> 1.0, >= 1.0.5)
-    actionpack (4.2.11.1)
-      actionview (= 4.2.11.1)
-      activesupport (= 4.2.11.1)
+    actionpack (4.2.11.3)
+      actionview (= 4.2.11.3)
+      activesupport (= 4.2.11.3)
       rack (~> 1.6)
       rack-test (~> 0.6.2)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
-    actionview (4.2.11.1)
-      activesupport (= 4.2.11.1)
+    actionview (4.2.11.3)
+      activesupport (= 4.2.11.3)
       builder (~> 3.1)
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
     active_record_query_trace (1.5.4)
-    activejob (4.2.11.1)
-      activesupport (= 4.2.11.1)
+    activejob (4.2.11.3)
+      activesupport (= 4.2.11.3)
       globalid (>= 0.3.0)
-    activemodel (4.2.11.1)
-      activesupport (= 4.2.11.1)
+    activemodel (4.2.11.3)
+      activesupport (= 4.2.11.3)
       builder (~> 3.1)
-    activerecord (4.2.11.1)
-      activemodel (= 4.2.11.1)
-      activesupport (= 4.2.11.1)
+    activerecord (4.2.11.3)
+      activemodel (= 4.2.11.3)
+      activesupport (= 4.2.11.3)
       arel (~> 6.0)
-    activesupport (4.2.11.1)
+    activesupport (4.2.11.3)
       i18n (~> 0.7)
       minitest (~> 5.1)
       thread_safe (~> 0.3, >= 0.3.4)
@@ -66,15 +66,8 @@ GEM
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.1)
-    coffee-rails (4.2.1)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.2.x)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.11.1)
     color (1.5.1)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     crack (0.4.5)
       rexml
     crass (1.0.6)
@@ -117,8 +110,8 @@ GEM
       railties (>= 3.1.0)
       sass (>= 3.3.0, < 3.5)
     fuzzy_match (2.1.0)
-    globalid (0.3.7)
-      activesupport (>= 4.1.0)
+    globalid (0.4.2)
+      activesupport (>= 4.2.0)
     haml (5.2.1)
       temple (>= 0.8.0)
       tilt
@@ -151,24 +144,25 @@ GEM
     json (1.8.6)
     launchy (2.4.3)
       addressable (~> 2.3)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
-    mail (2.6.6)
-      mime-types (>= 1.16, < 4)
+    mail (2.7.1)
+      mini_mime (>= 0.1.1)
     method_source (0.8.2)
-    mime-types (3.1)
+    mime-types (3.4.1)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
+    mime-types-data (3.2022.0105)
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
+    mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    minitest (5.14.4)
+    minitest (5.16.3)
     multi_json (1.12.1)
     multipart-post (2.1.1)
     newrelic_rpm (4.2.0.334)
-    nokogiri (1.13.6)
+    nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     order_query (0.3.3)
@@ -198,16 +192,16 @@ GEM
     rack (1.6.13)
     rack-test (0.6.3)
       rack (>= 1.0)
-    rails (4.2.11.1)
-      actionmailer (= 4.2.11.1)
-      actionpack (= 4.2.11.1)
-      actionview (= 4.2.11.1)
-      activejob (= 4.2.11.1)
-      activemodel (= 4.2.11.1)
-      activerecord (= 4.2.11.1)
-      activesupport (= 4.2.11.1)
+    rails (4.2.11.3)
+      actionmailer (= 4.2.11.3)
+      actionpack (= 4.2.11.3)
+      actionview (= 4.2.11.3)
+      activejob (= 4.2.11.3)
+      activemodel (= 4.2.11.3)
+      activerecord (= 4.2.11.3)
+      activesupport (= 4.2.11.3)
       bundler (>= 1.3.0, < 2.0)
-      railties (= 4.2.11.1)
+      railties (= 4.2.11.3)
       sprockets-rails
     rails-deprecated_sanitizer (1.0.4)
       activesupport (>= 4.2.0.alpha)
@@ -217,12 +211,12 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.4.3)
       loofah (~> 2.3)
-    railties (4.2.11.1)
-      actionpack (= 4.2.11.1)
-      activesupport (= 4.2.11.1)
+    railties (4.2.11.3)
+      actionpack (= 4.2.11.3)
+      activesupport (= 4.2.11.3)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (13.0.3)
+    rake (13.0.6)
     rdoc (4.3.0)
     request_store (1.3.1)
     responders (2.4.1)
@@ -279,7 +273,7 @@ GEM
     sprockets (3.7.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.2.1)
+    sprockets-rails (3.2.2)
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
@@ -290,7 +284,7 @@ GEM
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
-    thor (1.1.0)
+    thor (1.2.1)
     thread_safe (0.3.6)
     tilt (2.0.10)
     timecop (0.8.1)
@@ -313,62 +307,61 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_record_query_trace
-  autoprefixer-rails
+  active_record_query_trace (~> 1.5)
+  autoprefixer-rails (~> 6.5)
   aws-sdk (~> 2.3.0)
   bigdecimal (~> 1.3.5)
   cancancan (~> 1.10.1)
-  capybara
-  capybara-screenshot
-  coffee-rails
+  capybara (~> 2.7)
+  capybara-screenshot (~> 1.0)
   color (~> 1.5.1)
-  database_cleaner
-  date_time_attribute
+  database_cleaner (~> 1.5)
+  date_time_attribute (~> 0.1)
   devise (~> 4.7.1)
   dotenv-rails (~> 2.1, >= 2.1.1)
-  draper
-  factory_girl_rails
-  ffaker
-  fivemat
-  font-awesome-sass
+  draper (~> 2.1)
+  factory_girl_rails (~> 4.7)
+  ffaker (~> 2.4)
+  fivemat (~> 1.3)
+  font-awesome-sass (~> 4.7)
   foundation-rails (< 6.0)
   fuzzy_match (~> 2.1)
-  haml-rails
-  hstore_accessor
-  icalendar
-  iconv
+  haml-rails (~> 1.0)
+  hstore_accessor (~> 1.0)
+  icalendar (~> 2.4)
+  iconv (~> 1.0)
   jbuilder (~> 1.2)
-  jquery-rails
-  launchy
+  jquery-rails (~> 4.2)
+  launchy (~> 2.4)
   mimemagic (~> 0.3.9)
-  newrelic_rpm
+  newrelic_rpm (~> 4.2)
   nokogiri (~> 1.13.6)
-  order_query
-  paper_trail
+  order_query (~> 0.3)
+  paper_trail (~> 5.2)
   paperclip (~> 5.2.1)
-  pg
-  pry-nav
-  pry-rails
-  rails (~> 4.2.7)
+  pg (~> 0.19)
+  pry-nav (~> 0.2)
+  pry-rails (~> 0.3)
+  rails (~> 4.2.11.3)
   rmagick (~> 4.1.0.pre.rc2)
-  rspec-rails
-  rspec_junit_formatter
-  sass
-  sass-rails
+  rspec-rails (~> 3.5)
+  rspec_junit_formatter (~> 0.4)
+  sass (~> 3.4)
+  sass-rails (~> 5.0)
   sdoc
-  selenium-webdriver
+  selenium-webdriver (~> 3.142)
   simplecov
-  spring-commands-rspec
+  spring-commands-rspec (~> 1.0)
   stripe (~> 3.9)
-  thin
-  timecop
-  uglifier
+  thin (~> 1.8)
+  timecop (~> 0.8)
+  uglifier (~> 3.0)
   vcr (~> 3.0)
   webmock (~> 3.5)
-  will_paginate
+  will_paginate (~> 3.1)
 
 RUBY VERSION
-   ruby 2.6.6p456
+   ruby 2.7.6p219
 
 BUNDLED WITH
    1.17.3

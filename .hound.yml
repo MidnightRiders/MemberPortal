@@ -1,5 +1,3 @@
-coffeescript:
-  enabled: false
 eslint:
   config_file: .eslintrc
 haml:
