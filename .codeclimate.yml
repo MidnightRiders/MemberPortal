@@ -6,8 +6,6 @@ engines:
     enabled: true
   csslint:
     enabled: false
-  coffeelint:
-    enabled: false
   duplication:
     enabled: true
     config:
@@ -29,7 +27,6 @@ ratings:
   - "**.haml"
   - "**.css"
   - "**.scss"
-  - "**.coffee"
   - "**.js"
   - "**.es6"
   - "**.jsx"

@@ -10,7 +10,6 @@ gem 'order_query'
 gem 'pg'
 
 gem 'autoprefixer-rails'
-gem 'coffee-rails'
 gem 'font-awesome-sass'
 gem 'foundation-rails', '<6.0'
 gem 'haml-rails'

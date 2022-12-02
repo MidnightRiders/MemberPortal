@@ -66,13 +66,6 @@ GEM
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.1)
-    coffee-rails (4.2.1)
-      coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.2.x)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.11.1)
     color (1.5.1)
     concurrent-ruby (1.1.9)
     crack (0.4.5)
@@ -320,7 +313,6 @@ DEPENDENCIES
   cancancan (~> 1.10.1)
   capybara
   capybara-screenshot
-  coffee-rails
   color (~> 1.5.1)
   database_cleaner
   date_time_attribute
