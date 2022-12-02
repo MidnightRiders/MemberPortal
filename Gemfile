@@ -61,7 +61,7 @@ end
 group :development, :test do
   # Testing
   gem 'active_record_query_trace', '~> 1.5'
-  gem 'capybara', '~> 2.7'
+  gem 'capybara', '~> 3.38'
   gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
   gem 'factory_girl_rails', '~> 4.7'
   gem 'ffaker', '~> 2.4'
