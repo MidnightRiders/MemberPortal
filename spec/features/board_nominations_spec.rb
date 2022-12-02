@@ -3,7 +3,7 @@ require 'spec_helper'
 feature 'Board Nominations', type: :feature, js: true do
   let(:user) { FactoryGirl.create(:user) }
   let(:positions) {
-    %w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator).sort + ['501(c)(3) Board of Directors']
+    %w(President Treasurer Recording\ Secretary Membership\ Secretary Communications\ Coordinator Philanthropy\ Coordinator Merchandise\ Coordinator).sort + ['501(c)(3) Board of Directors']
   }
 
   before(:each) do
