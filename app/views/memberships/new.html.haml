@@ -1,6 +1,6 @@
 :ruby
   content_for :head, tag(:meta, name: 'stripe-public-key', content: ENV['STRIPE_PUBLIC_KEY'])
-  enqueue_javascript 'https://js.stripe.com/v2/'
+  enqueue_javascript 'https://js.stripe.com/v3/'
 
 = form_for [@user, @membership.becomes(Membership)], html: { autocomplete: 'on' } do |membership_form|
   .row
