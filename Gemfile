@@ -78,8 +78,8 @@ group :test do
   gem 'database_cleaner', '~> 1.5'
   gem 'launchy', '~> 2.4'
   gem 'rspec_junit_formatter', '~> 0.4'
-  gem 'selenium-webdriver', '~> 3.142'
-  gem 'timecop', '~> 0.8'
+  gem 'selenium-webdriver', '~> 4.7'
+  gem 'timecop', '~> 0.9'
   gem 'vcr', '~>3.0'
   gem 'webmock', '~>3.5'
 
