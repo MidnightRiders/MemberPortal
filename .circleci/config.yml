@@ -12,13 +12,14 @@ jobs:
           PGHOST: 127.0.0.1
           PGUSER: mr-member-portal-test-user
           RAILS_ENV: test
-      - image: circleci/postgres:9.5-alpine
+      - image: cimg/postgres:9.5-alpine
         environment:
           POSTGRES_USER: mr-member-portal-test-user
           POSTGRES_DB: mr_member_portal_test
     steps:
       - checkout
       - browser-tools/install-firefox
+      - browser-tools/install-geckodriver
       - run:
           name: Install Apt dependencies
           command: |
