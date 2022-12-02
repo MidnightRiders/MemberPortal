@@ -22,7 +22,9 @@ jobs:
             - rails-demo-bundle-v2-
       - run:
           name: Bundle Install
-          command: bundle check --path vendor/bundle || bundle install --deployment
+          command: |
+            gem install bundler:1.17.3
+            bundle check --path vendor/bundle || bundle install --deployment
       - save_cache:
           key: rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
           paths:
