@@ -16,7 +16,7 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'sass'
 gem 'sass-rails'
-gem 'uglifier'
+gem 'terser', '~> 1.1'
 
 gem 'draper'
 gem 'icalendar'
@@ -98,4 +98,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

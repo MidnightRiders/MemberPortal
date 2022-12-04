@@ -280,14 +280,14 @@ GEM
     stripe (3.31.1)
       faraday (~> 0.10)
     temple (0.8.2)
+    terser (1.1.12)
+      execjs (>= 0.3.0, < 3)
     thor (1.1.0)
     thread_safe (0.3.6)
     tilt (2.0.10)
     timecop (0.8.1)
     tzinfo (1.2.10)
       thread_safe (~> 0.1)
-    uglifier (3.0.3)
-      execjs (>= 0.3.0, < 3)
     vcr (3.0.3)
     warden (1.2.7)
       rack (>= 1.0)
@@ -350,8 +350,8 @@ DEPENDENCIES
   simplecov
   spring-commands-rspec
   stripe (~> 3.9)
+  terser (~> 1.1)
   timecop
-  uglifier
   vcr (~> 3.0)
   webmock (~> 3.5)
   will_paginate
