@@ -41,6 +41,11 @@ MidnightRiders::Application.configure do
   config.active_support.deprecation = :stderr
 
   DatabaseCleaner.url_allowlist = [
-    %r{^postgresql://postgres:postgres@db:5432}
+    %r{^postgresql://postgres:postgres@db:5432},
+    proc { |uri|
+      Rails.logger.info "DatabaseCleaner.url_allowlist: #{uri}"
+      URI.parse(uri).host === '127.0.0.1' &&
+        URI.parse(uri).user.in?([nil, 'mr-member-portal-test-user'])
+    }
   ]
 end
