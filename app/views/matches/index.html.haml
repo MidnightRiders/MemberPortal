@@ -11,7 +11,7 @@
       - unless @is_current_week
         %li.small-4
           = link_to matches_path, class: 'button small expand' do
-            = icon 'fa-regular', 'calendar-o fa-fw'
+            = icon 'fa-regular', 'calendar fa-fw'
             This Week
       - if @next_date
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }

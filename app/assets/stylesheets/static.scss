@@ -1,14 +1,10 @@
 $include-html-classes: false;
 
+@import 'font-awesome';
 @import 'foundation/functions';
 @import 'foundation/components/grid';
 
-$maroon: #6a0003;
-$navy: #02123f;
-$silver: #adaeae;
-
-$revs-red: #c8102e;
-$revs-navy: #0c2340;
+@import 'shared';
 
 * {
   box-sizing: border-box;

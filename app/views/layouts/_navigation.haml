@@ -26,7 +26,7 @@
               %label Social
             %li.has-dropdown
               %a{ href: '#' }
-                = icon 'fa-regular', 'facebook fa-fw'
+                = icon 'fa-brands', 'facebook fa-fw'
                 Facebook
               %ul.dropdown
                 %li.external
@@ -37,7 +37,7 @@
                     Facebook Page
             %li.external
               = link_to 'http://twitter.com/MidnightRiders', target: '_blank' do
-                = icon 'fa-regular', 'twitter fa-fw'
+                = icon 'fa-brands', 'twitter fa-fw'
                 Twitter
             %li
               %label Other
@@ -123,10 +123,10 @@
           %li
             = link_to contact_path, title: 'Contact Us' do
               .show-for-medium-up
-                = icon 'fa-regular', 'comment-o fa-fw fa-flip-horizontal'
+                = icon 'fa-regular', 'comment fa-fw fa-flip-horizontal'
                 &nbsp;
               .show-for-small-only
-                = icon 'fa-regular', 'comment-o fa-fw fa-flip-horizontal'
+                = icon 'fa-regular', 'comment fa-fw fa-flip-horizontal'
                 Contact Us
       %ul.right
         - if user_signed_in?
@@ -211,7 +211,7 @@
         - else
           %li
             = link_to new_user_registration_path do
-              = icon 'fa-regular', 'pencil-square-o fa-fw'
+              = icon 'fa-regular', 'pencil-square fa-fw'
               Sign Up
           %li
             = link_to new_user_session_path do

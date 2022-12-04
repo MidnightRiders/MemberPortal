@@ -15,12 +15,12 @@
         color: <%='#' + club.primary_color%>;
     }
 <%- if club.crest.blank? %>
-.crest.<%=abbrv%>, .pre-crest.<%=abbrv%>:before { display: none; }
+.crest.<%=abbrv%>, .pre-crest.<%=abbrv%>::before { display: none; }
 <%- else %>
-.crest.<%=abbrv%>, .pre-crest.<%=abbrv%>:before {
+.crest.<%=abbrv%>, .pre-crest.<%=abbrv%>::before {
   background-image: url('<%=club.crest.url(:standard)%>');
 }
-  .crest.<%=abbrv%>.small, .pre-crest.<%=abbrv%>.small:before {
+  .crest.<%=abbrv%>.small, .pre-crest.<%=abbrv%>.small::before {
     background-image: url('<%=club.crest.url(:thumb)%>');
   }
 <%- end %>

@@ -90,7 +90,7 @@ form {
           background-color: transparentize($maroon, .5);
         }
 
-        &:before {
+        &::before {
           content: '';
           display: block;
           position: absolute;

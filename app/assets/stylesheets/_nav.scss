@@ -4,7 +4,7 @@
 .top-bar {
   text-shadow: 0 1px 1px #333;
   .title-area h1 a {
-    &:before {
+    &::before {
       width: 30px;
       height: 100%;
       content: '\00A0';
@@ -20,7 +20,7 @@
     a:visited {
       padding-right: rem-calc(35);
       position: relative;
-      &:after {
+      &::after {
         @include fa-icon;
         content: $fa-var-external-link;
         font-size: rem-calc(9);

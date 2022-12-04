@@ -47,30 +47,31 @@
       background: linear-gradient(to bottom,$success-color,darken($success-color,5%));
     }
     &.correct, &.wrong, &.actual {
-      &:before {
+      &::before {
         display: block;
-        font-family: FontAwesome;
+        font-family: 'Font Awesome 6 Free';
         text-align: center;
         position: absolute;
         font-size: 2em;
+        font-weight: 400;
         z-index: 5;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
       }
     }
-    &.correct:before {
+    &.correct::before {
       opacity: .5;
       content: $fa-var-check-circle;
     }
-    &.wrong:before {
+    &.wrong::before {
       content: $fa-var-times;
       color: $alert-color;
       margin-top: -1px;
       opacity: .7;
       text-shadow: none;
     }
-    &.actual:before {
+    &.actual::before {
       color: #fff;
       opacity: .4;
       content: $fa-var-circle;
