@@ -21,6 +21,7 @@ A `.env` file is needed to run the application. The full `.env` file for develop
 ```bash
 SECRET_KEY_BASE=[RAILS SECRET KEY BASE]
 STRIPE_SECRET_KEY=[STRIPE SECRET KEY]
+STRIPE_PUBLIC_KEY=[STRIPE PUBLIC KEY]
 S3_BUCKET_NAME=[NAME OF AMAZON BUCKET]
 AWS_ACCESS_KEY_ID=[AWS ACCESS KEY]
 AWS_SECRET_ACCESS_KEY=[AWS SECRET KEY]
@@ -142,7 +143,7 @@ Name              | Type               | Attributes
 ### MotM
 
 Man of the Match model. Up to three picks - no duplicates, only `Players` who are `active?`.
-Only voteable between 45 minutes and two weeks after kickoff. 
+Only voteable between 45 minutes and two weeks after kickoff.
 
 **Attributes:**
 
@@ -156,7 +157,7 @@ Name              | Type               | Attributes
 **`third_id`**    | `integer`          |
 **`created_at`**  | `datetime`         |
 **`updated_at`**  | `datetime`         |
- 
+
 ### PickEm
 
 Pick 'Em model. Users can pick either team, or a draw, for every `Match`. One point for correct

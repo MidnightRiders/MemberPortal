@@ -16,7 +16,7 @@ gem 'haml-rails', '~> 1.0'
 gem 'jquery-rails', '~> 4.2'
 gem 'sass', '~> 3.4'
 gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '~> 3.0'
+gem 'terser', '~> 1.1', '~> 3.0'
 
 gem 'draper', '~> 2.1'
 gem 'icalendar', '~> 2.4'
@@ -35,7 +35,7 @@ gem 'paperclip', '~> 5.2.1'
 gem 'bigdecimal', '~> 1.3.5'
 gem 'mimemagic', '~> 0.3.9'
 
-gem 'nokogiri', '~> 1.13.6'
+gem 'nokogiri', '~> 1.13.9'
 
 # Users/auth
 gem 'cancancan', '~>1.10.1'
@@ -49,6 +49,8 @@ gem 'stripe', '~> 3.9'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
+
+gem 'puma'
 
 # Monitoring
 gem 'newrelic_rpm', '~> 4.2'
@@ -70,7 +72,6 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3'
   gem 'rspec-rails', '~> 3.5'
   gem 'spring-commands-rspec', '~> 1.0'
-  gem 'thin', '~> 1.8'
 end
 
 group :test do
@@ -97,4 +98,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

@@ -25,17 +25,20 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install -y imagemagick libmagickwand-dev
+      - run:
+          name: Install legacy Bundler # Required for Rails 4.2
+          command: gem install bundler:1.17.3
       - restore_cache:
           keys:
-            - rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
-            - rails-demo-bundle-v2-
+            - rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
+            - rails-demo-bundle-v2-20221203-
       - run:
           name: Bundle Install
           command: |
             gem install bundler:1.17.3
             bundle check --path vendor/bundle || bundle install --deployment
       - save_cache:
-          key: rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
+          key: rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -62,7 +65,7 @@ jobs:
                               --order random \
                               --format RspecJunitFormatter \
                               --out test-results/rspec.xml \
-                              --format progress \
+                              --format documentation \
                               -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test-results
