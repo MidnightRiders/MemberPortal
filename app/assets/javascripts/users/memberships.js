@@ -1,4 +1,5 @@
-(function ($) {
+// @ts-check
+(function (/** @type {jQuery} */ $) {
   let stripePublicKey;
 
   const stripeParams = {
@@ -17,26 +18,25 @@
       return $('#stripe_card_number')
         .closest('form')
         .on('submit', function (e) {
-          var card, key, value;
           $(this).find(':submit').prop('disabled', true);
           if (!$(this).find('#membership_info_override').prop('checked')) {
             e.preventDefault();
-            card = {};
-            for (key in stripeParams) {
-              if (!stripeParams.hasOwnProperty(key)) continue;
-              value = stripeParams[key];
-              card[key] = $(value).val();
-            }
+            const card = Object.entries(stripeParams).reduce(
+              (o, [key, value]) => ({
+                ...o,
+                [key]: $(value).val(),
+              }),
+              /** @type {stripe.StripeCardTokenData} */ ({}),
+            );
             window.Stripe.createToken(card, subscription.handleStripeResponse);
           }
         });
     },
     handleStripeResponse: function (status, response) {
       if (status === 200) {
-        $('#membership_stripe_card_token')
-          .val(response.id)
-          .closest('form')[0]
-          .submit();
+        /** @type {HTMLFormElement} */ (
+          $('#membership_stripe_card_token').val(response.id).closest('form')[0]
+        ).submit();
       } else {
         $('#stripe_card_number')
           .closest('form')
