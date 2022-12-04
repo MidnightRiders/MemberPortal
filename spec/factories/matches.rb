@@ -1,11 +1,11 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :match do
-    home_team { Club.all.sample || FactoryGirl.create(:club) }
-    away_team { Club.where('id != ?', home_team.id).sample || FactoryGirl.create(:club) }
+    home_team { Club.all.sample || FactoryBot.create(:club) }
+    away_team { Club.where('id != ?', home_team.id).sample || FactoryBot.create(:club) }
     kickoff { Time.now + (Random.rand * 24).hours + (Random.rand * 30).days }
-    location 'Stadium'
-    home_goals nil
-    away_goals nil
+    location { 'Stadium' }
+    home_goals { nil }
+    away_goals { nil }
     trait :past do
       kickoff { Time.now - (Random.rand * 24).hours - (Random.rand * 30).days }
       home_goals { (Random.rand * 5).to_i }

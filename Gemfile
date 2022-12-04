@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.7.5'
+ruby '3.1.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.11.3'
+gem 'rails', '~> 7.0.4'
 
 # Use postgresql as the database for Active Record
 gem 'hstore_accessor'
@@ -41,6 +41,7 @@ gem 'nokogiri'
 gem 'cancancan'
 gem 'devise'
 gem 'paper_trail'
+gem 'paper_trail-association_tracking'
 
 gem 'fuzzy_match'
 
@@ -65,7 +66,7 @@ group :development, :test do
   gem 'active_record_query_trace'
   gem 'capybara'
   gem 'dotenv-rails', '>= 2.1.1'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'fivemat'
   gem 'pry-nav'
@@ -78,6 +79,7 @@ group :test do
   gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'launchy'
+  gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'
   gem 'selenium-webdriver'
   gem 'timecop'

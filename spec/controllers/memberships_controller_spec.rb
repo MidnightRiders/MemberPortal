@@ -6,7 +6,7 @@ describe MembershipsController do
   pending 'get #new'
 
   describe 'post #create' do
-    let!(:user) { FactoryGirl.create(:user, :without_membership) }
+    let!(:user) { FactoryBot.create(:user, :without_membership) }
 
     context 'with errors' do
       before(:each) do
@@ -76,9 +76,9 @@ describe MembershipsController do
 
         context 'with valid user' do
           let!(:user) {
-            FactoryGirl.create(:user).tap do |u|
+            FactoryBot.create(:user).tap do |u|
               u.update_attribute(:stripe_customer_token, event[:data][:object][:customer])
-              u.current_membership.update_attributes(info: {}, stripe_charge_id: event[:data][:object][:id])
+              u.current_membership.update(info: {}, stripe_charge_id: event[:data][:object][:id])
             end
           }
 
@@ -149,7 +149,7 @@ describe MembershipsController do
 
         context 'with valid user' do
           let!(:user) {
-            FactoryGirl.create(:user, :without_membership).tap do |u|
+            FactoryBot.create(:user, :without_membership).tap do |u|
               u.update_attribute(:stripe_customer_token, event[:data][:object][:customer])
               u.memberships.new(
                 year: Time.zone.at(event[:created]).year - 1,

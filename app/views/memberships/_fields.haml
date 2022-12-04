@@ -63,7 +63,7 @@
             = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: !!f.object.user.stripe_customer_token
           .small-2.columns
             = link_to 'https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=members.midnightriders.com', target: '_blank', class: 'button secondary postfix', title: 'Learn more' do
-              = icon 'lock fa-fw'
+              = icon 'fa-regular', 'lock fa-fw'
               %small SSL
             -#%a{ href: 'https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=members.midnightriders.com', target: '_blank' }
             -#  %img{ alt: 'Expedited SSL Scanner', src: 'https://www.expeditedssl.com/ssl-secure-badge.png' }

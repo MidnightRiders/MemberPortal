@@ -1,4 +1,4 @@
-FROM ruby:2.7.5-alpine
+FROM ruby:3.1.2-alpine
 LABEL maintainer="Midnight Riders<webczar@midnightriders.com>"
 
 RUN apk update
@@ -19,7 +19,6 @@ RUN apk add --no-cache --virtual \
 
 WORKDIR /tmp
 COPY Gemfile Gemfile.lock /tmp/
-RUN gem install bundler --version 1.17.3
 RUN bundle install
 RUN apk del build-base
 

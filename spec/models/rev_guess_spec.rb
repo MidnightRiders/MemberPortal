@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe RevGuess do
-  let (:user) { FactoryGirl.create(:user) }
-  let (:revs) { Club.find_by(abbrv: 'NE') || FactoryGirl.create(:club, :ne) }
-  let (:rev_guess) { FactoryGirl.build(:rev_guess) }
+  let (:user) { FactoryBot.create(:user) }
+  let (:revs) { Club.find_by(abbrv: 'NE') || FactoryBot.create(:club, :ne) }
+  let (:rev_guess) { FactoryBot.build(:rev_guess) }
 
   before :each do
     rev_guess.match.home_team = revs unless rev_guess.match.teams.include? revs
@@ -35,7 +35,7 @@ describe RevGuess do
     it 'does not allow multiples from a user on a match' do
       rev_guess.user = user
       rev_guess.save
-      rev_guess2 = FactoryGirl.build(:rev_guess)
+      rev_guess2 = FactoryBot.build(:rev_guess)
       rev_guess2.match = rev_guess.match
       rev_guess2.user = user
       expect(rev_guess2).to_not be_valid

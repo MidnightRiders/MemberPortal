@@ -11,22 +11,22 @@
       %ul.left
         %li.has-dropdown
           %a{ href: '#' }
-            = icon 'external-link-square fa-fw'
+            = icon 'fa-regular', 'external-link-square fa-fw'
             Sites
           %ul.dropdown
             %li.external
               = link_to 'http://MidnightRiders.com', target: '_blank' do
-                = icon 'link fa-fw'
+                = icon 'fa-regular', 'link fa-fw'
                 Riders Website
             %li.external
               = link_to 'http://midnightriders.com/shop', target: '_blank' do
-                = icon 'shopping-cart fa-fw'
+                = icon 'fa-regular', 'shopping-cart fa-fw'
                 Shop
             %li
               %label Social
             %li.has-dropdown
               %a{ href: '#' }
-                = icon 'facebook fa-fw'
+                = icon 'fa-regular', 'facebook fa-fw'
                 Facebook
               %ul.dropdown
                 %li.external
@@ -37,17 +37,17 @@
                     Facebook Page
             %li.external
               = link_to 'http://twitter.com/MidnightRiders', target: '_blank' do
-                = icon 'twitter fa-fw'
+                = icon 'fa-regular', 'twitter fa-fw'
                 Twitter
             %li
               %label Other
             %li.external
               = link_to 'http://revolutionsoccer.net', target: '_blank' do
-                = icon 'bookmark fa-fw'
+                = icon 'fa-regular', 'bookmark fa-fw'
                 Revolution Website
             %li.has-dropdown
               %a{ href: '#' }
-                = icon 'beer fa-fw'
+                = icon 'fa-regular', 'beer fa-fw'
                 Partner Pubs
               %ul.dropdown
                 %li.external
@@ -68,7 +68,7 @@
                     %small Waltham, MA
             %li.has-dropdown
               %a{ href: '#' }
-                = icon 'star fa-fw'
+                = icon 'fa-regular', 'star fa-fw'
                 Other Partners
               %ul.dropdown
                 %li.external
@@ -93,7 +93,7 @@
                       %code RIDERS2017
             %li.has-dropdown
               %a{ href: '#' }
-                = icon 'reddit fa-fw'
+                = icon 'fa-regular', 'reddit fa-fw'
                 Reddit
               %ul.dropdown
                 %li.external
@@ -107,113 +107,113 @@
             %li
               = link_to user_home_path do
                 .show-for-medium-up
-                  = icon 'home fa-fw'
+                  = icon 'fa-regular', 'home fa-fw'
                   &nbsp;
                 .show-for-small-only
-                  = icon 'home fa-fw'
+                  = icon 'fa-regular', 'home fa-fw'
                   Home
           %li
             = link_to faq_path, title: 'FAQ' do
               .show-for-medium-up
-                = icon 'question fa-fw'
+                = icon 'fa-regular', 'question fa-fw'
                 &nbsp;
               .show-for-small-only
-                = icon 'question fa-fw'
+                = icon 'fa-regular', 'question fa-fw'
                 FAQ
           %li
             = link_to contact_path, title: 'Contact Us' do
               .show-for-medium-up
-                = icon 'comment-o fa-fw fa-flip-horizontal'
+                = icon 'fa-regular', 'comment-o fa-fw fa-flip-horizontal'
                 &nbsp;
               .show-for-small-only
-                = icon 'comment-o fa-fw fa-flip-horizontal'
+                = icon 'fa-regular', 'comment-o fa-fw fa-flip-horizontal'
                 Contact Us
       %ul.right
         - if user_signed_in?
           - if current_user.current_member?
             %li
               = link_to matches_url do
-                = icon 'calendar fa-fw'
+                = icon 'fa-regular', 'calendar fa-fw'
                 Matches
             %li.has-dropdown
               = link_to '#' do
-                = icon 'trophy fa-fw'
+                = icon 'fa-regular', 'trophy fa-fw'
                 Games
               %ul.dropdown
                 %li
                   = link_to matches_path do
-                    = icon 'check fa-fw'
+                    = icon 'fa-regular', 'check fa-fw'
                     RevGuess/Pick ’Em
                 %li
                   = link_to standings_path do
-                    = icon 'trophy fa-fw'
+                    = icon 'fa-regular', 'trophy fa-fw'
                     Standings
                 %li.external
                   = link_to 'https://fantasy.mlssoccer.com/#classic/leagues/771/join/AMN4KR2S', target: :_blank do
-                    = icon 'users fa-fw'
+                    = icon 'fa-regular', 'users fa-fw'
                     MLS Fantasy
                 %li
                   %label Other Fantasy
                 %li.external
                   = link_to 'http://fantasy.premierleague.com/my-leagues/290319/join/?autojoin-code=1206043-290319', target: :_blank do
-                    = icon 'users fa-fw'
+                    = icon 'fa-regular', 'users fa-fw'
                     EPL Fantasy
                 - if current_user.privilege?('admin') || current_user.privilege?('executive_board')
                   %li
                     %label Admin
                   %li
                     = link_to mot_ms_path do
-                      = icon 'list-ol fa-fw'
+                      = icon 'fa-regular', 'list-ol fa-fw'
                       MotY Rankings
 
           %li
             = link_to edit_user_registration_path(current_user) do
-              = icon 'user fa-fw'
+              = icon 'fa-regular', 'user fa-fw'
               My Account
           - if current_user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
             %li.has-dropdown
               %a{ href: '#', title: 'Admin' }
                 .show-for-medium-up
-                  = icon 'bolt fa-fw'
+                  = icon 'fa-regular', 'bolt fa-fw'
                   &nbsp;
                 .hide-for-medium-up
-                  = icon 'bolt fa-fw'
+                  = icon 'fa-regular', 'bolt fa-fw'
                   Admin
               %ul.dropdown
                 - if can? :view, :users
                   %li
                     = link_to users_path do
-                      = icon 'users fa-fw'
+                      = icon 'fa-regular', 'users fa-fw'
                       Users
                 - if can? :transactions, :static_page
                   %li
                     = link_to transactions_path do
-                      = icon 'dollar fa-fw'
+                      = icon 'fa-regular', 'dollar fa-fw'
                       Transactions
                 %li.divider
                 %li
                   = link_to clubs_path do
-                    = icon 'shield fa-fw'
+                    = icon 'fa-regular', 'shield fa-fw'
                     Clubs
                 - if can? :view, :players
                   %li
                     = link_to players_path do
-                      = icon 'list fa-fw'
+                      = icon 'fa-regular', 'list fa-fw'
                       Players
           %li
             = link_to destroy_user_session_path, title: 'Sign Out', data: { method: :delete, confirm: 'Are you sure you wish to sign out?' } do
               .show-for-small-only
-                = icon 'power-off fa-fw'
+                = icon 'fa-regular', 'power-off fa-fw'
                 Sign Out
               .show-for-medium-up
-                = icon 'power-off fa-fw'
+                = icon 'fa-regular', 'power-off fa-fw'
                 &nbsp;
         - else
           %li
             = link_to new_user_registration_path do
-              = icon 'pencil-square-o fa-fw'
+              = icon 'fa-regular', 'pencil-square-o fa-fw'
               Sign Up
           %li
             = link_to new_user_session_path do
-              = icon 'sign-in fa-fw'
+              = icon 'fa-regular', 'sign-in fa-fw'
               Sign In

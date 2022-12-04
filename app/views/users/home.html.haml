@@ -23,14 +23,14 @@
   - if should_show_scarf_vote
     .medium-6.columns.right
       = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
-        = icon 'check-circle'
+        = icon 'fa-regular', 'check-circle'
         Vote for 2022’s Scarf
   = render 'board_nominations'
 
   - if current_user.current_member? && ENV['MEETING_ZOOM_LINK'].present? && (params[:show_zoom_link].present? || Time.current.between?(Time.zone.local(2021, 2, 13, 8), Time.zone.local(2021, 2, 13, 15)))
     .medium-6.columns.right
       = link_to ENV['MEETING_ZOOM_LINK'], class: 'button large expand', target: '_blank' do
-        = icon 'video-camera'
+        = icon 'fa-regular', 'video-camera'
         Zoom: General Meeting
         %br
         Feb 13, 2021 1:00pm ET
@@ -40,7 +40,7 @@
   %section.medium-6.columns
     - if current_user.current_member? && current_user.current_membership.is_a?(Family)
       = link_to user_membership_path(current_user, current_user.current_membership), class: 'button large expand' do
-        = icon 'users fa-fw'
+        = icon 'fa-regular', 'users fa-fw'
         Manage Family Membership
     .row.show-for-medium-up= render 'shared/next_last_games', last_match: revs.last_match, next_match: revs.next_match
     = render 'static_pages/events', events: @events

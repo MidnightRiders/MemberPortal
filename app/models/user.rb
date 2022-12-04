@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   has_many :pick_ems, autosave: false
 
   validates :first_name, :last_name, :email, presence: true
-  validates :username, presence: true, uniqueness: true, case_sensitive: false
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
   validates :member_since, numericality: { less_than_or_equal_to: Date.current.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
 

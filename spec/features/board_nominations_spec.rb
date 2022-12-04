@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 feature 'Board Nominations', type: :feature, js: true do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   let(:positions) {
     %w(President Treasurer Recording\ Secretary Membership\ Secretary Communications\ Coordinator Philanthropy\ Coordinator Merchandise\ Coordinator).sort + ['501(c)(3) Board of Directors']
   }
