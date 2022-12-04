@@ -6,7 +6,7 @@
       - if @prev_date
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }
           = link_to matches_path(date: @prev_date), class: 'button secondary small expand' do
-            = icon 'fa-regular', 'arrow-circle-o-left fa-fw'
+            = icon 'fa-regular', 'circle-arrow-left fa-fw'
             = @prev_link
       - unless @is_current_week
         %li.small-4
@@ -17,7 +17,7 @@
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }
           = link_to matches_path(date: @next_date), class: 'button secondary small expand' do
             = @next_link
-            = icon 'fa-regular', 'arrow-circle-o-right fa-fw'
+            = icon 'fa-regular', 'circle-arrow-right fa-fw'
   - if can? :manage, Match
     .medium-4.columns.text-right
       = link_to '#', class: 'button small expand', data: { reveal_id: 'matches-admin' } do
