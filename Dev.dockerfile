@@ -1,9 +1,11 @@
-FROM ruby:2.6.6-alpine
-LABEL maintainer "Midnight Riders<webczar@midnightriders.com>"
+FROM ruby:2.7.5-alpine
+LABEL maintainer="Midnight Riders<webczar@midnightriders.com>"
 
 RUN apk update
-RUN apk add --no-cache --virtual build-dependencies \
+RUN apk add --no-cache --virtual \
+  build-dependencies \
   build-base \
+  gcompat \
   nodejs \
   postgresql-dev \
   ruby-nokogiri \

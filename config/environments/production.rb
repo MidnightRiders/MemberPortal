@@ -23,7 +23,7 @@ MidnightRiders::Application.configure do
   # config.action_dispatch.rack_cache = true
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  config.assets.js_compressor = :terser
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
@@ -60,7 +60,7 @@ MidnightRiders::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets.
-  # application.coffee, application.scss, and all non-JS/CSS in app/assets folder are already added.
+  # application.js, application.scss, and all non-JS/CSS in app/assets folder are already added.
   # config.assets.precompile += %w( search.js )
 
   # Ignore bad email addresses and do not raise email delivery errors.

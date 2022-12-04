@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '2.6.6'
+ruby '2.7.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 4.2.7'
@@ -10,14 +10,13 @@ gem 'order_query'
 gem 'pg'
 
 gem 'autoprefixer-rails'
-gem 'coffee-rails'
 gem 'font-awesome-sass'
 gem 'foundation-rails', '<6.0'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'sass'
 gem 'sass-rails'
-gem 'uglifier'
+gem 'terser', '~> 1.1'
 
 gem 'draper'
 gem 'icalendar'
@@ -36,7 +35,7 @@ gem 'paperclip', '~> 5.2.1'
 gem 'bigdecimal', '~> 1.3.5'
 gem 'mimemagic', '~> 0.3.9'
 
-gem 'nokogiri', '~> 1.13.6'
+gem 'nokogiri', '~> 1.13.9'
 
 # Users/auth
 gem 'cancancan', '~>1.10.1'
@@ -50,6 +49,8 @@ gem 'stripe', '~> 3.9'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
+
+gem 'puma'
 
 # Monitoring
 gem 'newrelic_rpm'
@@ -71,7 +72,6 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
-  gem 'thin'
 end
 
 group :test do
@@ -98,4 +98,3 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-

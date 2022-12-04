@@ -3,28 +3,31 @@ jobs:
   build:
     parallelism: 3
     docker:
-      - image: circleci/ruby:2.6.6-node-browsers
+      - image: circleci/ruby:2.7.5-node-browsers
         environment:
           COVERAGE: true
           BUNDLE_PATH: vendor/bundle
           PGHOST: 127.0.0.1
           PGUSER: mr-member-portal-test-user
           RAILS_ENV: test
-      - image: circleci/postgres:9.5-alpine
+      - image: cimg/postgres:11.17
         environment:
           POSTGRES_USER: mr-member-portal-test-user
           POSTGRES_DB: mr_member_portal_test
     steps:
       - checkout
+      - run:
+          name: Install legacy Bundler # Required for Rails 4.2
+          command: gem install bundler:1.17.3
       - restore_cache:
           keys:
-            - rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
-            - rails-demo-bundle-v2-
+            - rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
+            - rails-demo-bundle-v2-20221203-
       - run:
           name: Bundle Install
           command: bundle check --path vendor/bundle || bundle install --deployment
       - save_cache:
-          key: rails-demo-bundle-v2-{{ checksum "Gemfile.lock" }}
+          key: rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -51,7 +54,7 @@ jobs:
                               --order random \
                               --format RspecJunitFormatter \
                               --out test-results/rspec.xml \
-                              --format progress \
+                              --format documentation \
                               -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test-results
@@ -68,7 +71,7 @@ jobs:
             - codeclimate.*.json
   upload-coverage:
     docker:
-      - image: circleci/ruby:2.6.6-node
+      - image: circleci/ruby:2.7.5-node
     environment:
       CC_TEST_REPORTER_ID: c3ff91e23ea0fea718bb62dae0a8a5440dc082d5d2bb508af6b33d0babac479a
     working_directory: ~/bikeindex/bike_index
