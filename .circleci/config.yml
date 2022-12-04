@@ -7,8 +7,9 @@ jobs:
     docker:
       - image: cimg/ruby:3.1.2-node
         environment:
-          COVERAGE: true
           BUNDLE_PATH: vendor/bundle
+          COVERAGE: true
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
           PGHOST: 127.0.0.1
           PGUSER: mr-member-portal-test-user
           RAILS_ENV: test
