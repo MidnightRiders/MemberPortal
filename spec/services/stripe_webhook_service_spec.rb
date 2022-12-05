@@ -14,9 +14,9 @@ RSpec.describe StripeWebhookService do
       expect(Rails.logger).to receive(:warn).with(a_string_including('not in accepted webhooks'))
       expect(webhook).not_to receive(:customer_token)
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(200)
+      expect(status).to eq(200)
       expect(response[:nothing]).to be(true)
     end
 
@@ -31,9 +31,9 @@ RSpec.describe StripeWebhookService do
 
       expect(StripeWebhookService).not_to receive(:event_type)
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(200)
+      expect(status).to eq(200)
     end
 
     it 'returns 200 for events that don\'t have a Stripe::Customer' do
@@ -48,9 +48,9 @@ RSpec.describe StripeWebhookService do
 
       expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(200)
+      expect(status).to eq(200)
     end
 
     it 'returns 404 for events that don\'t have a user' do
@@ -60,9 +60,9 @@ RSpec.describe StripeWebhookService do
 
       expect(Rails.logger).to receive(:error).with(a_string_including('No User could be found'))
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(404)
+      expect(status).to eq(404)
     end
 
     it 'calls charge_refunded for charge.refunded event' do
@@ -105,20 +105,20 @@ RSpec.describe StripeWebhookService do
 
       expect(Rails.logger).to receive(:error).with(a_string_including('No membership associated'))
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(200)
+      expect(status).to eq(200)
     end
 
     it 'marks a matching Membership as refunded' do
       webhook = StripeWebhookService.new(event)
       membership = user.current_membership
-      response = nil
+      status = nil
 
       expect(Rails.logger).not_to receive(:error)
 
-      expect { response = webhook.process }.to change { membership.reload.refunded }.to 'true'
-      expect(response[:status]).to eq(200)
+      expect { status = webhook.process }.to change { membership.reload.refunded }.to 'true'
+      expect(status).to eq(200)
     end
   end
 
@@ -141,28 +141,28 @@ RSpec.describe StripeWebhookService do
     it 'does not renew a membership if a membership already exists' do
       user.memberships.create(type: 'Individual', year: Date.current.year)
       webhook = StripeWebhookService.new(event)
-      response = nil
+      status = nil
 
-      expect { response = webhook.process }.not_to change(Membership, :count)
-      expect(response[:status]).to eq(200)
+      expect { status = webhook.process }.not_to change(Membership, :count)
+      expect(status).to eq(200)
     end
 
     it 'does not renew a membership if no prior membership exists' do
       user.memberships.each(&:destroy)
       webhook = StripeWebhookService.new(event)
-      response = nil
+      status = nil
 
       expect(Rails.logger).to receive(:error).with(a_string_including('Could not find record to renew'))
-      expect { response = webhook.process }.not_to change(Membership, :count)
-      expect(response[:status]).to eq(500)
+      expect { status = webhook.process }.not_to change(Membership, :count)
+      expect(status).to eq(500)
     end
 
     it 'renews a subscription-based membership' do
       webhook = StripeWebhookService.new(event)
-      response = nil
+      status = nil
 
-      expect { response = webhook.process }.to change(Membership, :count).by 1
-      expect(response[:status]).to eq(200)
+      expect { status = webhook.process }.to change(Membership, :count).by 1
+      expect(status).to eq(200)
     end
   end
 end
