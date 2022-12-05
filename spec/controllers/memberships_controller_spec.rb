@@ -20,7 +20,7 @@ describe MembershipsController do
         expect(Rails.logger).to receive(:error).with(a_string_including('Something went wrong'))
         expect(subject).to receive(:prepare_new_form)
 
-        post :create, params: { type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual } }
+        post :create, params: { type: 'Individual', user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: 'Individual' } }
 
         expect(response).to have_http_status(:ok)
         expect(flash.now[:error]).to eq('Something went wrong')
@@ -37,7 +37,7 @@ describe MembershipsController do
 
       it 'creates a new Membership' do
         expect {
-          post :create, params: { type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual } }
+          post :create, params: { type: 'Individual', user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: 'Individual' } }
         }.to change { user.memberships.reload.size }.by(1)
       end
 
@@ -46,9 +46,9 @@ describe MembershipsController do
         expect(MembershipMailer).to receive(:new_membership_alert).and_return(double(ActionMailer::MessageDelivery, deliver_now: true))
 
         post :create, params: {
-          type: :Individual,
+          type: 'Individual',
           user_id: user.username,
-          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual },
+          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: 'Individual' },
         }
       end
 
@@ -59,9 +59,9 @@ describe MembershipsController do
         expect(SlackBot).to receive(:post_message)
 
         post :create, params: {
-          type: :Individual,
+          type: 'Individual',
           user_id: user.username,
-          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual },
+          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: 'Individual' },
         }
       end
     end
