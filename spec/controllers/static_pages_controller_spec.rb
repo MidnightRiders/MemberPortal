@@ -17,14 +17,14 @@ describe StaticPagesController do
   describe 'GET "faq"' do
     it 'returns http success' do
       get 'faq'
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
   describe 'GET "contact"' do
     it 'returns http success' do
       get 'contact'
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -33,7 +33,7 @@ describe StaticPagesController do
       it 'should show' do
         sign_in FactoryBot.create(:user)
         get 'standings'
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

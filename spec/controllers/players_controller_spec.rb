@@ -47,22 +47,22 @@ describe PlayersController do
     end
     it 'accepts #index' do
       get :index
-      expect(response).to be_success
+      expect(response).to be_successful
     end
     it 'accepts #new' do
       get :new
-      expect(response).to be_success
+      expect(response).to be_successful
     end
     it 'accepts #show' do
       player = FactoryBot.create(:player)
       get :show, params: { id: player }
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:player)).to eq player
     end
     it 'accepts #edit' do
       player = FactoryBot.create(:player)
       get :edit, params: { id: player }
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:player)).to eq player
     end
     it 'accepts #create' do
