@@ -17,7 +17,6 @@ RSpec.describe StripeWebhookService do
       status = webhook.process
 
       expect(status).to eq(200)
-      expect(response[:nothing]).to be(true)
     end
 
     it 'returns 200 for explicitly ignored Stripe::Event IDs' do
