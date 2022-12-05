@@ -10,32 +10,32 @@ describe MotMsController do
     end
     describe '#new' do
       it 'instantiates MotM' do
-        get :new, match_id: match
+        get :new, params: { match_id: match }
         expect(assigns(:mot_m)).to be_an_instance_of(MotM)
       end
     end
 
     describe '#create' do
       it 'creates a new MotM if none exists' do
-        expect { post :create, mot_m: FactoryBot.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match }.to change(MotM, :count)
+        expect { post :create, params: { mot_m: FactoryBot.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match } }.to change(MotM, :count)
       end
 
       it 'will not create a second MotM vote for a user per match' do
         FactoryBot.create(:mot_m, user_id: user.id, match_id: match.id)
-        expect { post :create, mot_m: FactoryBot.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match }.not_to change(MotM, :count)
+        expect { post :create, params: { mot_m: FactoryBot.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match } }.not_to change(MotM, :count)
       end
 
       it 'will not create a MotM vote for a non-Revs match' do
         match.home_team = Club.where('abbrv NOT IN (?)', ['NE', match.away_team.abbrv]).first
         FactoryBot.create(:mot_m, user_id: user.id, match_id: match.id)
-        expect { post :create, mot_m: FactoryBot.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match }.not_to change(MotM, :count)
+        expect { post :create, params: { mot_m: FactoryBot.attributes_for(:mot_m, user_id: user.id, match_id: match.id), match_id: match } }.not_to change(MotM, :count)
       end
     end
 
     describe '#edit' do
       it 'retrieves the MotM for editing' do
         mot_m = FactoryBot.create(:mot_m, match_id: match.id, user_id: user.id)
-        get :edit, id: mot_m, match_id: mot_m.match
+        get :edit, params: { id: mot_m, match_id: mot_m.match }
         expect(assigns(:mot_m)).to eq mot_m
       end
     end
@@ -45,7 +45,7 @@ describe MotMsController do
         motm = FactoryBot.create(:mot_m, match_id: match.id, user_id: user.id)
         new_motm = Player.where('id NOT IN (?)', [motm.first.id, motm.second.id, motm.third.id]).sample || FactoryBot.create(:player)
         expect {
-          patch :update, id: motm, mot_m: { first_id: new_motm.id }, match_id: motm.match
+          patch :update, params: { id: motm, mot_m: { first_id: new_motm.id }, match_id: motm.match }
           motm.reload
         }.to change(motm, :first_id)
       end

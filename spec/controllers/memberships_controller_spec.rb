@@ -20,7 +20,7 @@ describe MembershipsController do
         expect(Rails.logger).to receive(:error).with(a_string_including('Something went wrong'))
         expect(subject).to receive(:prepare_new_form)
 
-        post :create, type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual }
+        post :create, params: { type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual } }
 
         expect(response).to have_http_status(:ok)
         expect(flash.now[:error]).to eq('Something went wrong')
@@ -37,7 +37,7 @@ describe MembershipsController do
 
       it 'creates a new Membership' do
         expect {
-          post :create, type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual }
+          post :create, params: { type: :Individual, user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual } }
         }.to change { user.memberships.reload.size }.by(1)
       end
 
@@ -45,9 +45,11 @@ describe MembershipsController do
         expect(MembershipMailer).to receive(:new_membership_confirmation_email).and_return(double(ActionMailer::MessageDelivery, deliver_now: true))
         expect(MembershipMailer).to receive(:new_membership_alert).and_return(double(ActionMailer::MessageDelivery, deliver_now: true))
 
-        post :create, type: :Individual,
+        post :create, params: {
+          type: :Individual,
           user_id: user.username,
-          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual }
+          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual },
+        }
       end
 
       it 'notifies Slack' do
@@ -56,9 +58,11 @@ describe MembershipsController do
 
         expect(SlackBot).to receive(:post_message)
 
-        post :create, type: :Individual,
+        post :create, params: {
+          type: :Individual,
           user_id: user.username,
-          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual }
+          membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: :Individual },
+        }
       end
     end
   end
@@ -85,7 +89,7 @@ describe MembershipsController do
           it 'marks corresponding customer as refunded' do
             membership = user.current_membership
             expect {
-              post :webhooks, event
+              post :webhooks, params: event
             }.to change {
               membership.reload.refunded
             }.from nil
@@ -97,7 +101,7 @@ describe MembershipsController do
             user.current_membership.destroy
             expect(Rails.logger).to receive(:error).with(a_string_including('No membership associated with Stripe Charge'))
 
-            post :webhooks, event
+            post :webhooks, params: event
 
             expect(response).to have_http_status :success
           end
@@ -107,7 +111,7 @@ describe MembershipsController do
           it 'logs an error for no corresponding user' do
             expect(Rails.logger).to receive(:error).with(a_string_including('No User could be found with Stripe ID'))
 
-            post :webhooks, event
+            post :webhooks, params: event
 
             expect(response).to have_http_status :not_found
           end
@@ -141,7 +145,7 @@ describe MembershipsController do
           it 'logs an error for no corresponding user' do
             expect(Rails.logger).to receive(:error).with(a_string_including('No User could be found with Stripe ID'))
 
-            post :webhooks, event
+            post :webhooks, params: event
 
             expect(response).to have_http_status :not_found
           end
@@ -182,7 +186,7 @@ describe MembershipsController do
           it 'sends notifications' do
             expect(MembershipNotifier).to receive(:new).with(user: user, membership: a_kind_of(Membership)).and_return(double('MembershipNotifier', notify_renewal: nil))
 
-            post :webhooks, event
+            post :webhooks, params: event
           end
 
           it 'doesn\'t create a duplicate membership' do

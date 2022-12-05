@@ -54,7 +54,7 @@ describe StaticPagesController do
 
     context 'signed out' do
       it 'should redirect to root without emailing' do
-        post 'nominate', nomination: nomination
+        post 'nominate', params: { nomination: nomination }
 
         expect(UserMailer).not_to receive(:new_board_nomination_email)
         expect(response).to redirect_to(root_path)
@@ -69,7 +69,7 @@ describe StaticPagesController do
         expect(UserMailer).to receive(:new_board_nomination_email).with(user, nomination).and_return(mail_double)
         expect(mail_double).to receive(:deliver_now)
 
-        post 'nominate', nomination: nomination
+        post 'nominate', params: { nomination: nomination }
       end
 
       it 'should redirect to user home' do
@@ -77,7 +77,7 @@ describe StaticPagesController do
 
         allow(UserMailer).to receive_message_chain('new_board_nomination_email.deliver_now')
 
-        post 'nominate', nomination: nomination
+        post 'nominate', params: { nomination: nomination }
 
         expect(response).to redirect_to(user_home_path)
         expect(flash[:notice]).to eq 'Thank you for your nomination.'
