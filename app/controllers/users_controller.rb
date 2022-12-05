@@ -94,6 +94,8 @@ class UsersController < ApplicationController
     file = CSV.read(params[:file].path.to_s, headers: true, header_converters: :symbol).map(&:to_h)
     users = User.import(file, override_id: current_user.id)
     redirect_to users_path, notice: "#{users.size} #{'user'.pluralize(users.size)} imported."
+  rescue CanCan::AccessDenied => e
+    redirect_to root_path, e.message
   rescue => e
     Rails.logger.warn e.message
     Rails.logger.info e.backtrace.to_yaml

@@ -27,7 +27,8 @@ class StaticPagesController < ApplicationController
 
   # Nominate board member
   def nominate
-    UserMailer.new_board_nomination_email(current_user, params[:nomination]).deliver_now
+    nomination = params[:nomination]&.permit(:name, :position)&.to_h
+    UserMailer.new_board_nomination_email(current_user, nomination).deliver_now
     redirect_to user_home_path, notice: 'Thank you for your nomination.'
   rescue ArgumentError => e
     redirect_to user_home_path, flash: { error: e.message }

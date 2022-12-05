@@ -35,7 +35,7 @@ RSpec.describe StripeWebhookService do
       expect(status).to eq(200)
     end
 
-    it 'returns 200 for events that don\'t have a Stripe::Customer' do
+    it "returns 200 for events that don't have a Stripe::Customer" do
       event_name = StripeWebhookService::ACCEPTED_EVENTS.sample
       event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access
       if event[:data][:object][:object] == 'customer'
@@ -52,7 +52,7 @@ RSpec.describe StripeWebhookService do
       expect(status).to eq(200)
     end
 
-    it 'returns 404 for events that don\'t have a user' do
+    it "returns 404 for events that don't have a user" do
       event_name = StripeWebhookService::ACCEPTED_EVENTS.sample
       event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json")))
       webhook = StripeWebhookService.new(event)
@@ -98,7 +98,7 @@ RSpec.describe StripeWebhookService do
       end
     }
 
-    it 'logs an error if a Membership can\'t be found for the charge' do
+    it "logs an error if a Membership can't be found for the charge" do
       user.current_membership.destroy
       webhook = StripeWebhookService.new(event)
 
