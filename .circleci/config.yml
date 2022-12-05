@@ -3,16 +3,16 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.0
 jobs:
   build:
-    environment:
-      BUNDLE_PATH: vendor/bundle
-      COVERAGE: true
-      DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
-      PGHOST: 127.0.0.1
-      PGUSER: mr-member-portal-test-user
-      RAILS_ENV: test
     parallelism: 3
     docker:
       - image: cimg/ruby:3.1.2-node
+        environment:
+          BUNDLE_PATH: vendor/bundle
+          COVERAGE: true
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
+          PGHOST: 127.0.0.1
+          PGUSER: mr-member-portal-test-user
+          RAILS_ENV: test
       - image: cimg/postgres:11.17
         environment:
           POSTGRES_USER: mr-member-portal-test-user
