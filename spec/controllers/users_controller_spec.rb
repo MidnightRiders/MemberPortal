@@ -124,13 +124,13 @@ describe UsersController do
 
         expect(flash[:alert]).to eq('No file was selected')
       end
-      it 'imports Individual and Family users' do
+      it 'imports Individual and Family users but not Relatives' do
         expect {
           post :import, params: { file: fixture_file_upload('user-import.csv') }
-        }.to change(User, :count).by(3)
+        }.to change(User, :count).by(2)
       end
       it 'emails new users' do
-        expect(UserMailer).to receive(:new_user_creation_email).and_return(double(deliver_now: true)).exactly(3).times
+        expect(UserMailer).to receive(:new_user_creation_email).and_return(double(deliver_now: true)).exactly(2).times
 
         post :import, params: { file: fixture_file_upload('user-import.csv') }
       end
