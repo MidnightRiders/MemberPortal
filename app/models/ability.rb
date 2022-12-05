@@ -17,6 +17,7 @@ class Ability
           # can :refund, Membership, year: (Date.current.year..Date.current.year + 1)
           # can :grant_privileges, Membership
         elsif user.privilege? 'executive_board'
+          can :import, :users
           can :manage, [User, Membership, Club, Match, Player, RevGuess]
           cannot :destroy, [Club, Player]
           can :create, [User, Membership]
