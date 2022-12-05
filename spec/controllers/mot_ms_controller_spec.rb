@@ -47,7 +47,6 @@ describe MotMsController do
         expect {
           patch :update, params: { id: motm.id, mot_m: { first_id: new_motm.id }, match_id: motm.match.id }
           motm.reload
-          binding.pry
         }.to change(motm, :first_id)
       end
     end

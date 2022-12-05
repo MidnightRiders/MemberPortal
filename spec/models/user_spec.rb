@@ -43,31 +43,31 @@ describe User do
       it 'can manage itself' do
         expect(ability).to be_able_to(:manage, user)
       end
-      it 'can\'t manage another user' do
+      it "can't manage another user" do
         expect(ability).not_to be_able_to(:manage, FactoryBot.create(:user))
       end
       it 'can show another user' do
         expect(ability).to be_able_to(:show, FactoryBot.create(:user))
       end
-      it 'can\'t manage Clubs, Players, Matches' do
+      it "can't manage Clubs, Players, Matches" do
         expect(ability).not_to be_able_to(:manage, [Club, Player, Match])
       end
       it 'can index Matches' do
         expect(ability).to be_able_to(:index, Match)
       end
-      it 'can\'t index Players, Clubs, or Users' do
+      it "can't index Players, Clubs, or Users" do
         expect(ability).not_to be_able_to(:index, [Player, Club, User])
       end
     end
 
     context 'for no user' do
-      it 'can\'t create a Registration' do
+      it "can't create a Registration" do
         expect(ability).to be_able_to(:create, :Registration)
       end
-      it 'can\'t view any user' do
+      it "can't view any user" do
         expect(ability).not_to be_able_to(:view, FactoryBot.create(:user))
       end
-      it 'can\'t index Matches, Users, Players, Clubs' do
+      it "can't index Matches, Users, Players, Clubs" do
         expect(ability).not_to be_able_to(:index, [Match, User, Player, Club])
       end
     end
@@ -143,7 +143,7 @@ describe User do
       it 'grants memberships to members without current memberships' do
         expect { User.import(users_hash, override_id: admin_user.id) }.to change(Membership, :count).by(3)
       end
-      it 'doesn\'t grant memberships to members with current memberships' do
+      it "doesn't grant memberships to members with current memberships" do
         user = users_hash.select { |u| u[:membership_type] != 'Relative' }.sample
         FactoryBot.create(:user).tap { |u| u.email = user[:email] }.save
 
@@ -154,10 +154,10 @@ describe User do
 
         expect(User.find_by(first_name: 'Eliot', last_name: 'Waugh').current_membership.family).to eq(User.find_by(first_name: 'Alice', last_name: 'Quinn').current_membership)
       end
-      it 'doesn\'t create Users for Relatives if they don\'t follow a Family' do
+      it "doesn't create Users for Relatives if they don't follow a Family" do
         expect { User.import(improper_users_hash, override_id: admin_user.id) }.to change(User, :count).by(2)
       end
-      it 'doesn\'t create Relatives if they don\'t follow a Family' do
+      it "doesn't create Relatives if they don't follow a Family" do
         expect { User.import(improper_users_hash, override_id: admin_user.id) }.to change(Membership, :count).by(2)
       end
     end
@@ -169,7 +169,7 @@ describe User do
         expect { User.from_hash(hash) }.to change(User, :count).by(1)
       end
 
-      it 'doesn\'t create a new record if the User exists' do
+      it "doesn't create a new record if the User exists" do
         User.from_hash(hash)
 
         expect { User.from_hash(hash) }.not_to change(User, :count)

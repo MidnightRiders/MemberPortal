@@ -171,7 +171,8 @@ class User < ActiveRecord::Base
       begin
         type = user_info[:membership_type]
         raise 'No Family for Relative' if family_id.nil? && type == 'Relative'
-        user = from_hash(user_info).grant_membership!(type: type, privileges: privileges, granted_by: override_id, family_id: family_id)
+        user = from_hash(user_info)
+        user.grant_membership!(type: type, privileges: privileges, granted_by: override_id, family_id: family_id)
         family_id = user.current_membership.id if type == 'Family'
         family_id = nil if type == 'Individual'
         imported_users << user
