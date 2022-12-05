@@ -26,13 +26,20 @@ class Ability
         else
           can :show, [User, Club, Match]
           can :index, Match
-          can :manage, [user.current_membership, user.mot_ms, user.rev_guesses, user.pick_ems]
-          can :create, [MotM, RevGuess], user_id: user.id
-          can :vote, PickEm, user_id: user.id
+          can :manage, Membership do |membership|
+            membership == user.current_membership
+          end
+          can :manage, [MotM, RevGuess, PickEm], user: user
+          can :create, [MotM, RevGuess], user: user
+          can :vote, PickEm, user: user
           cannot :manage, Relative
           if user.current_membership.is_a? Family
-            can :manage, Relative, family_id: user.current_membership.id
-            can :manage, [user.current_membership.relatives, user.current_membership.relatives.map(&:user)]
+            can :manage, Relative do |relative|
+              relative.family_id == user.current_membership.id
+            end
+            can :manage, User do |u|
+              user.current_membership.relatives.map(&:user).include? u
+            end
           end
           cannot :index, [Club, Membership, Player, User, MotM, Relative, Family]
           cannot :refund, Membership
@@ -45,9 +52,9 @@ class Ability
         can :cancel_subscription, user.current_membership if user.current_membership.subscription?
       elsif user.invited_to_family?
         can :manage, user.family_invitation
-        can :create, Membership, user_id: user.id
+        can :create, Membership, user: user
       else
-        can :create, Membership, user_id: user.id
+        can :create, Membership, user: user
       end
     else
       cannot :index, :all
