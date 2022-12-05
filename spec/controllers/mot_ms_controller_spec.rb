@@ -43,7 +43,7 @@ describe MotMsController do
     describe '#update' do
       it 'updates the provided MotM' do
         motm = FactoryBot.create(:mot_m, match_id: match.id, user_id: user.id)
-        new_motm = Player.where('id NOT IN (?)', [motm.first.id, motm.second.id, motm.third.id]).sample || FactoryBot.create(:player)
+        new_motm = Player.where.not(id: [motm.first.id, motm.second.id, motm.third.id]).sample || FactoryBot.create(:player)
         expect {
           patch :update, params: { id: motm, mot_m: { first_id: new_motm.id }, match_id: motm.match }
           motm.reload

@@ -20,7 +20,7 @@ RSpec.describe 'PickEms', type: :request do
 
     it 'returns JSON for acceptable vote' do
       post match_pick_em_vote_path(match), params: { pick_em: { result: 1 } }
-      expect(response.content_type).to eq('application/json')
+      expect(response.content_type).to include('application/json')
       expect(response.body).to eq({ result: PickEm.last.result_key }.to_json)
     end
 
