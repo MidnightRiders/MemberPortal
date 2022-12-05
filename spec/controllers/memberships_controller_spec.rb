@@ -178,7 +178,7 @@ describe MembershipsController do
           end
 
           it 'creates a new Membership for a corresponding user' do
-            expect { post :webhooks, event }.to change(Membership, :count).by 1
+            expect { post :webhooks, params: event }.to change(Membership, :count).by 1
             expect(user.current_member?).to be_truthy
             expect(response).to have_http_status(:success)
           end
@@ -194,7 +194,7 @@ describe MembershipsController do
 
             allow(Rails.logger).to receive(:info)
             expect(Rails.logger).to receive(:info).with(a_string_including('duplicate Membership'))
-            expect { post :webhooks, event }.not_to change(Membership, :count)
+            expect { post :webhooks, params: event }.not_to change(Membership, :count)
             expect(response).to have_http_status(:success)
           end
         end
