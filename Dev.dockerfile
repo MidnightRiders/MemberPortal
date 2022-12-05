@@ -5,6 +5,8 @@ RUN apk update
 RUN apk add --no-cache --virtual \
   build-dependencies \
   build-base \
+  chromium \
+  chromium-chromedriver \
   gcompat \
   nodejs \
   postgresql-dev \

@@ -13,4 +13,4 @@ if [ $# -gt 0 ]; then
   args=( "$@" )
 fi
 
-docker-compose run --rm server -e RAILS_ENV=test bundle exec rspec "${args[@]}"
+docker-compose run -e RAILS_ENV=test --rm server bundle exec rspec "${args[@]}"
