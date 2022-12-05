@@ -22,13 +22,6 @@ require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 require 'capybara-screenshot/rspec'
 
-Capybara.register_server :thin do |app, port, host|
-  require 'rack/handler/thin'
-  Rack::Handler::Thin.run(app, :Port => port, :Host => host)
-end
-
-Capybara.server = :thin
-
 Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
 WebMock.disable_net_connect!(allow_localhost: true)
