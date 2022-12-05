@@ -1,8 +1,9 @@
 class StripeWebhookService
   ACCEPTED_EVENTS = %w(charge.refunded invoice.payment_succeeded).freeze
 
+  # @param [ActiveSupport::HashWithIndifferentAccess] event
   def initialize(event)
-    @event = event.to_h.with_indifferent_access
+    @event = event
     @response = { nothing: true, status: 500 }
   end
 

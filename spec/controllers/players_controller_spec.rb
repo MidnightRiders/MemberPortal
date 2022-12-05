@@ -16,7 +16,7 @@ describe PlayersController do
       expect(response).to redirect_to root_path
     end
     it 'rejects #create' do
-      expect { post :create, player: FactoryBot.attributes_for(:player) }.not_to change(Player, :count)
+      expect { post :create, params: { player: FactoryBot.attributes_for(:player) } }.not_to change(Player, :count)
       expect(response).to redirect_to root_path
     end
     it 'rejects #edit' do
@@ -66,7 +66,7 @@ describe PlayersController do
       expect(assigns(:player)).to eq player
     end
     it 'accepts #create' do
-      expect { post :create, player: FactoryBot.attributes_for(:player) }.to change(Player, :count)
+      expect { post :create, params: { player: FactoryBot.attributes_for(:player) } }.to change(Player, :count)
     end
     it 'accepts #update' do
       p = FactoryBot.create(:player)

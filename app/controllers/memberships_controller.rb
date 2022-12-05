@@ -80,7 +80,7 @@ class MembershipsController < ApplicationController
 
   # ALL /memberships/webhooks
   def webhooks
-    webhook = StripeWebhookService.new(params)
+    webhook = StripeWebhookService.new(params.permit!.to_h.with_indifferent_access)
     render webhook.process
   end
 
