@@ -30,18 +30,33 @@ Midnight Riders Web Committee Member [@bensaufley](https://github.com/bensaufley
 
 This repo adheres to the [Scripts to Rule Them All] philosophy. Scripts:
 
-- `script/bootstrap`: checks for required utilities; installs as available, or instructs
-  user to install manually
-- `script/setup`: sets up the project for local development. Builds without cache. Runs `script/bootstrap` first.
-- `script/update`: attempts to rebuild the docker environment, using cache. Runs `script/bootstrap` first.
+- `script/bootstrap`: checks for required utilities; installs as available, or
+  instructs user to install manually
+- `script/setup`: sets up the project for local development. Builds without
+  cache. Runs `script/bootstrap` first.
+- `script/migrate`: runs db migrations. Can be used with `:up`, `:down` etc:
+  `script/migrate :down` will run `bundle exec rails db:migrate:down`. If args
+  that don't begin with `:` are passed, they'll be passed as is:
+  `script/migrate foo bar` will run `bundle exec rails foo bar`.
+- `script/update`: attempts to rebuild the docker environment, using cache, and
+  runs `script/migrate`. Runs `script/bootstrap` first.
 - `script/server`: starts the server on port 5991. Runs `script/update` first.
 - `script/test`: runs the test suite. Runs `script/update` first.
-- `script/console`: starts a shell session inside `server` Docker service. Runs `script/update` first.
-- `script/cmd`: runs a single command inside the `server` Docker service. Runs `script/update` first.
+- `script/console`: starts a shell session inside `server` Docker service. Runs
+  `script/update` first.
+- `script/cmd`: runs a single command inside the `server` Docker service. Runs
+  `script/update` first.
+
+For first run, run `script/setup` before `script/server`. In subsequent runs,
+you can just run `script/server`.
+
+[scripts to rule them all]: https://github.com/github/scripts-to-rule-them-all
 
 ### Dependencies
-**`postgresql`** is used for the database. I've used [Postgres.app](https://postgresapp.com/documentation/install.html)
-for Mac, which is pretty plug-and-play. You'll need a `root` user with broad privileges.
+
+**`postgresql`** is used for the database. I've used
+[Postgres.app](https://postgresapp.com/documentation/install.html) for Mac,
+which is pretty plug-and-play. You'll need a `root` user with broad privileges.
 
 **`phantomjs`** is also required to run spec, and can also be installed using Homebrew:
 `brew install phantomjs`.

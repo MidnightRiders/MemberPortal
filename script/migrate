@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+args=( db:migrate )
+if [ "$#" -gt 0 ]; then
+  if [ "${1:0:1}" = ":" ]; then
+    args=( "db:migrate$1" "$@" )
+  else
+    args=( "$@" )
+  fi
+fi
+
+docker-compose run --rm start_db
+
+docker-compose run -e RAILS_ENV="${RAILS_ENV:-development}" --rm server bundle exec rails "${args[@]}"
