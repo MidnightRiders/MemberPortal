@@ -25,14 +25,20 @@ describe UsersController do
       it 'for admin users' do
         sign_in FactoryBot.create(:user, :admin)
         get :index
+
         expect(response).to be_successful
-        expect(assigns(:users)).to match_array(User.all)
+        expect(assigns(:user_set)).to match_array(
+          User.where(memberships: { year: Date.current.year }).order(last_name: :asc, first_name: :asc)
+        )
       end
       it 'for Executive Board users' do
         sign_in FactoryBot.create(:user, :executive_board)
         get :index
+
         expect(response).to be_successful
-        expect(assigns(:users)).to match_array(User.all)
+        expect(assigns(:user_set)).to match_array(
+          User.where(memberships: { year: Date.current.year }).order(last_name: :asc, first_name: :asc)
+        )
       end
     end
   end
