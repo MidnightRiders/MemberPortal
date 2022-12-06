@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe StripeWebhookService do
-  describe 'process' do
+  describe '#process' do
     it 'returns 200 for non-accepted events' do
       event_file = nil
       loop do
@@ -35,33 +35,35 @@ RSpec.describe StripeWebhookService do
       expect(status).to eq(200)
     end
 
-    it "returns 200 for events that don't have a Stripe::Customer" do
-      event_name = StripeWebhookService::ACCEPTED_EVENTS.sample
-      event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access
-      if event[:data][:object][:object] == 'customer'
-        event[:data][:object][:id] = ''
-      else
-        event[:data][:object][:customer] = ''
+    StripeWebhookService::ACCEPTED_EVENTS.each do |event_name|
+      context "event: #{event_name}" do
+        it "returns 200 for events that don't have a Stripe::Customer" do
+          event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access
+          if event[:data][:object][:object] == 'customer'
+            event[:data][:object][:id] = ''
+          else
+            event[:data][:object][:customer] = ''
+          end
+          webhook = StripeWebhookService.new(event)
+
+          expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')
+
+          status = webhook.process
+
+          expect(status).to eq(200)
+        end
+
+        it "returns 404 for events that don't have a user" do
+          event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access
+          webhook = StripeWebhookService.new(event)
+
+          expect(Rails.logger).to receive(:error).with(a_string_including('No User could be found'))
+
+          status = webhook.process
+
+          expect(status).to eq(404)
+        end
       end
-      webhook = StripeWebhookService.new(event)
-
-      expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')
-
-      status = webhook.process
-
-      expect(status).to eq(200)
-    end
-
-    it "returns 404 for events that don't have a user" do
-      event_name = StripeWebhookService::ACCEPTED_EVENTS.sample
-      event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json")))
-      webhook = StripeWebhookService.new(event)
-
-      expect(Rails.logger).to receive(:error).with(a_string_including('No User could be found'))
-
-      status = webhook.process
-
-      expect(status).to eq(404)
     end
 
     it 'calls charge_refunded for charge.refunded event' do
