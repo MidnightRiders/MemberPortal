@@ -11,16 +11,16 @@
       %ul.left
         %li.has-dropdown
           %a{ href: '#' }
-            = icon 'fa-regular', 'external-link-square fa-fw'
+            = icon 'fa-solid', 'external-link fa-fw'
             Sites
           %ul.dropdown
             %li.external
               = link_to 'http://MidnightRiders.com', target: '_blank' do
-                = icon 'fa-regular', 'link fa-fw'
+                = icon 'fa-solid', 'link fa-fw'
                 Riders Website
             %li.external
               = link_to 'http://midnightriders.com/shop', target: '_blank' do
-                = icon 'fa-regular', 'shopping-cart fa-fw'
+                = icon 'fa-solid', 'shopping-cart fa-fw'
                 Shop
             %li
               %label Social
@@ -47,7 +47,7 @@
                 Revolution Website
             %li.has-dropdown
               %a{ href: '#' }
-                = icon 'fa-regular', 'beer fa-fw'
+                = icon 'fa-solid', 'beer fa-fw'
                 Partner Pubs
               %ul.dropdown
                 %li.external
@@ -93,7 +93,7 @@
                       %code RIDERS2017
             %li.has-dropdown
               %a{ href: '#' }
-                = icon 'fa-regular', 'reddit fa-fw'
+                = icon 'fa-brands', 'reddit fa-fw'
                 Reddit
               %ul.dropdown
                 %li.external
@@ -107,18 +107,18 @@
             %li
               = link_to user_home_path do
                 .show-for-medium-up
-                  = icon 'fa-regular', 'home fa-fw'
+                  = icon 'fa-solid', 'home fa-fw'
                   &nbsp;
                 .show-for-small-only
-                  = icon 'fa-regular', 'home fa-fw'
+                  = icon 'fa-solid', 'home fa-fw'
                   Home
           %li
             = link_to faq_path, title: 'FAQ' do
               .show-for-medium-up
-                = icon 'fa-regular', 'question fa-fw'
+                = icon 'fa-solid', 'circle-question fa-fw'
                 &nbsp;
               .show-for-small-only
-                = icon 'fa-regular', 'question fa-fw'
+                = icon 'fa-solid', 'circle-question fa-fw'
                 FAQ
           %li
             = link_to contact_path, title: 'Contact Us' do
@@ -137,33 +137,33 @@
                 Matches
             %li.has-dropdown
               = link_to '#' do
-                = icon 'fa-regular', 'trophy fa-fw'
+                = icon 'fa-solid', 'trophy fa-fw'
                 Games
               %ul.dropdown
                 %li
                   = link_to matches_path do
-                    = icon 'fa-regular', 'check fa-fw'
+                    = icon 'fa-solid', 'check fa-fw'
                     RevGuess/Pick ’Em
                 %li
                   = link_to standings_path do
-                    = icon 'fa-regular', 'trophy fa-fw'
+                    = icon 'fa-solid', 'trophy fa-fw'
                     Standings
                 %li.external
                   = link_to 'https://fantasy.mlssoccer.com/#classic/leagues/771/join/AMN4KR2S', target: :_blank do
-                    = icon 'fa-regular', 'users fa-fw'
+                    = icon 'fa-solid', 'users fa-fw'
                     MLS Fantasy
                 %li
                   %label Other Fantasy
                 %li.external
                   = link_to 'http://fantasy.premierleague.com/my-leagues/290319/join/?autojoin-code=1206043-290319', target: :_blank do
-                    = icon 'fa-regular', 'users fa-fw'
+                    = icon 'fa-solid', 'users fa-fw'
                     EPL Fantasy
                 - if current_user.privilege?('admin') || current_user.privilege?('executive_board')
                   %li
                     %label Admin
                   %li
                     = link_to mot_ms_path do
-                      = icon 'fa-regular', 'list-ol fa-fw'
+                      = icon 'fa-solid', 'list-ol fa-fw'
                       MotY Rankings
 
           %li
@@ -174,16 +174,16 @@
             %li.has-dropdown
               %a{ href: '#', title: 'Admin' }
                 .show-for-medium-up
-                  = icon 'fa-regular', 'bolt fa-fw'
+                  = icon 'fa-solid', 'bolt fa-fw'
                   &nbsp;
                 .hide-for-medium-up
-                  = icon 'fa-regular', 'bolt fa-fw'
+                  = icon 'fa-solid', 'bolt fa-fw'
                   Admin
               %ul.dropdown
                 - if can? :view, :users
                   %li
                     = link_to users_path do
-                      = icon 'fa-regular', 'users fa-fw'
+                      = icon 'fa-solid', 'users fa-fw'
                       Users
                 - if can? :transactions, :static_page
                   %li
@@ -193,27 +193,27 @@
                 %li.divider
                 %li
                   = link_to clubs_path do
-                    = icon 'fa-regular', 'shield fa-fw'
+                    = icon 'fa-solid', 'shield fa-fw'
                     Clubs
                 - if can? :view, :players
                   %li
                     = link_to players_path do
-                      = icon 'fa-regular', 'list fa-fw'
+                      = icon 'fa-solid', 'list fa-fw'
                       Players
           %li
             = link_to destroy_user_session_path, title: 'Sign Out', data: { method: :delete, confirm: 'Are you sure you wish to sign out?' } do
               .show-for-small-only
-                = icon 'fa-regular', 'power-off fa-fw'
+                = icon 'fa-solid', 'power-off fa-fw'
                 Sign Out
               .show-for-medium-up
-                = icon 'fa-regular', 'power-off fa-fw'
+                = icon 'fa-solid', 'power-off fa-fw'
                 &nbsp;
         - else
           %li
             = link_to new_user_registration_path do
-              = icon 'fa-regular', 'pencil-square fa-fw'
+              = icon 'fa-solid', 'pencil-square fa-fw'
               Sign Up
           %li
             = link_to new_user_session_path do
-              = icon 'fa-regular', 'sign-in fa-fw'
+              = icon 'fa-solid', 'sign-in fa-fw'
               Sign In

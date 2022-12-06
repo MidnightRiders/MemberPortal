@@ -18,7 +18,7 @@ class MatchDecorator < Draper::Decorator
   def mot_m_button(size = 'small', o = false)
     opp = o ? opponent : ''
     h.link_to h.mot_m_path_for(model), class: "button secondary #{size}", title: "Man of the Match #{opp}" do
-      h.icon('fa-regular', 'list-ol fa-fw') + ' MotM ' + opp + (h.icon('fa-regular', 'check fa-fw') if h.mot_m_for(model))
+      h.icon('fa-solid', 'list-ol fa-fw') + ' MotM ' + opp + (h.icon('fa-regular', 'check fa-fw') if h.mot_m_for(model))
     end
   end
 
@@ -89,8 +89,8 @@ class MatchDecorator < Draper::Decorator
   # Returns buttons for editing/deleting a match
   def admin_controls
     h.capture do
-      h.concat h.link_to(h.icon('fa-regular', 'pencil fa-fw'), h.edit_match_path(model), title: 'Edit') if h.can? :edit, model
-      h.concat h.link_to(h.icon('fa-regular', 'trash fa-fw'), model, method: :delete, data: { confirm: 'Are you sure?' }, title: 'Destroy') if h.can? :destroy, model
+      h.concat h.link_to(h.icon('fa-solid', 'pencil fa-fw'), h.edit_match_path(model), title: 'Edit') if h.can? :edit, model
+      h.concat h.link_to(h.icon('fa-solid', 'trash fa-fw'), model, method: :delete, data: { confirm: 'Are you sure?' }, title: 'Destroy') if h.can? :destroy, model
     end
   end
 

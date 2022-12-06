@@ -3,7 +3,7 @@
 .row.actions
   .column.text-right
     = link_to new_club_path, class: 'button' do
-      = icon 'fa-regular', 'shield fa-fw'
+      = icon 'fa-solid', 'shield fa-fw'
       Add Club
 
 .table
@@ -33,5 +33,5 @@
           Edit
         - if can? :destroy, club
           = link_to club, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button small alert' do
-            = icon 'fa-regular', 'trash fa-fw'
+            = icon 'fa-solid', 'trash fa-fw'
             Destroy

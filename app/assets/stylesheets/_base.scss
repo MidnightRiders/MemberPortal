@@ -113,7 +113,7 @@ select[multiple], select[size] {
     &::before {
       display: inline-block;
       float: right;
-      font-family: 'Font Awesome 6 Free';
+      font-family: $fa-style-family;
       font-style: normal;
       font-weight: 400;
       line-height: 1;
