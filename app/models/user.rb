@@ -173,8 +173,11 @@ class User < ActiveRecord::Base
         raise 'No Family for Relative' if family_id.nil? && type == 'Relative'
         user = from_hash(user_info)
         user.grant_membership!(type: type, privileges: privileges, granted_by: override_id, family_id: family_id)
-        family_id = user.current_membership.id if type == 'Family'
-        family_id = nil if type == 'Individual'
+        if type == 'Family'
+          family_id = user.current_membership.id
+        elsif type == 'Individual'
+          family_id = nil
+        end
         imported_users << user
       rescue => e
         Rails.logger.warn e.message
