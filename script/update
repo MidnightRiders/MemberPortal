@@ -6,8 +6,8 @@ cd "$(dirname "$0")/.."
 
 script/bootstrap
 
+docker-compose build
+
 if [ "$MIGRATE" != "false" ]; then
   script/migrate
 fi
-
-docker-compose build

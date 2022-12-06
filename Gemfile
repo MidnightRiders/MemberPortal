@@ -11,7 +11,7 @@ gem 'pg'
 
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass'
-gem 'foundation-rails', '<6.0'
+gem 'foundation-rails', '5.5.3.2'
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'sassc-rails'

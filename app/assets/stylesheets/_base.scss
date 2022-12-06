@@ -1,7 +1,7 @@
 @font-face {
   font-family: Mayflower;
-  src: url('/assets/Mayflower.eot'); /* EOT file for IE */
-  src: local('Mayflower'), url('/assets/Mayflower.ttf') format('opentype');
+  src: font-url('Mayflower.eot'); /* EOT file for IE */
+  src: local('Mayflower'), font-url('Mayflower.woff2') format('woff2'), font-url('Mayflower.ttf') format('opentype');
 }
 
 html {
