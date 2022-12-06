@@ -15,10 +15,9 @@ class UserMailer < ActionMailer::Base
     mail(to: @user.email, subject: @title)
   end
 
-  def new_board_nomination_email(user, nomination)
+  def new_board_nomination_email(user, nomination = {})
     @user = user
 
-    nomination ||= {}
     @nominee = nomination[:name]
     @position = nomination[:position]
     raise ArgumentError, 'Need all information for nominee.' unless @nominee.present? && @position.present?

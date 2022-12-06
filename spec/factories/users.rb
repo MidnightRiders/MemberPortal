@@ -22,7 +22,12 @@ FactoryBot.define do
     end
 
     after :create do |u, evaluator|
-      FactoryBot.create(:membership, user_id: u.id, type: %w(Individual Family).sample) if evaluator.with_membership
+      FactoryBot.create(
+        :membership,
+        user_id: u.id,
+        type: %w(Individual Family).sample,
+        year: Membership.new_membership_year,
+      ) if evaluator.with_membership
     end
 
     trait :admin do

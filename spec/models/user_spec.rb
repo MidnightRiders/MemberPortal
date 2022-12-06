@@ -145,7 +145,7 @@ describe User do
       end
       it "doesn't grant memberships to members with current memberships" do
         user = users_hash.select { |u| u[:membership_type] != 'Relative' }.sample
-        FactoryBot.create(:user).tap { |u| u.email = user[:email] }.save
+        FactoryBot.create(:user).tap { |u| u.email = user[:email] }.save!
 
         expect { User.import(users_hash, override_id: admin_user.id) }.to change(Membership, :count).by(2)
       end
