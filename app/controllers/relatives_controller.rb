@@ -56,7 +56,7 @@ class RelativesController < ApplicationController
   # POST /users/:username/memberships/:membership_id/relatives//accept_invitation
   def accept_invitation
     if @relative.pending_approval
-      if (@relative_user = User.find_by(email: @relative.invited_email)).present? && @relative.update_attributes(user_id: @relative_user.id, info: @relative.info.with_indifferent_access.except(:pending_approval, :invited_email))
+      if (@relative_user = User.find_by(email: @relative.invited_email)).present? && @relative.update(user_id: @relative_user.id, info: @relative.info.with_indifferent_access.except(:pending_approval, :invited_email))
         MembershipNotifier.new(user: @relative_user, membership: @relative).notify_relative
         redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
       else

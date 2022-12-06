@@ -10,29 +10,35 @@ describe UsersController do
       end
 
       it 'for individual users' do
-        sign_in FactoryGirl.create(:user)
+        sign_in FactoryBot.create(:user)
         get :index
         expect(response).to redirect_to root_path
       end
 
       it 'for At Large Board users' do
-        sign_in FactoryGirl.create(:user, :at_large_board)
+        sign_in FactoryBot.create(:user, :at_large_board)
         get :index
         expect(response).to redirect_to root_path
       end
     end
     context 'authorized access' do
       it 'for admin users' do
-        sign_in FactoryGirl.create(:user, :admin)
+        sign_in FactoryBot.create(:user, :admin)
         get :index
-        expect(response).to be_success
-        expect(assigns(:users)).to match_array(User.all)
+
+        expect(response).to be_successful
+        expect(assigns(:user_set)).to match_array(
+          User.where(memberships: { year: Date.current.year }).order(last_name: :asc, first_name: :asc)
+        )
       end
       it 'for Executive Board users' do
-        sign_in FactoryGirl.create(:user, :executive_board)
+        sign_in FactoryBot.create(:user, :executive_board)
         get :index
-        expect(response).to be_success
-        expect(assigns(:users)).to match_array(User.all)
+
+        expect(response).to be_successful
+        expect(assigns(:user_set)).to match_array(
+          User.where(memberships: { year: Date.current.year }).order(last_name: :asc, first_name: :asc)
+        )
       end
     end
   end
@@ -41,38 +47,38 @@ describe UsersController do
   end
 
   describe '#show' do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { FactoryBot.create :user }
     it 'will reject signed-out users' do
-      get :show, id: user.to_param
+      get :show, params: { id: user.to_param }
       expect(response).to redirect_to root_path
     end
     it 'will not reject signed-in users' do
       sign_in user
-      get :show, id: user
-      expect(response).to be_success
+      get :show, params: { id: user }
+      expect(response).to be_successful
       expect(assigns(:user)).to eq user
     end
   end
 
   describe '#edit' do
-    let(:user) { FactoryGirl.create :user }
+    let(:user) { FactoryBot.create :user }
     it 'rejects logged-out users' do
-      get :edit, id: user
+      get :edit, params: { id: user }
       expect(response).to redirect_to root_path
     end
     it 'rejects unauthorized users' do
-      sign_in FactoryGirl.create(:user)
-      get :edit, id: user
+      sign_in FactoryBot.create(:user)
+      get :edit, params: { id: user }
       expect(response).to redirect_to root_path
     end
     it 'allows admin users' do
-      sign_in FactoryGirl.create(:user, :admin)
-      get :edit, id: user
-      expect(response).to be_success
+      sign_in FactoryBot.create(:user, :admin)
+      get :edit, params: { id: user }
+      expect(response).to be_successful
     end
     it 'redirects non-admins to Devise' do
       sign_in user
-      get :edit, id: user
+      get :edit, params: { id: user }
       expect(response).to redirect_to(edit_user_registration_path(user))
     end
   end
@@ -81,44 +87,44 @@ describe UsersController do
     let(:file) { Rails.root.join('spec', 'data', 'user-import.csv') }
     context 'logged out' do
       it 'redirects users' do
-        post :import, file: fixture_file_upload('files/user-import.csv')
+        post :import, params: { file: fixture_file_upload('user-import.csv') }
 
         expect(response).to redirect_to root_path
       end
       it 'does not accept files' do
         expect {
-          post :import, file: fixture_file_upload('files/user-import.csv')
+          post :import, params: { file: fixture_file_upload('user-import.csv') }
         }.not_to change(User, :count)
       end
     end
     context 'logged in as regular user' do
-      before(:each) { sign_in FactoryGirl.create(:user) }
+      before(:each) { sign_in FactoryBot.create(:user) }
       it 'redirects users' do
-        post :import, file: fixture_file_upload('files/user-import.csv')
+        post :import, params: { file: fixture_file_upload('user-import.csv') }
 
         expect(response).to redirect_to root_path
       end
       it 'does not accept files' do
         expect {
-          post :import, file: fixture_file_upload('files/user-import.csv')
+          post :import, params: { file: fixture_file_upload('user-import.csv') }
         }.not_to change(User, :count)
       end
     end
     context 'logged in as at-large board user' do
-      before(:each) { sign_in FactoryGirl.create(:user, :at_large_board) }
+      before(:each) { sign_in FactoryBot.create(:user, :at_large_board) }
       it 'redirects users' do
-        post :import, file: fixture_file_upload('files/user-import.csv')
+        post :import, params: { file: fixture_file_upload('user-import.csv') }
 
         expect(response).to redirect_to root_path
       end
       it 'does not accept files' do
         expect {
-          post :import, file: fixture_file_upload('files/user-import.csv')
+          post :import, params: { file: fixture_file_upload('user-import.csv') }
         }.not_to change(User, :count)
       end
     end
     context 'logged in as admin' do
-      before(:each) { sign_in FactoryGirl.create(:user, :admin) }
+      before(:each) { sign_in FactoryBot.create(:user, :admin) }
       it 'rejects if file missing' do
         post :import
 
@@ -126,25 +132,25 @@ describe UsersController do
       end
       it 'imports Individual and Family users' do
         expect {
-          post :import, file: fixture_file_upload('files/user-import.csv')
+          post :import, params: { file: fixture_file_upload('user-import.csv') }
         }.to change(User, :count).by(3)
       end
       it 'emails new users' do
         expect(UserMailer).to receive(:new_user_creation_email).and_return(double(deliver_now: true)).exactly(3).times
 
-        post :import, file: fixture_file_upload('files/user-import.csv')
+        post :import, params: { file: fixture_file_upload('user-import.csv') }
       end
       it 'doesn\'t email existing users' do
         user_file = CSV.read(Rails.root.join('spec', 'fixtures', 'files', 'user-import.csv'), headers: true, header_converters: :symbol).map(&:to_h)
         user_file.each do |u|
-          FactoryGirl.build(:user).tap { |user|
+          FactoryBot.build(:user).tap { |user|
             user.email = u[:email]
           }.save
         end
 
         expect(UserMailer).not_to receive(:new_user_creation_email)
 
-        post :import, file: fixture_file_upload('files/user-import.csv')
+        post :import, params: { file: fixture_file_upload('user-import.csv') }
       end
     end
   end

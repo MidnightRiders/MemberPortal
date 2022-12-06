@@ -1,7 +1,7 @@
 @font-face {
   font-family: Mayflower;
-  src: url('/assets/Mayflower.eot'); /* EOT file for IE */
-  src: local('Mayflower'), url('/assets/Mayflower.ttf') format('opentype');
+  src: font-url('Mayflower.eot'); /* EOT file for IE */
+  src: local('Mayflower'), font-url('Mayflower.woff2') format('woff2'), font-url('Mayflower.ttf') format('opentype');
 }
 
 html {
@@ -110,12 +110,12 @@ select[multiple], select[size] {
     }
   }
   &.success, &.alert {
-    &:before {
+    &::before {
       display: inline-block;
       float: right;
-      font-family: FontAwesome;
+      font-family: $fa-style-family;
       font-style: normal;
-      font-weight: normal;
+      font-weight: 400;
       line-height: 1;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -124,12 +124,12 @@ select[multiple], select[size] {
     }
   }
   &.success {
-    &:before {
+    &::before {
       content: $fa-var-check-circle;
     }
   }
   &.alert {
-    &:before {
+    &::before {
       content: $fa-var-exclamation-triangle;
     }
   }

@@ -17,23 +17,23 @@ describe StaticPagesController do
   describe 'GET "faq"' do
     it 'returns http success' do
       get 'faq'
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
   describe 'GET "contact"' do
     it 'returns http success' do
       get 'contact'
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
   describe 'GET "standings"' do
     context 'signed in' do
       it 'should show' do
-        sign_in FactoryGirl.create(:user)
+        sign_in FactoryBot.create(:user)
         get 'standings'
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -46,7 +46,7 @@ describe StaticPagesController do
   end
 
   describe 'POST "nominate"' do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     let!(:positions) {
       %w(At-Large\ Board President Treasurer Membership\ Secretary Web\ Czar Recording\ Secretary Philanthropy\ Chair Merchandise\ Coordinator).sort + ['501(c)(3) Board of Directors']
     }
@@ -54,7 +54,7 @@ describe StaticPagesController do
 
     context 'signed out' do
       it 'should redirect to root without emailing' do
-        post 'nominate', nomination: nomination
+        post 'nominate', params: { nomination: nomination }
 
         expect(UserMailer).not_to receive(:new_board_nomination_email)
         expect(response).to redirect_to(root_path)
@@ -69,7 +69,7 @@ describe StaticPagesController do
         expect(UserMailer).to receive(:new_board_nomination_email).with(user, nomination).and_return(mail_double)
         expect(mail_double).to receive(:deliver_now)
 
-        post 'nominate', nomination: nomination
+        post 'nominate', params: { nomination: nomination }
       end
 
       it 'should redirect to user home' do
@@ -77,7 +77,7 @@ describe StaticPagesController do
 
         allow(UserMailer).to receive_message_chain('new_board_nomination_email.deliver_now')
 
-        post 'nominate', nomination: nomination
+        post 'nominate', params: { nomination: nomination }
 
         expect(response).to redirect_to(user_home_path)
         expect(flash[:notice]).to eq 'Thank you for your nomination.'

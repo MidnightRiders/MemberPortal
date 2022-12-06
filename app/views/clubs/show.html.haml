@@ -12,11 +12,11 @@
   - if can? :manage, @club
     .medium-4.columns.text-right
       = link_to edit_club_path(@club), class: 'button small' do
-        = icon 'pencil'
+        = icon 'fa-regular', 'pencil'
         Edit
       - if can? :destroy, @club
         = link_to @club, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button alert small' do
-          = icon 'trash-o'
+          = icon 'fa-solid', 'trash'
           Destroy
 .row
   .medium-3.columns

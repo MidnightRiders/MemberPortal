@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+MIGRATE=false script/update
+
+docker-compose run --service-ports --rm server /bin/sh

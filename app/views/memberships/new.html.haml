@@ -73,7 +73,7 @@
                   = text_field_tag nil, '', id: 'stripe_card_number', maxlength: 16, pattern: '[0-9]*', disabled: (membership_form.object.user.stripe_customer_token && @cards.present?)
                 .small-2.columns
                   = link_to 'https://www.expeditedssl.com/simple-ssl-scanner/scan?target_domain=members.midnightriders.com', target: '_blank', class: 'button secondary postfix', title: 'Learn more' do
-                    = icon 'lock fa-fw'
+                    = icon 'fa-regular', 'lock fa-fw'
                     %small SSL
           .row
             .medium-4.columns
@@ -89,5 +89,5 @@
           = membership_form.hidden_field :stripe_card_token, disabled: (membership_form.object.user.stripe_customer_token && @cards.present?)
 
       = membership_form.button :submit, class: 'button right' do
-        = icon 'credit-card fa-fw'
+        = icon 'fa-regular', 'credit-card fa-fw'
         Purchase Membership

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :club do
     name { FFaker::Address.city + ' FC' }
     abbrv { name.gsub(/\W/, '').upcase[0, [2, 3].sample] }
@@ -9,8 +9,8 @@ FactoryGirl.define do
     api_id { FFaker::Random.rand(0..9999) }
 
     trait :ne do
-      abbrv 'NE'
-      name 'New England Revolution'
+      abbrv { 'NE' }
+      name { 'New England Revolution' }
     end
   end
 end

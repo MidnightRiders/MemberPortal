@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :rev_guess do
-    match_id { (Match.first || FactoryGirl.create(:match)).id }
-    user_id { (User.first || FactoryGirl.create(:user)).id }
+    match_id { (Match.first || FactoryBot.create(:match)).id }
+    user_id { (User.first || FactoryBot.create(:user)).id }
     home_goals { (Random.rand * 5).to_i }
     away_goals { (Random.rand * 5).to_i }
     trait :home_win do

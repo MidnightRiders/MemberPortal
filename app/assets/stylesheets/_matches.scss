@@ -51,7 +51,7 @@ ul.matches {
     line-height: 2;
     .fa-fw {
       width: auto;
-      &:before {
+      &::before {
         background-color: $maroon;
         color: #fff;
         display: inline-block;

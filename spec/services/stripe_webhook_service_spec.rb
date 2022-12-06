@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 RSpec.describe StripeWebhookService do
-  describe 'process' do
+  describe '#process' do
     it 'returns 200 for non-accepted events' do
       event_file = nil
       loop do
@@ -14,10 +14,9 @@ RSpec.describe StripeWebhookService do
       expect(Rails.logger).to receive(:warn).with(a_string_including('not in accepted webhooks'))
       expect(webhook).not_to receive(:customer_token)
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(200)
-      expect(response[:nothing]).to be(true)
+      expect(status).to eq(200)
     end
 
     it 'returns 200 for explicitly ignored Stripe::Event IDs' do
@@ -31,43 +30,45 @@ RSpec.describe StripeWebhookService do
 
       expect(StripeWebhookService).not_to receive(:event_type)
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(200)
+      expect(status).to eq(200)
     end
 
-    it 'returns 200 for events that don\'t have a Stripe::Customer' do
-      event_name = StripeWebhookService::ACCEPTED_EVENTS.sample
-      event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access
-      if event[:data][:object][:object] == 'customer'
-        event[:data][:object][:id] = ''
-      else
-        event[:data][:object][:customer] = ''
+    StripeWebhookService::ACCEPTED_EVENTS.each do |event_name|
+      context "event: #{event_name}" do
+        it "returns 200 for events that don't have a Stripe::Customer" do
+          event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access
+          if event[:data][:object][:object] == 'customer'
+            event[:data][:object][:id] = ''
+          else
+            event[:data][:object][:customer] = ''
+          end
+          webhook = StripeWebhookService.new(event)
+
+          expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')
+
+          status = webhook.process
+
+          expect(status).to eq(200)
+        end
+
+        it "returns 404 for events that don't have a user" do
+          event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json"))).with_indifferent_access
+          webhook = StripeWebhookService.new(event)
+
+          expect(Rails.logger).to receive(:error).with(a_string_including('No User could be found'))
+
+          status = webhook.process
+
+          expect(status).to eq(404)
+        end
       end
-      webhook = StripeWebhookService.new(event)
-
-      expect(Rails.logger).to receive(:error).with('No Stripe::Customer attached to event.')
-
-      response = webhook.process
-
-      expect(response[:status]).to eq(200)
-    end
-
-    it 'returns 404 for events that don\'t have a user' do
-      event_name = StripeWebhookService::ACCEPTED_EVENTS.sample
-      event = JSON.parse(File.read(Rails.root.join("spec/fixtures/webhooks/#{event_name}.json")))
-      webhook = StripeWebhookService.new(event)
-
-      expect(Rails.logger).to receive(:error).with(a_string_including('No User could be found'))
-
-      response = webhook.process
-
-      expect(response[:status]).to eq(404)
     end
 
     it 'calls charge_refunded for charge.refunded event' do
       event = JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/charge.refunded.json'))).with_indifferent_access
-      FactoryGirl.create(:user).tap do |u|
+      FactoryBot.create(:user).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
         u.current_membership.update(stripe_charge_id: event[:data][:object][:id])
       end
@@ -79,7 +80,7 @@ RSpec.describe StripeWebhookService do
     end
     it 'calls invoice_payment_received for invoice.payment_succeeded event' do
       event = JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/invoice.payment_succeeded.json'))).with_indifferent_access
-      FactoryGirl.create(:user, :without_membership).tap do |u|
+      FactoryBot.create(:user, :without_membership).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
       end
       webhook = StripeWebhookService.new(event)
@@ -93,39 +94,39 @@ RSpec.describe StripeWebhookService do
   describe 'charge_refunded' do
     let!(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/charge.refunded.json'))).with_indifferent_access }
     let(:user) {
-      FactoryGirl.create(:user).tap do |u|
+      FactoryBot.create(:user).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
         u.current_membership.update(stripe_charge_id: event[:data][:object][:id])
       end
     }
 
-    it 'logs an error if a Membership can\'t be found for the charge' do
+    it "logs an error if a Membership can't be found for the charge" do
       user.current_membership.destroy
       webhook = StripeWebhookService.new(event)
 
       expect(Rails.logger).to receive(:error).with(a_string_including('No membership associated'))
 
-      response = webhook.process
+      status = webhook.process
 
-      expect(response[:status]).to eq(200)
+      expect(status).to eq(200)
     end
 
     it 'marks a matching Membership as refunded' do
       webhook = StripeWebhookService.new(event)
       membership = user.current_membership
-      response = nil
+      status = nil
 
       expect(Rails.logger).not_to receive(:error)
 
-      expect { response = webhook.process }.to change { membership.reload.refunded }.to 'true'
-      expect(response[:status]).to eq(200)
+      expect { status = webhook.process }.to change { membership.reload.refunded }.to 'true'
+      expect(status).to eq(200)
     end
   end
 
   describe 'invoice_payment_succeeded' do
     let!(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks/invoice.payment_succeeded.json'))).with_indifferent_access }
     let!(:user) {
-      FactoryGirl.create(:user, :without_membership).tap do |u|
+      FactoryBot.create(:user, :without_membership).tap do |u|
         u.update(stripe_customer_token: event[:data][:object][:customer])
         u.memberships.new(
           year: Time.zone.at(event[:created]).year - 1,
@@ -141,28 +142,28 @@ RSpec.describe StripeWebhookService do
     it 'does not renew a membership if a membership already exists' do
       user.memberships.create(type: 'Individual', year: Date.current.year)
       webhook = StripeWebhookService.new(event)
-      response = nil
+      status = nil
 
-      expect { response = webhook.process }.not_to change(Membership, :count)
-      expect(response[:status]).to eq(200)
+      expect { status = webhook.process }.not_to change(Membership, :count)
+      expect(status).to eq(200)
     end
 
     it 'does not renew a membership if no prior membership exists' do
       user.memberships.each(&:destroy)
       webhook = StripeWebhookService.new(event)
-      response = nil
+      status = nil
 
       expect(Rails.logger).to receive(:error).with(a_string_including('Could not find record to renew'))
-      expect { response = webhook.process }.not_to change(Membership, :count)
-      expect(response[:status]).to eq(500)
+      expect { status = webhook.process }.not_to change(Membership, :count)
+      expect(status).to eq(500)
     end
 
     it 'renews a subscription-based membership' do
       webhook = StripeWebhookService.new(event)
-      response = nil
+      status = nil
 
-      expect { response = webhook.process }.to change(Membership, :count).by 1
-      expect(response[:status]).to eq(200)
+      expect { status = webhook.process }.to change(Membership, :count).by 1
+      expect(status).to eq(200)
     end
   end
 end

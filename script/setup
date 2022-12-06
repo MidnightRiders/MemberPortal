@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+script/bootstrap
+
+docker-compose build --no-cache
+
+script/migrate db:create db:schema:load db:migrate

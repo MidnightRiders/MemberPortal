@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+if ! command -v docker >/dev/null 2>&1; then
+  echo -e "\x1b[31mError:\x1b[0m docker is not installed" >&2
+  echo 'Please install Docker and try again.' >&2
+  echo 'For more information, see \x1b[34mhttps://docs.docker.com/install/\x1b[0m' >&2
+  echo >&2
+  exit 1
+else
+  echo -e "\x1b[32mConfirmed:\x1b[0m Docker is installed"
+fi
+
+if ! docker compose -h >/dev/null 2>&1; then
+  echo -e "\x1b[31mError:\x1b[0m Docker Compose v2 is not installed" >&2
+  echo 'Please make sure you have enabled Docker Compose v2 and try again.' >&2
+  echo 'For more information, see \x1b[34mhttps://docs.docker.com/compose/compose-v2/\x1b[0m' >&2
+  echo >&2
+  exit 1
+else
+  echo -e "\x1b[32mConfirmed:\x1b[0m Docker Compose v2 is installed"
+fi
+
+if [ ! -f .env ]; then
+  echo -e "\x1b[31mError:\x1b[0m .env is not found" >&2
+  echo 'Please create .env and try again.' >&2
+  echo 'For more information, see the README.' >&2
+  echo >&2
+  exit 1
+else
+  echo -e "\x1b[32mConfirmed:\x1b[0m .env is found"
+fi
+
+(
+  required_env_vars=()
+  for v in $(grep -Eo '^[A-Z0-9_]+=' .env.example); do
+    required_env_vars+=("${v%%=*}")
+  done
+
+  source .env
+
+  missing_env_vars=()
+  for v in "${required_env_vars[@]}"; do
+    if [ -z "${!v}" ]; then
+      missing_env_vars+=("$v")
+    fi
+  done
+
+  if [ "${#missing_env_vars}" -gt 0 ]; then
+    echo -e "\x1b[31mError:\x1b[0m .env is missing the following required variables:" >&2
+    for v in "${missing_env_vars[@]}"; do
+      echo "  $v" >&2
+    done
+    echo 'Please add the missing variables and try again.' >&2
+    echo 'For more information, see the README.' >&2
+    echo >&2
+    exit 1
+  else
+    echo -e "\x1b[32mConfirmed:\x1b[0m .env has all required variables"
+  fi
+)

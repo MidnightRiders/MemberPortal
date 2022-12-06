@@ -3,7 +3,7 @@
 .row.actions
   .column.text-right
     = link_to new_club_path, class: 'button' do
-      = icon 'shield fa-fw'
+      = icon 'fa-solid', 'shield fa-fw'
       Add Club
 
 .table
@@ -29,9 +29,9 @@
       .td.text-center= club.abbrv
       .td.actions.text-right
         = link_to edit_club_path(club), class: 'button small' do
-          = icon 'pencil fa-fw'
+          = icon 'fa-regular', 'pencil fa-fw'
           Edit
         - if can? :destroy, club
           = link_to club, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button small alert' do
-            = icon 'trash-o fa-fw'
+            = icon 'fa-solid', 'trash fa-fw'
             Destroy

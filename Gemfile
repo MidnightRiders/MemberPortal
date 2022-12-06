@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.7.5'
+ruby '3.1.2'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 4.2.7'
+gem 'rails', '~> 7.0.4'
 
 # Use postgresql as the database for Active Record
 gem 'hstore_accessor'
@@ -11,12 +11,11 @@ gem 'pg'
 
 gem 'autoprefixer-rails'
 gem 'font-awesome-sass'
-gem 'foundation-rails', '<6.0'
+gem 'foundation-rails', '5.5.3.2'
 gem 'haml-rails'
 gem 'jquery-rails'
-gem 'sass'
-gem 'sass-rails'
-gem 'terser', '~> 1.1'
+gem 'sassc-rails'
+gem 'terser'
 
 gem 'draper'
 gem 'icalendar'
@@ -26,29 +25,30 @@ gem 'date_time_attribute'
 
 gem 'will_paginate'
 
-gem 'color', '~> 1.5.1'
-gem 'rmagick', '~> 4.1.0-rc2'
+gem 'color'
+gem 'rmagick'
 
-gem 'aws-sdk', '~> 2.3.0'
-gem 'paperclip', '~> 5.2.1'
+gem 'aws-sdk'
+gem 'paperclip'
 
-gem 'bigdecimal', '~> 1.3.5'
-gem 'mimemagic', '~> 0.3.9'
+gem 'bigdecimal'
+gem 'mimemagic'
 
-gem 'nokogiri', '~> 1.13.9'
+gem 'nokogiri'
 
 # Users/auth
-gem 'cancancan', '~>1.10.1'
-gem 'devise', '~>4.7.1'
+gem 'cancancan'
+gem 'devise'
 gem 'paper_trail'
+gem 'paper_trail-association_tracking'
 
-gem 'fuzzy_match', '~> 2.1'
+gem 'fuzzy_match'
 
 # Payments
-gem 'stripe', '~> 3.9'
+gem 'stripe'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder'
 
 gem 'puma'
 
@@ -64,8 +64,8 @@ group :development, :test do
   # Testing
   gem 'active_record_query_trace'
   gem 'capybara'
-  gem 'dotenv-rails', '~> 2.1', '>= 2.1.1'
-  gem 'factory_girl_rails'
+  gem 'dotenv-rails', '>= 2.1.1'
+  gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'fivemat'
   gem 'pry-nav'
@@ -78,17 +78,18 @@ group :test do
   gem 'capybara-screenshot'
   gem 'database_cleaner'
   gem 'launchy'
+  gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'
   gem 'selenium-webdriver'
   gem 'timecop'
-  gem 'vcr', '~>3.0'
-  gem 'webmock', '~>3.5'
+  gem 'vcr'
+  gem 'webmock'
 
   gem 'simplecov', require: false
 end
 
 # Use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.1.2'
+# gem 'bcrypt-ruby'
 
 # Use unicorn as the app server
 # gem 'unicorn'

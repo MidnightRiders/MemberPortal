@@ -42,7 +42,10 @@ class Membership < ActiveRecord::Base
 
   def overriding_admin
     return nil unless override.present?
-    Membership.includes(:user).find_by(users: { id: override }, year: year)&.user
+    Membership.includes(:user)
+      .where("privileges::jsonb ? 'admin'")
+      .find_by(year: [Time.current.year, year], user_id: override)
+      &.user
   end
 
   def cost
@@ -108,13 +111,13 @@ class Membership < ActiveRecord::Base
   def self.new_membership_year
     Date.current.month > 10 ? Date.current.year + 1 : Date.current.year
   end
-  
+
   def self.price
     '1061'
   end
-  
+
   private
-  
+
   def paid_for?
     return true if is_a?(Relative) || overriding_admin.present?
     super

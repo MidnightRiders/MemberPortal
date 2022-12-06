@@ -25,12 +25,12 @@
           %label.inline= link_to 'Forgot your password?', new_password_path(resource_name), class: 'underline'
         .small-6.medium-4.columns
           = link_to new_user_registration_path, class: 'button small secondary expand' do
-            = icon 'pencil'
+            = icon 'fa-solid', 'pencil'
             Sign Up
         .small-6.medium-4.columns
           = f.button :submit, class: 'button small expand' do
             Sign in
-            = icon 'arrow-right fa-fw'
+            = icon 'fa-solid', 'arrow-right fa-fw'
     %p.text-center.small
       Trouble logging in? Visit the
       = link_to 'FAQ', faq_path

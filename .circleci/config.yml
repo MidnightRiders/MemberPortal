@@ -1,12 +1,15 @@
-version: 2.0
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.4.0
 jobs:
   build:
     parallelism: 3
     docker:
-      - image: circleci/ruby:2.7.5-node-browsers
+      - image: cimg/ruby:3.1.2-node
         environment:
-          COVERAGE: true
           BUNDLE_PATH: vendor/bundle
+          COVERAGE: true
+          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
           PGHOST: 127.0.0.1
           PGUSER: mr-member-portal-test-user
           RAILS_ENV: test
@@ -16,16 +19,22 @@ jobs:
           POSTGRES_DB: mr_member_portal_test
     steps:
       - checkout
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - run:
-          name: Install legacy Bundler # Required for Rails 4.2
-          command: gem install bundler:1.17.3
+          name: Install Apt dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get install -y imagemagick libmagickwand-dev
       - restore_cache:
           keys:
             - rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
             - rails-demo-bundle-v2-20221203-
       - run:
           name: Bundle Install
-          command: bundle check --path vendor/bundle || bundle install --deployment
+          command: |
+            gem install bundler:1.17.3
+            bundle check --path vendor/bundle || bundle install --deployment
       - save_cache:
           key: rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
           paths:
@@ -47,7 +56,6 @@ jobs:
       - run:
           name: Run rspec in parallel
           command: |
-            mkdir -p test-results test-artifacts
             ./cc-test-reporter before-build
             bundle exec rspec --profile 10 \
                               --color \
@@ -59,7 +67,7 @@ jobs:
       - store_test_results:
           path: test-results
       - store_artifacts:
-          path: test-artifacts
+          path: tmp/capybara
 
       - run:
           name: Format CodeClimate Test Coverge
@@ -71,7 +79,7 @@ jobs:
             - codeclimate.*.json
   upload-coverage:
     docker:
-      - image: circleci/ruby:2.7.5-node
+      - image: cimg/ruby:3.1.2-node
     environment:
       CC_TEST_REPORTER_ID: c3ff91e23ea0fea718bb62dae0a8a5440dc082d5d2bb508af6b33d0babac479a
     working_directory: ~/bikeindex/bike_index

@@ -1,7 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
     transient do
-      with_membership true
+      with_membership { true }
     end
 
     first_name { FFaker::Name.first_name }
@@ -18,11 +18,16 @@ FactoryGirl.define do
     password { FFaker::Lorem.characters(Random.rand * 12 + 8) }
 
     trait :without_membership do
-      with_membership false
+      with_membership { false }
     end
 
     after :create do |u, evaluator|
-      FactoryGirl.create(:membership, user_id: u.id, type: %w(Individual Family).sample) if evaluator.with_membership
+      FactoryBot.create(
+        :membership,
+        user_id: u.id,
+        type: %w(Individual Family).sample,
+        year: Membership.new_membership_year,
+      ) if evaluator.with_membership
     end
 
     trait :admin do
@@ -51,7 +56,7 @@ FactoryGirl.define do
       end
     end
     trait :no_membership do |u|
-      u.memberships = []
+      memberships { [] }
     end
   end
 end

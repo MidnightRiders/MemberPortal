@@ -6,22 +6,22 @@
       - if @prev_date
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }
           = link_to matches_path(date: @prev_date), class: 'button secondary small expand' do
-            = icon 'arrow-circle-o-left fa-fw'
+            = icon 'fa-solid', 'circle-arrow-left fa-fw'
             = @prev_link
       - unless @is_current_week
         %li.small-4
           = link_to matches_path, class: 'button small expand' do
-            = icon 'calendar-o fa-fw'
+            = icon 'fa-regular', 'calendar fa-fw'
             This Week
       - if @next_date
         %li{ class: "small-#{@is_current_week ? '6' : '4'}" }
           = link_to matches_path(date: @next_date), class: 'button secondary small expand' do
             = @next_link
-            = icon 'arrow-circle-o-right fa-fw'
+            = icon 'fa-solid', 'circle-arrow-right fa-fw'
   - if can? :manage, Match
     .medium-4.columns.text-right
       = link_to '#', class: 'button small expand', data: { reveal_id: 'matches-admin' } do
-        = icon 'bolt fa-fw'
+        = icon 'fa-solid', 'bolt fa-fw'
         Admin
       #matches-admin.reveal-modal.small{ data: { reveal: true } }
         %a.close-reveal-modal{ href: '#' } &times;
@@ -29,12 +29,12 @@
         .row
           .medium-8.columns.right
             = link_to sync_matches_path, class: 'button small secondary expand' do
-              = icon 'refresh fa-fw'
+              = icon 'fa-solid', 'refresh fa-fw'
               Sync Fixtures/Results
         .row
           .medium-8.columns.right
             = link_to new_match_path, class: 'button small expand' do
-              = icon 'calendar fa-fw'
+              = icon 'fa-regular', 'calendar fa-fw'
               New Match
 
 - if @matches.present?

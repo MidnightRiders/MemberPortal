@@ -3,7 +3,7 @@ header.page-header {
   padding-top: rem-calc(10);
   h1 {
     margin-bottom: 0;
-    &:before {
+    &::before {
       display: block;
       content: '\00A0';
       width: 12%;

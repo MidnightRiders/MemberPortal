@@ -21,13 +21,13 @@ footer.page-footer {
 
   nav {
     a + a {
-      &:before {
+      &::before {
         content: '•\00A0';
         cursor: text;
         display: inline-block;
         text-decoration: none;
       }
-      &:hover:before {
+      &:hover::before {
         color: mix(#fff, $maroon, 85%);
       }
     }

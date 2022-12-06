@@ -43,11 +43,11 @@ module Commerce
           "Could not find record to renew for Stripe::Subscription ID #{subscription_id}")
       end
 
-      def re_up!(subscription, query_attributes = {}, update_attributes = {})
+      def re_up!(subscription, query_attributes = {}, update = {})
         last_order = for_subscription(subscription, query_attributes)
         new_order = last_order.dup
         new_order.id = nil
-        new_order.assign_attributes(update_attributes) if update_attributes.present?
+        new_order.assign_attributes(update) if update.present?
         new_order.save!
         new_order
       end

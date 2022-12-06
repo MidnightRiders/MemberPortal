@@ -3,8 +3,8 @@ require 'support/shared_examples/purchasable'
 require 'support/shared_examples/subscribable'
 
 describe Membership do
-  let!(:admin) { FactoryGirl.create(:user, :admin) }
-  let(:membership) { FactoryGirl.create(:membership) }
+  let!(:admin) { FactoryBot.create(:user, :admin) }
+  let(:membership) { FactoryBot.create(:membership) }
 
   describe 'scopes' do
     pending 'refunds'
@@ -13,11 +13,11 @@ describe Membership do
   end
 
   it_behaves_like 'Commerce::Purchasable' do
-    let(:product) { FactoryGirl.build(:membership).tap { |m| m.info = {} } }
+    let(:product) { FactoryBot.build(:membership).tap { |m| m.info = {} } }
   end
 
   it_behaves_like 'Commerce::Subscribable' do
-    let(:product) { FactoryGirl.build(:membership).tap { |m| m.info = {} } }
+    let(:product) { FactoryBot.build(:membership).tap { |m| m.info = {} } }
   end
 
   describe 'notify_slack' do

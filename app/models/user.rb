@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   has_many :pick_ems, autosave: false
 
   validates :first_name, :last_name, :email, presence: true
-  validates :username, presence: true, uniqueness: true, case_sensitive: false
+  validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
   validates :member_since, numericality: { less_than_or_equal_to: Date.current.year, greater_than_or_equal_to: 1995, only_integer: true }, allow_blank: true
 
@@ -171,9 +171,13 @@ class User < ActiveRecord::Base
       begin
         type = user_info[:membership_type]
         raise 'No Family for Relative' if family_id.nil? && type == 'Relative'
-        user = from_hash(user_info).grant_membership!(type: type, privileges: privileges, granted_by: override_id, family_id: family_id)
-        family_id = user.current_membership.id if type == 'Family'
-        family_id = nil if type == 'Individual'
+        user = from_hash(user_info)
+        user.grant_membership!(type: type, privileges: privileges, granted_by: override_id, family_id: family_id)
+        if type == 'Family'
+          family_id = user.current_membership.id
+        elsif type == 'Individual'
+          family_id = nil
+        end
         imported_users << user
       rescue => e
         Rails.logger.warn e.message

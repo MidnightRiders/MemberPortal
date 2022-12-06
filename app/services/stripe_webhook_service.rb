@@ -1,20 +1,22 @@
 class StripeWebhookService
   ACCEPTED_EVENTS = %w(charge.refunded invoice.payment_succeeded).freeze
 
+  # @param [ActiveSupport::HashWithIndifferentAccess] event
   def initialize(event)
-    @event = event.with_indifferent_access
-    @response = { nothing: true, status: 500 }
+    @event = event
+    @status = 500
   end
 
+  # @return [Integer]
   def process
-    return @response unless filter_event && customer_token && user
-    return { nothing: true, status: 200 } if ignored?
+    return @status unless filter_event && customer_token && user
+    return 200 if ignored?
     public_send(@event[:type].gsub(/[^a-z0-9]+/i, '_'))
-    @response
+    @status
   rescue => e
     Rails.logger.error e.message
     Rails.logger.info e.backtrace&.join("\n")
-    @response
+    @status
   end
 
   def charge_refunded
@@ -24,16 +26,17 @@ class StripeWebhookService
     else
       Rails.logger.error "No membership associated with Stripe Charge #{object[:id]}."
     end
-    @response[:status] = 200
+    @status = 200
   end
 
   def invoice_payment_succeeded
     renew_subscription
-    @response[:status] = 200
+    @status = 200
   rescue ActiveRecord::RecordInvalid => e
     if e.record.errors.messages.keys.include? :year
       Rails.logger.info "Skipping duplicate Membership for #{object[:subscription]}"
-      return @response[:status] = 200
+      @status = 200
+      return
     end
     raise e
   end
@@ -45,7 +48,7 @@ class StripeWebhookService
     customer_token = object[:object] == 'customer' ? object[:id] : object[:customer]
     return @customer_token = customer_token if customer_token.present?
     Rails.logger.error 'No Stripe::Customer attached to event.'
-    @response[:status] = 200
+    @status = 200
     false
   end
 
@@ -53,7 +56,7 @@ class StripeWebhookService
     Rails.logger.debug @event[:type]
     return true if ACCEPTED_EVENTS.include? @event[:type]
     Rails.logger.warn "Stripe::Event type #{@event[:type]} not in accepted webhooks. Returning 200."
-    @response[:status] = 200
+    @status = 200
     false
   end
 
@@ -78,7 +81,7 @@ class StripeWebhookService
     user = User.find_by(stripe_customer_token: customer_token)
     return @user = user if user
     Rails.logger.error "No User could be found with Stripe ID #{customer_token}\n  Event ID: #{@event[:id]}"
-    @response[:status] = 404
+    @status = 404
     false
   end
 

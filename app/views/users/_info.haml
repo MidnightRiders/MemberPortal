@@ -20,7 +20,7 @@
   - if can? :destroy, User
     .medium-4.columns.text-right
       = link_to user, class: 'button secondary tiny', method: :delete, data: { confirm: "Are you sure you wish to destroy @#{user.username}?" }, title: 'Destroy' do
-        = icon 'trash-o fa-lg fa-fw'
+        = icon 'fa-solid', 'trash fa-lg fa-fw'
 
 %hr
 %h4

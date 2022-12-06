@@ -26,6 +26,7 @@ module MidnightRiders
     # config.time_zone = 'Central Time (US & Canada)'
     config.time_zone = 'Eastern Time (US & Canada)'
     # config.active_record.default_timezone = 'Eastern Time (US & Canada)'
+    config.active_record.legacy_connection_handling = false
 
     config.week_start = :monday
 
@@ -41,8 +42,6 @@ module MidnightRiders
         secret_access_key: ENV['AWS_SECRET_ACCESS_KEY']
       }
     }
-
-    config.active_record.raise_in_transactional_callbacks = true
 
     config.log_level = ENV['LOG_LEVEL']&.downcase&.to_sym || :debug
 

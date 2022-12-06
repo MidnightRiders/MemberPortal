@@ -16,17 +16,8 @@ instead of Google Drive.
 
 ### Environment Variables
 This project uses [dotenv-rails](https://github.com/bkeepers/dotenv) to obscure sensitive env variables.
-A `.env` file is needed to run the application. The full `.env` file for development looks like below:
-
-```bash
-SECRET_KEY_BASE=[RAILS SECRET KEY BASE]
-STRIPE_SECRET_KEY=[STRIPE SECRET KEY]
-STRIPE_PUBLIC_KEY=[STRIPE PUBLIC KEY]
-S3_BUCKET_NAME=[NAME OF AMAZON BUCKET]
-AWS_ACCESS_KEY_ID=[AWS ACCESS KEY]
-AWS_SECRET_ACCESS_KEY=[AWS SECRET KEY]
-API_FOOTBALL_KEY=[API-FOOTBALL KEY]
-```
+A `.env` file is needed to run the application. You can see the format of the expected `.env` file in
+`.env.example` in the root of the project.
 
 The Stripe and AWS credentials are unnecessary for a large portion of the project, and all you'll really
 need is the `SECRET_KEY_BASE`, which can be generated for your local environment with `rake secret`.
@@ -35,9 +26,37 @@ Access to the development credentials for Stripe and AWS can be obtained as need
 Midnight Riders Web Committee Member [@bensaufley](https://github.com/bensaufley) at
 [member-portal-support@midnightriders.com](mailto:member-portal-support@midnightriders.com).
 
+### Scripts
+
+This repo adheres to the [Scripts to Rule Them All] philosophy. Scripts:
+
+- `script/bootstrap`: checks for required utilities; installs as available, or
+  instructs user to install manually
+- `script/setup`: sets up the project for local development. Builds without
+  cache. Runs `script/bootstrap` first.
+- `script/migrate`: runs db migrations. Can be used with `:up`, `:down` etc:
+  `script/migrate :down` will run `bundle exec rails db:migrate:down`. If args
+  that don't begin with `:` are passed, they'll be passed as is:
+  `script/migrate foo bar` will run `bundle exec rails foo bar`.
+- `script/update`: attempts to rebuild the docker environment, using cache, and
+  runs `script/migrate`. Runs `script/bootstrap` first.
+- `script/server`: starts the server on port 5991. Runs `script/update` first.
+- `script/test`: runs the test suite. Runs `script/update` first.
+- `script/console`: starts a shell session inside `server` Docker service. Runs
+  `script/update` first.
+- `script/cmd`: runs a single command inside the `server` Docker service. Runs
+  `script/update` first.
+
+For first run, run `script/setup` before `script/server`. In subsequent runs,
+you can just run `script/server`.
+
+[scripts to rule them all]: https://github.com/github/scripts-to-rule-them-all
+
 ### Dependencies
-**`postgresql`** is used for the database. I've used [Postgres.app](https://postgresapp.com/documentation/install.html)
-for Mac, which is pretty plug-and-play. You'll need a `root` user with broad privileges.
+
+**`postgresql`** is used for the database. I've used
+[Postgres.app](https://postgresapp.com/documentation/install.html) for Mac,
+which is pretty plug-and-play. You'll need a `root` user with broad privileges.
 
 **`phantomjs`** is also required to run spec, and can also be installed using Homebrew:
 `brew install phantomjs`.

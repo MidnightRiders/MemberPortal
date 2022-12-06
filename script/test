@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+export RAILS_ENV=test
+
+script/update
+
+args=( spec )
+if [ $# -gt 0 ]; then
+  args=( "$@" )
+fi
+
+docker-compose run -e RAILS_ENV=test --rm server bundle exec rspec "${args[@]}"

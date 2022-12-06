@@ -8,12 +8,12 @@ describe Player do
       expect(subject.errors).to include(:first_name, :last_name, :position, :number, :club)
     end
     it 'requires a valid club' do
-      subject = FactoryGirl.build(:player)
+      subject = FactoryBot.build(:player)
       subject.club_id = 100
       expect(subject).to_not be_valid
     end
     it 'validates proper record' do
-      subject = FactoryGirl.build(:player)
+      subject = FactoryBot.build(:player)
       expect(subject).to be_valid
     end
   end

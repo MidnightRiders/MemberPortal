@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+cd "$(dirname "$0")/.."
+
+MIGRATE=false script/update
+
+if [ $# -lt 1 ]; then
+  echo "At least one argument is required" >&2
+  echo "Usage: $0 <command>" >&2
+  exit 1
+fi
+
+docker-compose run --service-ports --rm server "$@"

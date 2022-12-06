@@ -10,8 +10,8 @@
           = button_tag :submit, class: 'button small expand no-margin-bottom', title: 'Import' do
             %i.fa.fa-upload.fa-fw
   .small-3.medium-1.columns
-    = link_to users_path(format: 'csv', params: params.except(:action, :controller)), class: 'button secondary small expand', title: 'Download' do
-      = icon 'download fa-fw'
+    = link_to users_path(format: 'csv', params: @params), class: 'button secondary small expand', title: 'Download' do
+      = icon 'fa-solid', 'download fa-fw'
   .small-6.medium-3.columns.text-right
     = form_tag users_path, method: :get do
       = hidden_field_tag :privilege, @privilege
@@ -19,39 +19,39 @@
       = hidden_field_tag :year, @year
       .row.collapse
         .small-8.columns
-          = text_field_tag :search, params[:search]
+          = text_field_tag :search, @params[:search]
         .small-4.columns
           = button_tag :submit, class: 'button small secondary postfix' do
-            = icon 'search fa-fw'
+            = icon 'fa-solid', 'search fa-fw'
             Search
   - if can? :create, User
     .small-6.medium-2.columns.text-right
       = link_to new_user_path, class: 'button small postfix' do
-        = icon 'user fa-fw'
+        = icon 'fa-solid', 'user fa-fw'
         New User
 
 .row.collapse
   .medium-2.columns
-    = select_tag :year, options_for_select((2014..Date.current.year), @year), data: { autosubmit: users_path(params.merge(year: '___')) }
+    = select_tag :year, options_for_select((2014..Date.current.year), @year), data: { autosubmit: users_path(@params.merge(year: '___')) }
   .medium-2.columns
     = link_to users_path(year: @year), class: "button small expand #{'success' unless @privilege || @show_all}" do
-      = icon 'users'
+      = icon 'fa-solid', 'users'
       Current Members
   .medium-2.columns
     = link_to users_path(show_all: true, year: @year), class: "button small expand #{'success' if @show_all}" do
-      = icon 'list'
+      = icon 'fa-solid', 'list'
       All Users
   .medium-2.columns
     = link_to users_path(privilege: 'admin', year: @year), class: "button small expand #{'success' if @privilege == 'admin'}" do
-      = icon 'bolt'
+      = icon 'fa-solid', 'bolt'
       Admins
   .medium-2.columns
     = link_to users_path(privilege: 'executive_board', year: @year), class: "button small expand #{'success' if @privilege == 'executive_board'}" do
-      = icon 'suitcase'
+      = icon 'fa-solid', 'suitcase'
       Executive Board
   .medium-2.columns
     = link_to users_path(privilege: [ 'executive_board', 'at_large_board' ], year: @year), class: "button small expand #{'success' if @privilege == ['executive_board','at_large_board']}" do
-      = icon 'sitemap'
+      = icon 'fa-solid', 'sitemap'
       Boards
 %ul.table.members
   .thead
@@ -68,9 +68,9 @@
       - membership = user.memberships.find { |m| m.year == @year }
       %li.tr
         .td.text-center
-          = icon 'check fa-fw' if membership.present?
+          = icon 'fa-solid', 'check fa-fw' if membership.present?
           - user.current_privileges.each do |r|
-            = content_tag(:i,'',class: 'fa fa-fw fa-' + r, title: r.titleize)
+            = content_tag(:i,'',class: 'fa-solid fa-fw fa-' + r, title: r.titleize)
         .td
           = link_to user do
             %h5
@@ -84,10 +84,10 @@
         .td.text-right
           -#= link_to 'Show', user
           = link_to edit_user_path(user), class: 'button tiny', title: 'Edit' do
-            = icon 'pencil'
+            = icon 'fa-solid', 'pencil'
           - if can? :destroy, user
             = link_to user, method: :delete, data: { confirm: 'Are you sure?' }, class: 'button tiny alert', title: 'Destroy' do
-              = icon 'trash-o'
+              = icon 'fa-solid', 'trash'
 
 .row
   .medium-4.columns

@@ -5,15 +5,16 @@ class UsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @privilege = params[:privilege].blank? ? nil : params[:privilege]
-    @year = params.fetch(:year, Date.current.year).to_i
-    @show_all = params[:show_all].in? [true, 'true']
+    @params = params.permit(:privilege, :search, :show_all, :year)
+    @privilege = @params[:privilege].blank? ? nil : @params[:privilege]
+    @year = @params.fetch(:year, Date.current.year).to_i
+    @show_all = @params[:show_all].in? [true, 'true']
     @user_set = @users
-    @user_set = @user_set.text_search(params[:search]) if params[:search]
+    @user_set = @user_set.text_search(@params[:search]) if @params[:search]
     @user_set = @user_set.where(memberships: { year: @year }) unless @show_all
     @user_set = @user_set.where('memberships.privileges::jsonb ?| array[:privileges]', year: Date.current.year, privileges: [@privilege].flatten) if @privilege
     @user_set = @user_set.includes(:memberships).order(last_name: :asc, first_name: :asc)
-    @users = @user_set.paginate(page: params[:p], per_page: 20)
+    @users = @user_set.paginate(page: @params[:p], per_page: 20)
 
     respond_to do |format|
       format.html
@@ -88,10 +89,14 @@ class UsersController < ApplicationController
   # POST /users/import
   # Accepts +:file+ to import new +Users+.
   def import
+    authorize! :import, :users
+
     raise 'No file was selected' unless params[:file]
     file = CSV.read(params[:file].path.to_s, headers: true, header_converters: :symbol).map(&:to_h)
     users = User.import(file, override_id: current_user.id)
     redirect_to users_path, notice: "#{users.size} #{'user'.pluralize(users.size)} imported."
+  rescue CanCan::AccessDenied => e
+    redirect_to root_path, e.message
   rescue => e
     Rails.logger.warn e.message
     Rails.logger.info e.backtrace.to_yaml
