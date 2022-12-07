@@ -1,9 +1,13 @@
+@use "foundation/components/grid";
+@use "foundation/components/tables";
+@use "shared";
+
 table,
 .table {
   display: table;
-  background: $table-bg;
-  margin-bottom: $table-margin-bottom;
-  border: $table-border-style $table-border-size $table-border-color;
+  background: tables.$table-bg;
+  margin-bottom: tables.$table-margin-bottom;
+  border: tables.$table-border-style tables.$table-border-size tables.$table-border-color;
   list-style: none;
   margin-left: 0;
   max-width: 100%;
@@ -36,18 +40,18 @@ table,
   .thead,
   tfoot,
   .tfoot{
-    background: $table-head-bg;
+    background: tables.$table-head-bg;
     tr,
     .tr {
       td,
       .td,
       th,
       .thd {
-        padding: $table-head-padding;
-        font-size: $table-head-font-size;
-        font-weight: $table-head-font-weight;
-        color: $table-head-font-color;
-        text-align: $default-float;
+        padding: tables.$table-head-padding;
+        font-size: tables.$table-head-font-size;
+        font-weight: tables.$table-head-font-weight;
+        color: tables.$table-head-font-color;
+        text-align: grid.$default-float;
         &.numeric {
           text-align: right; }
       }
@@ -57,7 +61,7 @@ table,
   .tr {
     display: table-row;
     &.highlight, &.highlight:nth-of-type(1n) {
-      background-color: $revs-navy;
+      background-color: shared.$revs-navy;
       td,
       .td,
       th,
@@ -73,9 +77,9 @@ table,
     .thd,
     td,
     .td {
-      padding: $table-row-padding;
-      font-size: $table-row-font-size;
-      color: $table-row-font-color;
+      padding: tables.$table-row-padding;
+      font-size: tables.$table-row-font-size;
+      color: tables.$table-row-font-color;
       &.column, &.columns {
         float: none;
       }
@@ -93,21 +97,21 @@ table,
         }
       }
       ul {
-        font-size: $table-row-font-size;
+        font-size: tables.$table-row-font-size;
       }
       &.no-pad {
         padding-left: 0;
         padding-right: 0;
       }
       &.highlight {
-        background-color: $revs-red;
+        background-color: shared.$revs-red;
         color: #fff;
       }
     }
 
     &.even,
     &.alt,
-    &:nth-of-type(even) { background: $table-even-row-bg; }
+    &:nth-of-type(even) { background: tables.$table-even-row-bg; }
   }
 
   thead tr th,
@@ -119,7 +123,7 @@ table,
   tr td,
   .tr .td,
   tfoot tr td,
-  .tfoot .tr .td { display: $table-display; line-height: $table-line-height; }
+  .tfoot .tr .td { display: tables.$table-display; line-height: tables.$table-line-height; }
   th,
   .thd {
     text-align: center;
@@ -135,7 +139,7 @@ table,
 
   &.hoverable {
     tr:hover {
-      background-color: $primary-color;
+      background-color: grid.$primary-color;
     }
   }
 }

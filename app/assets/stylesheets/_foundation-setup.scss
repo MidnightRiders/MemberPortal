@@ -1,7 +1,9 @@
-@import 'foundation/functions';
+@use 'sass:color';
+@use 'foundation/functions';
+@use 'shared';
 
-$primary-color: $maroon;
-$secondary-color: $navy;
+$primary-color: shared.$maroon;
+$secondary-color: shared.$navy;
 
 $body-font-weight: 300;
 
@@ -10,46 +12,46 @@ $body-font-family: 'Lato', sans-serif;
 $body-font-weight: 300;
 
 $header-font-family: 'Mayflower', Georgia, serif;
-$h1-font-size: rem-calc(32);
-$h2-font-size: rem-calc(28);
-$h3-font-size: rem-calc(24);
-$h4-font-size: rem-calc(20);
+$h1-font-size: functions.rem-calc(32);
+$h2-font-size: functions.rem-calc(28);
+$h3-font-size: functions.rem-calc(24);
+$h4-font-size: functions.rem-calc(20);
 //$h5-font-size: $body-font-size;
 
-$paragraph-margin-bottom: rem-calc(14);
+$paragraph-margin-bottom: functions.rem-calc(14);
 
-$link-color: $maroon;
-$link-visited-color: $maroon;
-$link-hover-color: saturate(lighten($maroon,15%),15%);
+$link-color: shared.$maroon;
+$link-visited-color: shared.$maroon;
+$link-hover-color: color.adjust(color.adjust(shared.$maroon,$lightness: 15%),$saturation: 15%);
 
-$topbar-bg: $silver;
-$topbar-bg-color: $silver;
-$topbar-dropdown-bg: $silver;
+$topbar-bg: shared.$silver;
+$topbar-bg-color: shared.$silver;
+$topbar-dropdown-bg: shared.$silver;
 $topbar-dropdown-link-weight: 700;
-$topbar-dropdown-link-bg-hover: $maroon;
+$topbar-dropdown-link-bg-hover: shared.$maroon;
 $topbar-link-weight: 700;
-$topbar-link-bg-hover: $maroon;
+$topbar-link-bg-hover: shared.$maroon;
 $topbar-dropdown-label-bg: $secondary-color;
 $topbar-dropdown-label-color: #fff;
 $topbar-menu-link-color-toggled: #fff;
 // $topbar-dropdown-bg: darken($silver,25%);
 // $topbar-dropdown-link-bg: darken($silver,15%);
 
-$table-head-padding: rem-calc(6);
-$table-row-padding: rem-calc(6);
+$table-head-padding: functions.rem-calc(6);
+$table-row-padding: functions.rem-calc(6);
 
 $input-prefix-bg: $secondary-color;
-$input-prefix-border-color: $silver;
+$input-prefix-border-color: shared.$silver;
 $input-prefix-font-color: #fff;
 
-$button-med: rem-calc(12);
-$button-tny: rem-calc(7);
-$button-sml: rem-calc(10);
-$button-lrg: rem-calc(16);
+$button-med: functions.rem-calc(12);
+$button-tny: functions.rem-calc(7);
+$button-sml: functions.rem-calc(10);
+$button-lrg: functions.rem-calc(16);
 
-$code-color: mix($maroon, #fff, 75%);
-$code-background-color: mix($maroon, #fff, 10%);
-$code-border-color: mix($maroon, #fff);
+$code-color: color.mix(shared.$maroon, #fff, 75%);
+$code-background-color: color.mix(shared.$maroon, #fff, 10%);
+$code-border-color: color.mix(shared.$maroon, #fff);
 
 @import "foundation/components/grid";
 @import "foundation/components/alert-boxes";

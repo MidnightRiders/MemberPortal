@@ -1,10 +1,13 @@
+@use "foundation/components/grid";
+@use "foundation/functions";
+
 main > .row {
   margin: 0;
-  padding: rem-calc(10 0);
+  padding: functions.rem-calc(10 0);
   background: #fff;
-  border: 1px solid $silver;
-  @media #{$medium-up} {
-    margin: rem-calc(20) auto;
-    padding: rem-calc(20 10);
+  border: 1px solid grid.$silver;
+  @media #{grid.$medium-up} {
+    margin: functions.rem-calc(20) auto;
+    padding: functions.rem-calc(20 10);
   }
 }

@@ -1,15 +1,25 @@
+@use "sass:color";
+@use "foundation/components/alert-boxes";
+@use "foundation/components/button-groups";
+@use "foundation/components/forms";
+@use "foundation/components/grid";
+@use "foundation/components/tabs";
+@use "foundation/components/type";
+@use "foundation/functions";
+@use "shared";
+
 form {
   input[type], select, textarea {
     + .hint {
       display: block;
-      margin-bottom: $form-spacing;
-      margin-top: -($form-spacing - rem-calc(4));
+      margin-bottom: forms.$form-spacing;
+      margin-top: -(forms.$form-spacing - functions.rem-calc(4));
     }
   }
   h3 + .hint {
     display: block;
-    margin-bottom: $header-bottom-margin;
-    margin-top: -($header-bottom-margin - rem-calc(4));
+    margin-bottom: type.$header-bottom-margin;
+    margin-top: -(type.$header-bottom-margin - functions.rem-calc(4));
   }
 }
 .file-input {
@@ -19,6 +29,7 @@ form {
     margin-bottom: 0;
   }
 
+  %label-inline,
   label.inline {
     margin-left: .5em;
     overflow-x: hidden;
@@ -28,32 +39,35 @@ form {
 }
 
 .split.button.expand {
-  padding-left: $button-med; // overriding some dumb Foundation thing that hard-sets this to 2rem
+  padding-left: button-groups.$button-med; // overriding some dumb Foundation thing that hard-sets this to 2rem
 }
 
 .actions {
   text-align: right;
   a:link, a:visited {
     padding: {
-      left: rem-calc(5);
-      right: rem-calc(5);
+      left: functions.rem-calc(5);
+      right: functions.rem-calc(5);
     }
   }
 }
 
 .inline {
-  @extend label.inline;
+  @extend %label-inline;
 }
 
-@media #{$small-only} {
-  label.inline:not(.inline-small) {
-    margin: 0;
-    padding: 0;
+@media #{grid.$small-only} {
+  %label-inline,
+  label.inline {
+    &:not(.inline-small) {
+      margin: 0;
+      padding: 0;
+    }
   }
 }
 
 #scarf-vote-modal {
-  max-width: rem-calc(800);
+  max-width: functions.rem-calc(800);
   width: auto;
 
   ul,
@@ -87,7 +101,7 @@ form {
         }
 
         &:hover {
-          background-color: transparentize($maroon, .5);
+          background-color: color.adjust(shared.$maroon, $alpha: -.5);
         }
 
         &::before {
@@ -101,7 +115,7 @@ form {
           z-index: -1;
         }
 
-        @media #{$medium-up} {
+        @media #{grid.$medium-up} {
           padding: 1em 2em;
         }
       }
@@ -109,7 +123,7 @@ form {
       &:checked + label {
         &,
         &:hover {
-          background-color: $maroon;
+          background-color: shared.$maroon;
           color: #fff;
 
           img {
@@ -130,6 +144,6 @@ form {
 
   .form-error-message,
   .form-button-error {
-    @include alert($alert-color);
+    @include alert-boxes.alert(grid.$alert-color);
   }
 }

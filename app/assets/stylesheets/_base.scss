@@ -1,3 +1,9 @@
+@use "sass:color";
+@use "font-awesome";
+@use "foundation/components/grid";
+@use "foundation/functions";
+@use "shared";
+
 @font-face {
   font-family: Mayflower;
   src: font-url('Mayflower.eot'); /* EOT file for IE */
@@ -16,8 +22,8 @@ body {
   height: auto;
   min-height: 100%;
   position: relative;
-  padding-bottom: 4rem + rem-calc(10);
-  background: $maroon image-url('bg.png') repeat center;
+  padding-bottom: 4rem + functions.rem-calc(10);
+  background: shared.$maroon image-url('bg.png') repeat center;
   &.wait {
     &, * {
       cursor: wait !important;
@@ -41,7 +47,7 @@ p.hint {
 
 main {
   display: block;
-  padding: rem-calc(10 5);
+  padding: functions.rem-calc(10 5);
   h1, h2, h3, h4, h5, h6 {
     small {
       font-family: 'Lato', sans-serif;
@@ -49,9 +55,9 @@ main {
   }
 }
 
-@media #{$small-only} {
+@media #{grid.$small-only} {
   hr {
-    margin: rem-calc(5 0)
+    margin: functions.rem-calc(5 0)
   }
 }
 
@@ -76,7 +82,7 @@ select {
 
 .gravatar {
   display: inline-block;
-  @include radius($global-rounded);
+  @include grid.radius(grid.$global-rounded);
   height: 1.1em;
   line-height: 0;
   margin-bottom: .2em;
@@ -92,9 +98,9 @@ select[multiple], select[size] {
 }
 
 .alert-box {
-  background-color: saturate(mix(#fff,$revs-navy,95%),25%);
-  border-color: saturate(mix(#fff,$revs-navy,75%),30%);
-  color: $navy;
+  background-color: color.adjust(color.mix(#fff,shared.$revs-navy,95%),$saturation: 25%);
+  border-color: color.adjust(color.mix(#fff,shared.$revs-navy,75%),$saturation: 30%);
+  color: shared.$navy;
   &, * {
     transition: color .5s, background-color .5s, border-color .5s;
   }
@@ -113,7 +119,7 @@ select[multiple], select[size] {
     &::before {
       display: inline-block;
       float: right;
-      font-family: $fa-style-family;
+      font-family: font-awesome.$fa-style-family;
       font-style: normal;
       font-weight: 400;
       line-height: 1;
@@ -125,12 +131,12 @@ select[multiple], select[size] {
   }
   &.success {
     &::before {
-      content: $fa-var-check-circle;
+      content: font-awesome.$fa-var-check-circle;
     }
   }
   &.alert {
     &::before {
-      content: $fa-var-exclamation-triangle;
+      content: font-awesome.$fa-var-exclamation-triangle;
     }
   }
 }
@@ -152,7 +158,7 @@ select[multiple], select[size] {
     }
   }
 
-  @media #{$small-only} {
+  @media #{grid.$small-only} {
     bottom: 5px;
     left: 5px;
     right: 5px;
@@ -168,7 +174,7 @@ a:visited {
 }
 
 p.small {
-  font-size: rem-calc(12);
+  font-size: functions.rem-calc(12);
   font-style: italic;
 }
 
@@ -183,7 +189,7 @@ ul.no-style {
 }
 
 .gray-background {
-  background-color: $silver;
+  background-color: grid.$silver;
 }
 
 .no-margin-bottom {

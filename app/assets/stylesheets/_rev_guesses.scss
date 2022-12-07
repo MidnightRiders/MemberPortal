@@ -1,7 +1,9 @@
+@use "foundation/components/grid";
+
 .table.rev-guesses {
   .td.comment {
     display: none;
-    @media #{$medium-up} {
+    @media #{grid.$medium-up} {
       display: table-cell;
     }
   }

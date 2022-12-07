@@ -1,3 +1,7 @@
+@use "foundation/components/grid";
+@use "foundation/functions";
+@use "shared";
+
 ul.matches {
   list-style: none;
   display: block;
@@ -6,21 +10,21 @@ ul.matches {
     padding-left: 0;
   }
   li {
-    margin-bottom: rem-calc(6);
-    border: 1px solid $silver;
-    padding: rem-calc(5);
-    @include radius;
+    margin-bottom: functions.rem-calc(6);
+    border: 1px solid grid.$silver;
+    padding: functions.rem-calc(5);
+    @include grid.radius;
     &.pending {
-      border-color: $navy;
+      border-color: shared.$navy;
       .score {
-        color: $silver;
+        color: grid.$silver;
       }
     }
     .button {
       margin-bottom: 0;
     }
     &.highlight {
-      background-color: $revs-red;
+      background-color: shared.$revs-red;
       &, a:link, a:visited, time, .score {
         color: #fff;
       }
@@ -30,7 +34,7 @@ ul.matches {
     }
   }
   time, .score {
-    font-size: rem-calc(18);
+    font-size: functions.rem-calc(18);
     font-weight: 600;
     display: block;
     width: 50%;
@@ -44,19 +48,19 @@ ul.matches {
   }
   .pick-em-buttons {
     clear: both;
-    @include radius;
+    @include grid.radius;
   }
   .pick-em-sub {
-    font-size: rem-calc(18);
+    font-size: functions.rem-calc(18);
     line-height: 2;
     .fa-fw {
       width: auto;
       &::before {
-        background-color: $maroon;
+        background-color: shared.$maroon;
         color: #fff;
         display: inline-block;
-        @include radius;
-        padding: rem-calc(5 10);
+        @include grid.radius;
+        padding: functions.rem-calc(5 10);
       }
     }
     a:first-child .fa-fw {
@@ -66,14 +70,14 @@ ul.matches {
   .location {
     display: none;
   }
-  @media #{$medium-up} {
+  @media #{grid.$medium-up} {
     &:not(.small) {
       width: 100%;
       margin-left: auto;
       margin-right: auto;
       li {
         width: 100%;
-        @include clearfix;
+        @include grid.clearfix;
         > time, > .score, > .pick-em, > .button, > .location {
           display: block;
           float: left;
@@ -81,8 +85,8 @@ ul.matches {
         }
         time, .score {
           width: 30%;
-          padding: rem-calc(10);
-          font-size: rem-calc(24);
+          padding: functions.rem-calc(10);
+          font-size: functions.rem-calc(24);
         }
         .score {
           text-align: center;
@@ -92,8 +96,8 @@ ul.matches {
         }
         > .location {
           width: 60%;
-          padding: rem-calc(0 10);
-          margin-top: rem-calc(-35);
+          padding: functions.rem-calc(0 10);
+          margin-top: functions.rem-calc(-35);
         }
         > .button {
           width: 40%;

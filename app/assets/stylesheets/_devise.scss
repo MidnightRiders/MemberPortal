@@ -1,10 +1,14 @@
+@use "foundation/components/alert-boxes";
+@use "foundation/components/grid";
+@use "foundation/components/type";
+
 #error_explanation {
-  max-width: $row-width;
+  max-width: grid.$row-width;
   margin-left: auto;
   margin-right: auto;
-  @include alert;
+  @include alert-boxes.alert;
   h2 {
-    font-size: $h3-font-size;
-    color: $alert-font-color;
+    font-size: type.$h3-font-size;
+    color: alert-boxes.$alert-font-color;
   }
 }

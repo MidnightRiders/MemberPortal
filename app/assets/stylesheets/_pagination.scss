@@ -1,14 +1,17 @@
+@use "foundation/components/button-groups";
+@use "foundation/components/grid";
+
 .pagination {
   span, a, em {
-    @include button($button-tny);
+    @include button-groups.button(button-groups.$button-tny);
     &.disabled {
       display: none;
     }
     &.current {
-      @include button($button-tny,$success-color);
+      @include button-groups.button(button-groups.$button-tny,grid.$success-color);
       cursor: default;
       &:hover {
-        background-color: $success-color;
+        background-color: grid.$success-color;
       }
     }
   }

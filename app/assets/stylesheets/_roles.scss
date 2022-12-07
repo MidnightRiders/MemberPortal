@@ -1,25 +1,27 @@
+@use "font-awesome";
+
 .fa.fa-admin {
   &::before {
-    content: $fa-var-bolt;
+    content: font-awesome.$fa-var-bolt;
   }
 }
 .fa.fa-executive_board {
   &::before {
-    content: $fa-var-briefcase;
+    content: font-awesome.$fa-var-briefcase;
   }
 }
 .fa.fa-at_large_board {
   &::before {
-    content: $fa-var-sitemap;
+    content: font-awesome.$fa-var-sitemap;
   }
 }
 .fa.fa-family {
   &::before {
-    content: $fa-var-users;
+    content: font-awesome.$fa-var-users;
   }
 }
 .fa.fa-individual {
   &::before {
-    content: $fa-var-user;
+    content: font-awesome.$fa-var-user;
   }
 }

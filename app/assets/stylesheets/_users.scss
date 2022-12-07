@@ -1,9 +1,14 @@
+@use "sass:color";
+@use "foundation/components/grid";
+@use "foundation/functions";
+@use "shared";
+
 .events {
-  padding: rem-calc(5 0);
+  padding: functions.rem-calc(5 0);
   h3 {
-    margin: rem-calc(0 5);
-    @media #{$medium-up} {
-      margin: rem-calc(0 10);
+    margin: functions.rem-calc(0 5);
+    @media #{grid.$medium-up} {
+      margin: functions.rem-calc(0 10);
     }
   }
   ul.events {
@@ -15,17 +20,17 @@
     padding: 0;
     li {
       font-weight: bold;
-      padding: rem-calc(5);
-      line-height: rem-calc(18);
-      @media #{$medium-up} {
-        padding: rem-calc(5 10);
-        line-height: rem-calc(25);
+      padding: functions.rem-calc(5);
+      line-height: functions.rem-calc(18);
+      @media #{grid.$medium-up} {
+        padding: functions.rem-calc(5 10);
+        line-height: functions.rem-calc(25);
       }
       &:nth-child(2n-1) {
         background-color: rgba(255,255,255,.75);
       }
       time {
-        @extend small;
+        @extend small !optional;
         display: inline-block;
       }
       &.past {
@@ -33,10 +38,10 @@
         opacity: .9;
         font-weight: 300;
         a:link, a:visited {
-          color: desaturate($navy,35%);
+          color: color.adjust(shared.$navy,$saturation: -35%);
         }
         + li:not(.past) {
-          border-top: 1px dashed transparentize($maroon,.75);
+          border-top: 1px dashed color.adjust(shared.$maroon,$alpha: -.75);
         }
       }
     }

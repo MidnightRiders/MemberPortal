@@ -1,3 +1,7 @@
+@use "font-awesome";
+@use "foundation/components/grid";
+@use "foundation/functions";
+
 .contain-to-grid.sticky {
   box-shadow: 0 3px 6px #000;
 }
@@ -18,28 +22,28 @@
   li.external {
     a:link,
     a:visited {
-      padding-right: rem-calc(35);
+      padding-right: functions.rem-calc(35);
       position: relative;
       &::after {
-        @include fa-icon;
-        content: $fa-var-external-link;
-        font-size: rem-calc(9);
-        line-height: rem-calc(45);
+        @include font-awesome.fa-icon;
+        content: font-awesome.$fa-var-external-link;
+        font-size: functions.rem-calc(9);
+        line-height: functions.rem-calc(45);
         position: absolute;
         top: 0;
-        right: rem-calc(10);
+        right: functions.rem-calc(10);
       }
     }
   }
 
-  @media #{$small-only} {
+  @media #{grid.$small-only} {
     .title-area .name h1 {
       overflow: visible;
       white-space: nowrap;
       font-size: .8em;
     }
   }
-  @media #{$medium-up} {
+  @media #{grid.$medium-up} {
     .title-area {
       height: 0;
       overflow: hidden;
