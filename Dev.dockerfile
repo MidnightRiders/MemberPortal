@@ -8,6 +8,7 @@ RUN apk add --no-cache --virtual \
   chromium \
   chromium-chromedriver \
   gcompat \
+  yaml-dev \
   nodejs \
   postgresql-dev \
   ruby-nokogiri \
