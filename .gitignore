@@ -33,3 +33,6 @@ node_modules/
 /public/assets/*
 !.env.example
 latest.dump
+
+/app/assets/builds/*
+!/app/assets/builds/.keep

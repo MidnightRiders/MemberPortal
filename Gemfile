@@ -10,11 +10,12 @@ gem 'order_query'
 gem 'pg'
 
 gem 'autoprefixer-rails'
+gem 'dartsass-rails'
 gem 'font-awesome-sass'
 gem 'foundation-rails', '5.5.3.2'
 gem 'haml-rails'
 gem 'jquery-rails'
-gem 'sassc-rails'
+gem 'sprockets-rails'
 gem 'terser'
 
 gem 'draper'
@@ -54,6 +55,8 @@ gem 'puma'
 
 # Monitoring
 gem 'newrelic_rpm'
+
+gem 'foreman', group: :development
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
