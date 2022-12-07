@@ -1,28 +1,17 @@
-FROM ruby:3.1.2-alpine
+FROM ruby:3.1.2
 LABEL maintainer="Midnight Riders<webczar@midnightriders.com>"
 
-RUN apk update
-RUN apk add --no-cache --virtual \
-  build-dependencies \
-  build-base \
-  chromium \
-  chromium-chromedriver \
-  gcompat \
-  nodejs \
-  postgresql-dev \
-  ruby-nokogiri \
-  tzdata \
-  build-base \
-  imagemagick6 \
-  imagemagick6-c++ \
-  imagemagick6-dev \
-  imagemagick6-libs && \
-  rm -rf /var/cache/apk/*
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends \
+    chromium \
+    chromium-chromedriver \
+    nodejs \
+    postgresql-dev && \
+  rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
 COPY Gemfile Gemfile.lock /tmp/
 RUN bundle install
-RUN apk del build-base
 
 WORKDIR /usr/src/member-portal
 COPY . /usr/src/member-portal

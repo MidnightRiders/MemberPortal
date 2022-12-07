@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dev.dockerfile
-    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "8080"]
+    command: ["bin/dev"]
     depends_on:
       - db
       - start_db
