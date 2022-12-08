@@ -11,6 +11,9 @@ services:
     environment:
       APP_ENV: "${APP_ENV:-development}"
       DATABASE_URL: "postgresql://postgres:postgres@db:5432/mr_member_portal_${DBENV:-development}"
+      LOCAL_HOST_AND_PORT: 'localhost:5991'
+      MAILER_HOST: 'host.docker.internal'
+      MAILER_PORT: '1025'
       RAILS_ENV: "${RAILS_ENV:-development}"
       PORT: 8080
     ports:

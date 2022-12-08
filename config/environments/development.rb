@@ -6,10 +6,14 @@ MidnightRiders::Application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
-  config.action_mailer.asset_host = 'http://localhost:3000'
+  local_host_and_port = ENV.fetch('LOCAL_HOST_AND_PORT', 'localhost:3000')
+  config.action_mailer.default_url_options = { host: local_host_and_port }
+  config.action_mailer.asset_host = "http://#{local_host_and_port}"
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: '127.0.0.1', port: 1025 }
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch('MAILER_HOST', '127.0.0.1'),
+    port: ENV.fetch('MAILER_PORT', '1025').to_i,
+  }
 
   # Do not eager load code on boot.
   config.eager_load = false
