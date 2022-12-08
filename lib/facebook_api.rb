@@ -41,7 +41,7 @@ module FacebookApi
     response = {}
     begin
       if auth_token
-        uri = URI("https://graph.facebook.com/MidnightRiders/events?#{URI.encode(auth_token)}")
+        uri = URI("https://graph.facebook.com/MidnightRiders/events?#{URI.encode_www_form_component(auth_token)}")
         response = Net::HTTP.get(uri)
         response = JSON.parse(response)
       end

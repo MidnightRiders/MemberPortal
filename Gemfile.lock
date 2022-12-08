@@ -1744,6 +1744,7 @@ DEPENDENCIES
   puma
   rails (~> 7.0.4)
   rails-controller-testing
+  rexml
   rmagick
   rspec-rails
   rspec_junit_formatter

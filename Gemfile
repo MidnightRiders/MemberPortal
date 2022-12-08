@@ -35,6 +35,7 @@ gem 'bigdecimal'
 gem 'mimemagic'
 
 gem 'nokogiri'
+gem 'rexml'
 
 # Users/auth
 gem 'cancancan'
