@@ -20,7 +20,7 @@ class MembershipsController < ApplicationController
   def show
     @card = nil
     if @membership.stripe_charge_id
-      @card = Stripe::Charge.retrieve(@membership.stripe_charge_id).card
+      @card = Stripe::Charge.retrieve(@membership.stripe_charge_id).source
     end
   rescue Stripe::StripeError => e
     ErrorNotifier.notify(e)
