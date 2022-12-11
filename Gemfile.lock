@@ -1542,7 +1542,6 @@ GEM
       timeout
     net-smtp (0.3.3)
       net-protocol
-    newrelic_rpm (8.13.1)
     nio4r (2.5.8)
     nokogiri (1.13.10)
       mini_portile2 (~> 2.8.0)
@@ -1734,7 +1733,6 @@ DEPENDENCIES
   jquery-rails
   launchy
   mimemagic
-  newrelic_rpm
   nokogiri
   order_query
   paper_trail
