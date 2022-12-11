@@ -19,6 +19,7 @@ form {
     margin-bottom: 0;
   }
 
+  %label-inline,
   label.inline {
     margin-left: .5em;
     overflow-x: hidden;
@@ -42,13 +43,16 @@ form {
 }
 
 .inline {
-  @extend label.inline;
+  @extend %label-inline;
 }
 
 @media #{$small-only} {
-  label.inline:not(.inline-small) {
-    margin: 0;
-    padding: 0;
+  %label-inline,
+  label.inline {
+    &:not(.inline-small) {
+      margin: 0;
+      padding: 0;
+    }
   }
 }
 

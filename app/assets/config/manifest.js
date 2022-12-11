@@ -5,3 +5,4 @@
 //
 //= link application.css
 //= link static.css
+//= link_tree ../builds

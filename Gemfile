@@ -9,13 +9,8 @@ gem 'hstore_accessor'
 gem 'order_query'
 gem 'pg'
 
-gem 'autoprefixer-rails'
-gem 'font-awesome-sass'
-gem 'foundation-rails', '5.5.3.2'
 gem 'haml-rails'
-gem 'jquery-rails'
-gem 'sassc-rails'
-gem 'terser'
+gem 'propshaft'
 
 gem 'draper'
 gem 'icalendar'
@@ -69,10 +64,15 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'fivemat'
+  gem 'foreman', '~> 0.87.2'
   gem 'pry-nav'
   gem 'pry-rails'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
+
+  # Assets
+  gem 'cssbundling-rails', '~> 1.1'
+  gem 'jsbundling-rails', '~> 1.0'
 end
 
 group :test do
