@@ -1,4 +1,4 @@
-@import 'vendor/foundation/functions';
+@import '../vendor/foundation/functions';
 
 $primary-color: $maroon;
 $secondary-color: $navy;
@@ -51,23 +51,23 @@ $code-color: mix($maroon, #fff, 75%);
 $code-background-color: mix($maroon, #fff, 10%);
 $code-border-color: mix($maroon, #fff);
 
-@import "vendor/foundation/components/grid";
-@import "vendor/foundation/components/alert-boxes";
-@import "vendor/foundation/components/button-groups";
-@import "vendor/foundation/components/buttons";
-@import "vendor/foundation/components/dropdown";
-@import "vendor/foundation/components/dropdown-buttons";
-@import "vendor/foundation/components/flex-video";
-@import "vendor/foundation/components/forms";
-@import "vendor/foundation/components/inline-lists";
-@import "vendor/foundation/components/pagination";
-@import "vendor/foundation/components/reveal";
-@import "vendor/foundation/components/split-buttons";
-@import "vendor/foundation/components/tables";
-@import "vendor/foundation/components/tabs";
-@import "vendor/foundation/components/top-bar";
-@import "vendor/foundation/components/type";
-@import "vendor/foundation/components/visibility";
+@import "../vendor/foundation/components/grid";
+@import "../vendor/foundation/components/alert-boxes";
+@import "../vendor/foundation/components/button-groups";
+@import "../vendor/foundation/components/buttons";
+@import "../vendor/foundation/components/dropdown";
+@import "../vendor/foundation/components/dropdown-buttons";
+@import "../vendor/foundation/components/flex-video";
+@import "../vendor/foundation/components/forms";
+@import "../vendor/foundation/components/inline-lists";
+@import "../vendor/foundation/components/pagination";
+@import "../vendor/foundation/components/reveal";
+@import "../vendor/foundation/components/split-buttons";
+@import "../vendor/foundation/components/tables";
+@import "../vendor/foundation/components/tabs";
+@import "../vendor/foundation/components/top-bar";
+@import "../vendor/foundation/components/type";
+@import "../vendor/foundation/components/visibility";
 
 .field_with_errors {
   @extend .error;

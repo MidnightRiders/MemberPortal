@@ -1,17 +1,17 @@
-//= require foundation/foundation
-//= require foundation/foundation.abide
-//= require foundation/foundation.accordion
-//= require foundation/foundation.alert
-//= require foundation/foundation.clearing
-//= require foundation/foundation.dropdown
-//= require foundation/foundation.equalizer
-//= require foundation/foundation.interchange
-//= require foundation/foundation.joyride
-//= require foundation/foundation.magellan
-//= require foundation/foundation.offcanvas
-//= require foundation/foundation.orbit
-//= require foundation/foundation.reveal
-//= require foundation/foundation.slider
-//= require foundation/foundation.tab
-//= require foundation/foundation.tooltip
-//= require foundation/foundation.topbar
+import './foundation/foundation';
+import './foundation/foundation.abide';
+import './foundation/foundation.accordion';
+import './foundation/foundation.alert';
+import './foundation/foundation.clearing';
+import './foundation/foundation.dropdown';
+import './foundation/foundation.equalizer';
+import './foundation/foundation.interchange';
+import './foundation/foundation.joyride';
+import './foundation/foundation.magellan';
+import './foundation/foundation.offcanvas';
+import './foundation/foundation.orbit';
+import './foundation/foundation.reveal';
+import './foundation/foundation.slider';
+import './foundation/foundation.tab';
+import './foundation/foundation.tooltip';
+import './foundation/foundation.topbar';

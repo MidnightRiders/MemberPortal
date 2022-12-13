@@ -6,4 +6,9 @@ cd "$(dirname "$0")/.."
 
 script/update
 
-docker-compose up
+docker compose up
+ec="$?"
+
+docker-compose down
+
+exit "$ec"

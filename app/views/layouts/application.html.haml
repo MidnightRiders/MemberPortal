@@ -30,6 +30,7 @@
           = render partial: 'layouts/notifications'
           = yield
     = render partial: 'layouts/footer'
+    %script{ src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js' }/
     = javascript_include_tag 'application'
     = javascript_include_tag 'admin' if current_user && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
     = yield :foot

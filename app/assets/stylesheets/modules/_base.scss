@@ -1,7 +1,7 @@
 @font-face {
   font-family: Mayflower;
-  src: font-url('Mayflower.eot'); /* EOT file for IE */
-  src: local('Mayflower'), font-url('Mayflower.woff2') format('woff2'), font-url('Mayflower.ttf') format('opentype');
+  src: url('Mayflower.eot'); /* EOT file for IE */
+  src: local('Mayflower'), url('Mayflower.woff2') format('woff2'), url('Mayflower.ttf') format('opentype');
 }
 
 html {
@@ -17,7 +17,7 @@ body {
   min-height: 100%;
   position: relative;
   padding-bottom: 4rem + rem-calc(10);
-  background: $maroon image-url('bg.png') repeat center;
+  background: $maroon url('bg.png') repeat center;
   &.wait {
     &, * {
       cursor: wait !important;

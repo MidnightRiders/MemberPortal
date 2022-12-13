@@ -1,6 +1,8 @@
 FROM ruby:3.1.2-alpine
 LABEL maintainer="Midnight Riders<webczar@midnightriders.com>"
 
+WORKDIR /tmp
+COPY .node-version .
 RUN apk update
 RUN apk add --no-cache --virtual \
   build-dependencies \
@@ -9,7 +11,7 @@ RUN apk add --no-cache --virtual \
   chromium-chromedriver \
   gcompat \
   yaml-dev \
-  nodejs \
+  nodejs-current=$(head -1 .node-version)-r0 \
   postgresql-dev \
   ruby-nokogiri \
   tzdata \
@@ -20,10 +22,15 @@ RUN apk add --no-cache --virtual \
   imagemagick6-libs && \
   rm -rf /var/cache/apk/*
 
+RUN corepack enable
+
 WORKDIR /tmp
 COPY Gemfile Gemfile.lock /tmp/
-RUN bundle install
+RUN gem install foreman && \
+  bundle install
 RUN apk del build-base
 
 WORKDIR /usr/src/member-portal
-COPY . /usr/src/member-portal
+
+COPY package.json yarn.lock ./
+RUN yarn install && yarn cache clean

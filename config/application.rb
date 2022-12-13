@@ -44,6 +44,17 @@ module MidnightRiders
 
     config.log_level = ENV['LOG_LEVEL']&.downcase&.to_sym || :debug
 
+    config.assets.paths << Rails.root.join('node_modules/@fortawesome/fontawesome-free/webfonts')
+
+    config.exception_handler = {
+      dev: true,
+      exceptions: {
+        all: {
+          layout: 'exception_handler/exception',
+        }
+      }
+    }
+
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de

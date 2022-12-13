@@ -6,7 +6,7 @@ $revs-red: #c8102e;
 $revs-navy: #0c2340;
 
 @mixin text-stroke($width,$color) {
-  text-shadow: -$width 0 0 $color, $width 0 0 $color, 0 -$width 0 $color, 0 $width 0 $color;
+  text-shadow: (-$width) 0 0 $color, $width 0 0 $color, 0 (-$width) 0 $color, 0 $width 0 $color;
 }
 
 @mixin text-hide {

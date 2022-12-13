@@ -119,7 +119,7 @@
 
 "@types/jquery@^3.5.14":
   version "3.5.14"
-  resolved "https://registry.npmjs.org/@types/jquery/-/jquery-3.5.14.tgz"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.14.tgz#ac8e11ee591e94d4d58da602cb3a5a8320dee577"
   integrity sha512-X1gtMRMbziVQkErhTQmSe2jFwwENA/Zr+PprCkF63vFq+Yt5PZ4AlKqgmeNlwgn7dhsXEK888eIW2520EpC+xg==
   dependencies:
     "@types/sizzle" "*"
@@ -133,11 +133,6 @@
   version "2.0.2"
   resolved "https://registry.npmjs.org/@types/stripe-v2/-/stripe-v2-2.0.2.tgz"
   integrity sha512-YhXpV+x01wAmI44mBAKLGmeJ6q8iY9+cmwAXwfeXuNATSMgIwoB8ZsCgX4SvgQ3GiYot68ekiGnMrxDjY4beYg==
-
-"@types/stripe-v3@^3.1.27":
-  version "3.1.27"
-  resolved "https://registry.npmjs.org/@types/stripe-v3/-/stripe-v3-3.1.27.tgz"
-  integrity sha512-lsOXNRfYyzz45HW4FXXKWsx/6d2BpwDSYcmwLZOS81XarHFQFTqiqVq1bsLMebKgEz7+qQ2LLAPhmn8StQbi8w==
 
 anymatch@~3.1.2:
   version "3.1.3"
@@ -249,6 +244,11 @@ is-number@^7.0.0:
   version "7.0.0"
   resolved "https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz"
   integrity sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
+
+jquery-ujs@^1.2.3:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/jquery-ujs/-/jquery-ujs-1.2.3.tgz#dcac6026ab7268e5ee41faf9d31c997cd4ddd603"
+  integrity sha512-59wvfx5vcCTHMeQT1/OwFiAj+UffLIwjRIoXdpO7Z7BCFGepzq9T9oLVeoItjTqjoXfUrHJvV7QU6pUR+UzOoA==
 
 normalize-path@^3.0.0, normalize-path@~3.0.0:
   version "3.0.0"

@@ -4,7 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dev.dockerfile
-    command: ["bin/dev"]
+    command:
+      - bin/dev
     depends_on:
       - db
       - start_db
@@ -18,8 +19,10 @@ services:
       PORT: 8080
     ports:
       - "5991:8080"
+    tty: true
     volumes:
       - .:/usr/src/member-portal
+      - /usr/src/member-portal/node_modules
       - /usr/src/member-portal/tmp
   db:
     environment:

@@ -4,6 +4,8 @@ ruby '3.1.2'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.0.4'
 
+gem 'puma'
+
 # Use postgresql as the database for Active Record
 gem 'hstore_accessor'
 gem 'order_query'
@@ -11,6 +13,8 @@ gem 'pg'
 
 gem 'haml-rails'
 gem 'propshaft'
+
+gem 'exception_handler'
 
 gem 'draper'
 gem 'icalendar'
@@ -46,8 +50,6 @@ gem 'stripe'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 
-gem 'puma'
-
 # Monitoring
 gem 'newrelic_rpm'
 
@@ -64,7 +66,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'fivemat'
-  gem 'foreman', '~> 0.87.2'
   gem 'pry-nav'
   gem 'pry-rails'
   gem 'rspec-rails'
