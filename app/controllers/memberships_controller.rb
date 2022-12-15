@@ -116,7 +116,7 @@ class MembershipsController < ApplicationController
 
   def prepare_new_form
     @year = Membership.new_membership_year
-    @cards = @user.stripe_customer.cards.data if @user.stripe_customer.present?
+    @cards = @user.stripe_customer.list_payment_methods(type: 'card').data.map(&:card) if @user.stripe_customer.present?
   end
 
   # Strong params for +Membership+
