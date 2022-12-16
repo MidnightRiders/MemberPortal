@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby '3.1.2'
+ruby '3.1.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.0.4'
@@ -13,8 +13,6 @@ gem 'pg'
 
 gem 'haml-rails'
 gem 'propshaft'
-
-gem 'exception_handler'
 
 gem 'draper'
 gem 'icalendar'
@@ -52,6 +50,8 @@ gem 'jbuilder'
 
 # Monitoring
 gem 'newrelic_rpm'
+gem 'sentry-ruby'
+gem 'sentry-rails'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -66,8 +66,8 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'fivemat'
-  gem 'pry-nav'
-  gem 'pry-rails'
+  gem 'debase', '0.2.5.beta2'
+  gem 'ruby-debug-ide', '0.7.3'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
 

@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title #{@exception.status} | #{@exception.message}
+    %title #{@status} | #{@message}
     %link{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Lato:300,700' }
     %meta{ charset: 'utf-8' }
     = favicon_link_tag 'icons/favicon.ico'
@@ -16,12 +16,10 @@
     = stylesheet_link_tag 'static'
     != File.read(Rails.root.join('app/views/shared/_riders_logo.html'))
   %body
-    /
-      != @exception.inspect
-    %h1= @exception.status
+    %h1= @status
     .sub-container
       %h2
-        - case @exception.status
+        - case @status
           - when 400
             Bad Request
           - when 401
@@ -177,10 +175,10 @@
           - when 511
             Network Authentication Required
         %br/
-        - if @exception.message.present?
-          %small= @exception.message
+        - if @message.present?
+          %small= @message
         - else
-          - case @exception.status
+          - case @status
             - when (400..499)
               %small We couldn't find the content you're looking for.
             - else
