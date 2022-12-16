@@ -141,14 +141,8 @@
           modal;
 
       if (target) {
-        if (typeof target.selector !== 'undefined') {
-          // Find the named node; only use the first one found, since the rest of the code assumes there's only one node
-          modal = self.S('#' + target.data(self.data_attr('reveal-id'))).first();
-        } else {
-          modal = self.S(this.scope);
-
-          ajax_settings = target;
-        }
+        // Find the named node; only use the first one found, since the rest of the code assumes there's only one node
+        modal = self.S('#' + target.data(self.data_attr('reveal-id'))).first();
       } else {
         modal = self.S(this.scope);
       }

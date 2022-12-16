@@ -17,5 +17,6 @@
     "esbuild": "^0.16.4",
     "jquery-ujs": "^1.2.3",
     "sass": "^1.56.2"
-  }
+  },
+  "type": "module"
 }
