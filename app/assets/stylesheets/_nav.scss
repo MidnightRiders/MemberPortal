@@ -1,0 +1,61 @@
+.contain-to-grid.sticky {
+  box-shadow: 0 3px 6px #000;
+}
+.top-bar {
+  text-shadow: 0 1px 1px #333;
+  .title-area h1 a {
+    &::before {
+      width: 30px;
+      height: 100%;
+      content: '\00A0';
+      background: transparent image-url('logo.png') no-repeat center;
+      background-size: contain;
+      display: inline-block;
+      margin-right: .3em;
+    }
+  }
+
+  li.external {
+    a:link,
+    a:visited {
+      padding-right: rem-calc(35);
+      position: relative;
+      &::after {
+        @include fa-icon;
+        content: $fa-var-external-link;
+        font-size: rem-calc(9);
+        line-height: rem-calc(45);
+        position: absolute;
+        top: 0;
+        right: rem-calc(10);
+      }
+    }
+  }
+
+  @media #{$small-only} {
+    .title-area .name h1 {
+      overflow: visible;
+      white-space: nowrap;
+      font-size: .8em;
+    }
+  }
+  @media #{$medium-up} {
+    .title-area {
+      height: 0;
+      overflow: hidden;
+      .fixed & {
+        height: auto;
+      }
+      a:link, a:visited {
+        opacity: 0;
+        transition: opacity .5s;
+        .fixed & {
+          opacity: 1;
+        }
+      }
+    }
+  }
+  code {
+    text-shadow: none;
+  }
+}

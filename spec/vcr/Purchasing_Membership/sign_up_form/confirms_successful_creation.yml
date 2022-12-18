@@ -16,7 +16,7 @@ http_interactions:
       Stripe-Version:
       - '2022-11-15'
       X-Stripe-Client-User-Agent:
-      - '{"bindings_version":"8.0.0","lang":"ruby","lang_version":"3.1.3 p20 (2022-04-12)","platform":"aarch64-linux-musl","engine":"ruby","publisher":"stripe","uname":"Linux
+      - '{"bindings_version":"8.0.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"aarch64-linux-musl","engine":"ruby","publisher":"stripe","uname":"Linux
         version 5.10.104-linuxkit (root@buildkitsandbox) (gcc (Alpine 10.2.1_pre1)
         10.2.1 20201203, GNU ld (GNU Binutils) 2.35.2) #1 SMP PREEMPT Thu Mar 17 17:05:54
         UTC 2022","hostname":"c9c99ef446de"}'
@@ -119,7 +119,7 @@ http_interactions:
       Stripe-Version:
       - '2022-11-15'
       X-Stripe-Client-User-Agent:
-      - '{"bindings_version":"8.0.0","lang":"ruby","lang_version":"3.1.3 p20 (2022-04-12)","platform":"aarch64-linux-musl","engine":"ruby","publisher":"stripe","uname":"Linux
+      - '{"bindings_version":"8.0.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"aarch64-linux-musl","engine":"ruby","publisher":"stripe","uname":"Linux
         version 5.10.104-linuxkit (root@buildkitsandbox) (gcc (Alpine 10.2.1_pre1)
         10.2.1 20201203, GNU ld (GNU Binutils) 2.35.2) #1 SMP PREEMPT Thu Mar 17 17:05:54
         UTC 2022","hostname":"c9c99ef446de"}'
@@ -303,7 +303,7 @@ http_interactions:
       Stripe-Version:
       - '2022-11-15'
       X-Stripe-Client-User-Agent:
-      - '{"bindings_version":"8.0.0","lang":"ruby","lang_version":"3.1.3 p20 (2022-04-12)","platform":"aarch64-linux-musl","engine":"ruby","publisher":"stripe","uname":"Linux
+      - '{"bindings_version":"8.0.0","lang":"ruby","lang_version":"3.1.2 p20 (2022-04-12)","platform":"aarch64-linux-musl","engine":"ruby","publisher":"stripe","uname":"Linux
         version 5.10.104-linuxkit (root@buildkitsandbox) (gcc (Alpine 10.2.1_pre1)
         10.2.1 20201203, GNU ld (GNU Binutils) 2.35.2) #1 SMP PREEMPT Thu Mar 17 17:05:54
         UTC 2022","hostname":"c9c99ef446de"}'

@@ -4,8 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dev.dockerfile
-    command:
-      - bin/dev
+    command: ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "8080"]
     depends_on:
       - db
       - start_db
@@ -19,11 +18,9 @@ services:
       PORT: 8080
     ports:
       - "5991:8080"
-      - '9876:9876'
-    tty: true
     volumes:
       - .:/usr/src/member-portal
-      - /usr/src/member-portal/node_modules
+      - /usr/src/member-portal/tmp
   db:
     environment:
       POSTGRES_USER: postgres

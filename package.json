@@ -2,22 +2,12 @@
   "name": "midnightriders",
   "version": "1.0.0",
   "description": "package.json is just for types now",
-  "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --minify --public-path=assets",
-    "build:css": "sass ./app/assets/stylesheets/entrypoints:./app/assets/builds --style=compressed --load-path=node_modules"
-  },
+  "scripts": {},
   "devDependencies": {
     "@types/jquery": "^3.5.14",
     "@types/stripe-v2": "^2.0.2",
+    "@types/stripe-v3": "^3.1.27",
     "prettier": "^2.8.0",
     "typescript": "^4.9.3"
-  },
-  "dependencies": {
-    "@fortawesome/fontawesome-free": "^6.2.1",
-    "esbuild": "^0.16.4",
-    "jquery-ujs": "^1.2.3",
-    "logrocket": "^3.0.1",
-    "sass": "^1.56.2"
-  },
-  "type": "module"
+  }
 }

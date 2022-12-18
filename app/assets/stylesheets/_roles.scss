@@ -1,0 +1,25 @@
+.fa.fa-admin {
+  &::before {
+    content: $fa-var-bolt;
+  }
+}
+.fa.fa-executive_board {
+  &::before {
+    content: $fa-var-briefcase;
+  }
+}
+.fa.fa-at_large_board {
+  &::before {
+    content: $fa-var-sitemap;
+  }
+}
+.fa.fa-family {
+  &::before {
+    content: $fa-var-users;
+  }
+}
+.fa.fa-individual {
+  &::before {
+    content: $fa-var-user;
+  }
+}

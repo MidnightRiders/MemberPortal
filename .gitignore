@@ -33,6 +33,3 @@ node_modules/
 /public/assets/*
 !.env.example
 *.dump
-
-/app/assets/builds/*
-!/app/assets/builds/.keep

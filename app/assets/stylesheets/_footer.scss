@@ -1,0 +1,35 @@
+footer.page-footer {
+  position: absolute;
+  bottom: rem-calc(10);
+  left: 0;
+  width: 100%;
+  height: 4rem;
+  padding: rem-calc(10);
+  text-align: center;
+  color: #fff;
+  a:link, a:visited {
+    color: mix(#fff,$maroon,85%);
+    text-decoration: underline;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+  @media #{$medium-up} {
+    padding: rem-calc(15 20)
+  }
+
+  nav {
+    a + a {
+      &::before {
+        content: '•\00A0';
+        cursor: text;
+        display: inline-block;
+        text-decoration: none;
+      }
+      &:hover::before {
+        color: mix(#fff, $maroon, 85%);
+      }
+    }
+  }
+}

@@ -6,15 +6,4 @@ cd "$(dirname "$0")/.."
 
 script/update
 
-shutdown() {
-  ec="$?"
-
-  docker-compose down
-  [ -f tmp/pids/server.pid ] && rm -f tmp/pids/server.pid
-
-  exit "$ec"
-}
-
-trap shutdown INT
-
-docker compose up
+docker-compose up

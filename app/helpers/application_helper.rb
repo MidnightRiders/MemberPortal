@@ -22,8 +22,4 @@ module ApplicationHelper
   def render_javascript
     javascript_include_tag *@javascript_files if @javascript_files
   end
-
-  def icon(set, name)
-    content_tag :i, '', class: "#{set} fa-#{name}", 'aria-hidden': true
-  end
 end
