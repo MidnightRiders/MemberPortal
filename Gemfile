@@ -58,6 +58,11 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+group :local do
+  gem 'debase', '0.2.5.beta2'
+  gem 'ruby-debug-ide', '0.7.3'
+end
+
 group :development, :test do
   # Testing
   gem 'active_record_query_trace'
@@ -66,8 +71,6 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'fivemat'
-  gem 'debase', '0.2.5.beta2'
-  gem 'ruby-debug-ide', '0.7.3'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
 
