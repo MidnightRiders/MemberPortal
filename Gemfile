@@ -53,6 +53,12 @@ gem 'newrelic_rpm'
 gem 'sentry-ruby'
 gem 'sentry-rails'
 
+group :production do
+  # Heroku runs a check against sprockets version; even though
+  # it's not in use, it needs to be in the gemfile.
+  gem 'sprockets', require: false
+end
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
