@@ -6,7 +6,6 @@ require 'iconv'
 require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
-require 'sprockets/railtie'
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -44,6 +43,18 @@ module MidnightRiders
     }
 
     config.log_level = ENV['LOG_LEVEL']&.downcase&.to_sym || :debug
+
+    config.assets.paths = [
+      Rails.root.join('app', 'assets', 'builds'),
+      Rails.root.join('app', 'assets', 'fonts'),
+      Rails.root.join('app', 'assets', 'images'),
+      Rails.root.join('node_modules/@fortawesome/fontawesome-free/webfonts')
+    ]
+    config.exceptions_app = ->(env) {
+      ExceptionsController
+        .action(:show)
+        .call(env)
+    }
 
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]

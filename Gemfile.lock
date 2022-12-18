@@ -73,8 +73,6 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
-    autoprefixer-rails (10.4.7.0)
-      execjs (~> 2)
     aws-eventstream (1.2.0)
     aws-partitions (1.674.0)
     aws-sdk (3.1.0)
@@ -1433,12 +1431,13 @@ GEM
       capybara (>= 1.0, < 4)
       launchy
     climate_control (0.2.0)
-    coderay (1.1.3)
     color (1.8)
     concurrent-ruby (1.1.10)
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    cssbundling-rails (1.1.1)
+      railties (>= 6.0.0)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -1448,6 +1447,9 @@ GEM
     date (3.3.1)
     date_time_attribute (0.1.2)
       activesupport (>= 3.0.0)
+    debase (0.2.5.beta2)
+      debase-ruby_core_source (>= 0.10.12)
+    debase-ruby_core_source (0.10.18)
     devise (4.8.1)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -1468,20 +1470,13 @@ GEM
       request_store (>= 1.0)
       ruby2_keywords
     erubi (1.11.0)
-    execjs (2.8.1)
     factory_bot (6.2.1)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
     ffaker (2.21.0)
-    ffi (1.15.5)
     fivemat (1.3.7)
-    font-awesome-sass (6.2.1)
-      sassc (~> 2.0)
-    foundation-rails (5.5.3.2)
-      railties (>= 3.1.0)
-      sass (>= 3.3.0, < 3.5)
     fuzzy_match (2.1.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -1507,10 +1502,8 @@ GEM
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
-    jquery-rails (4.5.1)
-      rails-dom-testing (>= 1, < 3)
-      railties (>= 4.2.0)
-      thor (>= 0.14, < 2.0)
+    jsbundling-rails (1.0.3)
+      railties (>= 6.0.0)
     launchy (2.5.0)
       addressable (~> 2.7)
     loofah (2.19.1)
@@ -1564,13 +1557,11 @@ GEM
       terrapin (~> 0.6.0)
     pg (1.4.5)
     pkg-config (1.5.1)
-    pry (0.14.1)
-      coderay (~> 1.1)
-      method_source (~> 1.0)
-    pry-nav (1.0.0)
-      pry (>= 0.9.10, < 0.15)
-    pry-rails (0.3.9)
-      pry (>= 0.10.4)
+    propshaft (0.6.4)
+      actionpack (>= 7.0.0)
+      activesupport (>= 7.0.0)
+      rack
+      railties (>= 7.0.0)
     psych (5.0.1)
       stringio
     public_suffix (5.0.1)
@@ -1641,23 +1632,21 @@ GEM
     rspec-support (3.12.0)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
+    ruby-debug-ide (0.7.3)
+      rake (>= 0.8.1)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
-    sass (3.4.25)
-    sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     sdoc (2.4.0)
       rdoc (>= 5.0)
     selenium-webdriver (4.7.1)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sentry-rails (5.7.0)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.7.0)
+    sentry-ruby (5.7.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     simplecov (0.21.2)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -1670,17 +1659,11 @@ GEM
     sprockets (4.1.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.4.2)
-      actionpack (>= 5.2)
-      activesupport (>= 5.2)
-      sprockets (>= 3.0.0)
     stringio (3.0.4)
     stripe (8.0.0)
     temple (0.9.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
-    terser (1.1.13)
-      execjs (>= 0.3.0, < 3)
     thor (1.2.1)
     tilt (2.0.11)
     timecop (0.9.6)
@@ -1708,30 +1691,29 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_query_trace
-  autoprefixer-rails
   aws-sdk
   bigdecimal
   cancancan
   capybara
   capybara-screenshot
   color
+  cssbundling-rails (~> 1.1)
   database_cleaner
   date_time_attribute
+  debase (= 0.2.5.beta2)
   devise
   dotenv-rails (>= 2.1.1)
   draper
   factory_bot_rails
   ffaker
   fivemat
-  font-awesome-sass
-  foundation-rails (= 5.5.3.2)
   fuzzy_match
   haml-rails
   hstore_accessor
   icalendar
   iconv
   jbuilder
-  jquery-rails
+  jsbundling-rails (~> 1.0)
   launchy
   mimemagic
   newrelic_rpm
@@ -1741,8 +1723,7 @@ DEPENDENCIES
   paper_trail-association_tracking
   paperclip
   pg
-  pry-nav
-  pry-rails
+  propshaft
   puma
   rails (~> 7.0.4)
   rails-controller-testing
@@ -1750,20 +1731,22 @@ DEPENDENCIES
   rmagick
   rspec-rails
   rspec_junit_formatter
-  sassc-rails
+  ruby-debug-ide (= 0.7.3)
   sdoc
   selenium-webdriver
+  sentry-rails
+  sentry-ruby
   simplecov
   spring-commands-rspec
+  sprockets
   stripe
-  terser
   timecop
   vcr
   webmock
   will_paginate
 
 RUBY VERSION
-   ruby 3.1.2p203
+   ruby 3.1.3p203
 
 BUNDLED WITH
    2.3.26

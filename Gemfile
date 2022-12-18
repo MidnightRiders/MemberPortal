@@ -1,21 +1,18 @@
 source 'https://rubygems.org'
-ruby '3.1.2'
+ruby '3.1.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 7.0.4'
+
+gem 'puma'
 
 # Use postgresql as the database for Active Record
 gem 'hstore_accessor'
 gem 'order_query'
 gem 'pg'
 
-gem 'autoprefixer-rails'
-gem 'font-awesome-sass'
-gem 'foundation-rails', '5.5.3.2'
 gem 'haml-rails'
-gem 'jquery-rails'
-gem 'sassc-rails'
-gem 'terser'
+gem 'propshaft'
 
 gem 'draper'
 gem 'icalendar'
@@ -51,14 +48,23 @@ gem 'stripe'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
 
-gem 'puma'
-
 # Monitoring
 gem 'newrelic_rpm'
+gem 'sentry-ruby'
+gem 'sentry-rails'
+
+# Heroku runs a check against sprockets version; even though
+# it's not in use, it needs to be in the gemfile.
+gem 'sprockets', require: false
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
+end
+
+group :local do
+  gem 'debase', '0.2.5.beta2'
+  gem 'ruby-debug-ide', '0.7.3'
 end
 
 group :development, :test do
@@ -69,10 +75,12 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'ffaker'
   gem 'fivemat'
-  gem 'pry-nav'
-  gem 'pry-rails'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
+
+  # Assets
+  gem 'cssbundling-rails', '~> 1.1'
+  gem 'jsbundling-rails', '~> 1.0'
 end
 
 group :test do

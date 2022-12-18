@@ -13,6 +13,6 @@ if [ "$#" -gt 0 ]; then
   fi
 fi
 
-docker-compose run --rm start_db
+docker compose run --rm start_db
 
-docker-compose run -e RAILS_ENV="${RAILS_ENV:-development}" --rm server bundle exec rails "${args[@]}"
+docker compose run -e RAILS_ENV="${RAILS_ENV:-development}" --rm server bundle exec rails "${args[@]}"

@@ -21,13 +21,13 @@ require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 require 'capybara-screenshot/rspec'
+require 'rails/command'
 
 Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
-
 
 Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
@@ -66,6 +66,14 @@ RSpec.configure do |config|
 
   config.infer_spec_type_from_file_location!
 
+  config.before(:suite) do
+    Rails::Command.invoke 'assets:precompile'
+  end
+
+  config.after(:suite) do
+    Rails::Command.invoke 'assets:clobber'
+  end
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -93,5 +101,4 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-
 end
