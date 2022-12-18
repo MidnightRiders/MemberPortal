@@ -25,7 +25,7 @@ jobs:
           name: Install Apt dependencies
           command: |
             sudo apt-get update
-            sudo apt-get install -y imagemagick libmagickwand-dev libssl=1.1.1
+            sudo apt-get install -y --no-install-recommends imagemagick libmagickwand-dev libssl-dev
       - restore_cache:
           keys:
             - rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
@@ -34,7 +34,9 @@ jobs:
           name: Bundle Install
           command: |
             bundle config without local
-            bundle check --path vendor/bundle || bundle install --deployment
+            bundle config deployment true
+            bundle config path vendor/bundle
+            bundle check || bundle install
       - save_cache:
           key: rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
           paths:
