@@ -6,10 +6,10 @@ $fa-font-path: '.';
 @import '@fortawesome/fontawesome-free/scss/solid';
 @import '@fortawesome/fontawesome-free/scss/brands';
 
-@import 'vendor/foundation/functions';
-@import 'vendor/foundation/components/grid';
+@import '../vendor/foundation/functions';
+@import '../vendor/foundation/components/grid';
 
-@import 'modules/shared';
+@import '../modules/shared';
 
 * {
   box-sizing: border-box;
