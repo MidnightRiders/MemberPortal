@@ -21,6 +21,7 @@ require 'cancan/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 require 'capybara-screenshot/rspec'
+require 'rails/command'
 
 Capybara.save_path = ENV['CIRCLE_ARTIFACTS'] if ENV['CIRCLE_ARTIFACTS']
 
