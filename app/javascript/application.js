@@ -1,10 +1,13 @@
 import 'jquery-ujs';
+import LogRocket from 'logrocket';
 
 import './vendor/modernizr';
 import './vendor/foundation';
 import './hex_functions';
 import './pick_em';
 import './users/memberships';
+
+LogRocket.init('nqhpme/midnight-riders-member-portal');
 
 (function () {
   jQuery(function ($) {
