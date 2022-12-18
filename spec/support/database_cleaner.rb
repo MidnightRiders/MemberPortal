@@ -4,8 +4,13 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with :truncation
     Rails.application.load_seed
+    Rake::Task['assets:precompile'].invoke
     create_admin
     Warden.test_mode!
+  end
+
+  config.after(:suite) do
+    Rake::Task['assets:clobber'].invoke
   end
 
   config.around(:each) do |example|

@@ -28,7 +28,6 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
-
 Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
@@ -93,5 +92,4 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-
 end
