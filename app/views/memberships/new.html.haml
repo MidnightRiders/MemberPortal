@@ -59,7 +59,7 @@
               = link_to '(Change Card)', '#', id: 'show-credit-card-info'
 
             - if @cards.present?
-              = select_tag :card_id, options_for_select(@cards.map { |card| ["#{card.brand}: x#{card.last4} (exp #{card.exp_month}/#{card.exp_year})", card.id] })
+              = select_tag :card_id, options_for_select(@cards.map { ["#{_1.card.brand}: x#{_1.card.last4} (exp #{_1.card.exp_month}/#{_1.card.exp_year})", _1.id] })
 
       - unless membership_form.object.stripe_card_token
         #credit-card-info{ class: ('hide' if membership_form.object.user.stripe_customer_token && @cards.present?) }

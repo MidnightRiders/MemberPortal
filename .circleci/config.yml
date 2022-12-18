@@ -5,7 +5,7 @@ jobs:
   build:
     parallelism: 3
     docker:
-      - image: cimg/ruby:3.1.2-node
+      - image: cimg/ruby:3.1.3-node
         environment:
           BUNDLE_PATH: vendor/bundle
           COVERAGE: true
@@ -22,21 +22,25 @@ jobs:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - run:
-          name: Install Apt dependencies
+          name: Install system dependencies
           command: |
             sudo apt-get update
-            sudo apt-get install -y imagemagick libmagickwand-dev
+            sudo apt-get install -y --no-install-recommends imagemagick libmagickwand-dev
+            wget http://nz2.archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
+            sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
       - restore_cache:
           keys:
-            - rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
-            - rails-demo-bundle-v2-20221203-
+            - rails-demo-bundle-v2-20221217-{{ checksum "Gemfile.lock" }}
+            - rails-demo-bundle-v2-20221217-
       - run:
           name: Bundle Install
           command: |
-            gem install bundler:1.17.3
-            bundle check --path vendor/bundle || bundle install --deployment
+            bundle config without local
+            bundle config deployment true
+            bundle config path vendor/bundle
+            bundle check || bundle install
       - save_cache:
-          key: rails-demo-bundle-v2-20221203-{{ checksum "Gemfile.lock" }}
+          key: rails-demo-bundle-v2-20221217-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
 
@@ -79,7 +83,7 @@ jobs:
             - codeclimate.*.json
   upload-coverage:
     docker:
-      - image: cimg/ruby:3.1.2-node
+      - image: cimg/ruby:3.1.3-node
     environment:
       CC_TEST_REPORTER_ID: c3ff91e23ea0fea718bb62dae0a8a5440dc082d5d2bb508af6b33d0babac479a
     working_directory: ~/bikeindex/bike_index
@@ -105,4 +109,3 @@ workflows:
       - upload-coverage:
           requires:
              - build
-

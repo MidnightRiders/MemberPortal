@@ -1,0 +1,197 @@
+!!!
+%html
+  %head
+    %title #{@status} | #{@message}
+    %link{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Lato:300,700' }
+    %meta{ charset: 'utf-8' }
+    = favicon_link_tag 'icons/favicon.ico'
+    %meta{ name: 'og:image', content: image_url('logo.png') }
+    - if Rails.env.production?
+      = Haml::Engine.new(File.read(Rails.root.join('app/views/layouts/_ga.haml'))).render(Object.new)
+    - else
+      :javascript
+        if (!window.ga) window.ga = function() {};
+    %meta{ content: 'initial-scale=1, maximum-scale=1', name: 'viewport'}
+    %meta{ 'http-equiv' => 'X-UA-Compatible', content: 'IE=edge,chrome=1' }
+    = stylesheet_link_tag 'static'
+    != File.read(Rails.root.join('app/views/shared/_riders_logo.html'))
+  %body
+    %h1= @status
+    .sub-container
+      %h2
+        - case @status
+          - when 400
+            Bad Request
+          - when 401
+            Unauthorized
+          - when 402
+            Payment Required
+          - when 403
+            Forbidden
+          - when 404
+            Not Found
+          - when 405
+            Method Not Allowed
+          - when 406
+            Not Acceptable
+          - when 407
+            Proxy Authentication Required
+          - when 408
+            Request Timeout
+          - when 409
+            Conflict
+          - when 410
+            Gone
+          - when 411
+            Length Required
+          - when 412
+            Precondition Failed
+          - when 413
+            Payload Too Large
+          - when 414
+            URI Too Long
+          - when 415
+            Unsupported Media Type
+          - when 416
+            Range Not Satisfiable
+          - when 417
+            Expectation Failed
+          - when 418
+            I'm a teapot
+          - when 422
+            Unprocessable Entity
+          - when 425
+            Too Early
+          - when 426
+            Upgrade Required
+          - when 428
+            Precondition Required
+          - when 429
+            Too Many Requests
+          - when 431
+            Request Header Fields Too Large
+          - when 451
+            Unavailable For Legal Reasons
+          - when 500
+            Internal Server Error
+          - when 501
+            Not Implemented
+          - when 502
+            Bad Gateway
+          - when 503
+            Service Unavailable
+          - when 504
+            Gateway Timeout
+          - when 505
+            HTTP Version Not Supported
+          - when 506
+            Variant Also Negotiates
+          - when 507
+            Insufficient Storage
+          - when 508
+            Loop Detected
+          - when 510
+            Not Extended
+          - when 511
+            Network Authentication Required
+          - when 400
+            Bad Request
+          - when 401
+            Unauthorized
+          - when 402
+            Payment Required
+          - when 403
+            Forbidden
+          - when 404
+            Not Found
+          - when 405
+            Method Not Allowed
+          - when 406
+            Not Acceptable
+          - when 407
+            Proxy Authentication Required
+          - when 408
+            Request Timeout
+          - when 409
+            Conflict
+          - when 410
+            Gone
+          - when 411
+            Length Required
+          - when 412
+            Precondition Failed
+          - when 413
+            Payload Too Large
+          - when 414
+            URI Too Long
+          - when 415
+            Unsupported Media Type
+          - when 416
+            Range Not Satisfiable
+          - when 417
+            Expectation Failed
+          - when 418
+            I'm a teapot
+          - when 421
+            Misdirected Request
+          - when 422
+            Unprocessable Entity
+          - when 423
+            Locked
+          - when 424
+            Failed Dependency
+          - when 425
+            Too Early
+          - when 426
+            Upgrade Required
+          - when 428
+            Precondition Required
+          - when 429
+            Too Many Requests
+          - when 431
+            Request Header Fields Too Large
+          - when 451
+            Unavailable For Legal Reasons
+          - when 500
+            Internal Server Error
+          - when 501
+            Not Implemented
+          - when 502
+            Bad Gateway
+          - when 503
+            Service Unavailable
+          - when 504
+            Gateway Timeout
+          - when 505
+            HTTP Version Not Supported
+          - when 506
+            Variant Also Negotiates
+          - when 507
+            Insufficient Storage
+          - when 508
+            Loop Detected
+          - when 510
+            Not Extended
+          - when 511
+            Network Authentication Required
+        %br/
+        - if @message.present?
+          %small= @message
+        - else
+          - case @status
+            - when (400..499)
+              %small We couldn't find the content you're looking for.
+            - else
+              %small Some kind of error has occurred.
+    %p
+      Even the best of us get turned upside down sometimes.
+      If you’re certain there should be a page here,
+      <a href="mailto:member-portal-support@midnightriders.com">send us an email</a>
+      with the URL and any description you can. If you’re not so
+      sure, try <a href="/">returning home</a>
+      and navigating from there.
+
+    .copyrights
+      Copyright ©#{Date.current.year} Midnight Riders.
+      %br
+      Image copyright ©2016 <a href="http://CapturedImages.SmugMug.com" target="_blank">Kari Heistad, Captured Images</a>

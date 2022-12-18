@@ -1,0 +1,74 @@
+@import '../vendor/foundation/functions';
+
+$primary-color: $maroon;
+$secondary-color: $navy;
+
+$body-font-weight: 300;
+
+$include-open-sans: false;
+$body-font-family: 'Lato', sans-serif;
+$body-font-weight: 300;
+
+$header-font-family: 'Mayflower', Georgia, serif;
+$h1-font-size: rem-calc(32);
+$h2-font-size: rem-calc(28);
+$h3-font-size: rem-calc(24);
+$h4-font-size: rem-calc(20);
+//$h5-font-size: $body-font-size;
+
+$paragraph-margin-bottom: rem-calc(14);
+
+$link-color: $maroon;
+$link-visited-color: $maroon;
+$link-hover-color: saturate(lighten($maroon,15%),15%);
+
+$topbar-bg: $silver;
+$topbar-bg-color: $silver;
+$topbar-dropdown-bg: $silver;
+$topbar-dropdown-link-weight: 700;
+$topbar-dropdown-link-bg-hover: $maroon;
+$topbar-link-weight: 700;
+$topbar-link-bg-hover: $maroon;
+$topbar-dropdown-label-bg: $secondary-color;
+$topbar-dropdown-label-color: #fff;
+$topbar-menu-link-color-toggled: #fff;
+// $topbar-dropdown-bg: darken($silver,25%);
+// $topbar-dropdown-link-bg: darken($silver,15%);
+
+$table-head-padding: rem-calc(6);
+$table-row-padding: rem-calc(6);
+
+$input-prefix-bg: $secondary-color;
+$input-prefix-border-color: $silver;
+$input-prefix-font-color: #fff;
+
+$button-med: rem-calc(12);
+$button-tny: rem-calc(7);
+$button-sml: rem-calc(10);
+$button-lrg: rem-calc(16);
+
+$code-color: mix($maroon, #fff, 75%);
+$code-background-color: mix($maroon, #fff, 10%);
+$code-border-color: mix($maroon, #fff);
+
+@import "../vendor/foundation/components/grid";
+@import "../vendor/foundation/components/alert-boxes";
+@import "../vendor/foundation/components/button-groups";
+@import "../vendor/foundation/components/buttons";
+@import "../vendor/foundation/components/dropdown";
+@import "../vendor/foundation/components/dropdown-buttons";
+@import "../vendor/foundation/components/flex-video";
+@import "../vendor/foundation/components/forms";
+@import "../vendor/foundation/components/inline-lists";
+@import "../vendor/foundation/components/pagination";
+@import "../vendor/foundation/components/reveal";
+@import "../vendor/foundation/components/split-buttons";
+@import "../vendor/foundation/components/tables";
+@import "../vendor/foundation/components/tabs";
+@import "../vendor/foundation/components/top-bar";
+@import "../vendor/foundation/components/type";
+@import "../vendor/foundation/components/visibility";
+
+.field_with_errors {
+  @extend .error;
+}

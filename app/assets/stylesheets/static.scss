@@ -1,10 +1,15 @@
 $include-html-classes: false;
+$fa-font-path: '.';
 
-@import 'font-awesome';
-@import 'foundation/functions';
-@import 'foundation/components/grid';
+@import '@fortawesome/fontawesome-free/scss/fontawesome';
+@import '@fortawesome/fontawesome-free/scss/regular';
+@import '@fortawesome/fontawesome-free/scss/solid';
+@import '@fortawesome/fontawesome-free/scss/brands';
 
-@import 'shared';
+@import 'vendor/foundation/functions';
+@import 'vendor/foundation/components/grid';
+
+@import 'modules/shared';
 
 * {
   box-sizing: border-box;
@@ -21,7 +26,7 @@ html {
 }
 
 body {
-  background: image-url('teal.jpg') no-repeat 65% 100%;
+  background: no-repeat url('teal.jpg') 65% 100%;
   background-size: cover;
   color: $navy;
   font-family: 'Lato', sans-serif;
