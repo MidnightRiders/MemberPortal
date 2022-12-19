@@ -13,6 +13,8 @@ gem 'pg'
 
 gem 'haml-rails'
 gem 'propshaft'
+gem 'cssbundling-rails', '~> 1.1'
+gem 'jsbundling-rails', '~> 1.0'
 
 gem 'draper'
 gem 'icalendar'
@@ -77,10 +79,6 @@ group :development, :test do
   gem 'fivemat'
   gem 'rspec-rails'
   gem 'spring-commands-rspec'
-
-  # Assets
-  gem 'cssbundling-rails', '~> 1.1'
-  gem 'jsbundling-rails', '~> 1.0'
 end
 
 group :test do
