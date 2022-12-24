@@ -148,8 +148,8 @@ shared_examples_for 'Commerce::Purchasable' do
     it 'saves the Stripe::Refund id to the refund attribute' do
       product.update_attribute(:stripe_charge_id, StripeHelper.charge_id)
       refund_id = StripeHelper.refund_id
-      allow(product.purchaser)
-        .to receive_message_chain('stripe_customer.charges.retrieve.refunds.create')
+      allow(Stripe::Refund)
+        .to receive(:create).with({ charge: product.stripe_charge_id })
         .and_return(double('Stripe::Refund', id: refund_id))
 
       expect { product.refund }.to change { product.refunded }.to refund_id
@@ -158,8 +158,8 @@ shared_examples_for 'Commerce::Purchasable' do
     it 'adds an error to :base if there is a Stripe Error' do
       product.update_attribute(:stripe_charge_id, StripeHelper.charge_id)
       error_message = 'The expiration date on your card is not valid'
-      allow(product.purchaser)
-        .to receive_message_chain('stripe_customer.charges.retrieve.refunds.create')
+      allow(Stripe::Refund)
+        .to receive(:create).with({ charge: product.stripe_charge_id })
         .and_raise(Stripe::StripeError.new(error_message))
 
       expect { product.refund }.to change { product.errors[:base] }.to(['There was a problem refunding the transaction.'])

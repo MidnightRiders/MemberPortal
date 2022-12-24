@@ -19,7 +19,7 @@ module Commerce
 
     def refund(purchase)
       return unless purchase.stripe_charge_id.present?
-      Stripe::Charge.retrieve(purchase.stripe_charge_id).refunds.create
+      Stripe::Refund.create({ charge: purchase.stripe_charge_id })
     end
 
     # @return [Stripe::Customer, nil] Stripe customer associated with User
