@@ -16,6 +16,6 @@
       = link_to new_user_membership_path(user), class: 'button large' do
         = icon 'fa-regular', 'credit-card fa-fw'
         Buy a
-        = Date.current.year
+        = Membership.new_membership_year
         Membership
 %hr

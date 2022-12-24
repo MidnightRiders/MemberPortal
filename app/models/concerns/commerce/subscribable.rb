@@ -8,10 +8,16 @@ module Commerce
 
     # Cancel current subscription
     def cancel(provide_refund = false)
-      return false unless subscription?
-      Stripe::Subscription.retrieve(stripe_subscription_id).delete
+      unless subscription?
+        errors.add(:base, 'No subscription to cancel')
+        return false
+      end
+
+      Stripe::Subscription.update(stripe_subscription_id, {
+        cancel_at_period_end: true,
+      })
       update_attribute(:stripe_subscription_id, "Stripe Subscription #{stripe_subscription_id} Canceled")
-      refund if provide_refund
+      provide_refund ? refund : true
     rescue Stripe::StripeError => e
       logger.error "Stripe error while canceling subscription: #{e.message}"
       errors.add :base, 'There was a problem while canceling your subscription: ' + e.message

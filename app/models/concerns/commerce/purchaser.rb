@@ -40,7 +40,8 @@ module Commerce
     end
 
     def subscribe_to(product)
-      subscription = stripe_customer.subscriptions.create(
+      subscription = Stripe::Subscription.create(
+        customer: stripe_customer,
         plan: product.plan,
         trial_end: product.trial_end
       )
