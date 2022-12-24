@@ -26,6 +26,7 @@ RUN apk add --no-cache --virtual \
     corepack enable
 
 WORKDIR /tmp
+RUN gem install debase-ruby_core_source
 COPY Gemfile Gemfile.lock /tmp/
 RUN gem install foreman && \
   bundle install

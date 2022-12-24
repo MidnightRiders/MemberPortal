@@ -7,5 +7,7 @@ class ExceptionsController < ActionController::Base
     @status = exception ? ActionDispatch::ExceptionWrapper.new(request.env, exception).try(:status_code) : request.env["PATH_INFO"][1..-1].to_i
     # => Server Response ("Not Found" etc)
     @response = ActionDispatch::ExceptionWrapper.rescue_responses[exception.class.name]
+
+    render template: 'exceptions/show', status: @status, formats: %i[html]
   end
 end
