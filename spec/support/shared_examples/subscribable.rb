@@ -42,7 +42,7 @@ shared_examples_for 'Commerce::Subscribable' do
     end
 
     it 'returns false for having a canceled subscription' do
-      allow(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+      allow(Stripe::Subscription).to receive(:update).with(/^sub_[a-z0-9]{23}$/, { cancel_at_period_end: true })
 
       stripe_subscription_id = StripeHelper.subscription_id
       product.update_attribute(:stripe_subscription_id, stripe_subscription_id)
@@ -70,13 +70,13 @@ shared_examples_for 'Commerce::Subscribable' do
       before(:each) { product.update_attribute(:stripe_subscription_id, StripeHelper.subscription_id) }
 
       it 'calls delete on the Stripe::Subscription' do
-        expect(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+        expect(Stripe::Subscription).to receive(:update).with(/^sub_[a-z0-9]{23}$/, { cancel_at_period_end: true })
 
         product.cancel
       end
 
       it 'replaces stripe_subscription_id with "Stripe Subscription [SUBSCRIPTION ID] Canceled"' do
-        allow(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+        allow(Stripe::Subscription).to receive(:update).with(/^sub_[a-z0-9]{23}$/, { cancel_at_period_end: true })
         sub_id = product.stripe_subscription_id
 
         expect { product.cancel }
@@ -85,7 +85,7 @@ shared_examples_for 'Commerce::Subscribable' do
       end
 
       it 'refunds if argument is true' do
-        allow(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+        allow(Stripe::Subscription).to receive(:update).with(/^sub_[a-z0-9]{23}$/, { cancel_at_period_end: true })
 
         expect(product).to receive(:refund)
 
@@ -93,7 +93,7 @@ shared_examples_for 'Commerce::Subscribable' do
       end
 
       it 'does not refund if argument is false' do
-        allow(product.purchaser).to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+        allow(Stripe::Subscription).to receive(:update).with(/^sub_[a-z0-9]{23}$/, { cancel_at_period_end: true })
 
         expect(product).not_to receive(:refund)
 
@@ -101,8 +101,8 @@ shared_examples_for 'Commerce::Subscribable' do
       end
 
       it 'adds an error to base if Stripe::StripeError is raised while canceling' do
-        allow(product.purchaser)
-          .to receive_message_chain('stripe_customer.subscriptions.retrieve.delete')
+        allow(Stripe::Subscription)
+          .to receive(:update).with(/^sub_[a-z0-9]{23}$/, { cancel_at_period_end: true })
           .and_raise(Stripe::StripeError.new('Message'))
 
         product.cancel

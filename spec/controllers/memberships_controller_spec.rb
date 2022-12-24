@@ -167,7 +167,7 @@ describe MembershipsController do
           after(:each) { Timecop.return }
 
           before :each do
-            allow_any_instance_of(User).to receive_message_chain(:stripe_customer, :subscriptions, :retrieve) {
+            allow(Stripe::Subscription).to receive(:retrieve) {
               double(
                 'Stripe::Subscription',
                 id: event.dig(:data, :object, :subscription),
