@@ -1,7 +1,7 @@
 # Controller for static pages – home, faq, contact. Only visible
 class StaticPagesController < ApplicationController
 
-  authorize_resource class: false, only: %i(standings transactions nominate)
+  authorize_resource class: false, only: %i[standings transactions nominate preact]
 
   # Root path. Shows sign_in if not signed in, user_home if signed in
   def home
@@ -56,6 +56,10 @@ class StaticPagesController < ApplicationController
       format.html { render view }
       format.js { render json: @transactions }
     end
+  end
+
+  def preact
+    render 'preact', layout: false
   end
 
   private

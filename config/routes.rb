@@ -44,5 +44,13 @@ MidnightRiders::Application.routes.draw do
 
   post 'nominate', to: 'static_pages#nominate'
 
+  # TODO: real routes
+  get 'preact', to: 'static_pages#preact'
+
+  namespace :api, formats: %i[json] do
+    get :user, to: 'users#current'
+    resources :users
+  end
+
   root to: 'static_pages#home'
 end

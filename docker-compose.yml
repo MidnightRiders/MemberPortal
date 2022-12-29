@@ -18,8 +18,8 @@ services:
       RAILS_ENV: "${RAILS_ENV:-development}"
       PORT: 8080
     ports:
-      - "5991:8080"
-      - '9876:9876'
+      - '5991:8080'
+      - '5999:5999'
     tty: true
     volumes:
       - .:/usr/src/member-portal
@@ -31,7 +31,7 @@ services:
       POSTGRES_DB: "mr_member_portal_${DBENV:-development}"
     image: postgres:11.17-alpine
     ports:
-      - "5992:5432"
+      - '5992:5432'
     restart: always
     volumes:
       - pgdata:/var/lib/postgresql/data

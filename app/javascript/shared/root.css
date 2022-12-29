@@ -1,0 +1,32 @@
+@import url('~shared/styles/variables');
+
+@font-face {
+  font-family: Mayflower;
+  src: local('Mayflower'), url('./assets/Mayflower.woff2') format('woff2'),
+    url('./assets/Mayflower.ttf') format('opentype');
+}
+
+html {
+  height: 100%;
+}
+
+html,
+body {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+body {
+  height: auto;
+  min-height: 100%;
+  position: relative;
+  background: $maroon url('./assets/bg.png') repeat center;
+
+  &.wait {
+    &,
+    * {
+      cursor: wait !important;
+    }
+  }
+}

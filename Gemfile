@@ -15,6 +15,7 @@ gem 'haml-rails'
 gem 'propshaft'
 gem 'cssbundling-rails', '~> 1.1'
 gem 'jsbundling-rails', '~> 1.0'
+gem 'vite_rails', '~> 3.0'
 
 gem 'draper'
 gem 'icalendar'
