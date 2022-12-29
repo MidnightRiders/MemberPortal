@@ -50,6 +50,12 @@ MidnightRiders::Application.routes.draw do
   namespace :api, formats: %i[json] do
     get :user, to: 'users#current'
     resources :users
+
+    resources :matches, only: %i[index show] do
+      collection do
+        get :next_revs_match
+      end
+    end
   end
 
   root to: 'static_pages#home'

@@ -1,4 +1,5 @@
 @import url('~shared/styles/variables');
+@import url('@fortawesome/fontawesome-free/css/all');
 
 @font-face {
   font-family: Mayflower;
@@ -28,5 +29,23 @@ body {
     * {
       cursor: wait !important;
     }
+  }
+}
+
+main {
+  display: block;
+  padding: 0.625rem 0.3125rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Mayflower';
+
+  small {
+    font-family: 'Lato', sans-serif;
   }
 }

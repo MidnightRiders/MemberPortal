@@ -72,7 +72,7 @@ class PlayersController < ApplicationController
     @player = Player.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the allowlist through.
   def player_params
     params.require(:player).permit(:first_name, :last_name, :club_id, :position, :number, :active)
   end

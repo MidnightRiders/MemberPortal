@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'preact/hooks';
 
 export const useOnMount = (
-  callback: () => void | Promise<void> | (() => undefined),
+  callback: () => void | Promise<void> | (() => void),
 ) => {
   useEffect(() => {
     const resp = callback();

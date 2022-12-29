@@ -1,11 +1,18 @@
 import { createContext, FunctionComponent } from 'preact';
-import { StateUpdater, useContext, useMemo, useState } from 'preact/hooks';
+import {
+  StateUpdater,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from 'preact/hooks';
 import { noop } from '~helpers/utils';
 import { useOnMount } from '~shared/hooks/effects';
+import { useDel, useGet } from '../errors/fetch';
 
 export interface BaseUser {
   id: number;
-  memberSince: number;
+  memberSince: number | null;
   username: string;
 }
 
@@ -20,6 +27,7 @@ interface APIExpandedUser extends BaseUser {
   createdAt: string;
   email: string;
   firstName: string;
+  isCurrentUser: boolean;
   lastName: string;
   phone: number;
   postalCode: string | null;
@@ -34,25 +42,28 @@ type ExpandedUser = Omit<APIExpandedUser, TimestampKeys<APIExpandedUser>> & {
 
 interface AuthContext {
   user: ExpandedUser | null;
+
+  logOut: () => void;
   setUser: StateUpdater<ExpandedUser | null>;
 }
 
-const AuthCtx = createContext<AuthContext>({ user: null, setUser: noop });
+const AuthCtx = createContext<AuthContext>({
+  user: null,
+  logOut: noop,
+  setUser: noop,
+});
 
 export const useAuthCtx = () => useContext(AuthCtx);
 
 export const AuthProvider: FunctionComponent = ({ children }) => {
   const [user, setUser] = useState<ExpandedUser | null>(null);
 
+  const getUser = useGet('fetchUser');
+
   useOnMount(async () => {
-    const resp = await fetch('/api/user');
-    const { user: apiUser } = (await resp.json()) as {
-      user: APIExpandedUser | null;
-    };
-    if (apiUser === null) {
-      setUser(null);
-    } else {
-      const newUser = Object.entries(apiUser).reduce(
+    const resp = await getUser<{ user: APIExpandedUser | null }>('/api/user');
+    if (resp && resp.user) {
+      const newUser = Object.entries(resp.user).reduce(
         (u, [k, v]) => ({
           ...u,
           [k]: k.endsWith('At') && typeof v === 'string' ? new Date(v) : v,
@@ -60,10 +71,22 @@ export const AuthProvider: FunctionComponent = ({ children }) => {
         {} as ExpandedUser,
       );
       setUser(newUser);
+    } else {
+      setUser(null);
     }
   });
 
-  const value = useMemo(() => ({ user, setUser }), [user, setUser]);
+  const delSession = useDel('signOut');
+  const logOut = useCallback(async () => {
+    if (await delSession<true>('/users/sign_out')) {
+      setUser(null);
+    }
+  }, []);
+
+  const value = useMemo(
+    () => ({ user, logOut, setUser }),
+    [user, logOut, setUser],
+  );
 
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 };

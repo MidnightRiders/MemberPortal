@@ -40,6 +40,7 @@ gem 'rexml'
 # Users/auth
 gem 'cancancan'
 gem 'devise'
+gem 'jwt'
 gem 'paper_trail'
 gem 'paper_trail-association_tracking'
 
