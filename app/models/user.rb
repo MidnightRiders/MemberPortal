@@ -38,6 +38,13 @@ class User < ActiveRecord::Base
 
   has_paper_trail only: %i(username email first_name last_name address city state postal_code phone member_since)
 
+  def as_api_json(api: false)
+    return super unless api
+
+    super.transform_keys { _1.camelize(:lower) }
+      .tap { _1[:isCurrentUser] = current_member? }
+  end
+
   # Returns +privileges+ from current +Membership+
   def current_privileges
     current_membership.try(:privileges) || []
@@ -149,6 +156,11 @@ class User < ActiveRecord::Base
       address: "#{address}\n#{city}, #{state} #{postal_code}",
       phone: phone
     }
+  end
+
+  def jwt
+    payload = { id: id, exp: 14.days.from_now.to_i }
+    JWT.encode payload, ENV.fetch('JWT_SECRET'), 'HS512'
   end
 
   def ability

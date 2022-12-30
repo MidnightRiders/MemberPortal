@@ -1,14 +1,18 @@
 import { createContext, FunctionComponent } from 'preact';
+import cookies from 'js-cookie';
+
 import {
   StateUpdater,
-  useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'preact/hooks';
 import { noop } from '~helpers/utils';
 import { useOnMount } from '~shared/hooks/effects';
-import { useDel, useGet } from '../errors/fetch';
+import { useGet } from '~shared/contexts/errors/fetch';
+import { FetchError } from '~helpers/fetch';
+import LogRocket from 'logrocket';
 
 export interface BaseUser {
   id: number;
@@ -20,7 +24,7 @@ type TimestampKeys<O> = {
   [K in keyof O]: K extends `${string}At` ? K : never;
 }[keyof O];
 
-interface APIExpandedUser extends BaseUser {
+export interface APIExpandedUser extends BaseUser {
   address: string | null;
   city: string | null;
   country: string | null;
@@ -36,56 +40,55 @@ interface APIExpandedUser extends BaseUser {
   updatedAt: string;
 }
 
-type ExpandedUser = Omit<APIExpandedUser, TimestampKeys<APIExpandedUser>> & {
+export type ExpandedUser = Omit<
+  APIExpandedUser,
+  TimestampKeys<APIExpandedUser>
+> & {
   [K in TimestampKeys<APIExpandedUser>]: Date;
 };
 
 interface AuthContext {
+  jwt: string | null;
   user: ExpandedUser | null;
 
-  logOut: () => void;
+  setJwt: (jwt: string | null) => void;
   setUser: StateUpdater<ExpandedUser | null>;
 }
 
 const AuthCtx = createContext<AuthContext>({
+  jwt: null,
   user: null,
-  logOut: noop,
+
+  setJwt: noop,
   setUser: noop,
 });
 
 export const useAuthCtx = () => useContext(AuthCtx);
 
+export const COOKIE_NAME = 'mr-session-token';
+
 export const AuthProvider: FunctionComponent = ({ children }) => {
+  const [jwt, setJwt] = useState(() => cookies.get(COOKIE_NAME) ?? null);
   const [user, setUser] = useState<ExpandedUser | null>(null);
 
-  const getUser = useGet('fetchUser');
-
-  useOnMount(async () => {
-    const resp = await getUser<{ user: APIExpandedUser | null }>('/api/user');
-    if (resp && resp.user) {
-      const newUser = Object.entries(resp.user).reduce(
-        (u, [k, v]) => ({
-          ...u,
-          [k]: k.endsWith('At') && typeof v === 'string' ? new Date(v) : v,
-        }),
-        {} as ExpandedUser,
-      );
-      setUser(newUser);
+  useEffect(() => {
+    if (jwt) {
+      cookies.set(COOKIE_NAME, jwt, { expires: 7 });
     } else {
+      cookies.remove(COOKIE_NAME);
       setUser(null);
     }
-  });
+  }, [jwt]);
 
-  const delSession = useDel('signOut');
-  const logOut = useCallback(async () => {
-    if (await delSession<true>('/users/sign_out')) {
-      setUser(null);
-    }
-  }, []);
+  useEffect(() => {
+    if (!user) return;
+
+    LogRocket.identify(user.id.toString(), { username: user.username });
+  }, [user]);
 
   const value = useMemo(
-    () => ({ user, logOut, setUser }),
-    [user, logOut, setUser],
+    () => ({ jwt, user, setJwt, setUser }),
+    [jwt, user, setJwt, setUser],
   );
 
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;

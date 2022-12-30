@@ -5,11 +5,13 @@
   "license": "MIT",
   "scripts": {
     "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --minify --public-path=assets",
-    "build:css": "sass ./app/assets/stylesheets/entrypoints:./app/assets/builds --style=compressed --load-path=node_modules"
+    "build:css": "sass ./app/assets/stylesheets/entrypoints:./app/assets/builds --style=compressed --load-path=node_modules",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",
     "@types/jquery": "^3.5.14",
+    "@types/js-cookie": "^3.0.2",
     "@types/node": "^18.11.18",
     "@types/postcss-import": "^14.0.0",
     "@types/postcss-mixins": "^9.0.0",
@@ -31,9 +33,11 @@
     "@sentry/browser": "^7.28.1",
     "@stripe/react-stripe-js": "^1.16.1",
     "@stripe/stripe-js": "^1.46.0",
+    "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
     "esbuild": "^0.16.4",
     "jquery-ujs": "^1.2.3",
+    "js-cookie": "^3.0.1",
     "logrocket": "^3.0.1",
     "preact": "^10.11.3",
     "sass": "^1.56.2",

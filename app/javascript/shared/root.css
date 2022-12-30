@@ -19,6 +19,8 @@ body {
 }
 
 body {
+  color: #fff;
+  font-family: 'Lato', Helvetica, sans-serif;
   height: auto;
   min-height: 100%;
   position: relative;
@@ -29,6 +31,11 @@ body {
     * {
       cursor: wait !important;
     }
+  }
+
+  a:link,
+  a:visited {
+    color: #dfdfdf;
   }
 }
 

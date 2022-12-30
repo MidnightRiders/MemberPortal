@@ -1,0 +1,30 @@
+@import url('~shared/styles/variables');
+
+.errors {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+
+  @media screen and (min-width: 30em) {
+    left: auto;
+    width: 28rem;
+  }
+}
+
+.error {
+  background: #fff;
+  border-radius: 3px;
+  border: 1px solid;
+  color: $maroon;
+  margin-bottom: 0.5rem;
+  opacity: 0;
+  padding: 15px;
+  transform: translateY(-100%);
+  transition: transform 250ms, opacity 250ms;
+
+  &.mounted {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

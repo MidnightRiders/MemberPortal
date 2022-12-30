@@ -1,9 +1,15 @@
 import type { JSX } from 'preact';
 import { useCallback } from 'preact/hooks';
+import { Link } from 'wouter-preact';
+
+import SignIn from '~routes/SignIn';
 import { useAuthCtx } from '~shared/contexts/auth';
+import { useLogOut } from '~shared/contexts/auth/hooks';
 
 const Navigation = () => {
-  const { user, logOut } = useAuthCtx();
+  const { user } = useAuthCtx();
+  const logOut = useLogOut();
+
   const handleLogOut = useCallback<JSX.GenericEventHandler<HTMLButtonElement>>(
     (e) => {
       e.preventDefault();
@@ -332,10 +338,10 @@ const Navigation = () => {
                 </a>
               </li>
               <li>
-                <a href="/users/sign_in">
+                <Link href={SignIn.path}>
                   <i class="fa-solid fa-sign-in fa-fw" />
                   Sign In
-                </a>
+                </Link>
               </li>
             </>
           )}

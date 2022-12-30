@@ -1,19 +1,27 @@
 import './root.css';
 
-import type { FunctionComponent } from 'preact';
 import { Router } from 'wouter-preact';
 
-import { AuthProvider } from '~shared/contexts/auth';
+import {
+  APIExpandedUser,
+  AuthProvider,
+  useAuthCtx,
+} from '~shared/contexts/auth';
 import Routes from '~shared/Routes';
 import { CacheProvider } from '~shared/contexts/cache';
 import Header from '~shared/components/Header';
 import { useOnMount } from '~shared/hooks/effects';
 import { nextRevsMatch } from '~shared/signals/app';
 import Navigation from '~shared/components/Navigation';
-import { ErrorsProvider, useErrorsCtx } from '~shared/contexts/errors/errors';
+import { ErrorsProvider } from '~shared/contexts/errors';
 import { useGet } from '~shared/contexts/errors/fetch';
 import { Match } from '~helpers/matches';
-import Footer from './components/Footer';
+import Footer from '~shared/components/Footer';
+import { FetchError } from '~helpers/fetch';
+import { userFromApi } from '~shared/contexts/auth/hooks';
+
+const ignoreUnauthed = (err: unknown) =>
+  err instanceof FetchError && err.status === 401;
 
 const App = () => {
   const getNextRevsMatch = useGet('nextRevsMatch');
@@ -33,17 +41,20 @@ const App = () => {
     return () => clearInterval(poll);
   });
 
-  const { errors } = useErrorsCtx();
+  const { setUser } = useAuthCtx();
+
+  const getUser = useGet('fetchUser', { ignore: ignoreUnauthed }, []);
+  useOnMount(async () => {
+    const resp = await getUser<{ user: APIExpandedUser | null }>('/api/user');
+    if (resp && resp.user) {
+      setUser(userFromApi(resp.user));
+    }
+  });
 
   return (
     <Router>
       <Header />
       <Navigation />
-      {Object.entries(errors).map(([key, errs]) => (
-        <div>
-          {key}: {errs.map(({ message }) => message).join(', ')}
-        </div>
-      ))}
       <Routes />
       <Footer />
     </Router>

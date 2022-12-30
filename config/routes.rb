@@ -46,10 +46,12 @@ MidnightRiders::Application.routes.draw do
 
   # TODO: real routes
   get 'preact', to: 'static_pages#preact'
+  get 'sign-in', to: 'static_pages#preact'
 
   namespace :api, formats: %i[json] do
     get :user, to: 'users#current'
     resources :users
+    resources :sessions, only: %i[create destroy]
 
     resources :matches, only: %i[index show] do
       collection do

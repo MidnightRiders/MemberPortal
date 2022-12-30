@@ -1,7 +1,12 @@
 import { render } from 'preact';
 import * as Sentry from '@sentry/browser';
+import LogRocket from 'logrocket';
 
 import App from '~shared/App';
+
+if (process.env.RAILS_ENV === 'production') {
+  LogRocket.init('nqhpme/midnight-riders-member-portal');
+}
 
 Sentry.init({
   dsn: 'https://bc9541d68fb243c89e2d97f20e2148fe@o4504330520100864.ingest.sentry.io/4504330521870336',

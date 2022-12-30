@@ -7,46 +7,79 @@ import {
   patch,
   put,
   del,
+  FetchOptions,
 } from '~helpers/fetch';
-import { useErrorsCtx } from './errors';
+import { useAuthCtx } from '../auth';
+import { ErrorOptions, useErrorsCtx } from '.';
+import { captureException } from '@sentry/browser';
+import LogRocket from 'logrocket';
 
-export interface Options {
-  flash?: number;
+export interface Options extends ErrorOptions {
+  capture?: boolean | ((err: unknown) => boolean);
+  customMessage?: (err: unknown) => string;
+  ignore?: boolean | ((err: unknown) => boolean);
 }
 
 export interface FetchHook {
   (name: string): <T>(
     url: string,
     data?: unknown,
-    options?: Omit<RequestInit, 'body' | 'method'>,
+    options?: FetchOptions,
   ) => Promise<T | false>;
   (name: string, options: Options, deps: unknown[]): <T>(
     url: string,
     data?: unknown,
-    options?: Omit<RequestInit, 'body' | 'method'>,
+    options?: FetchOptions,
   ) => Promise<T | false>;
 }
 
 const createFetchHook =
   (fetcher: Fetcher): FetchHook =>
-  (name: string, options?: Options, deps: unknown[] = []) => {
+  (
+    name: string,
+    { local, flash, capture, customMessage, ignore = false }: Options = {},
+    deps: unknown[] = [],
+  ) => {
     const { addError } = useErrorsCtx();
+    const { jwt, setJwt } = useAuthCtx();
 
     return useCallback(
-      async <T>(
-        url: string,
-        data?: unknown,
-        opts?: Omit<RequestInit, 'body'>,
-      ) => {
+      async <T>(url: string, data?: unknown, opts?: FetchOptions) => {
         try {
-          const resp = await fetcher<T>(url, data, opts);
-          return resp;
+          let fetchOptions: FetchOptions = opts ?? {};
+          if (jwt) {
+            fetchOptions.headers ??= {};
+            fetchOptions.headers.Authorization = `Bearer ${jwt}`;
+          }
+          const resp = await fetcher<T & { jwt?: string | null }>(
+            url,
+            data,
+            fetchOptions,
+          );
+          const { jwt: newJwt, ...body } = resp;
+          if (newJwt !== undefined) setJwt(newJwt);
+          return body as T;
         } catch (err) {
-          addError(name, (err as FetchError).message, options?.flash);
+          if (
+            ignore === false ||
+            (typeof ignore === 'function' && !ignore(err))
+          ) {
+            const message = customMessage?.(err) ?? (err as FetchError).message;
+            addError(name, message, { flash, local });
+            if (
+              capture === true ||
+              (typeof capture === 'function' && capture(err))
+            ) {
+              LogRocket.captureException(err as Error, {
+                extra: { name, url },
+              });
+              captureException(err, { extra: { name, url } });
+            }
+          }
           return false;
         }
       },
-      deps,
+      [...deps, addError, jwt, setJwt],
     );
   };
 

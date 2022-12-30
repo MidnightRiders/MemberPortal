@@ -1,3 +1,6 @@
+import cookies from 'js-cookie';
+import { COOKIE_NAME } from '~shared/contexts/auth';
+
 export class FetchError extends Error {
   public readonly name = 'FetchError';
 
@@ -10,10 +13,14 @@ export class FetchError extends Error {
   }
 }
 
+export type FetchOptions = Omit<RequestInit, 'body' | 'method' | 'headers'> & {
+  headers?: Record<string, string>;
+};
+
 export type Fetcher = <T>(
   url: string,
   data?: unknown,
-  options?: Omit<RequestInit, 'body' | 'method'>,
+  options?: FetchOptions,
 ) => Promise<T>;
 
 const createFetch =
@@ -21,12 +28,18 @@ const createFetch =
   async <T extends unknown>(
     url: string,
     data?: unknown,
-    options?: Omit<RequestInit, 'body' | 'method'>,
+    options?: FetchOptions,
   ) => {
     try {
+      let auth = options?.headers?.Authorization;
+      if (!auth) {
+        auth = cookies.get(COOKIE_NAME);
+      }
+      const authorization = auth ? { Authorization: auth } : {};
       const response = await fetch(url, {
         method,
         headers: {
+          ...authorization,
           'X-CSRF-TOKEN':
             document
               .querySelector('meta[name="csrf-token"]')
@@ -44,13 +57,7 @@ const createFetch =
         ...options,
       });
 
-      if (!response.ok) {
-        throw response;
-      }
-
-      if (response.status === 204) {
-        return true as T;
-      }
+      if (!response.ok) throw response;
 
       return response.json() as T;
     } catch (err) {

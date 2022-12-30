@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/browser';
-import { captureException as captureLogrocket } from 'logrocket';
+import LogRocket from 'logrocket';
 import { createContext, FunctionComponent } from 'preact';
 import {
   useCallback,
@@ -8,22 +8,35 @@ import {
   useMemo,
   useState,
 } from 'preact/hooks';
+
 import { noop } from '~helpers/utils';
 
+import ErrorDisplay from './ErrorDisplay';
+
+import styles from './styles.module.css';
+
 interface Err {
+  local: boolean;
   message: string;
+  timestamp: number;
+}
+
+export interface ErrorOptions {
+  flash?: number | undefined;
+  local?: boolean | undefined;
 }
 
 interface ErrorsContext {
   errors: Record<string, Err[]>;
 
-  addError: (key: string, message: string, flash?: number | undefined) => void;
+  addError: (key: string, message: string, opts?: ErrorOptions) => void;
   getError: (key: string) => string | null;
   getErrors: (key: string) => string[];
 }
 
 const ErrorsCtx = createContext<ErrorsContext>({
   errors: {},
+
   addError: noop,
   getError: () => null,
   getErrors: () => [],
@@ -31,16 +44,16 @@ const ErrorsCtx = createContext<ErrorsContext>({
 
 export const useErrorsCtx = () => useContext(ErrorsCtx);
 
-export const useError = (key: string) => useErrorsCtx().getError(key);
-
-export const useErrors = (key: string) => useErrorsCtx().getErrors(key);
-
 export const ErrorsProvider: FunctionComponent = ({ children }) => {
   const [errors, setErrors] = useState<Record<string, Err[]>>({});
 
   const addError = useCallback(
-    (key: string, message: string, flash = 5_000) => {
-      const err: Err = { message };
+    (
+      key: string,
+      message: string,
+      { flash = 5_000, local = false }: ErrorOptions = {},
+    ) => {
+      const err: Err = { local, message, timestamp: Date.now() };
       setErrors((prev) => ({
         ...prev,
         [key]: [...(prev[key] ?? []), err],
@@ -56,6 +69,11 @@ export const ErrorsProvider: FunctionComponent = ({ children }) => {
           const newErrs = errs.filter((e) => e !== err);
           if (newErrs.length === errs.length) return prev;
 
+          if (!newErrs.length) {
+            const { [key]: _, ...rest } = prev;
+            return rest;
+          }
+
           return {
             ...prev,
             [key]: newErrs,
@@ -68,12 +86,12 @@ export const ErrorsProvider: FunctionComponent = ({ children }) => {
 
   useErrorBoundary((err, errInfo) => {
     const message: string =
-      'message' in err
+      err && 'message' in err
         ? (err.message as string)
         : 'An unexpected application error was encountered';
     captureException(err, { extra: { ...errInfo, message } });
-    captureLogrocket(err, { extra: { ...errInfo, message } });
-    addError('global', message, 0);
+    LogRocket.captureException(err, { extra: { ...errInfo, message } });
+    addError('global', message, { flash: 0 });
   });
 
   const getError = useCallback(
@@ -92,10 +110,39 @@ export const ErrorsProvider: FunctionComponent = ({ children }) => {
     [errors],
   );
 
+  const sortedErrors = useMemo(() => {
+    return Object.entries(errors)
+      .reduce<(Err & { origin: string })[]>(
+        (acc, [key, errs]) => [
+          ...acc,
+          ...errs
+            .filter(({ local }) => !local)
+            .map((err) => ({ ...err, origin: key })),
+        ],
+        [],
+      )
+      .sort((a, b) => a.timestamp - b.timestamp);
+  }, [errors]);
+
   const value = useMemo(
     () => ({ errors, addError, getError, getErrors }),
     [errors, addError, getError, getErrors],
   );
 
-  return <ErrorsCtx.Provider value={value}>{children}</ErrorsCtx.Provider>;
+  return (
+    <ErrorsCtx.Provider value={value}>
+      {!!sortedErrors.length && (
+        <div class={styles.errors}>
+          {sortedErrors.map(({ message, origin, timestamp }) => (
+            <ErrorDisplay
+              key={`${message}-${timestamp}`}
+              message={message}
+              origin={origin}
+            />
+          ))}
+        </div>
+      )}
+      {children}
+    </ErrorsCtx.Provider>
+  );
 };
