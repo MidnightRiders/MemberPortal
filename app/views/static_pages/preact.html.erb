@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en/US">
+<head>
+<title>Midnight Riders</title>
+<link href="https://fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet" />
+<meta charset="utf-8" />
+<%= favicon_link_tag 'icons/apple-touch-icon-precomposed-57x57.png', rel: 'apple-touch-icon-precomposed', type: 'image/png' %>
+<%= favicon_link_tag 'icons/apple-touch-icon-precomposed-72x72.png', rel: 'apple-touch-icon-precomposed', sizes: '72x72', type: 'image/png' %>
+<%= favicon_link_tag 'icons/apple-touch-icon-precomposed-114x114.png', rel: 'apple-touch-icon-precomposed', sizes: '114x114', type: 'image/png' %>
+<%= favicon_link_tag 'icons/favicon.ico' %>
+<meta content="Midnight Riders Member Portal" name="og:title" />
+<meta content="<%= image_url('logo.png') %>" name="og:image" />
+<% if Rails.env.production? %>
+<%= render partial: 'layouts/ga' %>
+<% else %>
+<script>if (!window.ga) window.ga = function() {};</script>
+<%= vite_client_tag %>
+<% end %>
+<meta content="initial-scale=1, maximum-scale=1" name="viewport" />
+<%= csrf_meta_tags %>
+<%= render 'shared/riders_logo' %>
+</head>
+<body>
+<div id="root"></div>
+<%= vite_javascript_tag 'application.tsx' %>
+</body>
+</html>
