@@ -18,6 +18,6 @@ class Api::SessionsController < ApiController
   def destroy
     sign_out current_user
     @current_user = nil
-    render body: nil, status: :no_content
+    render status: :ok
   end
 end

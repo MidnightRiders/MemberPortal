@@ -51,7 +51,9 @@ MidnightRiders::Application.routes.draw do
   namespace :api, formats: %i[json] do
     get :user, to: 'users#current'
     resources :users
-    resources :sessions, only: %i[create destroy]
+
+    post :sessions, to: 'sessions#create'
+    delete :sessions, to: 'sessions#destroy'
 
     resources :matches, only: %i[index show] do
       collection do
