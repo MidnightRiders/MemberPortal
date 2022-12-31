@@ -55,7 +55,8 @@ class MatchesController < ApplicationController
 
   # GET /matches/sync
   def sync
-    uri = URI.parse("https://v3.football.api-sports.io/fixtures?league=253&season=#{Date.current.year}")
+    year = Date.current > Date.current.end_of_year - 15.days ? Date.current.year + 1 : Date.current.year
+    uri = URI.parse("https://v3.football.api-sports.io/fixtures?league=253&season=#{year}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true
     request = Net::HTTP::Get.new(uri)
