@@ -1,6 +1,6 @@
 import './root.css';
 
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Layout } from 'antd';
 import { Router } from 'wouter-preact';
 
 import {
@@ -59,10 +59,14 @@ const App = () => {
 
   return (
     <Router>
-      <Header />
-      <Navigation />
-      <Routes />
-      <Footer />
+      <Layout>
+        <Layout.Header>
+          <Header />
+          <Navigation />
+        </Layout.Header>
+        <Routes />
+        <Footer />
+      </Layout>
     </Router>
   );
 };

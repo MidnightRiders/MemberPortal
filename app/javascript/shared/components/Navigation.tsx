@@ -1,4 +1,5 @@
 import { Menu, MenuProps } from 'antd';
+import clsx from 'clsx';
 import type { JSX } from 'preact';
 import { useCallback, useMemo } from 'preact/hooks';
 import { MenuClickEventHandler } from 'rc-menu/lib/interface';
@@ -6,6 +7,14 @@ import { Link } from 'wouter-preact';
 
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useLogOut } from '~shared/contexts/auth/hooks';
+
+const Expand = ({
+  class: c,
+  className,
+}: {
+  class?: string;
+  className?: string;
+}) => <i class={clsx(c, className, 'fa-solid fa-chevron-right fa-fw')} />;
 
 const Navigation = () => {
   const { user } = useAuthCtx();
@@ -21,8 +30,12 @@ const Navigation = () => {
     (): Readonly<MenuProps['items']> => [
       {
         key: 'sites',
-        label: 'Sites',
-        icon: <i class="fa-solid fa-external-link fa-fw" />,
+        label: (
+          <>
+            <i class="fa-solid fa-external-link fa-fw" /> Sites{' '}
+            <i class="fa-solid fa-chevron-down fa-fw" />
+          </>
+        ),
         children: [
           {
             label: 'Riders',
@@ -323,9 +336,13 @@ const Navigation = () => {
                     icon: <i class="fa-regular fa-calendar fa-fw" />,
                   },
                   {
-                    label: 'Games',
+                    label: (
+                      <>
+                        <i class="fa-solid fa-trophy fa-fw" /> Games{' '}
+                        <i class="fa-solid fa-chevron-down fa-fw" />
+                      </>
+                    ),
                     key: 'games',
-                    icon: <i class="fa-solid fa-trophy fa-fw" />,
                     children: [
                       {
                         label: 'Members',
@@ -386,9 +403,13 @@ const Navigation = () => {
             ...(true /* user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board')) */
               ? [
                   {
-                    label: 'Admin',
+                    label: (
+                      <>
+                        <i class="fa-solid fa-bolt fa-fw" /> Admin{' '}
+                        <i class="fa-solid fa-chevron-down fa-fw" />
+                      </>
+                    ),
                     key: 'admin',
-                    icon: <i class="fa-solid fa-bolt fa-fw" />,
                     children: [
                       {
                         label: 'Management',
@@ -467,7 +488,14 @@ const Navigation = () => {
     [user, handleLogOut],
   );
 
-  return <Menu mode="horizontal" items={items} />;
+  return (
+    <Menu
+      mode="horizontal"
+      items={items}
+      triggerSubMenuAction="click"
+      expandIcon={<Expand />}
+    />
+  );
 };
 
 export default Navigation;
