@@ -18,7 +18,10 @@ require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 
 require 'support/setup/external_request_classes'
+require 'support/setup/users'
 require 'support/setup/vcr'
+
+require_relative '../db/seeds'
 
 require File.expand_path('../../config/environment', __FILE__)
 
