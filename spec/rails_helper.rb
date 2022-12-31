@@ -18,7 +18,6 @@ require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 
 require 'support/setup/external_request_classes'
-require 'support/setup/share_db_connection'
 require 'support/setup/vcr'
 
 require File.expand_path('../../config/environment', __FILE__)
