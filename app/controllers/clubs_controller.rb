@@ -65,6 +65,6 @@ class ClubsController < ApplicationController
   private
 
   def club_params
-    params.require(:club).permit(:name, :conference, :primary_color, :secondary_color, :accent_color, :abbrv, :crest)
+    params.require(:club).permit(:name, :conference, :primary_color, :secondary_color, :accent_color, :abbrv, :crest, :api_id)
   end
 end
