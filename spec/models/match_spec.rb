@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Match do
   # Capybara overwrites the +all+ matcher without this +include+

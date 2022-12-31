@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MotMsHelper do
   describe 'mot_m_for' do

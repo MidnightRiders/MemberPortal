@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MotM do
   pending 'does not allow multiples from a user on a match'

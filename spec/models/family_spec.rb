@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Family do
   pending 're-ups relatives if renewing'

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MatchDecorator do
   let(:match) { FactoryBot.create(:match) }

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature 'Board Nominations', type: :feature, js: true do
   let(:user) { FactoryBot.create(:user) }

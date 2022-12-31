@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'MotMs' do
   let(:match) { FactoryBot.create(:match) }

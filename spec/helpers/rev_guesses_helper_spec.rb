@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe RevGuessesHelper do
   describe 'rev_guess_for' do

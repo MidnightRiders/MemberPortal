@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'Purchasing Membership', :js, type: :feature do
   let(:user) { FactoryBot.create(:user, :without_membership) }

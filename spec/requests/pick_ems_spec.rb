@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'PickEms', type: :request do
   describe 'POST /matches/:match_id/pick_ems/vote' do
