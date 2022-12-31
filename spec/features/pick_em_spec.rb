@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Pick ’Em' do
+RSpec.feature 'Pick ’Em' do
   let(:user) { FactoryBot.create(:user) }
   let!(:match) { FactoryBot.create(:match, kickoff: Time.current + 2.hours) }
   before :each do
