@@ -17,7 +17,6 @@ require 'capybara-screenshot/rspec'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
 
-require 'support/setup/database_cleaner'
 require 'support/setup/external_request_classes'
 require 'support/setup/share_db_connection'
 require 'support/setup/vcr'
