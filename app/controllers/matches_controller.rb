@@ -84,7 +84,7 @@ class MatchesController < ApplicationController
       errors += match.errors.full_messages.map { |m| "#{data[:id]}: #{m}" } unless match.save
     end
     flash[:notice] = "#{match_data.length} matches synced: #{added} added, #{changed} changed."
-    flash[:error] = errors.join(', ') if errors.any?
+    flash[:alert] = errors.join(', ') if errors.any?
     redirect_to matches_path
   end
 

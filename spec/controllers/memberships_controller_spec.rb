@@ -23,7 +23,7 @@ describe MembershipsController do
         post :create, params: { type: 'Individual', user_id: user.username, membership: { year: Date.current.year, stripe_card_token: StripeHelper.card_token, type: 'Individual' } }
 
         expect(response).to have_http_status(:ok)
-        expect(flash.now[:error]).to eq('Something went wrong')
+        expect(flash.now[:alert]).to eq('Something went wrong')
       end
     end
 

@@ -128,7 +128,7 @@ describe UsersController do
       it 'rejects if file missing' do
         post :import
 
-        expect(flash[:error]).to eq('No file was selected')
+        expect(flash[:alert]).to eq('No file was selected')
       end
       it 'imports Individual and Family users' do
         expect {

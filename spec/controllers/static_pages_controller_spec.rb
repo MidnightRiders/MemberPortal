@@ -89,7 +89,7 @@ describe StaticPagesController do
         post 'nominate'
 
         expect(response).to redirect_to(user_home_path)
-        expect(flash[:error]).to eq 'Need all information for nominee.'
+        expect(flash[:alert]).to eq 'Need all information for nominee.'
       end
     end
   end

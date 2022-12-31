@@ -43,7 +43,7 @@ class MembershipsController < ApplicationController
 
     redirect_to user_membership_path(@user, @membership), notice: t('.payment_successful')
   rescue => err
-    flash.now[:error] = ErrorNotifier.notify(err)
+    flash.now[:alert] = ErrorNotifier.notify(err)
 
     prepare_new_form
     render action: 'new'

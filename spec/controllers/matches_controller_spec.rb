@@ -29,7 +29,7 @@ describe MatchesController do
       it 'creates matches', :vcr do
         expect {
           get :sync
-          puts flash[:error]
+          puts flash[:alert]
         }.to change(Match, :count).by(113)
       end
     end
