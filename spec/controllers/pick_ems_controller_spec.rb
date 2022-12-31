@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-describe PickEmsController do
+RSpec.describe PickEmsController do
   pending '#vote'
 end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Users' do
+RSpec.describe 'Users' do
   describe 'GET /users/user' do
     let(:user) { FactoryBot.create(:user) }
     it 'rejects signed-out users' do

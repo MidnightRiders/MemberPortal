@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+require 'support/stripe_helper'
+
 RSpec.describe StripeWebhookService do
   describe '#process' do
     it 'returns 200 for non-accepted events' do

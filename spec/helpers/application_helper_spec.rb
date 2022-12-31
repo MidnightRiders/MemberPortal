@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ApplicationHelper do
+RSpec.describe ApplicationHelper do
   describe 'revs' do
     pending 'returns a Club that represents the Revs'
   end

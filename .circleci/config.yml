@@ -61,13 +61,13 @@ jobs:
           name: Run rspec in parallel
           command: |
             ./cc-test-reporter before-build
-            bundle exec rspec --profile 10 \
-                              --color \
-                              --order random \
-                              --format RspecJunitFormatter \
-                              --out test-results/rspec.xml \
-                              --format documentation \
-                              -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            bin/rspec \
+              --profile 10 \
+              --color \
+              --format RspecJunitFormatter \
+              --out test-results/rspec.xml \
+              --format documentation \
+              -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test-results
       - store_artifacts:

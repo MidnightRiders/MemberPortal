@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe StaticPagesController do
+RSpec.describe StaticPagesController do
   describe 'GET "home"' do
     context 'signed in' do
       pending 'shows users/home'

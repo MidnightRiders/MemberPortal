@@ -1,6 +1,8 @@
 require 'rails_helper'
 
-describe 'Purchasing Membership', :js, type: :feature do
+require 'support/stripe_helper'
+
+RSpec.describe 'Purchasing Membership', :js, type: :feature do
   let(:user) { FactoryBot.create(:user, :without_membership) }
 
   it 'prompts for membership if user isn\'t a current member' do

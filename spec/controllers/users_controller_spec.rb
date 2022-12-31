@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe UsersController do
+RSpec.describe UsersController do
 
   describe '#index' do
     context 'unauthorized access' do

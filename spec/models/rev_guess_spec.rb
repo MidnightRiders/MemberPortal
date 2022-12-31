@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe RevGuess do
+RSpec.describe RevGuess do
   let (:user) { FactoryBot.create(:user) }
   let (:revs) { Club.find_by(abbrv: 'NE') || FactoryBot.create(:club, :ne) }
   let (:rev_guess) { FactoryBot.build(:rev_guess) }

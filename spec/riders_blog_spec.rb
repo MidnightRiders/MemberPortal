@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe RidersBlog do
+RSpec.describe RidersBlog do
   context 'class methods' do
     pending 'articles'
     pending 'url'

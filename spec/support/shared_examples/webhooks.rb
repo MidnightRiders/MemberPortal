@@ -1,4 +1,4 @@
-shared_examples_for 'Ignored Webhooks' do |event_code|
+RSpec.shared_examples_for 'Ignored Webhooks' do |event_code|
   let(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks', "#{event_code}.json"))) }
 
   it 'returns 200 with logger warning that it was ignored' do

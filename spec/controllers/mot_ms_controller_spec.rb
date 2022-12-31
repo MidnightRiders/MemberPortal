@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MotMsController do
+RSpec.describe MotMsController do
   let(:match) { FactoryBot.create(:match, kickoff: Time.current - 2.hours, home_team: Club.find_by(abbrv: 'NE')) }
 
   context 'when signed in' do

@@ -1,6 +1,9 @@
 require 'rails_helper'
 
-describe MembershipsController do
+require 'support/shared_examples/webhooks'
+require 'support/stripe_helper'
+
+RSpec.describe MembershipsController do
   pending 'get #index'
   pending 'get #show'
   pending 'get #new'

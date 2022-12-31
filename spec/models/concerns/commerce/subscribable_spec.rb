@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Commerce::Subscribable do
+RSpec.describe Commerce::Subscribable do
   let(:subscribable) {
     class ExampleSubscribableClass
       include ActiveModel::Validations

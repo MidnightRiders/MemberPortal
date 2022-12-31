@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Relative do
+RSpec.describe Relative do
 
   describe 'validation' do
     it 'strips whitespace from an invited email before validation' do

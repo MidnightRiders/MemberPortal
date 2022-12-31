@@ -1,5 +1,5 @@
 require 'rails_helper'
 
-describe MembershipDecorator do
+RSpec.describe MembershipDecorator do
   pending
 end

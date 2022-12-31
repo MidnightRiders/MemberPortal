@@ -1,11 +1,11 @@
-# This file is copied to spec/ when you run 'rails generate rspec:install'
-require 'rails_helper'
+require 'spec_helper'
 
 ENV['RAILS_ENV'] ||= 'test'
 require_relative '../config/environment'
 
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
+
 require 'rspec/rails'
 require 'cancan/matchers'
 require 'capybara/rails'
@@ -13,8 +13,12 @@ require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
-require 'rails/test_help'
 require 'rails/command'
+
+require 'support/setup/database_cleaner'
+require 'support/setup/external_request_classes'
+require 'support/setup/share_db_connection'
+require 'support/setup/vcr'
 
 require File.expand_path('../../config/environment', __FILE__)
 
@@ -53,15 +57,14 @@ Capybara.javascript_driver = :selenium_chrome_headless
 # of increasing the boot-up time by auto-requiring all files in the support
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
-
-Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
+#
+# Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
 RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
-  config.extend ControllerMacros, type: :controller
   config.include Warden::Test::Helpers
   config.include Capybara::DSL
 

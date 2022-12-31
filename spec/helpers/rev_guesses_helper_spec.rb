@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe RevGuessesHelper do
+RSpec.describe RevGuessesHelper do
   describe 'rev_guess_for' do
     pending 'returns RevGuess for given match'
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PlayersController do
+RSpec.describe PlayersController do
 
   shared_examples_for 'unauthorized' do
     it 'rejects #index' do

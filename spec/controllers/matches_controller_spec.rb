@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe MatchesController do
+RSpec.describe MatchesController do
   pending 'get #index'
   pending 'get #show'
 
