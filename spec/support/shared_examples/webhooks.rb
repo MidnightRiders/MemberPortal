@@ -11,7 +11,7 @@ RSpec.shared_examples_for 'Ignored Webhooks' do |event_code|
   end
 end
 
-shared_examples_for 'Non-Customer Webhooks' do |event_code|
+RSpec.shared_examples_for 'Non-Customer Webhooks' do |event_code|
   let(:event) { JSON.parse(File.read(Rails.root.join('spec/fixtures/webhooks', "#{event_code}.json"))) }
 
   it 'returns 200 with logger error for no Stripe::Customer' do
