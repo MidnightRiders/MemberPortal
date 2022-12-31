@@ -17,6 +17,7 @@ class Club < ActiveRecord::Base
   validates :name, :abbrv, uniqueness: true
   validates :conference, inclusion: CONFERENCES, allow_blank: false
   validates :primary_color, :secondary_color, :accent_color, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 'ffffff'.to_i(16) }
+  validates :api_id, presence: true, uniqueness: true
   validates_attachment :crest, content_type: { content_type: %w(image/jpg image/gif image/png) }
 
   has_many :home_matches, class_name: 'Match', foreign_key: 'home_team_id'
