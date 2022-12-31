@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
     return super unless api
 
     super.transform_keys { _1.camelize(:lower) }
-      .tap { _1[:isCurrentUser] = current_member? }
+      .tap { _1[:isCurrentMember] = current_member? }
   end
 
   # Returns +privileges+ from current +Membership+

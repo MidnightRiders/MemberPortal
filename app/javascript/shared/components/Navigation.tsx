@@ -1,8 +1,9 @@
+import { Menu, MenuProps } from 'antd';
 import type { JSX } from 'preact';
-import { useCallback } from 'preact/hooks';
+import { useCallback, useMemo } from 'preact/hooks';
+import { MenuClickEventHandler } from 'rc-menu/lib/interface';
 import { Link } from 'wouter-preact';
 
-import SignIn from '~routes/SignIn';
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useLogOut } from '~shared/contexts/auth/hooks';
 
@@ -10,345 +11,463 @@ const Navigation = () => {
   const { user } = useAuthCtx();
   const logOut = useLogOut();
 
-  const handleLogOut = useCallback<JSX.GenericEventHandler<HTMLButtonElement>>(
-    (e) => {
-      e.preventDefault();
-      if (!confirm('Are you sure you wish to sign out?')) return;
+  const handleLogOut = useCallback<MenuClickEventHandler>(() => {
+    if (!confirm('Are you sure you wish to sign out?')) return;
 
-      logOut();
-    },
-    [logOut],
-  );
+    logOut();
+  }, [logOut]);
 
-  return (
-    <>
-      <div>
-        <h1>
-          <a href="/">Midnight Riders</a>
-        </h1>
-        <button type="button">
-          <span>Menu</span>
-        </button>
-      </div>
-      <nav>
-        <ul>
-          <li>
-            <button type="button">
-              <i class="fa-solid fa-external-link fa-fw" />
-              Sites
-            </button>
-            <ul>
-              <li>
-                <a href="http://MidnightRiders.com" target="_blank">
-                  <i class="fa-solid fa-link fa-fw" />
-                  Riders Website
-                </a>
-              </li>
-              <li>
-                <a href="http://midnightriders.com/shop" target="_blank">
-                  <i class="fa-solid fa-shopping-cart fa-fw" />
-                  Shop
-                </a>
-              </li>
-              <li>
-                <label>Social</label>
-              </li>
-              <li>
-                <button type="button">
-                  <i class="fa-brands fa-facebook fa-fw" />
-                  Facebook
-                </button>
-                <ul>
-                  <li>
-                    <a
-                      href="https://www.facebook.com/groups/MidnightRiders2018/"
-                      target="_blank"
-                    >
-                      Facebook Group
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://facebook.com/MidnightRiders"
-                      target="_blank"
-                    >
-                      Facebook Page
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="http://twitter.com/MidnightRiders" target="_blank">
-                  <i class="fa-brands fa-twitter fa-fw" />
-                  Twitter
-                </a>
-              </li>
-              <li>
-                <label>Other</label>
-              </li>
-              <li>
-                <a href="http://revolutionsoccer.net" target="_blank">
-                  <i class="fa-regular fa-bookmark fa-fw" />
-                  Revolution Website
-                </a>
-              </li>
-              <li>
-                <button type="button">
-                  <i class="fa-solid fa-beer fa-fw" />
-                  Partner Pubs
-                </button>
-                <ul>
-                  <li>
-                    <a href="http://bansheeboston.com" target="_blank">
-                      The Banshee
-                      <small>Dorchester, MA</small>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="http://parlorsportsbar.com" target="_blank">
-                      Parlor Sports
-                      <small>Somerville, MA</small>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="http://www.the-rumbleseat.com/" target="_blank">
-                      The Rumbleseat
-                      <small>Chicopee, MA</small>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="http://www.bisoncounty.com/" target="_blank">
-                      Bison County
-                      <small>Waltham, MA</small>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <button type="button">
-                  <i class="fa-regular fa-star fa-fw" />
-                  Other Partners
-                </button>
-                <ul>
-                  <li>
-                    <a href="http://www.awaydaysfootball.com/" target="_blank">
-                      Away Days
-                      <small>Quincy, MA</small>
-                      {user /* && user.current_member */ && (
-                        <>
-                          <br />
-                          15% Off Code:
-                          <code>RIDERSOVERHERE2017</code>
-                        </>
-                      )}
-                    </a>
-                  </li>
-                  <li>
-                    <a href="http://www.risingtidebrewing.com" target="_blank">
-                      Rising Tide Brewing
-                      <small>Portland, ME</small>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="http://topshelfcookies.com/" target="_blank">
-                      Top Shelf Cookies
-                      <small>Quincy, MA</small>
-                      {user /* && user.current_member */ && (
-                        <>
-                          <br />
-                          15% Off Code:
-                          <code>RIDERS2017</code>
-                        </>
-                      )}
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <button type="button">
-                  <i class="fa-brands fa-reddit fa-fw" />
-                  Reddit
-                </button>
-                <ul>
-                  <li>
-                    <a
-                      href="http://reddit.com/r/newenglandrevolution"
-                      target="_blank"
-                    >
-                      Revolution Subreddit
-                    </a>
-                  </li>
-                  <li>
-                    <a href="http://reddit.com/r/mls" target="_blank">
-                      MLS Subreddit
-                    </a>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-            {user && (
-              <li>
-                <a href="/home">
-                  <i class="fa-solid fa-home fa-fw" />
-                  Home
-                </a>
-              </li>
-            )}
-            <li>
-              <a href="/faq" title="FAQ">
-                <i class="fa-solid fa-circle-question fa-fw" />
-                FAQ
-              </a>
-            </li>
-            <li>
-              <a href="/contact" title="Contact Us">
-                <i class="fa-regular fa-comment fa-fw fa-flip-horizontal" />
-                Contact Us
-              </a>
-            </li>
-          </li>
-          {user ? (
-            <>
-              {true /* current_user.current_member? */ && (
-                <>
-                  <li>
-                    <a href="/matches">
-                      <i class="fa-regular fa-calendar fa-fw" />
-                      Matches
-                    </a>
-                  </li>
-                  <li>
-                    <button type="button">
-                      <i class="fa-solid fa-trophy fa-fw" />
-                      Games
-                    </button>
-                    <ul>
-                      <li>
-                        <a href="/matches">
-                          <i class="fa-solid fa-check fa-fw" />
-                          RevGuess/Pick &rapos;Em
-                        </a>
-                      </li>
-                      <li>
-                        <a href="/standings">
-                          <i class="fa-solid fa-trophy fa-fw" />
-                          Standings
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://fantasy.mlssoccer.com/#classic/leagues/771/join/AMN4KR2S"
-                          target="_blank"
-                        >
-                          <i class="fa-solid fa-users fa-fw" />
-                          MLS Fantasy
-                        </a>
-                      </li>
-                      <li>
-                        <label>Other Fantasy</label>
-                      </li>
-                      <li>
-                        <a
-                          href="http://fantasy.premierleague.com/my-leagues/290319/join/?autojoin-code=1206043-290319"
-                          target="_blank"
-                        >
-                          <i class="fa-solid fa-users fa-fw" />
-                          EPL Fantasy
-                        </a>
-                      </li>
-                      {true /* current_user.privilege?('admin') || current_user.privilege?('executive_board') */ && (
-                        <>
-                          <li>
-                            <label>Admin</label>
-                          </li>
-                          <li>
-                            <a href="/motm">
-                              <i class="fa-solid fa-list-ol fa-fw" />
-                              MotY Rankings
-                            </a>
-                          </li>
-                        </>
-                      )}
-                    </ul>
-                  </li>
-                </>
-              )}
-              <li>
-                <a href={`/users/${user.id}/edit`}>
-                  <i class="fa-regular fa-user fa-fw" />
-                  My Account
-                </a>
-              </li>
-              {true && (
-                /* user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board')) */ <>
-                  <li>
-                    <button type="button" title="Admin">
-                      <i class="fa-solid fa-bolt fa-fw" />
-                      Admin
-                    </button>
-                    <ul>
-                      {true /* can? :view, :users */ && (
-                        <li>
-                          <a href="/users">
-                            <i class="fa-solid fa-users fa-fw" />
-                            Users
-                          </a>
-                        </li>
-                      )}
-                      {true /* can? :transactions, :static_page */ && (
-                        <li>
-                          <a href="/transactions">
-                            <i class="fa-regular fa-dollar fa-fw" />
-                            Transactions
-                          </a>
-                        </li>
-                      )}
-                      <li></li>
-                      <li>
-                        <a href="/clubs">
-                          <i class="fa-solid fa-shield fa-fw" />
-                          Clubs
-                        </a>
-                      </li>
-                      {true /* can? :view, :players */ && (
-                        <li>
-                          <a href="/players">
-                            <i class="fa-solid fa-list fa-fw" />
-                            Players
-                          </a>
-                        </li>
-                      )}
-                    </ul>
-                  </li>
-                </>
-              )}
-              <li>
-                <button type="button" title="Sign Out" onClick={handleLogOut}>
-                  <i class="fa-solid fa-power-off fa-fw" />
-                  Sign Out
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li>
-                <a href="/users/sign_up">
-                  <i class="fa-solid fa-pencil-square fa-fw" />
-                  Sign Up
-                </a>
-              </li>
-              <li>
-                <Link href={SignIn.path}>
-                  <i class="fa-solid fa-sign-in fa-fw" />
-                  Sign In
+  const items = useMemo(
+    (): Readonly<MenuProps['items']> => [
+      {
+        key: 'sites',
+        label: 'Sites',
+        icon: <i class="fa-solid fa-external-link fa-fw" />,
+        children: [
+          {
+            label: 'Riders',
+            type: 'group' as const,
+            children: [
+              {
+                label: (
+                  <a
+                    href="https://midnightriders.com"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i class="fa-solid fa-link fa-fw" /> Riders Website
+                  </a>
+                ),
+                key: 'riders-website',
+              },
+              {
+                label: (
+                  <a
+                    href="https://midnightriders.com/shop"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i class="fa-solid fa-shopping-cart fa-fw" /> Shop
+                  </a>
+                ),
+                key: 'shop',
+              },
+            ],
+          },
+          { type: 'divider' as const },
+          {
+            type: 'group' as const,
+            label: 'Social',
+            children: [
+              {
+                label: 'Facebook',
+                key: 'facebook',
+                icon: <i class="fa-brands fa-facebook fa-fw" />,
+                children: [
+                  {
+                    label: (
+                      <a
+                        href="https://facebook.com/groups/MidnightRiders2023/"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Facebook Group
+                      </a>
+                    ),
+                    key: 'facebook-group',
+                  },
+                  {
+                    label: (
+                      <a
+                        href="https://facebook.com/MidnightRiders"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Facebook Page
+                      </a>
+                    ),
+                    key: 'facebook-page',
+                  },
+                ],
+              },
+              {
+                label: (
+                  <a
+                    href="https://instagram.com/midnightriders1995"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i class="fa-brands fa-instagram fa-fw" /> Instagram
+                  </a>
+                ),
+                key: 'instagram',
+              },
+              {
+                label: (
+                  <a
+                    href="https://twitter.com/MidnightRiders"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i class="fa-brands fa-twitter fa-fw" /> Twitter
+                  </a>
+                ),
+                key: 'twitter',
+              },
+              {
+                label: (
+                  <a
+                    href="https://tifosi.social/@MidnightRiders"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i class="fa-brands fa-mastodon fa-fw" /> Mastodon
+                  </a>
+                ),
+                key: 'mastodon',
+              },
+              {
+                label: 'Reddit',
+                key: 'reddit',
+                icon: <i class="fa-brands fa-reddit fa-fw" />,
+                children: [
+                  {
+                    label: (
+                      <a
+                        href="https://reddit.com/r/newenglandrevolution"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Revolution Subreddit
+                      </a>
+                    ),
+                    key: 'revs-subreddit',
+                  },
+                  {
+                    label: (
+                      <a
+                        href="https://reddit.com/r/mls"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        MLS Subreddit
+                      </a>
+                    ),
+                    key: 'mls-subreddit',
+                  },
+                ],
+              },
+            ],
+          },
+          { type: 'divider' as const },
+          {
+            type: 'group' as const,
+            label: 'Other',
+            children: [
+              {
+                label: (
+                  <a
+                    href="https://revolutionsoccer.net"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <i class="fa-solid fa-bookmark fa-fw" /> Revolution Website
+                  </a>
+                ),
+                key: 'revs-website',
+              },
+              {
+                label: 'Partner Pubs',
+                key: 'partner-pubs',
+                icon: <i class="fa-solid fa-beer fa-fw" />,
+                children: [
+                  {
+                    label: (
+                      <a
+                        href="https://bansheeboston.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        The Banshee <small>Dorchester, MA</small>
+                      </a>
+                    ),
+                    key: 'the-banshee',
+                  },
+                  {
+                    label: (
+                      <a
+                        href="https://parlorsportsbar.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Parlor Sports <small>Somerville, MA</small>
+                      </a>
+                    ),
+                    key: 'parlor-sports',
+                  },
+                  {
+                    label: (
+                      <a
+                        href="https://www.the-rumbleseat.com/"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        The Rumbleseat <small>Chicopee, MA</small>
+                      </a>
+                    ),
+                    key: 'the-rumbleseat',
+                  },
+                  {
+                    label: (
+                      <a
+                        href="https://www.bisoncounty.com/"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Bison County <small>Waltham, MA</small>
+                      </a>
+                    ),
+                    key: 'bison-county',
+                  },
+                ],
+              },
+              {
+                label: 'Other Partners',
+                key: 'other-partners',
+                icon: <i class="fa-solid fa-star fa-fw" />,
+                children: [
+                  {
+                    label: (
+                      <a
+                        href="https://www.awaydaysfootball.com/"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Away Days <small>Quincy, MA</small>
+                        {user?.isCurrentMember && (
+                          <>
+                            {/* TODO: dynamically load and style multiline */}
+                            <br />
+                            15% Off Code:
+                            <code>RIDERSOVERHERE2017</code>
+                          </>
+                        )}
+                      </a>
+                    ),
+                    key: 'away-days',
+                  },
+                  {
+                    label: (
+                      <a
+                        href="https://www.risingtidebrewing.com"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Rising Tide Brewing <small>Portland, ME</small>
+                      </a>
+                    ),
+                    key: 'rising-tide-brewing',
+                  },
+                  {
+                    label: (
+                      <a
+                        href="https://topshelfcookies.com/"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Top Shelf Cookies <small>Quincy, MA</small>
+                        {user?.isCurrentMember && (
+                          <>
+                            {/* TODO: dynamically load and style multiline */}
+                            <br />
+                            15% Off Code:
+                            <code>RIDERS2017</code>
+                          </>
+                        )}
+                      </a>
+                    ),
+                    key: 'top-shelf-cookies',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      ...(user
+        ? [
+            {
+              label: 'Home',
+              key: 'home',
+              icon: <i class="fa-solid fa-home fa-fw" />,
+            },
+          ]
+        : []),
+      {
+        label: 'FAQ',
+        key: 'faq',
+        icon: <i class="fa-solid fa-circle-question fa-fw" />,
+      },
+      {
+        label: 'Contact Us',
+        key: 'contact-us',
+        icon: <i class="fa-regular fa-comment fa-fw fa-flip-horizontal" />,
+      },
+      ...(user
+        ? [
+            ...(true /* current_user.current_member? */
+              ? [
+                  {
+                    label: 'Matches',
+                    key: 'matches',
+                    icon: <i class="fa-regular fa-calendar fa-fw" />,
+                  },
+                  {
+                    label: 'Games',
+                    key: 'games',
+                    icon: <i class="fa-solid fa-trophy fa-fw" />,
+                    children: [
+                      {
+                        label: 'Members',
+                        type: 'group' as const,
+                        children: [
+                          {
+                            label: 'RevGuess/Pick ’Em',
+                            key: 'rev-guess-pick-rapos-em',
+                            icon: <i class="fa-solid fa-check fa-fw" />,
+                          },
+                          {
+                            label: 'Standings',
+                            key: 'standings',
+                            icon: <i class="fa-solid fa-trophy fa-fw" />,
+                          },
+                          {
+                            label: 'MLS Fantasy',
+                            key: 'mls-fantasy',
+                            icon: <i class="fa-solid fa-users fa-fw" />,
+                          },
+                        ],
+                      },
+                      {
+                        type: 'group' as const,
+                        label: 'Other Fantasy',
+                        children: [
+                          {
+                            label: 'EPL Fantasy',
+                            key: 'epl-fantasy',
+                            icon: <i class="fa-solid fa-users fa-fw" />,
+                          },
+                        ],
+                      },
+                      ...(true /* current_user.privilege?('admin') || current_user.privilege?('executive_board') */
+                        ? [
+                            {
+                              type: 'group' as const,
+                              label: 'Admin',
+                              children: [
+                                {
+                                  label: 'MotY Rankings',
+                                  key: 'mot-y-rankings',
+                                  icon: <i class="fa-solid fa-list-ol fa-fw" />,
+                                },
+                              ],
+                            },
+                          ]
+                        : []),
+                    ],
+                  },
+                ]
+              : []),
+            {
+              label: 'My Account',
+              key: 'my-account',
+              icon: <i class="fa-regular fa-user fa-fw" />,
+            },
+            ...(true /* user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board')) */
+              ? [
+                  {
+                    label: 'Admin',
+                    key: 'admin',
+                    icon: <i class="fa-solid fa-bolt fa-fw" />,
+                    children: [
+                      {
+                        label: 'Management',
+                        type: 'group' as const,
+                        children: [
+                          ...(true /* can? :view, :users */
+                            ? [
+                                {
+                                  label: 'Users',
+                                  key: 'users',
+                                  icon: <i class="fa-solid fa-users fa-fw" />,
+                                },
+                              ]
+                            : []),
+                          ...(true /* can? :transactions, :static_page */
+                            ? [
+                                {
+                                  label: 'Transactions',
+                                  key: 'transactions',
+                                  icon: (
+                                    <i class="fa-regular fa-dollar fa-fw" />
+                                  ),
+                                },
+                              ]
+                            : []),
+                        ],
+                      },
+                      { type: 'divider' as const },
+                      {
+                        label: 'Portal',
+                        type: 'group' as const,
+                        children: [
+                          {
+                            label: 'Clubs',
+                            key: 'clubs',
+                            icon: <i class="fa-solid fa-shield fa-fw" />,
+                          },
+                          ...(true /* can? :view, :players */
+                            ? [
+                                {
+                                  label: 'Players',
+                                  key: 'players',
+                                  icon: <i class="fa-solid fa-list fa-fw" />,
+                                },
+                              ]
+                            : []),
+                        ],
+                      },
+                    ],
+                  },
+                ]
+              : []),
+            {
+              label: 'Sign Out',
+              key: 'sign-out',
+              onClick: handleLogOut,
+              icon: <i class="fa-solid fa-power-off fa-fw" />,
+            },
+          ]
+        : [
+            {
+              label: 'Sign Up',
+              key: 'sign-up',
+              icon: <i class="fa-solid fa-pencil-square fa-fw" />,
+            },
+            {
+              label: (
+                <Link href="/sign-in">
+                  <i class="fa-solid fa-sign-in fa-fw" /> Sign In
                 </Link>
-              </li>
-            </>
-          )}
-        </ul>
-      </nav>
-    </>
+              ),
+              key: 'sign-in',
+            },
+          ]),
+    ],
+    [user, handleLogOut],
   );
+
+  return <Menu mode="horizontal" items={items} />;
 };
 
 export default Navigation;

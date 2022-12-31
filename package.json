@@ -33,6 +33,7 @@
     "@sentry/browser": "^7.28.1",
     "@stripe/react-stripe-js": "^1.16.1",
     "@stripe/stripe-js": "^1.46.0",
+    "antd": "^5.1.2",
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
     "esbuild": "^0.16.4",

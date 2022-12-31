@@ -31,7 +31,7 @@ export interface APIExpandedUser extends BaseUser {
   createdAt: string;
   email: string;
   firstName: string;
-  isCurrentUser: boolean;
+  isCurrentMember: boolean;
   lastName: string;
   phone: number;
   postalCode: string | null;

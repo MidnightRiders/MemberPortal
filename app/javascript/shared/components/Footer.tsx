@@ -1,3 +1,4 @@
+import { Link } from 'wouter-preact';
 import { useAuthCtx } from '~shared/contexts/auth';
 
 const Footer = () => {
@@ -11,7 +12,7 @@ const Footer = () => {
         {!user && (
           <>
             <a href="/users/sign_up">Sign Up</a>
-            <a href="/users/sign_in">Sign In</a>
+            <Link href="/sign-in">Sign In</Link>
           </>
         )}
       </nav>
