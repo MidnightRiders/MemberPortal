@@ -7,13 +7,15 @@ require_relative '../config/environment'
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 
 require 'rspec/rails'
+
+# Add additional requires below this line. Rails is not loaded until this point!
+
 require 'cancan/matchers'
 require 'capybara/rails'
 require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
-require 'rails/command'
 
 require 'support/setup/database_cleaner'
 require 'support/setup/external_request_classes'
@@ -43,7 +45,7 @@ end
 Capybara.default_driver = :selenium_chrome_headless
 Capybara.javascript_driver = :selenium_chrome_headless
 
-# Add additional requires below this line. Rails is not loaded until this point!
+Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -60,7 +62,14 @@ Capybara.javascript_driver = :selenium_chrome_headless
 #
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f }
 
-Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
+# Checks for pending migrations and applies them before tests are run.
+# If you are not using ActiveRecord, you can remove these lines.
+begin
+  ActiveRecord::Migration.maintain_test_schema!
+rescue ActiveRecord::PendingMigrationError => e
+  puts e.to_s.strip
+  exit 1
+end
 
 RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
@@ -68,17 +77,13 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
   config.include Capybara::DSL
 
-  config.include Rails.application.routes.url_helpers
+  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
+  config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
-
-  # If true, the base class of anonymous controllers will be inferred
-  # automatically. This will be the default behavior in future versions of
-  # rspec-rails.
-  config.infer_base_class_for_anonymous_controllers = true
 
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
@@ -102,12 +107,4 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
-
-  config.before(:suite) do
-    Rails::Command.invoke 'assets:precompile'
-  end
-
-  config.after(:suite) do
-    Rails::Command.invoke 'assets:clobber'
-  end
 end
