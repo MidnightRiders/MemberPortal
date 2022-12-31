@@ -13,6 +13,7 @@ require 'capybara/rspec'
 require 'capybara-screenshot/rspec'
 require 'paper_trail/frameworks/rspec'
 require 'webmock/rspec'
+require 'rails/test_help'
 require 'rails/command'
 
 require File.expand_path('../../config/environment', __FILE__)
@@ -57,14 +58,6 @@ Dir[Rails.root.join('spec', 'support', '**', '*.rb')].sort.each { |f| require f 
 
 Capybara.asset_host = MidnightRiders::Application.config.action_mailer.asset_host
 
-# Checks for pending migrations and applies them before tests are run.
-# If you are not using ActiveRecord, you can remove these lines.
-begin
-  ActiveRecord::Migration.maintain_test_schema!
-rescue ActiveRecord::PendingMigrationError => e
-  abort e.to_s.strip
-end
-
 RSpec.configure do |config|
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
@@ -73,9 +66,6 @@ RSpec.configure do |config|
   config.include Capybara::DSL
 
   config.include Rails.application.routes.url_helpers
-
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = Rails.root.join('spec/fixtures')
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
