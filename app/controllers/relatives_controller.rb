@@ -13,7 +13,7 @@ class RelativesController < ApplicationController
     @relative_user = User.find_or_initialize_by(relative_params[:user_attributes])
 
     if @relative_user.current_member?
-      redirect_to new_user_membership_relative_path(@family.user, @family), flash: { error: 'There is already a user with a current membership for that email.' }
+      redirect_to new_user_membership_relative_path(@family.user, @family), flash: { alert: 'There is already a user with a current membership for that email.' }
     else
       if Devise.email_regexp =~ @relative_user.email
         @relative = Relative.new(year: @family.year, family_id: @family.id, info: { pending_approval: true, invited_email: @relative_user.email })
@@ -60,10 +60,10 @@ class RelativesController < ApplicationController
         MembershipNotifier.new(user: @relative_user, membership: @relative).notify_relative
         redirect_to user_home_path, flash: { success: "You are now a member of #{@relative.family.user.first_name}’s #{@relative.family.year} Family Membership." }
       else
-        redirect_to user_home_path, flash: { error: @relative.errors.full_messages.to_sentence }
+        redirect_to user_home_path, flash: { alert: @relative.errors.full_messages.to_sentence }
       end
     else
-      redirect_to user_home_path, flash: { error: 'This membership is not eligible to accept a family membership.' }
+      redirect_to user_home_path, flash: { alert: 'This membership is not eligible to accept a family membership.' }
     end
   end
 

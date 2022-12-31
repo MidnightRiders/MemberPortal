@@ -31,7 +31,7 @@ class StaticPagesController < ApplicationController
     UserMailer.new_board_nomination_email(current_user, nomination).deliver_now
     redirect_to user_home_path, notice: 'Thank you for your nomination.'
   rescue ArgumentError => e
-    redirect_to user_home_path, flash: { error: e.message }
+    redirect_to user_home_path, flash: { alert: e.message }
   end
 
   # Admin-only: view transactions
