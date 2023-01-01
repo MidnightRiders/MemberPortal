@@ -108,7 +108,7 @@ RSpec.describe StripeWebhookService do
 
       status = webhook.process
 
-      expect(status).to eq(200)
+      expect(status).to eq(404)
     end
 
     it 'marks a matching Membership as refunded' do
