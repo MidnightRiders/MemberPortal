@@ -51,10 +51,11 @@ module Commerce
     # @param [String] stripe_card_token
     # @return [Stripe::Card]
     def update_payment_method(stripe_card_token)
-      card = stripe_customer.sources.create(source: stripe_card_token)
-      stripe_customer.default_source = card.id
-      stripe_customer.save
-      stripe_customer.sources.data.select { |c| c != card }.each(&:delete)
+      card = Stripe::Customer.create_source(stripe_customer_token, { source: stripe_card_token })
+      Stripe::Customer.update(stripe_customer_token, { default_source: card.id })
+      Stripe::Customer.list_sources(stripe_customer_token, { object: 'card' }).each do |c|
+        Stripe::Customer.delete_source(stripe_customer_token, c.id) unless c.id == card.id
+      end
       card
     end
 
