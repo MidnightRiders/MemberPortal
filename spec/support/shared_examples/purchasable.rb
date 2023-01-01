@@ -1,6 +1,8 @@
 require 'support/stripe_helper'
 
-shared_examples_for 'Commerce::Purchasable' do
+require 'support/stripe_helper'
+
+RSpec.shared_examples_for 'Commerce::Purchasable' do
   it 'validates unique stripe charge' do
     product.update(stripe_charge_id: StripeHelper.charge_id)
     new_product = product.dup

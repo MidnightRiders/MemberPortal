@@ -79,7 +79,7 @@ class RelativesController < ApplicationController
     redirect_to user_home_path, notice: 'Your account type does not permit relatives.' unless @family.is_a? Family
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the allowlist through.
   def relative_params
     r = params.require(:relative).permit(user_attributes: [:email])
     r[:user_attributes][:email].downcase! if r[:user_attributes].try(:[], :email)

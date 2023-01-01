@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe MatchDecorator do
+RSpec.describe MatchDecorator do
   let(:match) { FactoryBot.create(:match) }
   before(:each) { sign_in FactoryBot.create(:user) }
 

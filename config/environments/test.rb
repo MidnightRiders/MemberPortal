@@ -39,12 +39,4 @@ MidnightRiders::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
-
-  if ENV['DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL'] == 'true'
-    DatabaseCleaner.allow_remote_database_url = true
-  else
-    DatabaseCleaner.url_allowlist = [
-      %r{^postgresql://postgres:postgres@db:5432},
-    ]
-  end
 end

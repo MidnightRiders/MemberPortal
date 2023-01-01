@@ -105,7 +105,7 @@ class UsersController < ApplicationController
 
   private
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the allowlist through.
   def user_params
     params.require(:user).permit(:last_name, :first_name, :last_name, :address, :city, :state, :postal_code, :country, :phone, :email, :member_since, :username)
   end

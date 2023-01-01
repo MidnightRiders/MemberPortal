@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ErrorNotifier do
+RSpec.describe ErrorNotifier do
   describe 'notify' do
     let(:error) { StandardError.new('This is an error') }
     it 'outputs the error type and message to logger.error by default' do

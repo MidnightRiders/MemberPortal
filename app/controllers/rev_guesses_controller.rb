@@ -49,7 +49,7 @@ class RevGuessesController < ApplicationController
     @match = Match.with_clubs.find(params[:match_id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the allowlist through.
   def rev_guess_params
     params.require(:rev_guess).permit(:match_id, :user_id, :home_goals, :away_goals, :comment)
   end

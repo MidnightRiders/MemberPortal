@@ -22,7 +22,7 @@ class PickEmsController < ApplicationController
     @match = Match.with_clubs.find(params[:match_id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the allowlist through.
   def pick_em_params
     params.require(:pick_em).permit(:match_id, :user_id, :result)
   end

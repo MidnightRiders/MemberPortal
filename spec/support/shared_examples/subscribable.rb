@@ -1,6 +1,8 @@
 require 'support/stripe_helper'
 
-shared_examples_for 'Commerce::Subscribable' do
+require 'support/stripe_helper'
+
+RSpec.shared_examples_for 'Commerce::Subscribable' do
   it 'validates unique Stripe subscription' do
     product.update_attribute(:stripe_subscription_id, StripeHelper.subscription_id)
     new_product = product.dup

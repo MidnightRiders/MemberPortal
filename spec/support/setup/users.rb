@@ -1,22 +1,6 @@
 RSpec.configure do |config|
-
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with :truncation
-    Rails.application.load_seed
-    create_admin
-    Warden.test_mode!
-  end
-
-  config.around(:each) do |example|
+  config.before(:each) do |example|
     create_admin unless User.find_by(username: 'admin')
-    DatabaseCleaner.cleaning do
-      example.run
-    end
-  end
-
-  config.after(:each) do
-    Warden.test_reset!
   end
 
   def create_admin
@@ -31,5 +15,4 @@ RSpec.configure do |config|
       admin_membership.save validate: false
     end
   end
-
 end

@@ -9,7 +9,6 @@ jobs:
         environment:
           BUNDLE_PATH: vendor/bundle
           COVERAGE: true
-          DATABASE_CLEANER_ALLOW_REMOTE_DATABASE_URL: true
           PGHOST: 127.0.0.1
           PGUSER: mr-member-portal-test-user
           RAILS_ENV: test
@@ -56,18 +55,18 @@ jobs:
 
       - run:
           name: Database setup
-          command: bundle exec rake db:schema:load --trace
+          command: bin/rails db:test:prepare
       - run:
           name: Run rspec in parallel
           command: |
             ./cc-test-reporter before-build
-            bundle exec rspec --profile 10 \
-                              --color \
-                              --order random \
-                              --format RspecJunitFormatter \
-                              --out test-results/rspec.xml \
-                              --format documentation \
-                              -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+            bin/rspec \
+              --profile 10 \
+              --color \
+              --format RspecJunitFormatter \
+              --out test-results/rspec.xml \
+              --format documentation \
+              -- $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
       - store_test_results:
           path: test-results
       - store_artifacts:

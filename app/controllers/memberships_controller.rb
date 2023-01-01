@@ -121,8 +121,8 @@ class MembershipsController < ApplicationController
 
   # Strong params for +Membership+
   def membership_params
-    params.require(:membership).permit(:user_id, :year, :type, :stripe_card_token, :subscribe, privileges: []).tap do |whitelisted|
-      whitelisted[:info] = params[:membership][:info]
+    params.require(:membership).permit(:user_id, :year, :type, :stripe_card_token, :subscribe, privileges: []).tap do |allowlisted|
+      allowlisted[:info] = params[:membership][:info]
     end
   end
 end
