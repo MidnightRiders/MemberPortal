@@ -103,7 +103,7 @@ describe MembershipsController do
 
             post :webhooks, params: event
 
-            expect(response).to have_http_status :success
+            expect(response).to have_http_status :not_found
           end
         end
 
