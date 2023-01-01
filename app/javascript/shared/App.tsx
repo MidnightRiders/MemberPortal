@@ -1,7 +1,9 @@
 import './root.css';
 
+// Imported for types
+import 'preact/compat';
+
 import { ThemeProvider } from '@mui/material';
-import type { DefaultTheme } from '@mui/system';
 import { Router } from 'wouter-preact';
 
 import {
@@ -69,12 +71,8 @@ const App = () => {
   );
 };
 
-const MuiProvider = ThemeProvider as FunctionComponent<{
-  theme: Partial<DefaultTheme> | ((outerTheme: DefaultTheme) => DefaultTheme);
-}>;
-
 const AppWithContexts = () => (
-  <MuiProvider theme={theme}>
+  <ThemeProvider theme={theme}>
     <ErrorsProvider>
       <CacheProvider>
         <AuthProvider>
@@ -82,7 +80,7 @@ const AppWithContexts = () => (
         </AuthProvider>
       </CacheProvider>
     </ErrorsProvider>
-  </MuiProvider>
+  </ThemeProvider>
 );
 
 export default AppWithContexts;
