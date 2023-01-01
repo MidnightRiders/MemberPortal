@@ -1,4 +1,3 @@
-import { Typography } from 'antd';
 import dayjs from 'dayjs';
 
 import { matchLink, revsOpponent } from '~helpers/matches';

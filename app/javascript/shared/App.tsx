@@ -1,6 +1,7 @@
 import './root.css';
 
-import { ConfigProvider, Layout } from 'antd';
+import { ThemeProvider } from '@mui/material';
+import type { DefaultTheme } from '@mui/system';
 import { Router } from 'wouter-preact';
 
 import {
@@ -21,6 +22,7 @@ import Footer from '~shared/components/Footer';
 import { FetchError } from '~helpers/fetch';
 import { userFromApi } from '~shared/contexts/auth/hooks';
 import theme from '~shared/theme';
+import { FunctionComponent, VNode } from 'preact';
 
 const ignoreUnauthed = (err: unknown) =>
   err instanceof FetchError && err.status === 401;
@@ -59,24 +61,20 @@ const App = () => {
 
   return (
     <Router>
-      <Layout>
-        <Header />
-        <Layout.Header>
-          <Navigation />
-        </Layout.Header>
-        <Layout.Content>
-          <Routes />
-        </Layout.Content>
-        <Layout.Footer>
-          <Footer />
-        </Layout.Footer>
-      </Layout>
+      <Header />
+      <Navigation />
+      <Routes />
+      <Footer />
     </Router>
   );
 };
 
+const MuiProvider = ThemeProvider as FunctionComponent<{
+  theme: Partial<DefaultTheme> | ((outerTheme: DefaultTheme) => DefaultTheme);
+}>;
+
 const AppWithContexts = () => (
-  <ConfigProvider theme={theme}>
+  <MuiProvider theme={theme}>
     <ErrorsProvider>
       <CacheProvider>
         <AuthProvider>
@@ -84,7 +82,7 @@ const AppWithContexts = () => (
         </AuthProvider>
       </CacheProvider>
     </ErrorsProvider>
-  </ConfigProvider>
+  </MuiProvider>
 );
 
 export default AppWithContexts;

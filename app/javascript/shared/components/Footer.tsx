@@ -5,7 +5,7 @@ const Footer = () => {
   const { user } = useAuthCtx();
 
   return (
-    <>
+    <footer>
       <nav>
         <a href="/faq">Frequently Asked Questions</a>{' '}
         <a href="/contact">Contact Us</a>
@@ -22,7 +22,7 @@ const Footer = () => {
         club logos are copyright their respective owners.{' '}
         <a href="mailto:webczar+membersite@midnightriders.com">Webmaster</a>
       </p>
-    </>
+    </footer>
   );
 };
 

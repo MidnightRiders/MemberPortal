@@ -1,8 +1,6 @@
-import { Menu, MenuProps } from 'antd';
 import clsx from 'clsx';
 import type { JSX } from 'preact';
 import { useCallback, useMemo } from 'preact/hooks';
-import { MenuClickEventHandler } from 'rc-menu/lib/interface';
 import { Link } from 'wouter-preact';
 
 import { useAuthCtx } from '~shared/contexts/auth';
