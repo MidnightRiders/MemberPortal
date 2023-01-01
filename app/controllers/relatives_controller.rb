@@ -1,10 +1,11 @@
 class RelativesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: %i[new]
   before_action :get_user_family
 
   # GET /users/:username/memberships/:membership_id/relatives/new
   def new
     @relative = @family.relatives.new
+    authorize! :create, @relative
     @relative_user = @relative.user = User.new
   end
 
