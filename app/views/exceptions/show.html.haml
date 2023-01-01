@@ -176,13 +176,13 @@
             Network Authentication Required
       %p
         - if @message.present?
-          %small= @message
+          = @message
         - else
           - case @status
             - when (400..499)
-              %small We couldn't find the content you're looking for.
+              We couldn't find the content you're looking for.
             - else
-              %small Some kind of error has occurred.
+              Some kind of error has occurred.
     %p
       Even the best of us get turned upside down sometimes.
       If you’re certain there should be a page here,

@@ -53,14 +53,10 @@ a:visited {
   }
 }
 
-h1,
-h2 {
-  margin: 0 auto;
-}
-
 h1 {
   font-size: 5em;
   line-height: 1.2em;
+  margin: 0 auto;
   max-width: 15.2em;
   padding: .1em;
   text-shadow: 0 1px 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff, 1px 0 0 #fff, 0 3px 6px $navy;
@@ -73,34 +69,44 @@ h1 {
   @media #{$medium-up} {
     background: transparent linear-gradient(to right, $navy 50%, transparent 50%);
   }
+
+  h2,
+  p {
+    display: block;
+    max-width: 76rem;
+    margin: 0 auto;
+    padding: 0 .5rem;
+    width: 100%;
+
+    @media #{$medium-up} {
+      padding-right: 50%;
+    }
+
+    @media screen and (min-width: 76em) {
+      padding-right: 38.5rem;
+    }
+  }
+
+  h2 {
+    font-size: 2em;
+  }
+
+  p {
+    padding-bottom: .5em;
+  }
 }
 
 h2,
 p,
 .copyrights {
+  color: #fff;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
 
-h2 {
-  color: #fff;
-  font-size: 2em;
-  max-width: 38em;
-  padding: 0 .25em;
-
-  @media #{$medium-up} {
-    padding-right: 50%;
-  }
-
-  small {
-    color: mix($maroon, #fff);
-  }
-}
-
-p {
+p:not(.sub-container p) {
   background: $navy;
   background: transparentize($navy, .15);
-  color: #fff;
   margin: .5em;
   padding: .5em;
 
@@ -126,3 +132,4 @@ p {
     position: absolute;
   }
 }
+
