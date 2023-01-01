@@ -26,7 +26,7 @@ class StripeWebhookService
   rescue ActiveRecord::RecordNotFound
     Rails.logger.error "No membership associated with Stripe Charge #{object[:id]}."
     SlackBot.post_message(":warning: *Warning:* No membership associated with Stripe Charge `#{object[:id]}.`", 'web-notifications')
-    return 404
+    @status = 404
   end
 
   def invoice_payment_succeeded
@@ -40,7 +40,6 @@ class StripeWebhookService
     end
     raise e
   rescue ActiveRecord::RecordNotFound => e
-    Rails.logger.error e.message
     formatted = e.message.gsub(/\b([a-z]{2,3}_[A-Za-z0-9]{24})\b/, '`\1`')
     SlackBot.post_message(":warning: *Warning:* #{formatted}", 'web-notifications')
     raise e
