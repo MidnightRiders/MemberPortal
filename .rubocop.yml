@@ -110,7 +110,7 @@ Naming/PredicateName:
     - is_
     - has_
     - have_
-  # Predicate names which, despite having a blacklisted prefix, or no ?,
+  # Predicate names which, despite having a denylisted prefix, or no ?,
   # should still be accepted
   AllowedMethods:
     - is_a?

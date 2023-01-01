@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe FacebookApi do
+RSpec.describe FacebookApi do
   context 'class methods' do
     pending 'events'
     pending 'auth_token'

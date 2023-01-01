@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-feature 'User privileges and security' do
+RSpec.feature 'User privileges and security' do
 
   subject(:user) { FactoryBot.create(:user) }
 

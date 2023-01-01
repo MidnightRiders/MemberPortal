@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe ClubsController do
+RSpec.describe ClubsController do
   describe 'GET index' do
     pending 'assigns all clubs as @clubs'
   end

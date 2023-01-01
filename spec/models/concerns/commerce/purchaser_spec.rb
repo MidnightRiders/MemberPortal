@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Commerce::Purchaser do
+RSpec.describe Commerce::Purchaser do
   let(:purchaser) {
     class ExamplePurchaserClass
       include ActiveModel::Validations

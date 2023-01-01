@@ -62,7 +62,7 @@ class MatchesController < ApplicationController
     request = Net::HTTP::Get.new(uri)
     request['x-apisports-key'] = ENV['API_FOOTBALL_KEY']
     resp = http.request(request)
-    
+
     match_data = JSON.parse(resp.read_body, symbolize_names: true)[:response]
     clubs = Club.all.map { |c| [c.api_id, c] }.to_h
     errors = []
@@ -155,7 +155,7 @@ class MatchesController < ApplicationController
     @match = Match.all_seasons.with_clubs.find(params[:id])
   end
 
-  # Never trust parameters from the scary internet, only allow the white list through.
+  # Never trust parameters from the scary internet, only allow the allowlist through.
   def match_params
     params.require(:match).permit(:home_team_id, :away_team_id, :kickoff, :kickoff_date, :kickoff_time, :location, :home_goals, :away_goals)
   end

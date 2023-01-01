@@ -1,8 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'support/shared_examples/purchasable'
 require 'support/shared_examples/subscribable'
 
-describe Membership do
+RSpec.describe Membership do
   let!(:admin) { FactoryBot.create(:user, :admin) }
   let(:membership) { FactoryBot.create(:membership) }
 

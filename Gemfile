@@ -83,7 +83,6 @@ end
 
 group :test do
   gem 'capybara-screenshot'
-  gem 'database_cleaner'
   gem 'launchy'
   gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'

@@ -1,7 +1,7 @@
 # Controller for static pages – home, faq, contact. Only visible
 class StaticPagesController < ApplicationController
 
-  authorize_resource class: false, only: %i(standings transactions nominate)
+  authorize_resource class: false, only: %i[standings transactions nominate]
 
   # Root path. Shows sign_in if not signed in, user_home if signed in
   def home
