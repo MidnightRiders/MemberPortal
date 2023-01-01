@@ -60,12 +60,16 @@ const App = () => {
   return (
     <Router>
       <Layout>
+        <Header />
         <Layout.Header>
-          <Header />
           <Navigation />
         </Layout.Header>
-        <Routes />
-        <Footer />
+        <Layout.Content>
+          <Routes />
+        </Layout.Content>
+        <Layout.Footer>
+          <Footer />
+        </Layout.Footer>
       </Layout>
     </Router>
   );

@@ -492,6 +492,7 @@ const Navigation = () => {
     <Menu
       mode="horizontal"
       items={items}
+      theme="dark"
       triggerSubMenuAction="click"
       expandIcon={<Expand />}
     />
