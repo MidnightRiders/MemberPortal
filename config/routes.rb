@@ -59,5 +59,5 @@ MidnightRiders::Application.routes.draw do
     end
   end
 
-  root to: 'static_pages#preact'
+  root to: 'static_pages#spa'
 end

@@ -1,8 +1,5 @@
 import './root.css';
 
-// Imported for types
-import 'preact/compat';
-
 import { ThemeProvider } from '@mui/material';
 import { Router } from 'wouter-preact';
 
@@ -24,7 +21,6 @@ import Footer from '~shared/components/Footer';
 import { FetchError } from '~helpers/fetch';
 import { userFromApi } from '~shared/contexts/auth/hooks';
 import theme from '~shared/theme';
-import { FunctionComponent, VNode } from 'preact';
 
 const ignoreUnauthed = (err: unknown) =>
   err instanceof FetchError && err.status === 401;

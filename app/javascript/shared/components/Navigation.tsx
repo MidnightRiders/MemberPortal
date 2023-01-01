@@ -1,31 +1,31 @@
+import { Toolbar, Typography } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import { Container } from '@mui/system';
 import clsx from 'clsx';
 import type { JSX } from 'preact';
 import { useCallback, useMemo } from 'preact/hooks';
 import { Link } from 'wouter-preact';
 
+import logo from '~shared/assets/logo.png';
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useLogOut } from '~shared/contexts/auth/hooks';
-
-const Expand = ({
-  class: c,
-  className,
-}: {
-  class?: string;
-  className?: string;
-}) => <i class={clsx(c, className, 'fa-solid fa-chevron-right fa-fw')} />;
 
 const Navigation = () => {
   const { user } = useAuthCtx();
   const logOut = useLogOut();
 
-  const handleLogOut = useCallback<MenuClickEventHandler>(() => {
-    if (!confirm('Are you sure you wish to sign out?')) return;
+  const handleLogOut = useCallback<JSX.GenericEventHandler<HTMLButtonElement>>(
+    (e) => {
+      e.preventDefault();
+      if (!confirm('Are you sure you wish to sign out?')) return;
 
-    logOut();
-  }, [logOut]);
+      logOut();
+    },
+    [logOut],
+  );
 
   const items = useMemo(
-    (): Readonly<MenuProps['items']> => [
+    (): Readonly<unknown[]> => [
       {
         key: 'sites',
         label: (
@@ -487,13 +487,29 @@ const Navigation = () => {
   );
 
   return (
-    <Menu
-      mode="horizontal"
-      items={items}
-      theme="dark"
-      triggerSubMenuAction="click"
-      expandIcon={<Expand />}
-    />
+    <AppBar position="sticky">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <img src={logo} alt="logo" />
+          <Typography
+            variant="h6"
+            noWrap
+            component={Link}
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: '"Mayflower", Georgia, serif',
+              fontWeight: 700,
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Midnight Riders
+          </Typography>
+        </Toolbar>
+      </Container>
+    </AppBar>
   );
 };
 
