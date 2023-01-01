@@ -11,6 +11,12 @@ LogRocket.init('nqhpme/midnight-riders-member-portal');
 
 (function () {
   jQuery(function ($) {
+    if (window.userInfo) {
+      LogRocket.identify(window.userInfo.id, {
+        name: window.userInfo.name,
+        email: window.userInfo.email,
+      });
+    }
     $(document).foundation();
     $.ajaxSettings.dataType = 'json';
     $('a.toggle-div').on('click', function (e) {

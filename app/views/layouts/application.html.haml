@@ -33,6 +33,9 @@
     %script{ src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js' }
     %script{ src: 'https://cdnjs.cloudflare.com/ajax/libs/jquery-migrate/3.4.0/jquery-migrate.min.js' }
     = javascript_include_tag 'application'
+    - if current_user
+      :javascript
+        window.userInfo = #{{ id: current_user.id, name: current_user.name, email: current_user.email }.to_json}};
     = javascript_include_tag 'admin' if current_user && (current_user.privilege?('admin') || current_user.privilege?('executive_board'))
     = yield :foot
     = render_javascript
