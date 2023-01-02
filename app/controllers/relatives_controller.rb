@@ -1,5 +1,5 @@
 class RelativesController < ApplicationController
-  load_and_authorize_resource except: %i[new]
+  load_and_authorize_resource except: %i[new create]
   before_action :get_user_family
 
   # GET /users/:username/memberships/:membership_id/relatives/new
@@ -18,6 +18,7 @@ class RelativesController < ApplicationController
     else
       if Devise.email_regexp =~ @relative_user.email
         @relative = Relative.new(year: @family.year, family_id: @family.id, info: { pending_approval: true, invited_email: @relative_user.email })
+        authorize! :create, @relative
         @relative.save(validate: false)
         if @relative_user.persisted?
           MembershipMailer.invite_existing_user_to_family(@relative_user, @family, @relative).deliver_now
