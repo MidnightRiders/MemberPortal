@@ -67,7 +67,7 @@ export const useAuthCtx = () => useContext(AuthCtx);
 
 export const COOKIE_NAME = 'mr-session-token';
 
-export const AuthProvider: FunctionComponent = ({ children }) => {
+export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   const [jwt, setJwt] = useState(() => cookies.get(COOKIE_NAME) ?? null);
   const [user, setUser] = useState<ExpandedUser | null>(null);
 

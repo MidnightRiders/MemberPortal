@@ -17,14 +17,14 @@ declare namespace React {
     | JSX.Element
     | string
     | number
-    | preact.Fragment
+    | Iterable<ReactNode>
     | preact.VNode<any>
     | boolean
     | null
     | undefined;
 
-  export type ElementType<P = any> = JSX.ElementType<P>;
-  export type ComponentType<P = {}> = preact.ComponentType<P>;
+  export import ElementType = JSX.ElementType;
+  export import ComponentType = preact.ComponentType;
 
   // Hooks
   export import CreateHandle = _hooks.CreateHandle;

@@ -9,6 +9,7 @@ import postcssImport from 'postcss-import';
 import nested from 'postcss-nested';
 import variables from 'postcss-variables';
 import mixins from 'postcss-mixins';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig({
   plugins: [
@@ -19,13 +20,19 @@ export default defineConfig({
   ],
   build: {
     rollupOptions: {
-      plugins: [Gzip()],
+      plugins: [
+        visualizer({
+          filename: resolve(__dirname, 'stats.html'),
+          gzipSize: true,
+        }),
+        Gzip(),
+      ],
     },
   },
   resolve: {
     alias: {
-      react: 'preact/compat',
-      'react-dom': 'preact/compat',
+      'react/jsx-runtime': 'preact/jsx-runtime',
+
       '~routes': resolve(__dirname, 'app/javascript/routes'),
       '~shared': resolve(__dirname, 'app/javascript/shared'),
       '~helpers': resolve(__dirname, 'app/javascript/helpers'),

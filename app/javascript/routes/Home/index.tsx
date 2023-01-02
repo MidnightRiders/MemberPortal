@@ -1,3 +1,5 @@
+import { Typography } from '@mui/material';
+import { Body2, H2 } from '~shared/components/typography';
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useOnMount } from '~shared/hooks/effects';
 import makeRoute from '~shared/makeRoute';
@@ -17,13 +19,13 @@ const Home = makeRoute('/', () => {
   if (!user) {
     return (
       <>
-        <Typography.Title level={2}>Welcome</Typography.Title>
+        <H2>Welcome</H2>
 
-        <Typography.Text>
+        <Body2>
           Please sign in using the link in the top corner, or{' '}
           <a href="mailto:webczar+memberportal@midnightriders.com">email us</a>{' '}
           to gain access.
-        </Typography.Text>
+        </Body2>
       </>
     );
   }

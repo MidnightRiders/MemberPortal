@@ -1,7 +1,6 @@
-import { Toolbar, Typography } from '@mui/material';
+import { Toolbar } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import { Container } from '@mui/system';
-import clsx from 'clsx';
 import type { JSX } from 'preact';
 import { useCallback, useMemo } from 'preact/hooks';
 import { Link } from 'wouter-preact';
@@ -9,6 +8,7 @@ import { Link } from 'wouter-preact';
 import logo from '~shared/assets/logo.png';
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useLogOut } from '~shared/contexts/auth/hooks';
+import { H6 } from '~shared/components/typography';
 
 const Navigation = () => {
   const { user } = useAuthCtx();
@@ -491,8 +491,7 @@ const Navigation = () => {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <img src={logo} alt="logo" />
-          <Typography
-            variant="h6"
+          <H6
             noWrap
             component={Link}
             href="/"
@@ -506,7 +505,7 @@ const Navigation = () => {
             }}
           >
             Midnight Riders
-          </Typography>
+          </H6>
         </Toolbar>
       </Container>
     </AppBar>

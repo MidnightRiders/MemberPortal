@@ -2,34 +2,33 @@ import dayjs from 'dayjs';
 
 import { matchLink, revsOpponent } from '~helpers/matches';
 import { nextRevsMatch, pageTitle } from '~shared/signals/app';
+import { H1, H2, H5 } from '~shared/components/typography';
 
 const Header = () => {
   return (
     <header>
-      <Typography.Title level={1}>
+      <H1>
         <a href="/">Midnight Riders</a>
         <small>Member Portal</small>
-      </Typography.Title>
-      {pageTitle.value && (
-        <Typography.Title level={2}>{pageTitle}</Typography.Title>
-      )}
+      </H1>
+      {pageTitle.value && <H2>{pageTitle.value}</H2>}
       {/* = yield(:header) */}
-      <Typography.Title level={5}>Next Game:</Typography.Title>
+      <H5>Next Game:</H5>
       {nextRevsMatch.value ? (
         <a href={matchLink(nextRevsMatch.value)}>
           <img
             src={revsOpponent(nextRevsMatch.value)!.crest.thumb}
             title={revsOpponent(nextRevsMatch.value)!.name}
           />
-          <Typography.Title level={5}>
+          <H5>
             {dayjs(nextRevsMatch.value.kickoff).format('%A,')}
             {dayjs(nextRevsMatch.value.kickoff).format('%_m.%-d, %l:%M%P')}
             <br />
             {nextRevsMatch.value.location}
-          </Typography.Title>
+          </H5>
         </a>
       ) : (
-        <Typography.Title level={5}> None Scheduled</Typography.Title>
+        <H5>None Scheduled</H5>
       )}
     </header>
   );

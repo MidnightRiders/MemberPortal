@@ -78,6 +78,9 @@ const createFetch =
           }
         } catch {}
       }
+      if (process.env.RAILS_ENV === 'development') {
+        console.error(err);
+      }
       throw new FetchError(message, url, status);
     }
   };
