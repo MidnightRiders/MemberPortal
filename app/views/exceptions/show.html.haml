@@ -7,7 +7,7 @@
     = favicon_link_tag 'icons/favicon.ico'
     %meta{ name: 'og:image', content: image_url('logo.png') }
     - if Rails.env.production?
-      != Haml::Template.new(Rails.root.join('app/views/layouts/_ga.haml')).render(Object.new)
+      = render partial: 'layouts/ga'
     - else
       :javascript
         if (!window.ga) window.ga = function() {};
