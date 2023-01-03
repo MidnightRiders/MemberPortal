@@ -1,6 +1,5 @@
 import './root.css';
 
-import { ThemeProvider } from '@mui/material';
 import { Router } from 'wouter-preact';
 
 import {
@@ -20,7 +19,6 @@ import { Match } from '~helpers/matches';
 import Footer from '~shared/components/Footer';
 import { FetchError } from '~helpers/fetch';
 import { userFromApi } from '~shared/contexts/auth/hooks';
-import theme from '~shared/theme';
 
 const ignoreUnauthed = (err: unknown) =>
   err instanceof FetchError && err.status === 401;
@@ -68,15 +66,13 @@ const App = () => {
 };
 
 const AppWithContexts = () => (
-  <ThemeProvider theme={theme}>
-    <ErrorsProvider>
-      <CacheProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </CacheProvider>
-    </ErrorsProvider>
-  </ThemeProvider>
+  <ErrorsProvider>
+    <CacheProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </CacheProvider>
+  </ErrorsProvider>
 );
 
 export default AppWithContexts;
