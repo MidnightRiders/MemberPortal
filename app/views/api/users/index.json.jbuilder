@@ -3,3 +3,4 @@ json.users do
     json.partial! 'user', user: user
   end
 end
+json.jwt current_user.jwt

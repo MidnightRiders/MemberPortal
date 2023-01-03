@@ -10,6 +10,7 @@ class Ability
       can :manage, user
       if user.current_member?
         can :show, :download
+        can %i[show index], Club
         cannot :create, :Registration
         if user.privilege? 'admin'
           can :manage, :all
@@ -41,7 +42,7 @@ class Ability
               user.current_membership.relatives.map(&:user).include? u
             end
           end
-          cannot :index, [Club, Membership, Player, User, MotM, Relative, Family]
+          cannot :index, [Membership, User, MotM, Relative, Family]
           cannot :refund, Membership
           cannot :grant_privileges, Membership
         end

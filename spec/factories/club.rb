@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :club do
-    name { FFaker::Address.city + ' FC' }
+    name { FFaker::Address.city + ' SC' }
     abbrv { name.gsub(/\W/, '').upcase[0, [2, 3].sample] }
     primary_color { FFaker::Color.hex_code }
     secondary_color { FFaker::Color.hex_code }

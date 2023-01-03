@@ -1,6 +1,6 @@
 RSpec.configure do |config|
-  config.before(:each) do |example|
-    create_admin unless User.find_by(username: 'admin')
+  config.before(:each) do
+    create_admin unless User.exists?(username: 'admin')
   end
 
   def create_admin

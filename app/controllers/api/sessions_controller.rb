@@ -7,7 +7,7 @@ class Api::SessionsController < ApiController
     user = User.find_by(username: params[:username])
 
     if user&.valid_password?(params[:password])
-      sign_in user
+      sign_in user, store: false
       @current_user = user
       render json: { user: user.as_json(api: true), jwt: user.jwt }
     else

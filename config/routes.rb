@@ -49,8 +49,12 @@ MidnightRiders::Application.routes.draw do
     get :user, to: 'users#current'
     resources :users
 
-    post :sessions, to: 'sessions#create'
-    delete :sessions, to: 'sessions#destroy'
+    devise_scope :sessions do
+      post '/', to: 'sessions#create'
+      delete '/', to: 'sessions#destroy'
+    end
+
+    resources :clubs, only: %i[index show]
 
     resources :matches, only: %i[index show] do
       collection do
