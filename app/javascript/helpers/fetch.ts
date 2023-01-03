@@ -77,8 +77,7 @@ const createFetch =
             message = err.statusText;
           }
         } catch {}
-      }
-      if (process.env.RAILS_ENV === 'development') {
+      } else if (process.env.RAILS_ENV === 'development') {
         console.error(err);
       }
       throw new FetchError(message, url, status);

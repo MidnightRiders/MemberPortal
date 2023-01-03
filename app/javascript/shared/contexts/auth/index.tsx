@@ -9,9 +9,6 @@ import {
   useState,
 } from 'preact/hooks';
 import { noop } from '~helpers/utils';
-import { useOnMount } from '~shared/hooks/effects';
-import { useGet } from '~shared/contexts/errors/fetch';
-import { FetchError } from '~helpers/fetch';
 import LogRocket from 'logrocket';
 
 export interface BaseUser {

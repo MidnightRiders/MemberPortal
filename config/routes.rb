@@ -59,5 +59,7 @@ MidnightRiders::Application.routes.draw do
     end
   end
 
+  get '*', to: 'static_pages#spa'
+
   root to: 'static_pages#spa'
 end

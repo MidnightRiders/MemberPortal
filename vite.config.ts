@@ -16,7 +16,10 @@ export default defineConfig({
     preact(),
     RubyPlugin(),
     Environment(['NODE_ENV', 'RAILS_ENV']),
-    FullReload(['config/routes.rb', 'app/views/**/*'], { delay: 200 }),
+    FullReload(
+      ['config/routes.rb', 'app/views/**/*', '~app/views/**/*.jbuilder'],
+      { delay: 200 },
+    ),
   ],
   build: {
     rollupOptions: {
