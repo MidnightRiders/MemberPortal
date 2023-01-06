@@ -1,0 +1,22 @@
+- if can? :edit, @poll
+  = link_to edit_poll_path(@poll), class: 'button right' do
+    %i.fa-solid.fa-pencil.fa-fw
+    Edit
+= link_to polls_path, class: 'button secondary right' do
+  %i.fa-solid.fa-arrow-left.fa-fw
+  Back
+%h2
+  = @poll.title
+  %small
+    = @poll.start_time.strftime('%Y-%m-%d %I:%M%P')
+    –
+    = @poll.end_time.strftime('%Y-%m-%d %I:%M%P')
+
+- if @poll.description.present?
+  %p= @poll.description
+
+%ol
+  - @poll.ordered_options.each do |option|
+    %li
+      = option.title
+      (#{pluralize(option.poll_votes.count, 'vote')})

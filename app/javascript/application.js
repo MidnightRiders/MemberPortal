@@ -1,4 +1,6 @@
 import 'jquery-ujs';
+import '@nathanvda/cocoon';
+
 import LogRocket from 'logrocket';
 
 import './vendor/modernizr';
@@ -45,20 +47,21 @@ LogRocket.init('nqhpme/midnight-riders-member-portal');
         });
       })
       .trigger('change');
-    $('input[type=file]').each(function () {
+    function transformFileInputs () {
       var $label, $row, $this, label;
       $(this).hide();
       $this = $(this);
+      if ($this.next().is('.file-input')) return;
       $label = $('body').find('label[for=' + $this.attr('id') + ']');
       label = $label.length > 0 ? $label.html() : 'Select File';
       $row = $(
-        '<div class="row collapse file-input">\n  <div class="small-6 columns"><label for="' +
-          $this.attr('id') +
-          '" class="button small expand"><i class="fa fa-file" /> ' +
-          label +
-          '</label></div>\n  <div class="small-6 columns"><label for="' +
-          $this.attr('id') +
-          '" class="inline">No file selected</label></div>\n</div>',
+        '<div class="row collapse file-input">\n  <div class="medium-6 columns"><label for="' +
+        $this.attr('id') +
+        '" class="button small expand"><i class="fa fa-file"></i> ' +
+        label +
+        '</label></div>\n  <div class="medium-6 columns"><label for="' +
+        $this.attr('id') +
+        '" class="inline">No file selected</label></div>\n</div>',
       );
       $row.insertAfter($this);
       return $this.on('change', function () {
@@ -68,6 +71,10 @@ LogRocket.init('nqhpme/midnight-riders-member-portal');
             $this.val().replace('C:\\fakepath\\', '') || 'No file selected',
           );
       });
+    }
+    $('input[type=file]').each(transformFileInputs);
+    $(document.body).on('cocoon:after-insert', function () {
+      $('input[type=file]').each(transformFileInputs);
     });
     $(document).on('ajax:send', function () {
       return $('body').addClass('wait');

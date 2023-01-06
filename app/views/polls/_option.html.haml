@@ -1,0 +1,18 @@
+.row
+  .large-5.column.left
+    = f.label :title
+  .large-5.column.left
+    = f.label :image
+.row
+  .large-5.column
+    = f.text_field :title
+    - if f.object.errors.include?(:title)
+      %small.error
+        = f.object.errors[:title].to_sentence
+  .large-5.column
+    = f.file_field :image
+    - if f.object.errors.include?(:image)
+      %small.error
+        = f.object.errors[:image].to_sentence
+  .large-2.column
+    = link_to_remove_association '&times;'.html_safe, f, class: 'button alert right'

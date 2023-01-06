@@ -13,6 +13,9 @@ class Ability
         cannot :create, :Registration
         if user.privilege? 'admin'
           can :manage, :all
+          cannot :edit, Poll do |poll|
+            poll.start_time > Time.current
+          end
           # Implicit
           # can :refund, Membership, year: (Date.current.year..Date.current.year + 1)
           # can :grant_privileges, Membership
@@ -23,6 +26,7 @@ class Ability
           can :read, :all
           can :index, MotM
           can :transactions, :static_page
+          can %i[index show], Poll
         else
           can :show, [User, Club, Match]
           can :index, Match

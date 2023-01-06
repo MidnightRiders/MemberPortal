@@ -1,0 +1,20 @@
+- content_for :title, 'Polls'
+
+%h2 Polls
+
+%ul
+  - @polls.each do |poll|
+    %li
+      = link_to poll.title, poll
+      %small
+        = poll.start_time.strftime('%Y-%m-%d %I:%M%P')
+        –
+        = poll.end_time.strftime('%Y-%m-%d %I:%M%P')
+      %br
+      = pluralize(poll.poll_votes.count, 'votes')
+      from
+      = pluralize(poll.poll_votes.map(&:user).uniq.count, 'user')
+  %li
+    = link_to new_poll_path do
+      %span= icon 'fa-solid', 'plus fa-fw'
+      New Poll

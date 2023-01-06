@@ -31,6 +31,9 @@ class User < ActiveRecord::Base
   has_many :rev_guesses, autosave: false
   has_many :pick_ems, autosave: false
 
+  has_many :poll_votes, dependent: :destroy
+  has_many :polls, through: :poll_votes
+
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: { case_sensitive: false }
   validates :username, format: { with: /\A[\w\-]{5,}\z/i }
@@ -153,6 +156,11 @@ class User < ActiveRecord::Base
 
   def ability
     @ability ||= Ability.new(self)
+  end
+
+  # @param [Poll] poll
+  def votes_for_poll(poll)
+    poll_votes.where(poll: poll)
   end
 
   # Quick semi-full-text search for Users.
