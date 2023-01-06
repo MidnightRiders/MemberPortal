@@ -1,13 +1,3 @@
-:ruby
-  should_show_scarf_vote = current_user.current_member? &&
-    (
-      (
-        Time.current >= Time.zone.local(2022, 1, 4, 12) &&
-        Time.current < Time.zone.local(2022, 1, 15, 17)
-       ) ||
-      (current_user.privilege?('admin') && params[:show_jotform].present?)
-    )
-
 - content_for :title, 'Member Portal | Home'
 
 = render partial: 'users/update_prompt'
@@ -17,14 +7,9 @@
 
 = render 'accept_family_invitation', user: current_user if current_user.invited_to_family?
 
-= render 'static_pages/jotform' if should_show_scarf_vote
 
 .row
-  - if should_show_scarf_vote
-    .medium-6.columns.right
-      = link_to '#', class: 'button large expand', data: { reveal_id: 'scarf-vote-modal' } do
-        = icon 'fa-regular', 'check-circle'
-        Vote for 2022’s Scarf
+  = render 'polls' if current_user.current_member?
   = render 'board_nominations'
 
   - if current_user.current_member? && ENV['MEETING_ZOOM_LINK'].present? && (params[:show_zoom_link].present? || Time.current.between?(Time.zone.local(2021, 2, 13, 8), Time.zone.local(2021, 2, 13, 15)))

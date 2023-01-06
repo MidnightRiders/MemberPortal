@@ -13,7 +13,11 @@ MidnightRiders::Application.routes.draw do
     post 'pick_ems/vote', to: 'pick_ems#vote', as: :pick_em_vote
   end
 
-  resources :polls
+  resources :polls do
+    member do
+      post :vote
+    end
+  end
 
   resources :clubs
 

@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   has_many :pick_ems, autosave: false
 
   has_many :poll_votes, dependent: :destroy
-  has_many :polls, through: :poll_votes
+  has_many :polls, through: :poll_votes, source: :poll
 
   validates :first_name, :last_name, :email, presence: true
   validates :username, presence: true, uniqueness: { case_sensitive: false }
@@ -160,7 +160,12 @@ class User < ActiveRecord::Base
 
   # @param [Poll] poll
   def votes_for_poll(poll)
-    poll_votes.where(poll: poll)
+    poll_votes.joins(:poll_option).where(poll_options: { poll: poll })
+  end
+
+  # @param [Poll] poll
+  def has_voted_in?(poll)
+    poll_votes.joins(:poll_option).exists?(poll_options: { poll: poll })
   end
 
   # Quick semi-full-text search for Users.

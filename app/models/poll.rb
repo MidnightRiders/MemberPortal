@@ -12,6 +12,8 @@ class Poll < ActiveRecord::Base
   validate :has_options
   validate :in_future, on: :update
 
+  scope :active, -> { where(start_time: (..Time.current), end_time: (Time.current..)) }
+
   def active?
     Time.current.between?(start_time, end_time)
   end

@@ -37,6 +37,17 @@ class PollsController < ApplicationController
     redirect_to polls_path
   end
 
+  def vote
+    votes = params.require(:poll_option_id)
+    ActiveRecord::Base.transaction do
+      current_user.votes_for_poll(@poll).destroy_all
+      current_user.poll_votes.create!(votes.map { |id| { poll_option_id: id } })
+    end
+    redirect_to user_home_path, flash: { notice: "Your #{vote.pluralize(votes.size)} #{votes.size == 1 ? 'has' : 'have'} been cast"}
+  rescue ActiveRecord::ActiveRecordError => e
+    redirect_to user_home_path, flash: { alert: e.message }
+  end
+
   private
 
   def poll_params
