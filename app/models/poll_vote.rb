@@ -19,7 +19,7 @@ class PollVote < ActiveRecord::Base
   end
 
   def multi_votes
-    errors.add(:base, 'user has no votes remaining') if poll.multiple_choice&.tap { user.votes_for_poll(poll).count < _1 }
+    errors.add(:base, 'too many votes cast') if poll.multiple_choice&.then { user.votes_for_poll(poll).count > _1 }
   end
 
   def user_is_member

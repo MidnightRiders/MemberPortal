@@ -15,6 +15,9 @@
 - if @poll.description.present?
   %p= @poll.description
 
+- if @poll.multiple_choice
+  %p Up to #{@poll.multiple_choice} selections allowed.
+
 %ol
   - @poll.ordered_options.each do |option|
     %li

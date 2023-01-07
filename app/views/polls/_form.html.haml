@@ -10,7 +10,7 @@
     .large-4.columns
       = form.label :title
     .large-8.columns
-      = form.text_field :title
+      = form.text_field :title, placeholder: 'Title of poll will be displayed to members'
       - if poll.errors.include?(:title)
         %small.error
           = poll.errors[:title].to_sentence
@@ -18,10 +18,19 @@
     .large-4.columns
       = form.label :description
     .large-8.columns
-      = form.text_area :description
+      = form.text_area :description, placeholder: 'Optional description text'
       - if poll.errors.include?(:description)
         %small.error
           = poll.errors[:description].to_sentence
+
+  .row
+    .large-4.columns
+      = form.label :multiple_choice, 'Max Selections'
+    .large-8.columns
+      = form.number_field :multiple_choice, min: 0
+      - if poll.errors.include?(:multiple_choice)
+        %small.error
+          = poll.errors[:multiple_choice].to_sentence
 
   .row
     .large-8.columns.right

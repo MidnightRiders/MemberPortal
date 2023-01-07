@@ -10,6 +10,7 @@ class PollsController < ApplicationController
   def show; end
 
   def new
+    @poll.multiple_choice ||= 1
     @poll.start_time ||= Time.now.beginning_of_hour + 1.hour
     @poll.end_time ||= Time.now.beginning_of_hour + 1.hour + 2.weeks
   end
@@ -43,9 +44,11 @@ class PollsController < ApplicationController
       current_user.votes_for_poll(@poll).destroy_all
       current_user.poll_votes.create!(votes.map { |id| { poll_option_id: id } })
     end
-    redirect_to user_home_path, flash: { notice: "Your #{vote.pluralize(votes.size)} #{votes.size == 1 ? 'has' : 'have'} been cast"}
+    redirect_to user_home_path, flash: { notice: "Your #{'vote'.pluralize(votes.size)} #{votes.size == 1 ? 'has' : 'have'} been cast" }
   rescue ActiveRecord::ActiveRecordError => e
     redirect_to user_home_path, flash: { alert: e.message }
+  rescue ActionController::ParameterMissing => e
+    redirect_to user_home_path, flash: { alert: 'You must select at least one option' }
   end
 
   private

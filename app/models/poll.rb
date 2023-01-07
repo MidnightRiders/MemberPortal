@@ -9,6 +9,7 @@ class Poll < ActiveRecord::Base
   validates :title, presence: true
   validates :start_time, presence: true
   validates :end_time, presence: true
+  validates :multiple_choice, numericality: { only_integer: true, greater_than_or_equal_to: 1 }, allow_nil: true
   validate :has_options
   validate :in_future, on: :update
 
