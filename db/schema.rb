@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2020_01_14_022139) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_06_014240) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "hstore"
   enable_extension "pg_stat_statements"
@@ -103,6 +103,37 @@ ActiveRecord::Schema[7.0].define(version: 2020_01_14_022139) do
     t.index ["club_id"], name: "index_players_on_club_id"
   end
 
+  create_table "poll_options", force: :cascade do |t|
+    t.bigint "poll_id", null: false
+    t.string "title"
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.bigint "image_file_size"
+    t.datetime "image_updated_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["poll_id"], name: "index_poll_options_on_poll_id"
+  end
+
+  create_table "poll_votes", force: :cascade do |t|
+    t.bigint "poll_option_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["poll_option_id"], name: "index_poll_votes_on_poll_option_id"
+    t.index ["user_id"], name: "index_poll_votes_on_user_id"
+  end
+
+  create_table "polls", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "start_time", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "end_time"
+    t.integer "multiple_choice"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+  end
+
   create_table "rev_guesses", id: :serial, force: :cascade do |t|
     t.integer "match_id"
     t.integer "user_id"
@@ -156,4 +187,7 @@ ActiveRecord::Schema[7.0].define(version: 2020_01_14_022139) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
+  add_foreign_key "poll_options", "polls"
+  add_foreign_key "poll_votes", "poll_options"
+  add_foreign_key "poll_votes", "users"
 end

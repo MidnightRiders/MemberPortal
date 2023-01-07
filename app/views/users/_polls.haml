@@ -1,0 +1,27 @@
+- @polls.each do |poll|
+  .medium-6.columns
+    = link_to '#', class: %W[button large expand #{current_user.has_voted_in?(poll) ? 'secondary' : ''}], data: { reveal_id: "poll-#{poll.title.parameterize}" } do
+      = icon 'fa-solid', 'poll fa-fw'
+      Poll: #{poll.title}
+      - if current_user.has_voted_in?(poll)
+        %i.fa-solid.fa-check.fa-fw{ title: 'Voted' }
+  .reveal-modal.medium{ data: { reveal: true }, id: "poll-#{poll.title.parameterize}" }
+    .close-reveal-modal &#215;
+    = form_tag vote_poll_path(poll), method: :post, style: 'max-height: 100%; overflow-y: auto;' do
+      %h2.text-center= poll.title
+      %p Closes at #{poll.end_time.strftime('%I:%M%P on %B')} #{poll.end_time.day.ordinalize}
+      - if poll.description
+        %p= poll.description
+      - poll.poll_options.shuffle.each do |option|
+        %label.row{ for: "poll_option_id_#{option.id}" }
+          - if poll.multiple_choice == 1
+            .small-2.medium-1.columns.text-right= radio_button_tag 'poll_option_id[]', option.id, current_user.poll_votes.map(&:poll_option).include?(option), id: "poll_option_id_#{option.id}"
+          - else
+            .small-2.medium-1.columns.text-right= check_box_tag 'poll_option_id[]', option.id, current_user.poll_votes.map(&:poll_option).include?(option), id: "poll_option_id_#{option.id}"
+          .small-10.medium-11.columns
+            - if option.image.present?
+              = image_tag option.image.url(:large), style: 'max-width: 100%;'
+            %h4= option.title
+      .row.actions
+        .column.text-right
+          = submit_tag 'Vote', class: 'button'

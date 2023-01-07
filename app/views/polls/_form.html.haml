@@ -1,0 +1,72 @@
+= form_for poll do |form|
+  - if poll.errors[:base].present?
+    .alert-box.alert
+      - poll.errors[:base].each do |error|
+        %p= error
+  .row
+    .column
+      %h2 Poll
+  .row
+    .large-4.columns
+      = form.label :title
+    .large-8.columns
+      = form.text_field :title, placeholder: 'Title of poll will be displayed to members'
+      - if poll.errors.include?(:title)
+        %small.error
+          = poll.errors[:title].to_sentence
+  .row
+    .large-4.columns
+      = form.label :description
+    .large-8.columns
+      = form.text_area :description, placeholder: 'Optional description text'
+      - if poll.errors.include?(:description)
+        %small.error
+          = poll.errors[:description].to_sentence
+
+  .row
+    .large-4.columns
+      = form.label :multiple_choice, 'Max Selections'
+    .large-8.columns
+      = form.number_field :multiple_choice, min: 0
+      - if poll.errors.include?(:multiple_choice)
+        %small.error
+          = poll.errors[:multiple_choice].to_sentence
+
+  .row
+    .large-8.columns.right
+      .row
+        .large-6.columns
+          = form.label :start_time
+          = form.datetime_field :start_time
+          - if poll.errors.include?(:start_time)
+            %small.error
+              = poll.errors[:start_time].to_sentence
+        .large-6.columns
+          = form.label :end_time
+          = form.datetime_field :end_time
+          - if poll.errors.include?(:end_time)
+            %small.error
+              = poll.errors[:end_time].to_sentence
+
+  .row
+    .large-4.columns
+      %h2 Options
+    .large-8.columns
+      - poll.poll_options.each do |option|
+        = form.fields_for option do |f|
+          = render partial: 'option', locals: { f: f }
+      %div= link_to_add_association 'Add Option', form, :poll_options,
+        partial: 'option', class: 'button'
+
+  .row.actions
+    .column.text-right
+      = link_to poll.new_record? ? polls_path : poll_path(poll), class: 'button secondary' do
+        %i.fa-solid.fa-arrow-left.fa-fw
+        Back
+      = form.button :submit, class: 'button' do
+        - if poll.new_record?
+          = icon 'fa-solid', 'check fa-fw'
+          Create
+        - else
+          = icon 'fa-solid', 'save fa-fw'
+          Save
