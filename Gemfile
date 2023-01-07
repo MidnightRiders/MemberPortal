@@ -22,16 +22,16 @@ gem 'iconv'
 
 gem 'date_time_attribute'
 
+gem 'cocoon'
 gem 'will_paginate'
 
 gem 'color'
 gem 'rmagick'
 
 gem 'aws-sdk'
-gem 'paperclip'
+gem 'kt-paperclip'
 
 gem 'bigdecimal'
-gem 'mimemagic'
 
 gem 'nokogiri'
 gem 'rexml'

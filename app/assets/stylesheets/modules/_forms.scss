@@ -56,84 +56,60 @@ form {
   }
 }
 
-#scarf-vote-modal {
+[id^='poll-'].reveal-modal {
   max-width: rem-calc(800);
   width: auto;
 
-  ul,
-  li {
-    list-style: none;
-    margin: inherit;
-  }
-
-  .scarf {
+  label.row {
+    align-items: center;
+    display: flex;
+    margin-bottom: 1rem;
     width: 100%;
 
-    [type=radio],
-    [type=checkbox] {
-      float: left;
-      height: 0;
-      overflow: hidden;
-      opacity: 0;
-      position: relative;
-      width: 0;
-
-      + label {
-        display: block;
-        font-weight: bold;
-        margin: 0 0 .75em;
-        padding: 1em;
-        position: relative;
-        text-align: center;
-
-        img {
-          display: inline-block;
-        }
-
-        &:hover {
-          background-color: transparentize($maroon, .5);
-        }
-
-        &::before {
-          content: '';
-          display: block;
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          z-index: -1;
-        }
-
-        @media #{$medium-up} {
-          padding: 1em 2em;
-        }
-      }
-
-      &:checked + label {
-        &,
-        &:hover {
-          background-color: $maroon;
-          color: #fff;
-
-          img {
-            background: rgba(255, 255, 255, .85);
-          }
-        }
-      }
+    &:hover {
+      background-color: transparentize($maroon, .5);
     }
 
     img {
+      border: 1px solid transparent;
       display: block;
       height: auto;
+      margin-top: 10px;
       max-width: 100%;
-      pointer-events: none;
+    }
+
+    h4 {
+      display: block;
+      font-weight: bold;
+      margin: 0;
+      padding: 1em;
       position: relative;
+      text-align: center;
+
+      @media #{$medium-up} {
+        padding: 1em 2em;
+      }
     }
   }
 
-  .form-error-message,
-  .form-button-error {
-    @include alert($alert-color);
+  &.open {
+    bottom: 20px;
+    position: fixed;
+    top: 20px;
+
+    label:hover {
+      img {
+        background: #fff;
+        border: 1px solid #fff;
+        box-shadow: 0 0 3px #fff;
+      }
+    }
+
+    @media #{$small-only} {
+      bottom: 5px;
+      left: 5px;
+      right: 5px;
+      top: 5px !important;
+    }
   }
 }

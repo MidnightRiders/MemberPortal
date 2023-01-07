@@ -35,6 +35,7 @@ class UsersController < ApplicationController
     @articles = RidersBlog.articles.sort_by { |x| x['pubDate'].to_date }.last(2).reverse if RidersBlog.articles
     @events = FacebookApi.events['data'].try(:select) { |x| x['start_time'] >= Time.current - 1.week } if FacebookApi.events
     @revs_matches = [revs.last_match, revs.next_matches(2)].flatten.reject(&:nil?)
+    @polls = Poll.active
   end
 
   # GET /users/1/edit

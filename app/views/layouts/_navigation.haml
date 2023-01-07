@@ -190,6 +190,12 @@
                     = link_to transactions_path do
                       = icon 'fa-regular', 'dollar fa-fw'
                       Transactions
+                - if can? :manage, Poll
+                  %li.divider
+                  %li
+                    = link_to polls_path do
+                      = icon 'fa-solid', 'poll fa-fw'
+                      Polls
                 %li.divider
                 %li
                   = link_to clubs_path do

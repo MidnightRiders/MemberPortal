@@ -138,27 +138,6 @@ select[multiple], select[size] {
   display: none;
 }
 
-#scarf-vote-modal.open {
-  bottom: 20px;
-  position: fixed;
-  top: 20px;
-
-  tr:hover {
-    img {
-      background: #fff;
-      border: 1px solid #fff;
-      box-shadow: 0 0 3px #fff;
-    }
-  }
-
-  @media #{$small-only} {
-    bottom: 5px;
-    left: 5px;
-    right: 5px;
-    top: 5px !important;
-  }
-}
-
 a:link,
 a:visited {
   &.underline {
@@ -183,6 +162,10 @@ ul.no-style {
 
 .gray-background {
   background-color: $silver;
+}
+
+.no-margin {
+  margin: 0 !important;
 }
 
 .no-margin-bottom {
