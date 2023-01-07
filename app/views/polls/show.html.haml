@@ -21,5 +21,8 @@
 %ol
   - @poll.ordered_options.each do |option|
     %li
+      - if option.image.present?
+        = image_tag option.image.url(:thumb), style: 'display: inline-block'
       = option.title
       (#{pluralize(option.poll_votes.count, 'vote')})
+      %div{ style: "height: 1rem; background-color: #6a0003; width: #{option.percent_votes}%" }

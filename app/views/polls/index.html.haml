@@ -14,7 +14,6 @@
       = pluralize(poll.poll_votes.count, 'votes')
       from
       = pluralize(poll.poll_votes.map(&:user).uniq.count, 'user')
-  %li
-    = link_to new_poll_path do
-      %span= icon 'fa-solid', 'plus fa-fw'
-      New Poll
+= link_to new_poll_path, class: 'button' do
+  %span= icon 'fa-solid', 'plus fa-fw'
+  New Poll
