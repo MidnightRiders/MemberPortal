@@ -13,7 +13,7 @@
       - if poll.description
         %p= poll.description
       - poll.poll_options.shuffle.each do |option|
-        %label.row{ style: 'display: flex; align-items: center;', for: "poll_option_id_#{option.id}" }
+        %label.row{ for: "poll_option_id_#{option.id}" }
           - if poll.multiple_choice == 1
             .small-2.medium-1.columns.text-right= radio_button_tag 'poll_option_id[]', option.id, current_user.poll_votes.map(&:poll_option).include?(option), id: "poll_option_id_#{option.id}"
           - else
@@ -21,7 +21,7 @@
           .small-10.medium-11.columns
             - if option.image.present?
               = image_tag option.image.url(:large), style: 'max-width: 100%;'
-            %h4{ class: option.image.present? ? 'no-margin-bottom' : 'no-margin' }= option.title
+            %h4= option.title
       .row.actions
         .column.text-right
           = submit_tag 'Vote', class: 'button'
