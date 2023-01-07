@@ -39,7 +39,10 @@ class PollsController < ApplicationController
   end
 
   def vote
+    authorize! :vote, @poll
     votes = params.require(:poll_option_id)
+    votes = [votes] unless votes.is_a?(Array)
+    raise ActionController::BadRequest, 'too many votes' if @poll.multiple_choice&.then { votes.size > _1 }
     ActiveRecord::Base.transaction do
       current_user.votes_for_poll(@poll).destroy_all
       current_user.poll_votes.create!(votes.map { |id| { poll_option_id: id } })
@@ -49,6 +52,8 @@ class PollsController < ApplicationController
     redirect_to user_home_path, flash: { alert: e.message }
   rescue ActionController::ParameterMissing => e
     redirect_to user_home_path, flash: { alert: 'You must select at least one option' }
+  rescue => e
+    redirect_to user_home_path, flash: { alert: "Error: #{e.message}" }
   end
 
   private

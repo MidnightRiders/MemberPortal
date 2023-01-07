@@ -10,6 +10,9 @@ class Ability
       can :manage, user
       if user.current_member?
         can :show, :download
+        can :vote, Poll do |poll|
+          poll.active?
+        end
         cannot :create, :Registration
         if user.privilege? 'admin'
           can :manage, :all
