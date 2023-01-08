@@ -431,6 +431,16 @@ const Navigation = () => {
                             : []),
                         ],
                       },
+                      ...(true /* can? :manage, Poll */
+                        ? [
+                            { type: 'divider' as const },
+                            {
+                              label: 'Polls',
+                              key: 'polls',
+                              icon: <i class="fa-solid fa-poll fa-fw" />,
+                            },
+                          ]
+                        : []),
                       { type: 'divider' as const },
                       {
                         label: 'Portal',
