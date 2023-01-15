@@ -1,15 +1,22 @@
 import clsx from 'clsx';
 import type { JSX } from 'preact';
-import { useCallback, useState } from 'preact/hooks';
+import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useLocation } from 'wouter-preact';
 
 import NavNode from '~shared/components/Navigation/NavNode';
 import useNav from '~shared/components/Navigation/useNav';
+import Icon from '../Icon';
 
 import styles from './styles.module.css';
 
 const Navigation = () => {
   const navItems = useNav();
   const [mobileExpand, setMobileExpand] = useState(false);
+  const [location] = useLocation();
+
+  useEffect(() => {
+    setMobileExpand(false);
+  }, [location]);
 
   const toggleMobileExpand = useCallback<
     JSX.GenericEventHandler<HTMLButtonElement>
@@ -25,7 +32,7 @@ const Navigation = () => {
         class={styles.mobileExpand}
         onClick={toggleMobileExpand}
       >
-        <i class="fa-solid fa-bars fa-fw" /> Menu
+        <Icon name="list" /> Menu
       </button>
       <ul class={clsx(mobileExpand && styles.mobileExpanded)}>
         {navItems.map((node) => (

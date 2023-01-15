@@ -1,12 +1,5 @@
-@define-mixin fa $icon {
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  content: $icon;
-  display: var(--fa-display, inline-block);
-  font-family: var(--fa-style-family, 'Font Awesome 6 Free');
-  font-style: normal;
-  font-variant: normal;
-  font-weight: var(--fa-style, 900);
-  line-height: 1;
-  text-rendering: auto;
+@define-mixin breakpoint {
+  @media screen and (min-width: 45em) {
+    @mixin-content;
+  }
 }

@@ -44,7 +44,7 @@
       }
     }
 
-    @media screen and (min-width: 45em) {
+    @mixin breakpoint {
       display: none;
       + ul {
         display: flex;
@@ -53,7 +53,7 @@
   }
 
   .iconOnly {
-    @media screen and (min-width: 45em) {
+    @mixin breakpoint {
       display: none;
     }
   }
@@ -85,7 +85,7 @@
       background-color: rgba(255, 255, 255, 0.1);
     }
 
-    i[class^='fa-'] {
+    i[class^='bi-'] {
       margin-right: 0.5em;
     }
   }
@@ -114,19 +114,19 @@
     ul {
       background-color: rgba(0, 0, 0, 0.1);
 
-      @media screen and (min-width: 45em) {
+      @mixin breakpoint {
         background-color: $maroon;
       }
     }
   }
 
-  @media screen and (min-width: 45em) {
+  @mixin breakpoint {
     li.gap {
       margin-left: auto;
     }
   }
 
-  @media screen and (min-width: 45em) {
+  @mixin breakpoint {
     a,
     button {
       padding: 1rem 1rem;
@@ -161,11 +161,11 @@
     margin: 0 auto;
     width: 100%;
 
-    @media screen and (min-width: 45em) {
+    @mixin breakpoint {
       flex-flow: row nowrap;
     }
 
-    @media screen and (min-width: 45em) {
+    @mixin breakpoint {
       a,
       button,
       li.groupHeader {
@@ -175,23 +175,24 @@
   }
 
   .expand {
-    &::after {
-      @mixin fa ' \f078';
+    :global(.bi-chevron-down) {
       font-size: 0.75em;
       opacity: 0.5;
       margin-left: auto;
+      margin-right: 0;
       justify-self: flex-end;
       padding-left: 0.5rem;
     }
 
-    &:hover::after {
+    &:hover :global(.bi-chevron-down) {
       opacity: 1;
     }
   }
 
-  ul ul .expand::after {
-    @media screen and (min-width: 45em) {
-      @mixin fa ' \f054';
+  ul ul :global(.bi-chevron-down)::before {
+    @mixin breakpoint {
+      transform-origin: center;
+      transform: rotate(-90deg);
     }
   }
 }

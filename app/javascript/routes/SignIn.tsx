@@ -4,6 +4,7 @@ import { Link, Redirect } from 'wouter-preact';
 import Button from '~shared/components/Button';
 import Actions from '~shared/components/forms/Actions';
 import Input from '~shared/components/forms/Input';
+import Icon from '~shared/components/Icon';
 import Block from '~shared/components/layout/Block';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
@@ -54,22 +55,19 @@ const SignIn = makeRoute(Paths.SignIn, () => {
             type="password"
             name="password"
             label="Password"
-            autocomplete="password"
+            autocomplete="current-password"
             value={password}
             setValue={setPassword}
           />
           <Actions>
-            <Button
-              leftIcon={<i class="fa-solid fa-sign-in fa-fw" />}
-              type="submit"
-            >
+            <Button leftIcon="box-arrow-in-right" type="submit">
               Sign In
             </Button>
             <Button
               as={Link}
               href={Paths.SignUp}
               secondary
-              leftIcon={<i class="fa-solid fa-pencil fa-fw" />}
+              leftIcon="pencil-fill"
             >
               Sign Up
             </Button>

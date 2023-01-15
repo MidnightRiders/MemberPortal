@@ -3,8 +3,9 @@ import Button from '~shared/components/Button';
 import Actions from '~shared/components/forms/Actions';
 import Input from '~shared/components/forms/Input';
 import InputGroup from '~shared/components/forms/InputGroup';
-import useForm from '~shared/components/forms/useForm';
+import useForm, { Field } from '~shared/components/forms/useForm';
 import Block from '~shared/components/layout/Block';
+import Callout from '~shared/components/layout/Callout';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
 import makeRoute from '~shared/makeRoute';
@@ -12,6 +13,20 @@ import Paths from '~shared/paths';
 
 const thisYear =
   new Date().getFullYear() + (new Date().getMonth() >= 10 ? 1 : 0);
+
+const fields = {
+  firstName: '',
+  lastName: '',
+  memberSince: { value: thisYear, optional: true },
+  username: '',
+  password: '',
+  email: '',
+  streetAddress: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  country: 'USA',
+} satisfies Record<string, Field<string | number>>;
 
 const SignUp = makeRoute(Paths.SignUp, () => {
   const [
@@ -21,7 +36,6 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       memberSince,
       username,
       password,
-      passwordConfirmation,
       email,
       streetAddress,
       city,
@@ -35,7 +49,6 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       setMemberSince,
       setUsername,
       setPassword,
-      setPasswordConfirmation,
       setEmail,
       setStreetAddress,
       setCity,
@@ -44,29 +57,9 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       setCountry,
     ],
     handleSubmit,
-  ] = useForm(
-    '/users',
-    {
-      firstName: '',
-      lastName: '',
-      memberSince: thisYear,
-      username: '',
-      password: '',
-      passwordConfirmation: '',
-      email: '',
-      streetAddress: '',
-      city: '',
-      state: '',
-      postalCode: '',
-      country: 'USA',
-    },
-    (data) => {
-      // TODO
-    },
-    (error) => {
-      // TODO
-    },
-  );
+  ] = useForm('/users', fields, (data) => {
+    // TODO
+  });
 
   const [hasEditedUsername, setHasEditedUsername] = useState(false);
   const updateUsername = useCallback((v: string) => {
@@ -124,6 +117,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
               setValue={setMemberSince}
             />
             <Input
+              autocomplete="username"
               type="text"
               value={username}
               setValue={updateUsername}
@@ -134,21 +128,12 @@ const SignUp = makeRoute(Paths.SignUp, () => {
               required
             />
             <Input
+              autocomplete="new-password"
               type="password"
               value={password}
               setValue={setPassword}
               label="Password"
               name="password"
-              minLength={12}
-              maxLength={128}
-              required
-            />
-            <Input
-              type="password"
-              value={passwordConfirmation}
-              setValue={setPasswordConfirmation}
-              label="Password Confirmation"
-              name="passwordConfirmation"
               minLength={12}
               maxLength={128}
               required
@@ -159,6 +144,10 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       <Row>
         <Column columns={3}>
           <h2 class="white">Contact Information</h2>
+          <Callout as="p">
+            <strong>We need your address</strong> to be able to send you your
+            membership package.
+          </Callout>
         </Column>
         <Column columns={9}>
           <Block>
@@ -221,7 +210,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
         </Column>
       </Row>
       <Actions columns={[3, 9]}>
-        <Button type="submit" leftFa="user-plus">
+        <Button type="submit" leftIcon="person-fill-add">
           Sign Up
         </Button>
       </Actions>

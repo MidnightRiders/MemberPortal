@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import type { ComponentChild, JSX } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useLocation } from 'wouter-preact';
+import Icon from '../Icon';
 import NavNode, { Node } from './NavNode';
 
 import styles from './styles.module.css';
@@ -16,6 +18,11 @@ const stopPropagation = (e: Event) => e.stopPropagation();
 export const Expandable = ({ content, gap = false, nodes }: Props) => {
   const [expanded, setExpanded] = useState(false);
   const toggle = useCallback(() => setExpanded((e) => !e), []);
+  const [location] = useLocation();
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [location]);
 
   useEffect(() => {
     if (!expanded) return;
@@ -45,7 +52,7 @@ export const Expandable = ({ content, gap = false, nodes }: Props) => {
         class={clsx(styles.expand, expanded && styles.expanded)}
         onClick={toggle}
       >
-        {content}
+        {content} <Icon name="chevron-down" />
       </button>
       {expanded && (
         <ul>

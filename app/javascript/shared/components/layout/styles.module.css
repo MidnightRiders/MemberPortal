@@ -1,3 +1,6 @@
+@import url('~shared/styles/mixins');
+@import url('~shared/styles/variables');
+
 .row {
   margin: 0 -0.5rem;
 
@@ -9,7 +12,7 @@
     align-items: center;
   }
 
-  @media screen and (min-width: 45em) {
+  @mixin breakpoint {
     display: flex;
     flex-flow: row nowrap;
 
@@ -18,11 +21,17 @@
     }
   }
 
-  &:not(.block *) {
+  button,
+  a:link,
+  a:visited {
+    border: 1px solid #fff;
+  }
+
+  .block & {
     button,
     a:link,
     a:visited {
-      border: 1px solid #fff;
+      border: 0;
     }
   }
 }
@@ -34,7 +43,7 @@
     margin: 0 auto;
   }
 
-  @media screen and (min-width: 45em) {
+  @mixin breakpoint {
     margin-top: 1rem;
     margin-bottom: 1rem;
     margin-left: calc(var(--offset) / 12 * 100% + 0.5rem);
@@ -47,12 +56,38 @@
   border-radius: 10px 10px 10px 0;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.6);
   padding: 1rem;
+}
 
-  > .row:first-child {
-    margin-top: 0;
+.callout {
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0.9),
+    rgba(255, 255, 255, 0.9)
+  );
+  border: 1px solid;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  &.primary {
+    background-color: $navy;
+    border-color: #fff;
+    color: $navy;
   }
 
-  > .row:last-child {
-    margin-bottom: 0;
+  &.alert {
+    background-color: $maroon;
+    border-color: #fff;
+    color: $maroon;
+  }
+
+  &.success {
+    background-color: $green;
+    border-color: #fff;
+    color: $green;
+  }
+
+  &.warning {
+    background-color: $orange;
+    border-color: #fff;
+    color: $orange;
   }
 }

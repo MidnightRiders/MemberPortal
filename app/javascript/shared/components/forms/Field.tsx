@@ -4,12 +4,68 @@ import styles from './styles.module.css';
 interface BaseFieldProps {
   name: string;
   setValue: (value: string) => void;
-  value: string | number;
+  value: string | number | null;
   required?: boolean;
 }
 
+type Autocomplete =
+  | 'off'
+  | 'on'
+  | 'name'
+  | 'honorific-prefix'
+  | 'given-name'
+  | 'additional-name'
+  | 'family-name'
+  | 'honorific-suffix'
+  | 'nickname'
+  | 'email'
+  | 'username'
+  | 'new-password'
+  | 'current-password'
+  | 'one-time-code'
+  | 'organization-title'
+  | 'organization'
+  | 'street-address'
+  | 'address-line1'
+  | 'address-line2'
+  | 'address-line3'
+  | 'address-level4'
+  | 'address-level3'
+  | 'address-level2'
+  | 'address-level1'
+  | 'country'
+  | 'country-name'
+  | 'postal-code'
+  | 'cc-name'
+  | 'cc-given-name'
+  | 'cc-additional-name'
+  | 'cc-family-name'
+  | 'cc-number'
+  | 'cc-exp'
+  | 'cc-exp-month'
+  | 'cc-exp-year'
+  | 'cc-csc'
+  | 'cc-type'
+  | 'transaction-currency'
+  | 'transaction-amount'
+  | 'language'
+  | 'bday'
+  | 'bday-day'
+  | 'bday-month'
+  | 'bday-year'
+  | 'sex'
+  | 'tel'
+  | 'tel-country-code'
+  | 'tel-national'
+  | 'tel-area-code'
+  | 'tel-local'
+  | 'tel-extension'
+  | 'impp'
+  | 'url'
+  | 'photo';
+
 type BaseTextFieldProps = BaseFieldProps & {
-  autocomplete?: string;
+  autocomplete?: Autocomplete;
   pattern?: string;
   placeholder?: string;
   minLength?: number;
@@ -68,7 +124,7 @@ const Field = ({
         class={styles.select}
         name={name}
         id={name}
-        value={value}
+        value={value ?? ''}
         onInput={({ currentTarget: { value } }) => setValue(value)}
         required={required}
       >
@@ -87,7 +143,7 @@ const Field = ({
         class={styles.textarea}
         name={name}
         id={name}
-        value={value}
+        value={value ?? ''}
         required={required}
         onInput={({ currentTarget: { value } }) => setValue(value)}
         rows={props.rows ?? 3}
@@ -100,7 +156,7 @@ const Field = ({
     return (
       <Password
         name={name}
-        value={value}
+        value={value ?? ''}
         setValue={setValue}
         required={required}
         {...props}
@@ -113,7 +169,7 @@ const Field = ({
       class={styles.textInput}
       name={name}
       id={name}
-      value={value}
+      value={value ?? ''}
       required={required}
       onInput={({ currentTarget: { value } }) => setValue(value)}
       {...props}

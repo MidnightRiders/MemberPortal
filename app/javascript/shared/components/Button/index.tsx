@@ -1,8 +1,7 @@
 import clsx from 'clsx';
-import { cloneElement, JSX } from 'preact';
+import type { JSX } from 'preact';
 import { Link } from 'wouter-preact';
-import Icon from '../Icon';
-import { FaBrandIcon, FaIcon } from '../Icon/values';
+import Icon, { IconName } from '../Icon';
 
 import styles from './styles.module.css';
 
@@ -11,17 +10,10 @@ type Props<T extends 'a' | 'button' | typeof Link> = Omit<
   'as' | 'secondary' | 'primary'
 > & {
   as?: T;
+  ghost?: true;
+  leftIcon?: JSX.Element | IconName;
+  rightIcon?: JSX.Element | IconName;
 } & (
-    | {
-        leftIcon?: JSX.Element;
-        rightIcon?: JSX.Element;
-      }
-    | {
-        leftFa?: FaIcon | FaBrandIcon;
-        rightFa?: FaIcon | FaBrandIcon;
-      }
-  ) &
-  (
     | {
         primary?: true;
       }
@@ -34,6 +26,9 @@ const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
   as: Component = 'button' as T,
   class: className,
   children,
+  ghost,
+  leftIcon,
+  rightIcon,
   ...rest
 }: Props<T>) => {
   let props: any;
@@ -47,18 +42,13 @@ const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
     primary = true;
   }
 
-  let leftIcon: JSX.Element | null = null;
-  let rightIcon: JSX.Element | null = null;
-  if ('leftIcon' in props || 'leftIcon' in props) {
-    ({ leftIcon, rightIcon } = props);
-  } else if ('leftFa' in props || 'rightFa' in props) {
-    const { leftFa, rightFa } = props;
-    if (leftFa) {
-      leftIcon = <Icon name={leftFa} />;
-    }
-    if (rightFa) {
-      rightIcon = <Icon name={rightFa} />;
-    }
+  let lfi = leftIcon;
+  let rti = rightIcon;
+  if (typeof lfi === 'string') {
+    lfi = <Icon name={lfi} />;
+  }
+  if (typeof rti === 'string') {
+    rti = <Icon name={rti} />;
   }
 
   return (
@@ -68,12 +58,13 @@ const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
         styles.button,
         secondary && styles.secondary,
         primary && styles.primary,
+        ghost && styles.ghost,
       )}
       {...props}
     >
-      {leftIcon && <span class={styles.leftIcon}>{leftIcon}</span>}
-      {children}
-      {rightIcon && <span class={styles.rightIcon}>{rightIcon}</span>}
+      {lfi && <span class={styles.leftIcon}>{lfi}</span>}
+      <span>{children}</span>
+      {rti && <span class={styles.rightIcon}>{rti}</span>}
     </Component>
   );
 };

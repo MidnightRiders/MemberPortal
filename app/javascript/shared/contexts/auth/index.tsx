@@ -1,4 +1,4 @@
-import { createContext, FunctionComponent } from 'preact';
+import { createContext, FunctionComponent, JSX } from 'preact';
 import cookies from 'js-cookie';
 
 import {

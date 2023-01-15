@@ -5,6 +5,7 @@ import type { JSX } from 'preact';
 import type { PasswordTextFieldProps } from './Field';
 
 import styles from './styles.module.css';
+import Icon from '../Icon';
 
 const Password = ({
   type,
@@ -32,7 +33,7 @@ const Password = ({
         class={styles.textInput}
         name={name}
         id={name}
-        value={value}
+        value={value ?? ''}
         ref={fieldRef}
         required={required}
         onInput={({ currentTarget: { value } }) => setValue(value)}
@@ -44,13 +45,7 @@ const Password = ({
         onClick={toggleShow}
         title={showPassword ? 'Hide Password' : 'Show Password'}
       >
-        <i
-          class={clsx(
-            'fa-regular',
-            'fa-fw',
-            showPassword ? 'fa-eye-slash' : 'fa-eye',
-          )}
-        />
+        <Icon name={showPassword ? 'eye' : 'eye-slash'} />
       </button>
     </div>
   );

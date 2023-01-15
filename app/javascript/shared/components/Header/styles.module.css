@@ -1,3 +1,5 @@
+@import url('~shared/styles/mixins');
+
 .pageHeader {
   align-items: center;
   box-sizing: border-box;
@@ -20,7 +22,7 @@
     small {
       font-size: 0.875rem;
 
-      @media screen and (min-width: 45em) {
+      @mixin breakpoint {
         font-size: 1.25rem;
       }
     }
@@ -31,7 +33,7 @@
       margin-right: 0.5rem;
       max-width: 4rem;
 
-      @media screen and (min-width: 45em) {
+      @mixin breakpoint {
         max-width: 6rem;
       }
     }
@@ -59,7 +61,7 @@
       font-weight: 400;
       color: #fff;
 
-      @media screen and (min-width: 45em) {
+      @mixin breakpoint {
         font-size: 1.25rem;
       }
     }
@@ -82,7 +84,7 @@
         margin-left: 1rem;
         max-width: 2rem;
 
-        @media screen and (min-width: 45em) {
+        @mixin breakpoint {
           font-size: 1.25rem;
           max-width: 4rem;
         }

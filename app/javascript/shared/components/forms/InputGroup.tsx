@@ -20,14 +20,11 @@ const InputGroup = ({
   const fieldCols = useMemo(() => {
     if (fields.some((f) => f.columns)) {
       const takenCols = fields.reduce((acc, f) => acc + (f.columns || 0), 0);
-      console.debug('takenCols', takenCols);
       const remainingFields = fields.reduce(
         (c, f) => c + (f.columns ? 0 : 1),
         0,
       );
-      console.debug('remainingFields', remainingFields);
       const remainingCols = 12 - takenCols;
-      console.debug('remainingCols', remainingCols);
       const remainingPerField = Math.round(remainingCols / remainingFields);
       return fields.map((f) => f.columns ?? remainingPerField);
     }

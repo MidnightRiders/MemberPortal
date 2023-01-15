@@ -1,12 +1,14 @@
 import clsx from 'clsx';
 import { useState } from 'preact/hooks';
+import type { IconName } from '~shared/components/Icon';
+import Icon from '~shared/components/Icon';
 
 import { useOnMount } from '~shared/hooks/effects';
 
 import styles from './styles.module.css';
 
-const ERROR_ICON_MAP: Record<string, string | undefined> = {
-  default: 'fa-solid fa-triangle-exclamation fa-fw',
+const ERROR_ICON_MAP: Record<string, IconName | undefined> = {
+  default: 'exclamation-triangle-fill',
 };
 
 const ErrorDisplay = ({
@@ -18,7 +20,7 @@ const ErrorDisplay = ({
 }) => {
   const [mounted, setMounted] = useState(false);
 
-  const icon = ERROR_ICON_MAP[origin] ?? ERROR_ICON_MAP.default;
+  const icon = ERROR_ICON_MAP[origin] ?? ERROR_ICON_MAP.default!;
 
   useOnMount(() => {
     setTimeout(() => {
@@ -28,7 +30,7 @@ const ErrorDisplay = ({
 
   return (
     <div className={clsx(styles.error, mounted && styles.mounted)}>
-      <i class={icon} /> {message}
+      <Icon name={icon} /> {message}
     </div>
   );
 };

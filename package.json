@@ -4,7 +4,6 @@
   "description": "Member Portal for Midnight Riders; migrating from HAML to Preact",
   "license": "MIT",
   "scripts": {
-    "build": "esbuild app/javascript/*.* --bundle --sourcemap --outdir=app/assets/builds --minify --public-path=assets",
     "build:css": "sass ./app/assets/stylesheets/entrypoints:./app/assets/builds --style=compressed --load-path=node_modules",
     "typecheck": "tsc --noEmit"
   },
@@ -38,6 +37,7 @@
     "@sentry/browser": "^7.28.1",
     "@stripe/react-stripe-js": "^1.16.1",
     "@stripe/stripe-js": "^1.46.0",
+    "bootstrap-icons": "^1.10.3",
     "clsx": "^1.2.1",
     "dayjs": "^1.11.7",
     "esbuild": "^0.16.4",

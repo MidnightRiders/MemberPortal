@@ -7,6 +7,7 @@ import { useLogOut } from '~shared/contexts/auth/hooks';
 import Paths from '~shared/paths';
 
 import styles from './styles.module.css';
+import Icon from '../Icon';
 
 const useNav = () => {
   const { user } = useAuthCtx();
@@ -27,7 +28,7 @@ const useNav = () => {
       {
         content: (
           <>
-            <i class="fa-solid fa-external-link fa-fw" /> Sites
+            <Icon name="box-arrow-up-right" /> Sites
           </>
         ),
         children: [
@@ -40,7 +41,7 @@ const useNav = () => {
                 external: true,
                 content: (
                   <>
-                    <i class="fa-solid fa-link fa-fw" /> Riders Website
+                    <Icon name="link" /> Riders Website
                   </>
                 ),
               },
@@ -49,7 +50,7 @@ const useNav = () => {
                 external: true,
                 content: (
                   <>
-                    <i class="fa-solid fa-shopping-cart fa-fw" /> Shop
+                    <Icon name="cart" /> Shop
                   </>
                 ),
               },
@@ -63,7 +64,7 @@ const useNav = () => {
               {
                 content: (
                   <>
-                    <i class="fa-brands fa-facebook fa-fw" /> Facebook
+                    <Icon name="facebook" /> Facebook
                   </>
                 ),
                 children: [
@@ -84,7 +85,7 @@ const useNav = () => {
                 external: true,
                 content: (
                   <>
-                    <i class="fa-brands fa-instagram fa-fw" /> Instagram
+                    <Icon name="instagram" /> Instagram
                   </>
                 ),
               },
@@ -93,7 +94,7 @@ const useNav = () => {
                 external: true,
                 content: (
                   <>
-                    <i class="fa-brands fa-twitter fa-fw" /> Twitter
+                    <Icon name="twitter" /> Twitter
                   </>
                 ),
               },
@@ -102,14 +103,14 @@ const useNav = () => {
                 external: true,
                 content: (
                   <>
-                    <i class="fa-brands fa-mastodon fa-fw" /> Mastodon
+                    <Icon name="mastodon" /> Mastodon
                   </>
                 ),
               },
               {
                 content: (
                   <>
-                    <i class="fa-brands fa-reddit fa-fw" /> Reddit
+                    <Icon name="reddit" /> Reddit
                   </>
                 ),
                 children: [
@@ -234,7 +235,7 @@ const useNav = () => {
       user && {
         content: (
           <>
-            <i class="fa-solid fa-home fa-fw" />
+            <Icon name="house-fill" />
             <span class={styles.iconOnly}>Home</span>
           </>
         ),
@@ -244,7 +245,7 @@ const useNav = () => {
         href: Paths.FAQ,
         content: (
           <>
-            <i class="fa-solid fa-circle-question fa-fw" />
+            <Icon name="question-circle-fill" />
             <span class={styles.iconOnly}>FAQ</span>
           </>
         ),
@@ -253,7 +254,7 @@ const useNav = () => {
         href: Paths.ContactUs,
         content: (
           <>
-            <i class="fa-regular fa-comment fa-fw fa-flip-horizontal" />
+            <Icon name="chat-fill" />
             <span class={styles.iconOnly}>Contact Us</span>
           </>
         ),
@@ -264,7 +265,7 @@ const useNav = () => {
               {
                 content: (
                   <>
-                    <i class="fa-regular fa-calendar fa-fw" /> Matches
+                    <Icon name="calendar" /> Matches
                   </>
                 ),
                 gap: true,
@@ -273,7 +274,7 @@ const useNav = () => {
               {
                 content: (
                   <>
-                    <i class="fa-solid fa-trophy fa-fw" /> Games
+                    <Icon name="trophy" /> Games
                   </>
                 ),
                 children: [
@@ -281,7 +282,7 @@ const useNav = () => {
                     href: Paths.Matches,
                     content: (
                       <>
-                        <i class="fa-solid fa-check fa-fw" /> RevGuess/Pick ’Em
+                        <Icon name="check" /> RevGuess/Pick ’Em
                       </>
                     ),
                   },
@@ -289,7 +290,7 @@ const useNav = () => {
                     href: Paths.Standings,
                     content: (
                       <>
-                        <i class="fa-solid fa-trophy fa-fw" /> Standings
+                        <Icon name="trophy" /> Standings
                       </>
                     ),
                   },
@@ -298,7 +299,7 @@ const useNav = () => {
                     external: true,
                     content: (
                       <>
-                        <i class="fa-solid fa-users fa-fw" /> MLS Fantasy
+                        <Icon name="people-fill" /> MLS Fantasy
                       </>
                     ),
                   },
@@ -311,7 +312,7 @@ const useNav = () => {
                         external: true,
                         content: (
                           <>
-                            <i class="fa-solid fa-users fa-fw" /> EPL Fantasy
+                            <Icon name="people-fill" /> EPL Fantasy
                           </>
                         ),
                       },
@@ -325,8 +326,7 @@ const useNav = () => {
                         href: Paths.MotMs,
                         content: (
                           <>
-                            <i class="fa-solid fa-list-ol fa-fw" /> MotY
-                            Rankings
+                            <Icon name="list-ol" /> MotY Rankings
                           </>
                         ),
                       },
@@ -338,7 +338,7 @@ const useNav = () => {
                 href: Paths.User,
                 content: (
                   <>
-                    <i class="fa-regular fa-user fa-fw" /> My Account
+                    <Icon name="person-fill" /> My Account
                   </>
                 ),
               },
@@ -346,7 +346,7 @@ const useNav = () => {
                 {
                   content: (
                     <>
-                      <i class="fa-solid fa-bolt fa-fw" />
+                      <Icon name="lightning" />
                       <span class={styles.iconOnly}>Admin</span>
                     </>
                   ),
@@ -359,7 +359,7 @@ const useNav = () => {
                           href: Paths.Users,
                           content: (
                             <>
-                              <i class="fa-solid fa-users fa-fw" /> Users
+                              <Icon name="people-fill" /> Users
                             </>
                           ),
                         },
@@ -367,8 +367,7 @@ const useNav = () => {
                           href: Paths.Transactions,
                           content: (
                             <>
-                              <i class="fa-regular fa-dollar fa-fw" />{' '}
-                              Transactions
+                              <Icon name="currency-dollar" /> Transactions
                             </>
                           ),
                         },
@@ -380,7 +379,7 @@ const useNav = () => {
                         href: Paths.Polls,
                         content: (
                           <>
-                            <i class="fa-solid fa-poll fa-fw" /> Polls
+                            <Icon name="bar-chart-line-fill" /> Polls
                           </>
                         ),
                       },
@@ -393,7 +392,7 @@ const useNav = () => {
                           href: Paths.Clubs,
                           content: (
                             <>
-                              <i class="fa-solid fa-shield fa-fw" /> Clubs
+                              <Icon name="shield" /> Clubs
                             </>
                           ),
                         },
@@ -401,7 +400,7 @@ const useNav = () => {
                           href: Paths.Players,
                           content: (
                             <>
-                              <i class="fa-solid fa-list fa-fw" /> Players
+                              <Icon name="list" /> Players
                             </>
                           ),
                         },
@@ -416,7 +415,7 @@ const useNav = () => {
               title: 'Sign Out',
               content: (
                 <>
-                  <i class="fa-solid fa-power-off fa-fw" />
+                  <Icon name="power" />
                   <span class={styles.iconOnly}>Sign Out</span>
                 </>
               ),
@@ -428,7 +427,7 @@ const useNav = () => {
               gap: true,
               content: (
                 <>
-                  <i class="fa-solid fa-pencil-square fa-fw" /> Sign Up
+                  <Icon name="pencil-square" /> Sign Up
                 </>
               ),
             },
@@ -436,7 +435,7 @@ const useNav = () => {
               href: Paths.SignIn,
               content: (
                 <>
-                  <i class="fa-solid fa-sign-in fa-fw" /> Sign In
+                  <Icon name="box-arrow-in-right" /> Sign In
                 </>
               ),
             },

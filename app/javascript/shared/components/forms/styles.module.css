@@ -41,6 +41,7 @@
 
   &:focus {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) inset;
+    border-color: $navy;
     background-position: 0% 100%;
     outline: none;
   }
@@ -84,11 +85,21 @@
 }
 
 .actions {
-  align-items: center;
-  display: flex;
+  @mixin breakpoint {
+    align-items: center;
+    display: flex;
 
-  > * + * {
-    margin-left: 0.5rem;
+    > * + * {
+      margin-left: 0.5rem;
+    }
+
+    &.expand {
+      justify-content: stretch;
+
+      > * {
+        flex: 1 0 auto;
+      }
+    }
   }
 }
 
@@ -109,7 +120,7 @@
     }
   }
 
-  button {
+  && button {
     background-color: #efefef;
     color: $silver;
     flex: 0 1 auto;
@@ -117,6 +128,7 @@
     border-left: 0;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
+    cursor: pointer;
     font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
@@ -127,6 +139,12 @@
       background-color: #e0e0e0;
       border-color: $silver;
       color: $navy;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $maroon;
+      color: $maroon;
     }
   }
 }
