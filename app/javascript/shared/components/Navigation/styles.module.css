@@ -1,0 +1,155 @@
+@import url('~shared/styles/mixins');
+@import url('~shared/styles/variables');
+
+.nav {
+  background: $silver;
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 700;
+  left: 0;
+  position: sticky;
+  right: 0;
+  top: 0;
+
+  .iconOnly {
+    @media screen and (min-width: 45em) {
+      display: none;
+    }
+  }
+
+  button {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+  }
+
+  a,
+  button,
+  li.groupHeader {
+    align-items: center;
+    box-sizing: border-box;
+    color: #fff;
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+    width: 100%;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    i[class^='fa-'] {
+      margin-right: 0.5em;
+    }
+  }
+
+  li.groupHeader {
+    cursor: default;
+
+    &,
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  a:link,
+  a:visited {
+    color: #fff;
+  }
+
+  ul {
+    background: $silver;
+    display: flex;
+    flex-flow: column nowrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    ul {
+      background-color: rgba(0, 0, 0, 0.1);
+
+      @media screen and (min-width: 45em) {
+        background-color: $silver;
+      }
+    }
+  }
+
+  li.gap {
+    margin-left: auto;
+  }
+
+  @media screen and (min-width: 45em) {
+    a,
+    button {
+      padding: 1rem 1rem;
+    }
+
+    > ul {
+      .expandable {
+        position: relative;
+
+        ul {
+          position: absolute;
+        }
+      }
+
+      > .expandable {
+        > ul {
+          top: 100%;
+          left: 0;
+
+          .expandable ul {
+            top: 0;
+            left: 100%;
+          }
+        }
+      }
+    }
+  }
+
+  > ul {
+    flex-flow: column nowrap;
+    max-width: 75rem;
+    margin: 0 auto;
+    width: 100%;
+
+    @media screen and (min-width: 45em) {
+      flex-flow: row nowrap;
+    }
+
+    @media screen and (min-width: 45em) {
+      a,
+      button,
+      li.groupHeader {
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .expand {
+    &::after {
+      @mixin fa ' \f078';
+      font-size: 0.75em;
+      opacity: 0.5;
+      margin-left: auto;
+      justify-self: flex-end;
+      padding-left: 0.5rem;
+    }
+
+    &:hover::after {
+      opacity: 1;
+    }
+  }
+
+  ul ul .expand::after {
+    @media screen and (min-width: 45em) {
+      @mixin fa ' \f054';
+    }
+  }
+}

@@ -1,4 +1,5 @@
-import type { JSX, VNode } from 'preact';
+import type { VNode } from 'preact';
+import Paths from './paths';
 
 export interface Route {
   <P>(props: P): VNode<unknown>;
@@ -9,11 +10,11 @@ export interface Route {
 type Component<P> = (props: P) => VNode<unknown>;
 
 interface MakeRoute {
-  <P>(path: string, component: Component<P>): Route;
-  <P>(path: string, displayName: string, component: Component<P>): Route;
-  <P>(path: string, authed: false, component: Component<P>): Route;
+  <P>(path: Paths, component: Component<P>): Route;
+  <P>(path: Paths, displayName: string, component: Component<P>): Route;
+  <P>(path: Paths, authed: false, component: Component<P>): Route;
   <P>(
-    path: string,
+    path: Paths,
     displayName: string,
     authed: false,
     component: Component<P>,
@@ -21,7 +22,7 @@ interface MakeRoute {
 }
 
 const makeRoute: MakeRoute = <P>(
-  path: string,
+  path: Paths,
   ...args:
     | [Component<P>]
     | [string, Component<P>]

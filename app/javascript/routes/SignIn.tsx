@@ -6,8 +6,9 @@ import { useAuthCtx } from '~shared/contexts/auth';
 import { useLogIn } from '~shared/contexts/auth/hooks';
 import { useErrorsCtx } from '~shared/contexts/errors';
 import makeRoute from '~shared/makeRoute';
+import Paths from '~shared/paths';
 
-const SignIn = makeRoute('/sign-in', () => {
+const SignIn = makeRoute(Paths.SignIn, () => {
   const { user } = useAuthCtx();
   const logIn = useLogIn();
   const { addError } = useErrorsCtx();

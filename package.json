@@ -44,6 +44,7 @@
     "jquery-ujs": "^1.2.3",
     "js-cookie": "^3.0.1",
     "logrocket": "^3.0.1",
+    "normalize.css": "^8.0.1",
     "preact": "^10.11.3",
     "sass": "^1.56.2",
     "wouter-preact": "^2.9.0"

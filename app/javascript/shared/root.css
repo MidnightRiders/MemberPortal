@@ -1,3 +1,5 @@
+@import url('normalize.css');
+
 @import url('~shared/styles/variables');
 @import url('@fortawesome/fontawesome-free/css/all');
 
@@ -7,7 +9,7 @@
     url('./assets/Mayflower.ttf') format('opentype');
 }
 
-/* html {
+html {
   height: 100%;
 }
 
@@ -19,24 +21,10 @@ body {
 }
 
 body {
-  color: #fff;
   font-family: 'Lato', Helvetica, sans-serif;
   height: auto;
   min-height: 100%;
   position: relative;
-  background: $maroon url('./assets/bg.png') repeat center;
-
-  &.wait {
-    &,
-    * {
-      cursor: wait !important;
-    }
-  }
-
-  a:link,
-  a:visited {
-    color: #dfdfdf;
-  }
 }
 
 main {
@@ -55,4 +43,4 @@ h6 {
   small {
     font-family: 'Lato', sans-serif;
   }
-} */
+}

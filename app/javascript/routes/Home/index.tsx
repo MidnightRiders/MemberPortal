@@ -1,9 +1,10 @@
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useOnMount } from '~shared/hooks/effects';
 import makeRoute from '~shared/makeRoute';
+import Paths from '~shared/paths';
 import { pageTitle } from '~shared/signals/app';
 
-const Home = makeRoute('/', () => {
+const Home = makeRoute(Paths.Home, () => {
   const { user } = useAuthCtx();
 
   useOnMount(() => {
