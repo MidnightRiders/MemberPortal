@@ -1,52 +1,34 @@
+import clsx from 'clsx';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
+import Field, { FieldProps } from './Field';
 
 import styles from './styles.module.css';
 
-interface Props {
-  autocomplete?: string;
+type Props = FieldProps & {
   columns?: [number, number];
   label?: string;
-  name: string;
-  placeholder?: string;
-  setValue: (value: string) => void;
-  type?: string;
-  value: string;
-}
+};
 
 const Input = ({
-  autocomplete,
   columns: [labelCol, inputCol] = [4, 8],
   label,
-  name,
-  placeholder,
-  setValue,
-  type = 'text',
-  value,
+  ...props
 }: Props) => (
   <Row center>
     {label && (
       <Column columns={labelCol}>
-        <label class={styles.label} for={name}>
+        <label
+          class={clsx(styles.label, props.required && styles.required)}
+          for={props.name}
+        >
           {label}
+          {props.required && <span title="required"> *</span>}
         </label>
       </Column>
     )}
     <Column columns={inputCol} offset={label ? 0 : labelCol}>
-      <input
-        class={styles.textInput}
-        type={type}
-        name={name}
-        id={name}
-        value={value}
-        onInput={({ currentTarget: { value } }) => setValue(value)}
-        {...Object.fromEntries(
-          [
-            autocomplete && ['autocomplete', autocomplete],
-            placeholder && ['placeholder', placeholder],
-          ].filter(Boolean) as [string, string][],
-        )}
-      />
+      <Field {...props} />
     </Column>
   </Row>
 );

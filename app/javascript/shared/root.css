@@ -44,15 +44,31 @@ h4,
 h5,
 h6 {
   font-family: 'Mayflower';
+  margin-top: 0;
+  font-weight: 400;
 
   small {
     font-family: 'Lato', sans-serif;
   }
 }
 
+.white {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  color: #fff;
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
+}
+
 .pageContainer {
   display: block;
-  padding: 0 1rem;
+  padding: 1rem;
   margin: 0 auto;
   max-width: 75rem;
   box-sizing: border-box;

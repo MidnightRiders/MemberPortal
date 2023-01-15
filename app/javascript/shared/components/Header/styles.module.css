@@ -73,13 +73,18 @@
       text-decoration: none;
       margin: 0;
 
+      h5 {
+        margin: 0;
+      }
+
       img {
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
         margin-left: 1rem;
-        max-width: 3rem;
+        max-width: 2rem;
 
         @media screen and (min-width: 45em) {
           font-size: 1.25rem;
-          max-width: 5rem;
+          max-width: 4rem;
         }
       }
     }

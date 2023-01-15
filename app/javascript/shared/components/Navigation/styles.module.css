@@ -12,6 +12,7 @@
   position: sticky;
   right: 0;
   top: 0;
+  z-index: 100;
 
   @media screen and (min-width: 78em) {
     &::before,

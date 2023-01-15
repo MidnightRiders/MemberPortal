@@ -1,12 +1,13 @@
 import { Redirect, Route, Switch } from 'wouter-preact';
 import Home from '~routes/Home';
 import SignIn from '~routes/SignIn';
+import SignUp from '~routes/SignUp/SignUp';
 import { useAuthCtx } from './contexts/auth';
 import type { Route as Rte } from './makeRoute';
 
 const unauthedRoutes: Rte[] = [];
 
-const loggedOutRoutes: Rte[] = [SignIn];
+const loggedOutRoutes: Rte[] = [SignIn, SignUp];
 
 const authedRoutes: Rte[] = [Home];
 
