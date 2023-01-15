@@ -117,8 +117,10 @@
     }
   }
 
-  li.gap {
-    margin-left: auto;
+  @media screen and (min-width: 45em) {
+    li.gap {
+      margin-left: auto;
+    }
   }
 
   @media screen and (min-width: 45em) {
