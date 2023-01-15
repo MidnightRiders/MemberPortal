@@ -54,7 +54,7 @@ MidnightRiders::Application.routes.draw do
 
   as :user do
     namespace :api, constraints: { format: :json } do
-      get :user, to: 'users#current'
+      get :user, to: 'users#current', as: :current_user
       resources :users
 
       namespace :sessions do
