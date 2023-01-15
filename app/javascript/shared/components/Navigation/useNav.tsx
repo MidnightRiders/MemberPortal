@@ -6,7 +6,6 @@ import type { Node } from '~shared/components/Navigation/NavNode';
 import { useLogOut } from '~shared/contexts/auth/hooks';
 import Paths from '~shared/paths';
 
-import styles from './styles.module.css';
 import Icon from '../Icon';
 
 const useNav = () => {
@@ -26,11 +25,8 @@ const useNav = () => {
   return useMemo<Node[]>(
     () => [
       {
-        content: (
-          <>
-            <Icon name="box-arrow-up-right" /> Sites
-          </>
-        ),
+        icon: 'box-arrow-up-right',
+        content: 'Sites',
         children: [
           {
             content: 'Riders',
@@ -39,20 +35,14 @@ const useNav = () => {
               {
                 href: 'https://midnightriders.com',
                 external: true,
-                content: (
-                  <>
-                    <Icon name="link" /> Riders Website
-                  </>
-                ),
+                icon: 'link',
+                content: 'Riders Website',
               },
               {
                 href: 'https://midnightriders.com/shop',
                 external: true,
-                content: (
-                  <>
-                    <Icon name="cart" /> Shop
-                  </>
-                ),
+                icon: 'cart',
+                content: 'Shop',
               },
             ],
           },
@@ -62,11 +52,8 @@ const useNav = () => {
             type: 'group',
             children: [
               {
-                content: (
-                  <>
-                    <Icon name="facebook" /> Facebook
-                  </>
-                ),
+                icon: 'facebook',
+                content: 'Facebook',
                 children: [
                   {
                     href: 'https://facebook.com/groups/MidnightRiders2023/',
@@ -83,36 +70,24 @@ const useNav = () => {
               {
                 href: 'https://instagram.com/midnightriders1995',
                 external: true,
-                content: (
-                  <>
-                    <Icon name="instagram" /> Instagram
-                  </>
-                ),
+                icon: 'instagram',
+                content: 'Instagram',
               },
               {
                 href: 'https://twitter.com/MidnightRiders',
                 external: true,
-                content: (
-                  <>
-                    <Icon name="twitter" /> Twitter
-                  </>
-                ),
+                icon: 'twitter',
+                content: 'Twitter',
               },
               {
                 href: 'https://tifosi.social/@MidnightRiders',
                 external: true,
-                content: (
-                  <>
-                    <Icon name="mastodon" /> Mastodon
-                  </>
-                ),
+                icon: 'mastodon',
+                content: 'Mastodon',
               },
               {
-                content: (
-                  <>
-                    <Icon name="reddit" /> Reddit
-                  </>
-                ),
+                icon: 'reddit',
+                content: 'Reddit',
                 children: [
                   {
                     href: 'https://reddit.com/r/newenglandrevolution',
@@ -213,7 +188,6 @@ const useNav = () => {
                     external: true,
                     content: (
                       <>
-                        {' '}
                         Top Shelf Cookies <small>Quincy, MA</small>
                         {user?.isCurrentMember && (
                           <>
@@ -233,75 +207,51 @@ const useNav = () => {
         ],
       },
       user && {
-        content: (
-          <>
-            <Icon name="house-fill" />
-            <span class={styles.iconOnly}>Home</span>
-          </>
-        ),
+        icon: 'house-fill',
+        content: 'Home',
+        collapse: true,
         href: Paths.Home,
       },
       {
         href: Paths.FAQ,
-        content: (
-          <>
-            <Icon name="question-circle-fill" />
-            <span class={styles.iconOnly}>FAQ</span>
-          </>
-        ),
+        icon: 'question-circle-fill',
+        content: 'FAQ',
+        collapse: true,
       },
       {
         href: Paths.ContactUs,
-        content: (
-          <>
-            <Icon name="chat-fill" />
-            <span class={styles.iconOnly}>Contact Us</span>
-          </>
-        ),
+        icon: 'chat-fill',
+        content: 'Contact Us',
+        collapse: true,
       },
       user
         ? [
             true /* current_user.current_member? */ && [
               {
-                content: (
-                  <>
-                    <Icon name="calendar" /> Matches
-                  </>
-                ),
+                icon: 'calendar',
+                content: 'Matches',
                 gap: true,
                 href: Paths.Matches,
               },
               {
-                content: (
-                  <>
-                    <Icon name="trophy" /> Games
-                  </>
-                ),
+                icon: 'trophy',
+                content: 'Games',
                 children: [
                   {
                     href: Paths.Matches,
-                    content: (
-                      <>
-                        <Icon name="check" /> RevGuess/Pick ’Em
-                      </>
-                    ),
+                    icon: 'check',
+                    content: 'RevGuess/Pick ’Em',
                   },
                   {
                     href: Paths.Standings,
-                    content: (
-                      <>
-                        <Icon name="trophy" /> Standings
-                      </>
-                    ),
+                    icon: 'trophy',
+                    content: 'Standings',
                   },
                   {
                     href: 'https://fantasy.mlssoccer.com/#classic/leagues/771/join/AMN4KR2S',
                     external: true,
-                    content: (
-                      <>
-                        <Icon name="people-fill" /> MLS Fantasy
-                      </>
-                    ),
+                    icon: 'people-fill',
+                    content: 'MLS Fantasy',
                   },
                   {
                     content: 'Other Fantasy',
@@ -310,11 +260,8 @@ const useNav = () => {
                       {
                         href: 'http://fantasy.premierleague.com/my-leagues/290319/join/?autojoin-code=1206043-290319',
                         external: true,
-                        content: (
-                          <>
-                            <Icon name="people-fill" /> EPL Fantasy
-                          </>
-                        ),
+                        icon: 'people-fill',
+                        content: 'EPL Fantasy',
                       },
                     ],
                   },
@@ -324,11 +271,8 @@ const useNav = () => {
                     children: [
                       {
                         href: Paths.MotMs,
-                        content: (
-                          <>
-                            <Icon name="list-ol" /> MotY Rankings
-                          </>
-                        ),
+                        icon: 'list-ol',
+                        content: 'MotY Rankings',
                       },
                     ],
                   },
@@ -336,20 +280,14 @@ const useNav = () => {
               },
               {
                 href: Paths.User,
-                content: (
-                  <>
-                    <Icon name="person-fill" /> My Account
-                  </>
-                ),
+                icon: 'person-fill',
+                content: 'My Account',
               },
               true /* user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board')) */ && [
                 {
-                  content: (
-                    <>
-                      <Icon name="lightning" />
-                      <span class={styles.iconOnly}>Admin</span>
-                    </>
-                  ),
+                  icon: 'lightning',
+                  content: 'Admin',
+                  collapse: true,
 
                   children: [
                     {
@@ -357,19 +295,13 @@ const useNav = () => {
                       children: [
                         true /* can? :view, :users */ && {
                           href: Paths.Users,
-                          content: (
-                            <>
-                              <Icon name="people-fill" /> Users
-                            </>
-                          ),
+                          icon: 'people-fill',
+                          content: 'Users',
                         },
                         true /* can? :transactions, :static_page */ && {
                           href: Paths.Transactions,
-                          content: (
-                            <>
-                              <Icon name="currency-dollar" /> Transactions
-                            </>
-                          ),
+                          icon: 'currency-dollar',
+                          content: 'Transactions',
                         },
                       ],
                     },
@@ -377,11 +309,8 @@ const useNav = () => {
                       { divider: true },
                       {
                         href: Paths.Polls,
-                        content: (
-                          <>
-                            <Icon name="bar-chart-line-fill" /> Polls
-                          </>
-                        ),
+                        icon: 'bar-chart-line-fill',
+                        content: 'Polls',
                       },
                     ],
                     { divider: true },
@@ -390,19 +319,13 @@ const useNav = () => {
                       children: [
                         {
                           href: Paths.Clubs,
-                          content: (
-                            <>
-                              <Icon name="shield" /> Clubs
-                            </>
-                          ),
+                          icon: 'shield',
+                          content: 'Clubs',
                         },
                         true /* can? :view, :players */ && {
                           href: Paths.Players,
-                          content: (
-                            <>
-                              <Icon name="list" /> Players
-                            </>
-                          ),
+                          icon: 'list',
+                          content: 'Players',
                         },
                       ],
                     },
@@ -412,32 +335,22 @@ const useNav = () => {
             ],
             {
               onClick: handleLogOut,
-              title: 'Sign Out',
-              content: (
-                <>
-                  <Icon name="power" />
-                  <span class={styles.iconOnly}>Sign Out</span>
-                </>
-              ),
+              collapse: true,
+              icon: 'power',
+              content: 'Sign Out',
             },
           ]
         : [
             {
               href: Paths.SignUp,
               gap: true,
-              content: (
-                <>
-                  <Icon name="pencil-square" /> Sign Up
-                </>
-              ),
+              icon: 'pencil-square',
+              content: 'Sign Up',
             },
             {
               href: Paths.SignIn,
-              content: (
-                <>
-                  <Icon name="box-arrow-in-right" /> Sign In
-                </>
-              ),
+              icon: 'box-arrow-in-right',
+              content: 'Sign In',
             },
           ],
     ],

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import type { ComponentChild, JSX } from 'preact';
 import { useCallback, useEffect, useState } from 'preact/hooks';
 import { useLocation } from 'wouter-preact';
-import Icon from '../Icon';
+import Icon, { IconName } from '../Icon';
 import NavNode, { Node } from './NavNode';
 
 import styles from './styles.module.css';
@@ -10,12 +10,20 @@ import styles from './styles.module.css';
 interface Props {
   content: ComponentChild;
   gap?: boolean;
+  icon?: IconName | undefined;
   nodes: Node[];
+  title?: string;
 }
 
 const stopPropagation = (e: Event) => e.stopPropagation();
 
-export const Expandable = ({ content, gap = false, nodes }: Props) => {
+export const Expandable = ({
+  content,
+  gap = false,
+  icon,
+  nodes,
+  title,
+}: Props) => {
   const [expanded, setExpanded] = useState(false);
   const toggle = useCallback(() => setExpanded((e) => !e), []);
   const [location] = useLocation();
@@ -49,10 +57,16 @@ export const Expandable = ({ content, gap = false, nodes }: Props) => {
     >
       <button
         type="button"
-        class={clsx(styles.expand, expanded && styles.expanded)}
+        class={clsx(
+          styles.expand,
+          expanded && styles.expanded,
+          title && styles.collapse,
+        )}
         onClick={toggle}
+        {...(title ? { title } : {})}
       >
-        {content} <Icon name="chevron-down" />
+        {icon && <Icon name={icon} />} <span>{content}</span>{' '}
+        <Icon name="chevron-down" />
       </button>
       {expanded && (
         <ul>

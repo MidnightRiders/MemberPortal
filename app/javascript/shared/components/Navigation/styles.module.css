@@ -52,7 +52,11 @@
     }
   }
 
-  .iconOnly {
+  [class^='bi-'] + span {
+    margin-left: 0.5em;
+  }
+
+  .collapse i + span {
     @mixin breakpoint {
       display: none;
     }
@@ -83,10 +87,6 @@
 
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    i[class^='bi-'] {
-      margin-right: 0.5em;
     }
   }
 

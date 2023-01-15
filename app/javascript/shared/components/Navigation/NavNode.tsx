@@ -1,36 +1,53 @@
 import clsx from 'clsx';
 import type { ComponentChild, JSX } from 'preact';
 import { Link } from 'wouter-preact';
+import Icon, { IconName } from '../Icon';
 
 import { Expandable } from './Expandable';
 
 import styles from './styles.module.css';
 
 export type Node =
-  | ({
-      content: ComponentChild;
+  | (({
       gap?: boolean;
+      icon?: IconName;
     } & (
       | {
-          href: string;
-          external?: boolean;
-          title?: string;
+          content: string;
+          collapse?: boolean;
         }
       | {
-          onClick: JSX.GenericEventHandler<HTMLButtonElement>;
-          title?: string;
+          content: Exclude<ComponentChild, string>;
+          collapse?: string;
         }
-      | {
-          type?: 'group' | 'dropdown';
-          children: Node[];
-          title?: string;
-        }
-    ))
+    )) &
+      (
+        | {
+            href: string;
+            external?: boolean;
+          }
+        | {
+            onClick: JSX.GenericEventHandler<HTMLButtonElement>;
+          }
+        | {
+            type?: 'group' | 'dropdown';
+            children: Node[];
+          }
+      ))
   | {
       divider: true;
     }
   | (false | null | undefined)
   | Node[];
+
+const titleFromNode = (node: Node) => {
+  if (!node) return {};
+  if (!('collapse' in node)) return {};
+
+  if (typeof node.collapse === 'string') return { title: node.collapse };
+  if (typeof node.content === 'string') return { title: node.content };
+  return {};
+};
 
 const NavNode = ({ node }: { node: Node }) => {
   if (!node) return null;
@@ -41,18 +58,24 @@ const NavNode = ({ node }: { node: Node }) => {
       return (
         <Expandable
           content={content}
+          icon={node.icon}
           gap={node.gap ?? false}
           nodes={children}
+          {...titleFromNode(node)}
         />
       );
     }
     return (
       <>
         <li
-          class={clsx(styles.groupHeader, node.gap && styles.gap)}
-          {...(node.title ? { title: node.title } : {})}
+          class={clsx(
+            styles.groupHeader,
+            node.gap && styles.gap,
+            node.collapse && styles.collapse,
+          )}
+          {...titleFromNode(node)}
         >
-          {content}
+          {node.icon && <Icon name={node.icon} />} <span>{content}</span>
         </li>
         {children.map((n) => (
           <NavNode node={n} />
@@ -75,26 +98,38 @@ const NavNode = ({ node }: { node: Node }) => {
       <li class={clsx(node.gap && styles.gap)}>
         <button
           type="button"
+          class={clsx(node.collapse && styles.collapse)}
           onClick={node.onClick}
-          {...(node.title ? { title: node.title } : {})}
+          {...titleFromNode(node)}
         >
-          {node.content}
+          {node.icon && <Icon name={node.icon} />} <span>{node.content}</span>
         </button>
       </li>
     );
   }
 
-  const { external, gap, href, content, title, ...rest } = node;
+  const { external, gap, href, icon, content, collapse, ...rest } = node;
   const El = external ? 'a' : Link;
+  const linkProps = {
+    ...titleFromNode(node),
+    class: clsx(collapse && styles.collapse),
+  };
   return (
     <li class={clsx(gap && styles.gap)}>
       <El
         href={href}
         {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
-        {...(title ? { title: title } : {})}
-        {...rest}
+        {...linkProps}
       >
-        {!external ? <a>{content}</a> : content}
+        {!external ? (
+          <a {...linkProps}>
+            {icon && <Icon name={icon} />} <span>{content}</span>
+          </a>
+        ) : (
+          <>
+            {icon && <Icon name={icon} />} <span>{content}</span>
+          </>
+        )}
       </El>
     </li>
   );

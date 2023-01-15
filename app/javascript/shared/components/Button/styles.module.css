@@ -40,6 +40,7 @@
     }
 
     &.ghost.ghost {
+      background-image: none;
       border: 1px solid;
       background: transparent;
     }
