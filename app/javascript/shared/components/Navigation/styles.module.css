@@ -2,7 +2,7 @@
 @import url('~shared/styles/variables');
 
 .nav {
-  background: $silver;
+  background: $maroon;
   display: block;
   font-size: 0.875rem;
   font-weight: 700;
@@ -10,6 +10,27 @@
   position: sticky;
   right: 0;
   top: 0;
+
+  @media screen and (min-width: 78em) {
+    &::before,
+    &::after {
+      content: '';
+      display: block;
+      border: 1.5rem solid transparent;
+      position: absolute;
+      top: 0;
+    }
+
+    &::before {
+      border-left-color: $navy;
+      left: 0;
+    }
+
+    &::after {
+      border-right-color: $navy;
+      right: 0;
+    }
+  }
 
   .mobileExpand {
     + ul {
@@ -81,7 +102,7 @@
   }
 
   ul {
-    background: $silver;
+    background: $maroon;
     flex-flow: column nowrap;
     list-style: none;
     margin: 0;
@@ -91,7 +112,7 @@
       background-color: rgba(0, 0, 0, 0.1);
 
       @media screen and (min-width: 45em) {
-        background-color: $silver;
+        background-color: $maroon;
       }
     }
   }

@@ -21,10 +21,19 @@ body {
 }
 
 body {
+  background-color: $navy;
   font-family: 'Lato', Helvetica, sans-serif;
   height: auto;
   min-height: 100%;
   position: relative;
+
+  @media screen and (min-width: 45em) {
+    background-image: linear-gradient($silver, $silver 100%),
+      linear-gradient($silver, $silver 100%);
+    background-position: calc(50% - 38.5rem) 0, calc(50% + 37.5rem) 0;
+    background-size: 1rem 100%, 1rem 100%;
+    background-repeat: no-repeat;
+  }
 }
 
 main {
