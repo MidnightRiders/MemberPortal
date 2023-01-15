@@ -110,19 +110,21 @@ export const ErrorsProvider: FunctionComponent = ({ children }) => {
     [errors],
   );
 
-  const sortedErrors = useMemo(() => {
-    return Object.entries(errors)
-      .reduce<(Err & { origin: string })[]>(
-        (acc, [key, errs]) => [
-          ...acc,
-          ...errs
-            .filter(({ local }) => !local)
-            .map((err) => ({ ...err, origin: key })),
-        ],
-        [],
-      )
-      .sort((a, b) => a.timestamp - b.timestamp);
-  }, [errors]);
+  const sortedErrors = useMemo(
+    () =>
+      Object.entries(errors)
+        .reduce<(Err & { origin: string })[]>(
+          (acc, [key, errs]) => [
+            ...acc,
+            ...errs
+              .filter(({ local }) => !local)
+              .map((err) => ({ ...err, origin: key })),
+          ],
+          [],
+        )
+        .sort((a, b) => a.timestamp - b.timestamp),
+    [errors],
+  );
 
   const value = useMemo(
     () => ({ errors, addError, getError, getErrors }),
@@ -132,7 +134,7 @@ export const ErrorsProvider: FunctionComponent = ({ children }) => {
   return (
     <ErrorsCtx.Provider value={value}>
       {!!sortedErrors.length && (
-        <div class={styles.errors}>
+        <div className={styles.errors}>
           {sortedErrors.map(({ message, origin, timestamp }) => (
             <ErrorDisplay
               key={`${message}-${timestamp}`}

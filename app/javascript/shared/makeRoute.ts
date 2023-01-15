@@ -1,8 +1,10 @@
 import type { VNode } from 'preact';
+
 import Paths from './paths';
 
 export interface Route {
   <P>(props: P): VNode<unknown>;
+  authed: boolean;
   path: string;
   displayName?: string;
 }
@@ -35,14 +37,14 @@ const makeRoute: MakeRoute = <P>(
     component = args[0] as Route;
   } else if (typeof args[1] === 'function') {
     component = args[1] as Route;
-    if (typeof args[0] === 'string') component.displayName = args[0];
+    if (typeof args[0] === 'string') [component.displayName] = args;
   } else {
     component = args[2] as Route;
-    component.displayName = args[0];
-    authed = args[1];
+    [component.displayName, authed] = args;
   }
-  (component as Route).path = path;
-  return component as Route;
+  component.authed = authed;
+  component.path = path;
+  return component;
 };
 
 export default makeRoute;

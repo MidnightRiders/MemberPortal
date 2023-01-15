@@ -1,6 +1,6 @@
-import { createContext, FunctionComponent, JSX } from 'preact';
 import cookies from 'js-cookie';
-
+import LogRocket from 'logrocket';
+import { createContext, FunctionComponent, JSX } from 'preact';
 import {
   StateUpdater,
   useContext,
@@ -8,8 +8,8 @@ import {
   useMemo,
   useState,
 } from 'preact/hooks';
+
 import { noop } from '~helpers/utils';
-import LogRocket from 'logrocket';
 
 export interface BaseUser {
   id: number;

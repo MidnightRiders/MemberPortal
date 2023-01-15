@@ -1,9 +1,11 @@
 import { useEffect } from 'preact/hooks';
 import { Redirect, Route, Switch, useLocation } from 'wouter-preact';
+
 import Contact from '~routes/Contact';
 import Home from '~routes/Home';
 import SignIn from '~routes/SignIn';
 import SignUp from '~routes/SignUp/SignUp';
+
 import { useAuthCtx } from './contexts/auth';
 import type { Route as Rte } from './makeRoute';
 
@@ -31,7 +33,7 @@ const Routes = () => {
     if (scrollY === currentScroll) return undefined;
 
     const step = Math.max(1, Math.floor((currentScroll - scrollY) / 25));
-    let intvl = setInterval(() => {
+    const intvl = setInterval(() => {
       currentScroll -= step;
       window.scrollTo(0, currentScroll);
       if (currentScroll <= scrollY) {

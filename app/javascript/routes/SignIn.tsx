@@ -1,14 +1,14 @@
 import type { JSX } from 'preact';
 import { useCallback, useState } from 'preact/hooks';
-import { Link, Redirect } from 'wouter-preact';
+import { Redirect } from 'wouter-preact';
+
 import Button from '~shared/components/Button';
 import Actions from '~shared/components/forms/Actions';
 import Input from '~shared/components/forms/Input';
-import Icon from '~shared/components/Icon';
 import Block from '~shared/components/layout/Block';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
-
+import Link from '~shared/components/Link';
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useLogIn } from '~shared/contexts/auth/hooks';
 import { useErrorsCtx } from '~shared/contexts/errors';
@@ -33,7 +33,7 @@ const SignIn = makeRoute(Paths.SignIn, () => {
 
       logIn(username, password);
     },
-    [username, password],
+    [username, password], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   if (user) {

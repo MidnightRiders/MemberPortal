@@ -1,5 +1,6 @@
 import type { JSX } from 'preact';
 import { useCallback, useMemo, useState } from 'preact/hooks';
+
 import { useErrorsCtx } from '~shared/contexts/errors';
 
 type Setters<F extends Record<string, unknown>> = {
@@ -39,7 +40,23 @@ export const fieldIsEmpty = <F extends Field>(
   return !value;
 };
 
-const useForm = <F extends Record<string, Field>, R>(
+interface UseForm {
+  <R, F extends Record<string, Field<string | number>>>(
+    endpoint: `/${string}`,
+    fields: F,
+    onSubmit: (response: R) => void | Promise<void>,
+    deps?: unknown[],
+  ): readonly [
+    ValuesFromFields<typeof fields>,
+    Setters<typeof fields>,
+    JSX.GenericEventHandler<HTMLFormElement>,
+  ];
+}
+
+const useForm: UseForm = <
+  R,
+  F extends Record<string, Field> = Record<string, Field<string | number>>,
+>(
   endpoint: `/${string}`,
   fields: F,
   onSubmit: (response: R) => void | Promise<void>,
@@ -73,14 +90,14 @@ const useForm = <F extends Record<string, Field>, R>(
       ...prev,
       [name]: coerced,
     }));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const setters: Setters<F> = useMemo(
     () =>
       (Object.keys(fields) as (keyof F)[]).map(
         (key) => (value: string) => setValue(key, value),
       ),
-    [],
+    [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   const handleSubmit = useCallback<JSX.GenericEventHandler<HTMLFormElement>>(
@@ -105,8 +122,8 @@ const useForm = <F extends Record<string, Field>, R>(
 
         if (!response.ok) throw response;
 
-        const body = await response.json();
-        await onSubmit(await response.json());
+        const body: R = await response.json();
+        await onSubmit(body);
       } catch (err) {
         let message: string | undefined;
         if (err instanceof Response) {
@@ -115,13 +132,15 @@ const useForm = <F extends Record<string, Field>, R>(
             if (body.message) {
               message = `Error ${err.status} ${err.statusText}: ${body.message}`;
             }
-          } catch {}
+          } catch {
+            // noop
+          }
           message ??= `Error: ${err.status} ${err.statusText}`;
         }
         addError(endpoint, message || 'An unexpected error occurred');
       }
     },
-    [values, ...deps],
+    [values, ...deps], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   return [values, setters, handleSubmit] as const;

@@ -5,6 +5,7 @@ import { useLocation } from 'wouter-preact';
 
 import NavNode from '~shared/components/Navigation/NavNode';
 import useNav from '~shared/components/Navigation/useNav';
+
 import Icon from '../Icon';
 
 import styles from './styles.module.css';
@@ -26,15 +27,15 @@ const Navigation = () => {
   }, []);
 
   return (
-    <nav class={styles.nav}>
+    <nav className={styles.nav}>
       <button
         type="button"
-        class={styles.mobileExpand}
+        className={styles.mobileExpand}
         onClick={toggleMobileExpand}
       >
         <Icon name="list" /> Menu
       </button>
-      <ul class={clsx(mobileExpand && styles.mobileExpanded)}>
+      <ul className={clsx(mobileExpand && styles.mobileExpanded)}>
         {navItems.map((node) => (
           <NavNode node={node} />
         ))}

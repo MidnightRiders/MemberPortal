@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import { useState } from 'preact/hooks';
+
 import type { IconName } from '~shared/components/Icon';
 import Icon from '~shared/components/Icon';
-
 import { useOnMount } from '~shared/hooks/effects';
 
 import styles from './styles.module.css';

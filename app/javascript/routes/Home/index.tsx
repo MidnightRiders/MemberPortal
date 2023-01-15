@@ -1,14 +1,14 @@
 import Block from '~shared/components/layout/Block';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
-import { useAuthCtx } from '~shared/contexts/auth';
+// import { useAuthCtx } from '~shared/contexts/auth';
 import { useOnMount } from '~shared/hooks/effects';
 import makeRoute from '~shared/makeRoute';
 import Paths from '~shared/paths';
 import { pageTitle } from '~shared/signals/app';
 
 const Home = makeRoute(Paths.Home, () => {
-  const { user } = useAuthCtx();
+  // const { user } = useAuthCtx();
 
   useOnMount(() => {
     const prevValue = pageTitle.value;

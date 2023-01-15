@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { JSX, FunctionComponent } from 'preact';
+import { FunctionComponent, JSX } from 'preact';
 
 import styles from './styles.module.css';
 
@@ -18,7 +18,7 @@ const Column: FunctionComponent<
   ...rest
 }) => (
   <div
-    class={clsx(className, styles.column, center && styles.center)}
+    className={clsx(className, styles.column, center && styles.center)}
     style={{ '--cols': columns, '--offset': center ? 0 : offset }}
     {...rest}
   >

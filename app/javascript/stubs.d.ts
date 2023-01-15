@@ -20,6 +20,7 @@ declare module '*.gif' {
 
 declare module '*.svg' {
   import type { VNode } from 'preact';
+
   const svg: VNode<unknown>;
   export default svg;
 }

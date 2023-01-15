@@ -28,27 +28,29 @@ export const CacheProvider: FunctionComponent = ({ children }) => {
   const [cached, setCached] = useState<Record<string, unknown>>({});
 
   const set = useCallback((key: string, value: unknown) => {
-    setCached((cached) => ({ ...cached, [key]: value }));
+    setCached((prev) => ({ ...prev, [key]: value }));
   }, []);
 
-  const get: CacheGetter = <T extends unknown>(
-    key: string,
-    orElse: T | (() => T | Promise<T>) | null = null,
-  ) => {
-    if (cached[key]) return cached[key] as T;
-    if (typeof orElse === 'function') {
-      const value = (orElse as () => T | Promise<T>)();
-      if (value instanceof Promise) {
-        value.then((v) => set(key, v));
-      } else {
-        set(key, orElse);
+  const get: CacheGetter = useCallback(
+    <T extends unknown>(
+      key: string,
+      orElse: T | (() => T | Promise<T>) | null = null,
+    ) => {
+      if (cached[key]) return cached[key] as T;
+      if (typeof orElse === 'function') {
+        const value = (orElse as () => T | Promise<T>)();
+        if (value instanceof Promise) {
+          value.then((v) => set(key, v));
+        } else {
+          set(key, orElse);
+        }
+        return null;
       }
-      return null;
-    } else {
       set(key, orElse);
       return orElse;
-    }
-  };
+    },
+    [cached, set],
+  );
 
   const value = useMemo(() => ({ cached, set, get }), [cached, set, get]);
 

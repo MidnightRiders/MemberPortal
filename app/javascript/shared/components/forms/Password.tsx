@@ -1,14 +1,14 @@
-import clsx from 'clsx';
-import { useCallback, useRef, useState } from 'preact/hooks';
 import type { JSX } from 'preact';
+import { useCallback, useRef, useState } from 'preact/hooks';
+
+import Icon from '../Icon';
 
 import type { PasswordTextFieldProps } from './Field';
 
 import styles from './styles.module.css';
-import Icon from '../Icon';
 
 const Password = ({
-  type,
+  type: _t,
   name,
   value,
   setValue,
@@ -28,15 +28,15 @@ const Password = ({
   );
 
   return (
-    <div class={styles.password}>
+    <div className={styles.password}>
       <input
-        class={styles.textInput}
+        className={styles.textInput}
         name={name}
         id={name}
         value={value ?? ''}
         ref={fieldRef}
         required={required}
-        onInput={({ currentTarget: { value } }) => setValue(value)}
+        onInput={({ currentTarget: { value: v } }) => setValue(v)}
         type={showPassword ? 'text' : 'password'}
         {...props}
       />

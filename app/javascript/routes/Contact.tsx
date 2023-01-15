@@ -9,7 +9,7 @@ import Paths from '~shared/paths';
 const Contact = makeRoute(Paths.ContactUs, () => (
   <Row>
     <Column columns={4}>
-      <h2 class="white">Contact Us</h2>
+      <h2 className="white">Contact Us</h2>
     </Column>
     <Column columns={8}>
       <Block>

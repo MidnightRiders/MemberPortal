@@ -37,7 +37,7 @@ export const pathTo: PathTo = (
   const pathWithParams = Object.entries(
     typeof params === 'object' ? params : { id: params },
   ).reduce<string>(
-    (path, [key, value]) => path.replace(`:${key}`, value.toString()),
+    (p, [key, value]) => p.replace(`:${key}`, value.toString()),
     path,
   );
 

@@ -1,5 +1,7 @@
 import cookies from 'js-cookie';
+
 import { COOKIE_NAME } from '~shared/contexts/auth';
+import { error } from '~shared/debug';
 
 export class FetchError extends Error {
   public readonly name = 'FetchError';
@@ -25,11 +27,7 @@ export type Fetcher = <T>(
 
 const createFetch =
   (method: 'GET' | 'PATCH' | 'POST' | 'PUT' | 'DELETE'): Fetcher =>
-  async <T extends unknown>(
-    url: string,
-    data?: unknown,
-    options?: FetchOptions,
-  ) => {
+  async <T>(url: string, data?: unknown, options?: FetchOptions) => {
     try {
       let auth = options?.headers?.Authorization;
       if (!auth) {
@@ -76,9 +74,11 @@ const createFetch =
           } else {
             message = err.statusText;
           }
-        } catch {}
-      } else if (process.env.RAILS_ENV === 'development') {
-        console.error(err);
+        } catch {
+          // noop
+        }
+      } else {
+        error(err);
       }
       throw new FetchError(message, url, status);
     }

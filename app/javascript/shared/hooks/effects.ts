@@ -6,7 +6,8 @@ export const useOnMount = (
   useEffect(() => {
     const resp = callback();
     if (typeof resp === 'function') return resp;
-  }, []);
+    return undefined;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 };
 
 export const useOnUpdate = (
@@ -17,8 +18,8 @@ export const useOnUpdate = (
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
-    } else {
-      return callback();
+      return undefined;
     }
-  }, [deps]);
+    return callback();
+  }, deps); // eslint-disable-line react-hooks/exhaustive-deps
 };

@@ -1,6 +1,6 @@
-import { render } from 'preact';
 import * as Sentry from '@sentry/browser';
 import LogRocket from 'logrocket';
+import { render } from 'preact';
 
 import App from '~shared/App';
 

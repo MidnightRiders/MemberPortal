@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import { useMemo } from 'preact/hooks';
+
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
+
 import Field, { FieldProps } from './Field';
 
 import styles from './styles.module.css';
@@ -29,7 +31,7 @@ const InputGroup = ({
       return fields.map((f) => f.columns ?? remainingPerField);
     }
     return fields.map(() => Math.round(12 / fields.length));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const required = useMemo(() => fields.some((f) => f.required), [fields]);
 
@@ -38,8 +40,8 @@ const InputGroup = ({
       {label && (
         <Column columns={labelCol}>
           <label
-            class={clsx(styles.label, required && styles.required)}
-            for={fields[0].name}
+            className={clsx(styles.label, required && styles.required)}
+            htmlFor={fields[0].name}
           >
             {label}
             {required && <span title="required"> *</span>}

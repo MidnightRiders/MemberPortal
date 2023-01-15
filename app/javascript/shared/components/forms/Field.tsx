@@ -1,4 +1,5 @@
 import Password from './Password';
+
 import styles from './styles.module.css';
 
 interface BaseFieldProps {
@@ -121,11 +122,11 @@ const Field = ({
     const { options } = props;
     return (
       <select
-        class={styles.select}
+        className={styles.select}
         name={name}
         id={name}
         value={value ?? ''}
-        onInput={({ currentTarget: { value } }) => setValue(value)}
+        onInput={({ currentTarget: { value: v } }) => setValue(v)}
         required={required}
       >
         {options.map(({ label, value: v }) => (
@@ -140,12 +141,12 @@ const Field = ({
   if (props.type === 'textarea') {
     return (
       <textarea
-        class={styles.textarea}
+        className={styles.textarea}
         name={name}
         id={name}
         value={value ?? ''}
         required={required}
-        onInput={({ currentTarget: { value } }) => setValue(value)}
+        onInput={({ currentTarget: { value: v } }) => setValue(v)}
         rows={props.rows ?? 3}
         {...props}
       />
@@ -166,12 +167,12 @@ const Field = ({
 
   return (
     <input
-      class={styles.textInput}
+      className={styles.textInput}
       name={name}
       id={name}
       value={value ?? ''}
       required={required}
-      onInput={({ currentTarget: { value } }) => setValue(value)}
+      onInput={({ currentTarget: { value: v } }) => setValue(v)}
       {...props}
     />
   );

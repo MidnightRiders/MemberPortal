@@ -1,25 +1,26 @@
 import type { JSX } from 'preact';
 import { useCallback, useMemo } from 'preact/hooks';
 
-import { useAuthCtx } from '~shared/contexts/auth';
 import type { Node } from '~shared/components/Navigation/NavNode';
+import { useAuthCtx } from '~shared/contexts/auth';
 import { useLogOut } from '~shared/contexts/auth/hooks';
 import Paths from '~shared/paths';
 
-import Icon from '../Icon';
+import { useConfirm } from '../../contexts/confirmation';
 
 const useNav = () => {
   const { user } = useAuthCtx();
+  const confirm = useConfirm();
   const logOut = useLogOut();
 
   const handleLogOut = useCallback<JSX.GenericEventHandler<HTMLButtonElement>>(
-    (e) => {
+    async (e) => {
       e.preventDefault();
-      if (!confirm('Are you sure you wish to sign out?')) return;
+      if (!(await confirm('Are you sure you wish to sign out?'))) return;
 
       logOut();
     },
-    [logOut],
+    [confirm, logOut],
   );
 
   return useMemo<Node[]>(
@@ -354,7 +355,7 @@ const useNav = () => {
             },
           ],
     ],
-    [user],
+    [handleLogOut, user],
   );
 };
 

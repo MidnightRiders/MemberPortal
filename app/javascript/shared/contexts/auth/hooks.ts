@@ -1,9 +1,10 @@
 import { useCallback } from 'preact/hooks';
 
-import { useDel, usePost } from '../errors/fetch';
-import { APIExpandedUser, ExpandedUser, useAuthCtx } from '.';
 import { FetchError } from '~helpers/fetch';
-import { setUser } from '@sentry/browser';
+import { useDel, usePost } from '~shared/contexts/errors/fetch';
+import { error } from '~shared/debug';
+
+import { APIExpandedUser, ExpandedUser, useAuthCtx } from '.';
 
 export const userFromApi = (apiUser: APIExpandedUser): ExpandedUser =>
   Object.entries(apiUser).reduce(
@@ -28,7 +29,7 @@ export const useLogIn = () => {
           return err.message;
         }
         if (process.env.RAILS_ENV === 'development') {
-          console.error(err);
+          error(err);
         }
         return 'An unknown error occurred';
       },
@@ -44,7 +45,7 @@ export const useLogIn = () => {
     if (!resp) return;
 
     setUser(userFromApi(resp.user));
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return logIn;
 };
@@ -57,7 +58,7 @@ export const useLogOut = () => {
     if (await delSession<true>('/api/sessions')) {
       setJwt(null);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return logOut;
 };

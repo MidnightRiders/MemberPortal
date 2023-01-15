@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import type { JSX } from 'preact';
-import { Link } from 'wouter-preact';
+
+import Link from '~shared/components/Link';
+
 import Icon, { IconName } from '../Icon';
 
 import styles from './styles.module.css';
@@ -37,8 +39,8 @@ const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
   if ('secondary' in rest) {
     ({ secondary, ...props } = rest);
   } else {
-    let p: unknown;
-    ({ primary: p, ...props } = rest);
+    let _p: unknown;
+    ({ primary: _p, ...props } = rest);
     primary = true;
   }
 
@@ -62,9 +64,9 @@ const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
       )}
       {...props}
     >
-      {lfi && <span class={styles.leftIcon}>{lfi}</span>}
+      {lfi && <span className={styles.leftIcon}>{lfi}</span>}
       <span>{children}</span>
-      {rti && <span class={styles.rightIcon}>{rti}</span>}
+      {rti && <span className={styles.rightIcon}>{rti}</span>}
     </Component>
   );
 };

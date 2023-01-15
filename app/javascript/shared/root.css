@@ -21,7 +21,7 @@ body {
 
 body {
   background-color: $navy;
-  font-family: 'Lato', Helvetica, sans-serif;
+  font-family: Lato, Helvetica, sans-serif;
   height: auto;
   position: relative;
 
@@ -45,12 +45,12 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Mayflower';
+  font-family: Mayflower, Georgia, sans-serif;
   margin-top: 0;
   font-weight: 400;
 
   small {
-    font-family: 'Lato', sans-serif;
+    font-family: Lato, Helvetica, sans-serif;
   }
 }
 

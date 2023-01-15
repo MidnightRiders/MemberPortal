@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
+
 import Button from '~shared/components/Button';
 import Actions from '~shared/components/forms/Actions';
 import Input from '~shared/components/forms/Input';
@@ -57,7 +58,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       setCountry,
     ],
     handleSubmit,
-  ] = useForm('/users', fields, (data) => {
+  ] = useForm('/users', fields, (_data) => {
     // TODO
   });
 
@@ -65,7 +66,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
   const updateUsername = useCallback((v: string) => {
     setHasEditedUsername(true);
     setUsername(v);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (hasEditedUsername) return;
@@ -77,13 +78,13 @@ const SignUp = makeRoute(Paths.SignUp, () => {
         lastName.toLocaleLowerCase().replace(/\s+/g, ''),
       ].join('.'),
     );
-  }, [firstName, lastName]);
+  }, [firstName, lastName]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <form action="/users" method="post" onSubmit={handleSubmit}>
       <Row>
         <Column columns={3}>
-          <h2 class="white">User Information</h2>
+          <h2 className="white">User Information</h2>
         </Column>
         <Column columns={9}>
           <Block>
@@ -143,7 +144,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       </Row>
       <Row>
         <Column columns={3}>
-          <h2 class="white">Contact Information</h2>
+          <h2 className="white">Contact Information</h2>
           <Callout as="p">
             <strong>We need your address</strong> to be able to send you your
             membership package.

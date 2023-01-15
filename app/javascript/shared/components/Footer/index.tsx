@@ -1,5 +1,4 @@
-import { Link } from 'wouter-preact';
-
+import Link from '~shared/components/Link';
 import { useAuthCtx } from '~shared/contexts/auth';
 
 import styles from './styles.module.css';
@@ -8,7 +7,7 @@ const Footer = () => {
   const { user } = useAuthCtx();
 
   return (
-    <footer class={styles.pageFooter}>
+    <footer className={styles.pageFooter}>
       <nav>
         <a href="/faq">Frequently Asked Questions</a> &bull;{' '}
         <a href="/contact">Contact Us</a>

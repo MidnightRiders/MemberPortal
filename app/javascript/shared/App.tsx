@@ -2,23 +2,23 @@ import './root.css';
 
 import { Router } from 'wouter-preact';
 
+import { FetchError } from '~helpers/fetch';
+import { Match } from '~helpers/matches';
+import Footer from '~shared/components/Footer';
+import Header from '~shared/components/Header';
+import Navigation from '~shared/components/Navigation';
 import {
   APIExpandedUser,
   AuthProvider,
   useAuthCtx,
 } from '~shared/contexts/auth';
-import Routes from '~shared/Routes';
+import { userFromApi } from '~shared/contexts/auth/hooks';
 import { CacheProvider } from '~shared/contexts/cache';
-import Header from '~shared/components/Header';
-import { useOnMount } from '~shared/hooks/effects';
-import { nextRevsMatch, pageTitle } from '~shared/signals/app';
-import Navigation from '~shared/components/Navigation';
 import { ErrorsProvider } from '~shared/contexts/errors';
 import { useGet } from '~shared/contexts/errors/fetch';
-import { Match } from '~helpers/matches';
-import Footer from '~shared/components/Footer';
-import { FetchError } from '~helpers/fetch';
-import { userFromApi } from '~shared/contexts/auth/hooks';
+import { useOnMount } from '~shared/hooks/effects';
+import Routes from '~shared/Routes';
+import { nextRevsMatch, pageTitle } from '~shared/signals/app';
 
 const ignoreUnauthed = (err: unknown) =>
   err instanceof FetchError && err.status === 401;
@@ -59,7 +59,7 @@ const App = () => {
     <Router>
       <Header />
       <Navigation />
-      <div class="pageContainer">
+      <div className="pageContainer">
         <Routes />
       </div>
       <Footer />

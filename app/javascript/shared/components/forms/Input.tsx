@@ -1,6 +1,8 @@
 import clsx from 'clsx';
+
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
+
 import Field, { FieldProps } from './Field';
 
 import styles from './styles.module.css';
@@ -19,8 +21,8 @@ const Input = ({
     {label && (
       <Column columns={labelCol}>
         <label
-          class={clsx(styles.label, props.required && styles.required)}
-          for={props.name}
+          className={clsx(styles.label, props.required && styles.required)}
+          htmlFor={props.name}
         >
           {label}
           {props.required && <span title="required"> *</span>}

@@ -1,18 +1,21 @@
-import { useCallback } from 'preact/hooks';
-import {
-  Fetcher,
-  FetchError,
-  get,
-  post,
-  patch,
-  put,
-  del,
-  FetchOptions,
-} from '~helpers/fetch';
-import { useAuthCtx } from '../auth';
-import { ErrorOptions, useErrorsCtx } from '.';
 import { captureException } from '@sentry/browser';
 import LogRocket from 'logrocket';
+import { useCallback } from 'preact/hooks';
+
+import {
+  del,
+  Fetcher,
+  FetchError,
+  FetchOptions,
+  get,
+  patch,
+  post,
+  put,
+} from '~helpers/fetch';
+
+import { useAuthCtx } from '../auth';
+
+import { ErrorOptions, useErrorsCtx } from '.';
 
 export interface Options extends ErrorOptions {
   capture?: boolean | ((err: unknown) => boolean);
@@ -46,7 +49,7 @@ const createFetchHook =
     return useCallback(
       async <T>(url: string, data?: unknown, opts?: FetchOptions) => {
         try {
-          let fetchOptions: FetchOptions = opts ?? {};
+          const fetchOptions: FetchOptions = opts ?? {};
           if (jwt) {
             fetchOptions.headers ??= {};
             fetchOptions.headers.Authorization = `Bearer ${jwt}`;
@@ -79,7 +82,7 @@ const createFetchHook =
           return false;
         }
       },
-      [...deps, addError, jwt, setJwt],
+      [...deps, addError, jwt, setJwt], // eslint-disable-line react-hooks/exhaustive-deps
     );
   };
 

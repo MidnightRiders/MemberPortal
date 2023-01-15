@@ -1,9 +1,11 @@
 import clsx from 'clsx';
 import type { ComponentChild, JSX } from 'preact';
-import { Link } from 'wouter-preact';
-import Icon, { IconName } from '../Icon';
+import { useCallback, useEffect, useState } from 'preact/hooks';
+import { useLocation } from 'wouter-preact';
 
-import { Expandable } from './Expandable';
+import Link from '~shared/components/Link';
+
+import Icon, { IconName } from '../Icon';
 
 import styles from './styles.module.css';
 
@@ -40,6 +42,81 @@ export type Node =
   | (false | null | undefined)
   | Node[];
 
+interface ExpandableProps {
+  content: ComponentChild;
+  gap?: boolean;
+  icon?: IconName | undefined;
+  nodes: Node[];
+  title?: string;
+}
+
+const stopPropagation = (e: Event) => e.stopPropagation();
+
+export const Expandable = ({
+  content,
+  gap = false,
+  icon,
+  nodes,
+  title,
+}: ExpandableProps) => {
+  const [expanded, setExpanded] = useState(false);
+  const toggle = useCallback(() => setExpanded((e) => !e), []);
+  const [location] = useLocation();
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [location]);
+
+  useEffect(() => {
+    if (!expanded) return undefined;
+
+    let removed = false;
+
+    const closeModal: (e: Event) => void = () => {
+      setExpanded(false);
+      removed = true;
+      document.body.removeEventListener('click', closeModal);
+    };
+    document.body.addEventListener('click', closeModal);
+
+    return () => {
+      if (removed) return;
+      document.body.removeEventListener('click', closeModal);
+    };
+  }, [expanded]);
+
+  return (
+    // This is not an interactive element; it just stops propagation of click events farther down the tree.
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+    <li
+      className={clsx(styles.expandable, gap && styles.gap)}
+      onClick={stopPropagation}
+    >
+      <button
+        type="button"
+        className={clsx(
+          styles.expand,
+          expanded && styles.expanded,
+          title && styles.collapse,
+        )}
+        onClick={toggle}
+        {...(title ? { title } : {})}
+      >
+        {icon && <Icon name={icon} />} <span>{content}</span>{' '}
+        <Icon name="chevron-down" />
+      </button>
+      {expanded && (
+        <ul>
+          {nodes.map((node) => (
+            // eslint-disable-next-line @typescript-eslint/no-use-before-define
+            <NavNode node={node} />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+};
+
 const titleFromNode = (node: Node) => {
   if (!node) return {};
   if (!('collapse' in node)) return {};
@@ -68,7 +145,7 @@ const NavNode = ({ node }: { node: Node }) => {
     return (
       <>
         <li
-          class={clsx(
+          className={clsx(
             styles.groupHeader,
             node.gap && styles.gap,
             node.collapse && styles.collapse,
@@ -95,10 +172,10 @@ const NavNode = ({ node }: { node: Node }) => {
   }
   if ('onClick' in node) {
     return (
-      <li class={clsx(node.gap && styles.gap)}>
+      <li className={clsx(node.gap && styles.gap)}>
         <button
           type="button"
-          class={clsx(node.collapse && styles.collapse)}
+          className={clsx(node.collapse && styles.collapse)}
           onClick={node.onClick}
           {...titleFromNode(node)}
         >
@@ -108,14 +185,14 @@ const NavNode = ({ node }: { node: Node }) => {
     );
   }
 
-  const { external, gap, href, icon, content, collapse, ...rest } = node;
+  const { external, gap, href, icon, content, collapse } = node;
   const El = external ? 'a' : Link;
   const linkProps = {
     ...titleFromNode(node),
     class: clsx(collapse && styles.collapse),
   };
   return (
-    <li class={clsx(gap && styles.gap)}>
+    <li className={clsx(gap && styles.gap)}>
       <El
         href={href}
         {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
