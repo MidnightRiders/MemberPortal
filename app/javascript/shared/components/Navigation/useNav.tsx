@@ -424,6 +424,7 @@ const useNav = () => {
         : [
             {
               href: Paths.SignUp,
+              gap: true,
               content: (
                 <>
                   <i class="fa-solid fa-pencil-square fa-fw" /> Sign Up

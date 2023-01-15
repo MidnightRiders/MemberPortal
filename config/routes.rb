@@ -50,21 +50,24 @@ MidnightRiders::Application.routes.draw do
   # get 'contact', to: 'static_pages#contact'
 
   # post 'nominate', to: 'static_pages#nominate'
+  devise_for :users, skip: :all
 
-  namespace :api, constraints: { format: :json } do
-    get :user, to: 'users#current'
-    resources :users
+  as :user do
+    namespace :api, constraints: { format: :json } do
+      get :user, to: 'users#current'
+      resources :users
 
-    devise_scope :sessions do
-      post '/', to: 'sessions#create'
-      delete '/', to: 'sessions#destroy'
-    end
+      namespace :sessions do
+        post '/', action: :create
+        delete '/', action: :destroy
+      end
 
-    resources :clubs, only: %i[index show]
+      resources :clubs, only: %i[index show]
 
-    resources :matches, only: %i[index show] do
-      collection do
-        get :next_revs_match
+      resources :matches, only: %i[index show] do
+        collection do
+          get :next_revs_match
+        end
       end
     end
   end

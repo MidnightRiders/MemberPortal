@@ -1,16 +1,20 @@
 import dayjs from 'dayjs';
+import { Link } from 'wouter-preact';
 
+import logo from '~shared/assets/logo.png';
 import { matchLink, revsOpponent } from '~helpers/matches';
 import { nextRevsMatch, pageTitle } from '~shared/signals/app';
+import Paths from '~shared/paths';
 
 const Header = () => {
   return (
     <header>
       <h1>
-        <a href="/">Midnight Riders</a>
-        <small>Member Portal</small>
+        <Link href={Paths.Home}>
+          <img src={logo} alt="Midnight Riders" />
+        </Link>
+        <small>{pageTitle.value ?? 'Member Portal'}</small>
       </h1>
-      {pageTitle.value && <h2>{pageTitle.value}</h2>}
       {/* = yield(:header) */}
       <h5>Next Game:</h5>
       {nextRevsMatch.value ? (
