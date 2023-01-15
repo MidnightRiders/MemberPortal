@@ -74,6 +74,7 @@ class MatchesController < ApplicationController
         m.away_team = clubs[data[:teams][:away][:id]]
         m.location = data[:fixture][:venue][:name].presence || clubs[data[:teams][:home][:id]].name
       end
+      match.season = year
       match.kickoff = Time.zone.parse(data[:fixture][:date])
       if data[:fixture][:status][:short].in? %w[FT AET PEN]
         match.home_goals = data[:goals][:home]
