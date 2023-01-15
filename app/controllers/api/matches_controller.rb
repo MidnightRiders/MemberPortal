@@ -2,14 +2,14 @@ class Api::MatchesController < ApiController
   skip_before_action :authenticate_user!, only: %i[next_revs_match]
 
   def next_revs_match
-    render json: { match: revs&.next_match.as_json }
+    @match = revs&.next_match
+    render 'show'
   end
 
   def show
     authorize! :read, Match
 
     @match = Match.find(params[:id])
-    render json: { match: @match.as_json }
   end
 
   # TODO: match filtering
@@ -25,6 +25,5 @@ class Api::MatchesController < ApiController
     @next_date = @matches.empty? ? Match.unscoped.where('kickoff > ?', Time.current).order(kickoff: :asc).first&.kickoff : @start_date + 1.week
     @next_date = @next_date&.to_date
     @is_current_week = @start_date == Time.current.beginning_of_week
-    render json: { matches: @matches.as_json }
   end
 end

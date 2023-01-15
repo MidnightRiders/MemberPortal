@@ -10,10 +10,11 @@ export interface Match {
   id: number;
   kickoff: Date;
   location: string;
-  teams: [Team, Team];
+  homeGoals: number | null;
+  homeTeam: Team;
+  awayGoals: number | null;
+  awayTeam: Team;
 }
 
-export const revsOpponent = (match: Match) =>
-  match.teams.find(({ abbrv }) => abbrv !== 'NE');
-
-export const matchLink = (match: Match) => `/matches/${match.id}`;
+export const revsOpponent = (match: Match): Team =>
+  [match.homeTeam, match.awayTeam].find(({ abbrv }) => abbrv !== 'NE')!;
