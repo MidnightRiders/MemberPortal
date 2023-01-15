@@ -1,3 +1,6 @@
+import Block from '~shared/components/layout/Block';
+import Column from '~shared/components/layout/Column';
+import Row from '~shared/components/layout/Row';
 import { useAuthCtx } from '~shared/contexts/auth';
 import { useOnMount } from '~shared/hooks/effects';
 import makeRoute from '~shared/makeRoute';
@@ -15,21 +18,13 @@ const Home = makeRoute(Paths.Home, () => {
     };
   });
 
-  if (!user) {
-    return (
-      <>
-        <h2>Welcome</h2>
-
-        <p>
-          Please sign in using the link in the top corner, or{' '}
-          <a href="mailto:webczar+memberportal@midnightriders.com">email us</a>{' '}
-          to gain access.
-        </p>
-      </>
-    );
-  }
-
-  return <>TODO</>;
+  return (
+    <Row>
+      <Column>
+        <Block>TODO</Block>
+      </Column>
+    </Row>
+  );
 });
 
 export default Home;

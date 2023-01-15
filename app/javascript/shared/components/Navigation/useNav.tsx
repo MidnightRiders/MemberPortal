@@ -413,10 +413,11 @@ const useNav = () => {
             ],
             {
               onClick: handleLogOut,
+              title: 'Sign Out',
               content: (
                 <>
                   <i class="fa-solid fa-power-off fa-fw" />
-                  Sign Out
+                  <span class={styles.iconOnly}>Sign Out</span>
                 </>
               ),
             },

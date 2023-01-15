@@ -1,0 +1,43 @@
+@import url('~shared/styles/variables');
+
+.button {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  align-items: center;
+  box-sizing: border-box;
+  border-radius: 0;
+  border: 0;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  padding: 0.5rem 1rem;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  transition: all 250ms;
+
+  @media screen and (min-width: 45em) {
+    padding: 1rem 1.5rem;
+  }
+
+  .leftIcon {
+    margin-right: 0.5rem;
+  }
+
+  .rightIcon {
+    margin-left: 0.5rem;
+  }
+
+  &:hover {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  &.primary {
+    background-color: $maroon;
+  }
+
+  &.secondary {
+    background-color: $navy;
+  }
+}

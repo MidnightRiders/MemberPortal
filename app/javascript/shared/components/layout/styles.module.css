@@ -1,0 +1,28 @@
+.row {
+  display: flex;
+  flex-flow: row nowrap;
+  margin: 0.5rem -0.5rem;
+
+  &.center {
+    align-content: center;
+  }
+}
+
+.column {
+  margin: 0.5rem;
+
+  &.center {
+    margin: 0.5rem auto;
+  }
+
+  @media screen and (min-width: 45em) {
+    margin-left: calc(var(--offset) / 12 * 100% + 0.5rem);
+    width: calc(var(--cols) / 12 * 100% - 1rem);
+  }
+}
+
+.block {
+  background-color: #fff;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.6);
+  padding: 1rem;
+}

@@ -10,14 +10,25 @@
   width: 100%;
 
   h1 {
+    align-items: center;
+    color: #fff;
     display: flex;
     flex-flow: row nowrap;
-    flex: 1 0 auto;
-    margin: 0;
+    flex: 1 1 auto;
+    margin: 0 0.5rem 0 0;
+
+    small {
+      font-size: 0.875rem;
+
+      @media screen and (min-width: 45em) {
+        font-size: 1.25rem;
+      }
+    }
 
     img {
       /* easier than cropping some blank space off the bottom */
       margin-top: 1rem;
+      margin-right: 0.5rem;
       max-width: 4rem;
 
       @media screen and (min-width: 45em) {
@@ -28,7 +39,7 @@
 
   .nextMatch {
     color: #fff;
-    flex: 1 0 auto;
+    flex: 1 1 auto;
     text-align: right;
 
     h5 {
