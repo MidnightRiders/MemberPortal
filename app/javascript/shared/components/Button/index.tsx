@@ -1,10 +1,11 @@
 import clsx from 'clsx';
 import { cloneElement, JSX } from 'preact';
+import { Link } from 'wouter-preact';
 
 import styles from './styles.module.css';
 
-type Props<T extends 'a' | 'button'> = Omit<
-  JSX.IntrinsicElements[T],
+type Props<T extends 'a' | 'button' | typeof Link> = Omit<
+  JSX.IntrinsicElements[T extends typeof Link ? 'a' : T],
   'as' | 'secondary' | 'primary'
 > & {
   as?: T;
@@ -19,7 +20,7 @@ type Props<T extends 'a' | 'button'> = Omit<
       }
   );
 
-const Button = <T extends 'a' | 'button' = 'button'>({
+const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
   as: Component = 'button' as T,
   class: className,
   children,

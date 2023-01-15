@@ -1,43 +1,67 @@
 @import url('~shared/styles/variables');
 
 .button {
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased;
-  align-items: center;
-  box-sizing: border-box;
-  border-radius: 0;
-  border: 0;
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 400;
-  padding: 0.5rem 1rem;
-  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-  transition: all 250ms;
+  button&,
+  &:link,
+  &:visited {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    align-items: center;
+    background-image: linear-gradient(
+      rgba(255, 255, 255, 0.2),
+      rgba(255, 255, 255, 0) 33.333%,
+      rgba(0, 0, 0, 0) 66.666%,
+      rgba(0, 0, 0, 0.2)
+    );
+    background-position: 50% 50%;
+    background-size: 100% 600%;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    border-radius: 10px 10px 10px 0;
+    border: 0;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 400;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transition: box-shadow 250ms, transform 250ms, background-position 250ms;
 
-  @media screen and (min-width: 45em) {
-    padding: 1rem 1.5rem;
-  }
+    @media screen and (min-width: 45em) {
+      padding: 1rem 1.5rem;
+    }
 
-  .leftIcon {
-    margin-right: 0.5rem;
-  }
+    .leftIcon {
+      margin-right: 0.5rem;
+    }
 
-  .rightIcon {
-    margin-left: 0.5rem;
-  }
+    .rightIcon {
+      margin-left: 0.5rem;
+    }
 
-  &:hover {
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
-  }
+    &:focus,
+    &:hover {
+      background-position: 0% 0%;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+      outline: none;
+      transform: scale(1.025);
+    }
 
-  &.primary {
-    background-color: $maroon;
-  }
+    &:active {
+      background-position: 0% 100%;
+      box-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+      transform: scale(0.975);
+    }
 
-  &.secondary {
-    background-color: $navy;
+    &.primary {
+      background-color: $maroon;
+    }
+
+    &.secondary {
+      background-color: $navy;
+    }
   }
 }

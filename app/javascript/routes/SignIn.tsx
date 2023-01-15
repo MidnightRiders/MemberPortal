@@ -1,7 +1,9 @@
 import type { JSX } from 'preact';
 import { useCallback, useState } from 'preact/hooks';
-import { Redirect } from 'wouter-preact';
+import { Link, Redirect } from 'wouter-preact';
 import Button from '~shared/components/Button';
+import Actions from '~shared/components/forms/Actions';
+import Input from '~shared/components/forms/Input';
 import Block from '~shared/components/layout/Block';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
@@ -41,46 +43,37 @@ const SignIn = makeRoute(Paths.SignIn, () => {
     <Row>
       <Column columns={6} center>
         <Block as="form" onSubmit={handleLogIn}>
-          <Row center>
-            <Column columns={4}>
-              <label for="username">Username</label>
-            </Column>
-            <Column columns={8}>
-              <input
-                type="username"
-                name="username"
-                id="username"
-                autocomplete="username"
-                value={username}
-                onInput={({ currentTarget: { value } }) => setUsername(value)}
-              />
-            </Column>
-          </Row>
-          <Row center>
-            <Column columns={4}>
-              <label for="password">Password</label>
-            </Column>
-            <Column columns={8}>
-              <input
-                type="password"
-                name="password"
-                id="password"
-                autocomplete="password"
-                value={password}
-                onInput={({ currentTarget: { value } }) => setPassword(value)}
-              />
-            </Column>
-          </Row>
-          <Row>
-            <Column columns={8} offset={4}>
-              <Button
-                leftIcon={<i class="fa-solid fa-sign-in fa-fw" />}
-                type="submit"
-              >
-                Sign In
-              </Button>
-            </Column>
-          </Row>
+          <Input
+            label="Username"
+            value={username}
+            setValue={setUsername}
+            name="username"
+            autocomplete="username"
+          />
+          <Input
+            type="password"
+            name="password"
+            label="Password"
+            autocomplete="password"
+            value={password}
+            setValue={setPassword}
+          />
+          <Actions>
+            <Button
+              leftIcon={<i class="fa-solid fa-sign-in fa-fw" />}
+              type="submit"
+            >
+              Sign In
+            </Button>
+            <Button
+              as={Link}
+              href={Paths.SignUp}
+              secondary
+              leftIcon={<i class="fa-solid fa-pencil fa-fw" />}
+            >
+              Sign Up
+            </Button>
+          </Actions>
         </Block>
       </Column>
     </Row>

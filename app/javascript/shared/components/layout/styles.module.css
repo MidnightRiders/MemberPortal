@@ -4,7 +4,7 @@
   margin: 0.5rem -0.5rem;
 
   &.center {
-    align-content: center;
+    align-items: center;
   }
 }
 
@@ -23,6 +23,15 @@
 
 .block {
   background-color: #fff;
+  border-radius: 10px 10px 10px 0;
   box-shadow: 0 3px 3px rgba(0, 0, 0, 0.6);
   padding: 1rem;
+
+  > .row:first-child {
+    margin-top: 0;
+  }
+
+  > .row:last-child {
+    margin-bottom: 0;
+  }
 }
