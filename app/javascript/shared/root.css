@@ -53,3 +53,11 @@ h6 {
     font-family: 'Lato', sans-serif;
   }
 }
+
+.pageContainer {
+  display: block;
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 75rem;
+  box-sizing: border-box;
+}

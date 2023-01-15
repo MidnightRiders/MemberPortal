@@ -1,2 +1,2 @@
 json.partial! 'match', match: @match
-json.jwt current_user.jwt
+json.jwt current_user&.jwt

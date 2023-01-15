@@ -59,7 +59,9 @@ const App = () => {
     <Router>
       <Header />
       <Navigation />
-      <Routes />
+      <div class="pageContainer">
+        <Routes />
+      </div>
       <Footer />
     </Router>
   );

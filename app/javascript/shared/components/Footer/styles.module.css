@@ -1,0 +1,15 @@
+.pageFooter {
+  box-sizing: border-box;
+  color: #fff;
+  display: block;
+  font-size: 0.875rem;
+  max-width: 75rem;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+
+  a:link,
+  a:visited {
+    color: #fff;
+  }
+}
