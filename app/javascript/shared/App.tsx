@@ -1,5 +1,6 @@
 import './root.css';
 
+import { useState } from 'preact/hooks';
 import { Router } from 'wouter-preact';
 
 import { FetchError } from '~helpers/fetch';
@@ -19,6 +20,8 @@ import { useGet } from '~shared/contexts/errors/fetch';
 import { useOnMount } from '~shared/hooks/effects';
 import Routes from '~shared/Routes';
 import { nextRevsMatch, pageTitle } from '~shared/signals/app';
+
+import Icon from './components/Icon';
 
 const ignoreUnauthed = (err: unknown) =>
   err instanceof FetchError && err.status === 401;
@@ -45,6 +48,8 @@ const App = () => {
     return () => clearInterval(poll);
   });
 
+  const [initialized, setInitialized] = useState(false);
+
   const { setUser } = useAuthCtx();
 
   const getUser = useGet('fetchUser', { ignore: ignoreUnauthed }, []);
@@ -53,6 +58,7 @@ const App = () => {
     if (resp && resp.user) {
       setUser(userFromApi(resp.user));
     }
+    setInitialized(true);
   });
 
   return (
@@ -60,7 +66,13 @@ const App = () => {
       <Header />
       <Navigation />
       <div className="pageContainer">
-        <Routes />
+        {initialized ? (
+          <Routes />
+        ) : (
+          <div className="loading" alt="loading" title="Loading…">
+            <Icon name="arrow-clockwise" />
+          </div>
+        )}
       </div>
       <Footer />
     </Router>

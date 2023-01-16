@@ -99,4 +99,33 @@ h6 {
   margin: 0 auto;
   max-width: $maxWidthRem;
   box-sizing: border-box;
+
+  > .loading {
+    align-items: center;
+    color: #fff;
+    display: flex;
+    font-size: 4rem;
+    height: auto;
+    justify-content: center;
+
+    i::before {
+      animation: loadingCircle 1s infinite linear forwards;
+    }
+  }
+}
+
+@keyframes loadingCircle {
+  0% {
+    opacity: 1;
+    transform: rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+
+  100% {
+    opactiy: 100%;
+    transform: rotate(360deg);
+  }
 }
