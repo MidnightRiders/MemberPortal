@@ -54,7 +54,7 @@
 .block {
   background-color: #fff;
   border-radius: 10px 10px 10px 0;
-  box-shadow: 0 3px 3px rgb(0 0 0 / 60%);
+  box-shadow: 0 3px 6px rgba(0 0 0 / 60%);
   padding: 1rem;
 }
 

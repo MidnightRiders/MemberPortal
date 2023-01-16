@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
+import { Redirect } from 'wouter-preact';
 
 import Button from '~shared/components/Button';
 import Actions from '~shared/components/forms/Actions';
@@ -9,8 +10,10 @@ import Block from '~shared/components/layout/Block';
 import Callout from '~shared/components/layout/Callout';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
+import { APIExpandedUser, useAuthCtx } from '~shared/contexts/auth';
+import { userFromApi } from '~shared/contexts/auth/hooks';
 import makeRoute from '~shared/makeRoute';
-import Paths from '~shared/paths';
+import Paths, { pathTo } from '~shared/paths';
 
 const thisYear =
   new Date().getFullYear() + (new Date().getMonth() >= 10 ? 1 : 0);
@@ -30,6 +33,8 @@ const fields = {
 } satisfies Record<string, Field<string | number>>;
 
 const SignUp = makeRoute(Paths.SignUp, () => {
+  const { setUser, user } = useAuthCtx();
+
   const [
     {
       firstName,
@@ -58,8 +63,11 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       setCountry,
     ],
     handleSubmit,
-  ] = useForm('/users', fields, (_data) => {
-    // TODO
+  ] = useForm<{ user: APIExpandedUser }, typeof fields>('/api/users', fields, {
+    onSubmit: ({ user: u }) => {
+      setUser(userFromApi(u));
+    },
+    constructBody: (userValues) => ({ user: userValues }),
   });
 
   const [hasEditedUsername, setHasEditedUsername] = useState(false);
@@ -76,12 +84,19 @@ const SignUp = makeRoute(Paths.SignUp, () => {
       [
         firstName.toLocaleLowerCase().replace(/\s+/g, ''),
         lastName.toLocaleLowerCase().replace(/\s+/g, ''),
-      ].join('.'),
+      ].join(''),
     );
   }, [firstName, lastName]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  if (user) {
+    if (user.isCurrentMember) {
+      return <Redirect to={Paths.Home} />;
+    }
+    return <Redirect to={pathTo(Paths.UserNewMembership, user.id)} />;
+  }
+
   return (
-    <form action="/users" method="post" onSubmit={handleSubmit}>
+    <form action="/api/users" method="post" onSubmit={handleSubmit}>
       <Row>
         <Column columns={3}>
           <h2 className="white">User Information</h2>

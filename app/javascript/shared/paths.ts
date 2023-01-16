@@ -15,6 +15,7 @@ enum Paths {
   CurrentUser = '/user',
   Users = '/users',
   User = '/user/:id',
+  UserNewMembership = '/user/:id/new-membership',
   UserCurrentMembership = '/user/:userId/membership',
   UserMembership = '/user/:userId/membership/:id',
   Transactions = '/transactions',

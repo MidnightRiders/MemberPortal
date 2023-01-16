@@ -1,4 +1,5 @@
 class ApiController < ActionController::API
+  before_action :underscore_params!
   before_action :authenticate_user!
 
   private
@@ -36,4 +37,8 @@ class ApiController < ActionController::API
     @current_ability ||= Ability.new(current_user)
   end
   helper_method :current_ability
+
+  def underscore_params!
+    params.deep_transform_keys!(&:underscore)
+  end
 end

@@ -25,12 +25,12 @@ export interface Options extends ErrorOptions {
 
 export interface FetchHook {
   (name: string): <T>(
-    url: string,
+    url: `/api/${string}`,
     data?: unknown,
     options?: FetchOptions,
   ) => Promise<T | false>;
   (name: string, options: Options, deps: unknown[]): <T>(
-    url: string,
+    url: `/api/${string}`,
     data?: unknown,
     options?: FetchOptions,
   ) => Promise<T | false>;

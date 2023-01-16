@@ -2,6 +2,7 @@ import type { JSX } from 'preact';
 import { useCallback, useMemo, useState } from 'preact/hooks';
 
 import { useErrorsCtx } from '~shared/contexts/errors';
+import { usePost } from '~shared/contexts/errors/fetch';
 
 type Setters<F extends Record<string, unknown>> = {
   [K in keyof F]: (value: string) => void;
@@ -42,9 +43,12 @@ export const fieldIsEmpty = <F extends Field>(
 
 interface UseForm {
   <R, F extends Record<string, Field<string | number>>>(
-    endpoint: `/${string}`,
+    endpoint: `/api/${string}`,
     fields: F,
-    onSubmit: (response: R) => void | Promise<void>,
+    opts: {
+      onSubmit: (response: R) => void | Promise<void>;
+      constructBody?: (values: ValuesFromFields<F>) => unknown;
+    },
     deps?: unknown[],
   ): readonly [
     ValuesFromFields<typeof fields>,
@@ -57,9 +61,15 @@ const useForm: UseForm = <
   R,
   F extends Record<string, Field> = Record<string, Field<string | number>>,
 >(
-  endpoint: `/${string}`,
+  endpoint: `/api/${string}`,
   fields: F,
-  onSubmit: (response: R) => void | Promise<void>,
+  {
+    onSubmit,
+    constructBody = (v) => v,
+  }: {
+    onSubmit: (response: R) => void | Promise<void>;
+    constructBody?: (values: ValuesFromFields<F>) => unknown;
+  },
   deps: unknown[] = [],
 ) => {
   const { addError } = useErrorsCtx();
@@ -100,6 +110,8 @@ const useForm: UseForm = <
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
+  const post = usePost(endpoint);
+
   const handleSubmit = useCallback<JSX.GenericEventHandler<HTMLFormElement>>(
     async (e) => {
       e.preventDefault();
@@ -114,31 +126,10 @@ const useForm: UseForm = <
         return;
       }
 
-      try {
-        const response = await fetch(endpoint, {
-          body: JSON.stringify(values),
-          method: 'POST',
-        });
+      const response = await post<R>(endpoint, constructBody(values));
+      if (!response) return;
 
-        if (!response.ok) throw response;
-
-        const body: R = await response.json();
-        await onSubmit(body);
-      } catch (err) {
-        let message: string | undefined;
-        if (err instanceof Response) {
-          try {
-            const body = await err.json();
-            if (body.message) {
-              message = `Error ${err.status} ${err.statusText}: ${body.message}`;
-            }
-          } catch {
-            // noop
-          }
-          message ??= `Error: ${err.status} ${err.statusText}`;
-        }
-        addError(endpoint, message || 'An unexpected error occurred');
-      }
+      await onSubmit(response);
     },
     [values, ...deps], // eslint-disable-line react-hooks/exhaustive-deps
   );

@@ -1,9 +1,8 @@
 @import url('~shared/styles/mixins');
-@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css');
-
-@import url('normalize.css');
-
 @import url('~shared/styles/variables');
+
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css');
+@import url('normalize.css');
 
 @font-face {
   font-family: Mayflower;
@@ -20,17 +19,43 @@ body {
 }
 
 body {
-  background-color: $navy;
-  font-family: Lato, Helvetica, sans-serif;
+  background: linear-gradient(
+        to bottom,
+        rgba(255 255 255 / 2.5%),
+        rgba(255 255 255 / 0%)
+      )
+      center top / 100% no-repeat fixed,
+    $navy
+      radial-gradient(
+        ellipse at center,
+        rgba(255 255 255 / 10%),
+        rgba(255 255 255 / 0%)
+      )
+      center -50vw / 100vw 100vw no-repeat fixed;
+  font-family: $sansFont;
   height: auto;
   position: relative;
 
   @mixin breakpoint {
-    background-image: linear-gradient($silver, $silver 100%),
-      linear-gradient($silver, $silver 100%);
-    background-position: calc(50% - 38rem) 0, calc(50% + 38rem) 0;
-    background-size: 1rem 100%, 1rem 100%;
-    background-repeat: no-repeat;
+    background: linear-gradient(to bottom, $silver, $silver)
+        calc(50% - $maxWidthPx / 2 / 16 * 1rem - 1rem) 0 / 1rem 100% no-repeat
+        fixed,
+      linear-gradient(to bottom, $silver, $silver)
+        calc(50% + $maxWidthPx / 2 / 16 * 1rem + 1rem) 0 / 1rem 100% no-repeat
+        fixed,
+      linear-gradient(
+          to bottom,
+          rgba(255 255 255 / 2.5%),
+          rgba(255 255 255 / 0%)
+        )
+        center top / 100% no-repeat no-repeat,
+      $navy
+        radial-gradient(
+          ellipse at center,
+          rgba(255 255 255 / 10%),
+          rgba(255 255 255 / 0%)
+        )
+        center -50vw / 100vw 100vw no-repeat fixed;
   }
 }
 
@@ -45,12 +70,12 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: Mayflower, Georgia, sans-serif;
+  font-family: $serifFont;
   margin-top: 0;
   font-weight: 400;
 
   small {
-    font-family: Lato, Helvetica, sans-serif;
+    font-family: $sansFont;
   }
 }
 
@@ -72,6 +97,6 @@ h6 {
   display: block;
   padding: 1rem;
   margin: 0 auto;
-  max-width: 75rem;
+  max-width: $maxWidthRem;
   box-sizing: border-box;
 }

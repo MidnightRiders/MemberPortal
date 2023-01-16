@@ -229,13 +229,13 @@ const useNav = () => {
         ? [
             true /* current_user.current_member? */ && [
               {
-                icon: 'calendar',
+                icon: 'calendar3',
                 content: 'Matches',
                 gap: true,
                 href: Paths.Matches,
               },
               {
-                icon: 'trophy',
+                icon: 'trophy-fill',
                 content: 'Games',
                 children: [
                   {
@@ -245,13 +245,13 @@ const useNav = () => {
                   },
                   {
                     href: Paths.Standings,
-                    icon: 'trophy',
+                    icon: 'trophy-fill',
                     content: 'Standings',
                   },
                   {
                     href: 'https://fantasy.mlssoccer.com/#classic/leagues/771/join/AMN4KR2S',
                     external: true,
-                    icon: 'people-fill',
+                    icon: 'clipboard-data-fill',
                     content: 'MLS Fantasy',
                   },
                   {
@@ -261,7 +261,7 @@ const useNav = () => {
                       {
                         href: 'http://fantasy.premierleague.com/my-leagues/290319/join/?autojoin-code=1206043-290319',
                         external: true,
-                        icon: 'people-fill',
+                        icon: 'clipboard-data-fill',
                         content: 'EPL Fantasy',
                       },
                     ],
@@ -286,13 +286,14 @@ const useNav = () => {
               },
               true /* user.current_member? && (current_user.privilege?('admin') || current_user.privilege?('executive_board')) */ && [
                 {
-                  icon: 'lightning',
+                  icon: 'lightning-fill',
                   content: 'Admin',
                   collapse: true,
 
                   children: [
                     {
                       content: 'Management',
+                      icon: 'pencil-fill',
                       children: [
                         true /* can? :view, :users */ && {
                           href: Paths.Users,
@@ -317,15 +318,16 @@ const useNav = () => {
                     { divider: true },
                     {
                       content: 'Portal',
+                      icon: 'database-fill',
                       children: [
                         {
                           href: Paths.Clubs,
-                          icon: 'shield',
+                          icon: 'shield-fill',
                           content: 'Clubs',
                         },
                         true /* can? :view, :players */ && {
                           href: Paths.Players,
-                          icon: 'list',
+                          icon: 'people-fill',
                           content: 'Players',
                         },
                       ],

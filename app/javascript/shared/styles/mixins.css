@@ -1,5 +1,7 @@
-@define-mixin breakpoint {
-  @media screen and (min-width: 45em) {
+@import url('~shared/styles/variables');
+
+@define-mixin breakpoint $breakpoint: $mobileBreakpoint {
+  @media screen and (min-width: $breakpoint) {
     @mixin-content;
   }
 }
