@@ -80,7 +80,7 @@
       }
 
       img {
-        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+        filter: drop-shadow(0 3px 6px rgb(0 0 0 / 60%));
         margin-left: 1rem;
         max-width: 2rem;
 

@@ -46,6 +46,7 @@
 
     @mixin breakpoint {
       display: none;
+
       + ul {
         display: flex;
       }
@@ -82,11 +83,11 @@
     flex-flow: row nowrap;
     padding: 0.5rem 1rem;
     text-decoration: none;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 1px 1px rgb(0 0 0 / 60%);
     width: 100%;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background-color: rgb(255 255 255 / 10%);
     }
   }
 
@@ -95,7 +96,7 @@
 
     &,
     &:hover {
-      background-color: rgba(0, 0, 0, 0.15);
+      background-color: rgb(0 0 0 / 15%);
     }
   }
 
@@ -112,7 +113,7 @@
     padding: 0;
 
     ul {
-      background-color: rgba(0, 0, 0, 0.1);
+      background-color: rgb(0 0 0 / 10%);
 
       @mixin breakpoint {
         background-color: $maroon;
@@ -129,7 +130,7 @@
   @mixin breakpoint {
     a,
     button {
-      padding: 1rem 1rem;
+      padding: 1rem;
     }
 
     > ul {

@@ -1,5 +1,6 @@
 import Link from '~shared/components/Link';
 import { useAuthCtx } from '~shared/contexts/auth';
+import Paths from '~shared/paths';
 
 import styles from './styles.module.css';
 
@@ -9,19 +10,36 @@ const Footer = () => {
   return (
     <footer className={styles.pageFooter}>
       <nav>
-        <a href="/faq">Frequently Asked Questions</a> &bull;{' '}
-        <a href="/contact">Contact Us</a>
+        <Link unstyled href={Paths.FAQ}>
+          Frequently Asked Questions
+        </Link>{' '}
+        &bull;{' '}
+        <Link unstyled href={Paths.ContactUs}>
+          Contact Us
+        </Link>
         {!user && (
           <>
-            &bull; <a href="/users/sign_up">Sign Up</a> &bull;{' '}
-            <Link href="/sign-in">Sign In</Link>
+            &bull;{' '}
+            <Link unstyled href={Paths.SignUp}>
+              Sign Up
+            </Link>{' '}
+            &bull;{' '}
+            <Link unstyled href={Paths.SignIn}>
+              Sign In
+            </Link>
           </>
         )}
       </nav>
       <p>
         Copyright ©1995 – {new Date().getFullYear()}, Midnight Riders. MLS and
         club logos are copyright their respective owners.{' '}
-        <a href="mailto:webczar+membersite@midnightriders.com">Webmaster</a>
+        <Link
+          external
+          unstyled
+          href="mailto:webczar+membersite@midnightriders.com"
+        >
+          Webmaster
+        </Link>
       </p>
     </footer>
   );

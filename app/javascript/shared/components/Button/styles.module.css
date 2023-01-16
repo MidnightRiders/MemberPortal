@@ -3,16 +3,16 @@
 
 .button {
   button&,
-  &:link,
-  &:visited {
+  a&:link,
+  a&:visited {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     align-items: center;
     background-image: linear-gradient(
-      rgba(255, 255, 255, 0.2),
-      rgba(255, 255, 255, 0) 33.333%,
-      rgba(0, 0, 0, 0) 66.666%,
-      rgba(0, 0, 0, 0.2)
+      rgb(255 255 255 / 20%),
+      rgb(255 255 255 / 0%) 33.333%,
+      rgb(0 0 0 / 0%) 66.666%,
+      rgb(0 0 0 / 20%)
     );
     background-position: 50% 50%;
     background-size: 100% 600%;
@@ -31,7 +31,7 @@
     padding: 0.5rem 1rem;
     text-decoration: none;
     text-align: center;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 1px rgb(0 0 0 / 30%);
     transition: filter 250ms, transform 250ms, background-position 250ms;
     width: 100%;
 
@@ -42,7 +42,7 @@
     &.ghost.ghost {
       background-image: none;
       border: 1px solid;
-      background: transparent;
+      background-color: transparent;
     }
 
     @mixin breakpoint {
@@ -62,14 +62,14 @@
     &:focus,
     &:hover {
       background-position: 0% 0%;
-      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+      filter: drop-shadow(0 3px 6px rgb(0 0 0 / 60%));
       outline: none;
       transform: scale(1.025);
     }
 
     &:active {
       background-position: 0% 100%;
-      filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.8));
+      filter: drop-shadow(0 1px 1px rgb(0 0 0 / 80%));
       transform: scale(0.975);
     }
 

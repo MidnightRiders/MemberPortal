@@ -9,10 +9,10 @@
     "check": "npm-run-all --parallel --continue-on-error --aggregate-output typecheck lint",
     "format": "npm-run-all --parallel --continue-on-error --aggregate-output format:es format:css",
     "format:es": "f() { eslint --fix --format unix ${1:-app/javascript}; }; f",
-    "format:css": "f() { stylelint --fix --formatter unix ${1:-app/javascript/**/*.css}; }; f",
+    "format:css": "f() { stylelint --fix --formatter unix ${1:-'app/javascript/**/*.css'}; }; f",
     "lint": "npm-run-all --parallel --continue-on-error --aggregate-output lint:es lint:css",
     "lint:es": "f() { eslint --format unix ${1:-app/javascript}; }; f",
-    "lint:css": "f() { stylelint --formatter unix ${1:-app/javascript/**/*.css}; }; f"
+    "lint:css": "f() { stylelint --formatter unix ${1:-'app/javascript/**/*.css'}; }; f"
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.5.0",

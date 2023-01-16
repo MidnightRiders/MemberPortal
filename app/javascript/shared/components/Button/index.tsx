@@ -62,6 +62,7 @@ const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
         primary && styles.primary,
         ghost && styles.ghost,
       )}
+      {...(Component === Link ? { unstyled: true } : {})}
       {...props}
     >
       {lfi && <span className={styles.leftIcon}>{lfi}</span>}

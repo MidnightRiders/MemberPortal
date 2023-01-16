@@ -2,6 +2,7 @@ import { useEffect } from 'preact/hooks';
 import { Redirect, Route, Switch, useLocation } from 'wouter-preact';
 
 import Contact from '~routes/Contact';
+import FAQ from '~routes/FAQ';
 import Home from '~routes/Home';
 import SignIn from '~routes/SignIn';
 import SignUp from '~routes/SignUp/SignUp';
@@ -9,7 +10,7 @@ import SignUp from '~routes/SignUp/SignUp';
 import { useAuthCtx } from './contexts/auth';
 import type { Route as Rte } from './makeRoute';
 
-const unauthedRoutes: Rte[] = [Contact];
+const unauthedRoutes: Rte[] = [Contact, FAQ];
 
 const loggedOutRoutes: Rte[] = [SignIn, SignUp];
 

@@ -195,18 +195,12 @@ const NavNode = ({ node }: { node: Node }) => {
     <li className={clsx(gap && styles.gap)}>
       <El
         href={href}
-        {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+        {...(external
+          ? { target: '_blank', rel: 'noreferrer' }
+          : { unstyled: true })}
         {...linkProps}
       >
-        {!external ? (
-          <a {...linkProps}>
-            {icon && <Icon name={icon} />} <span>{content}</span>
-          </a>
-        ) : (
-          <>
-            {icon && <Icon name={icon} />} <span>{content}</span>
-          </>
-        )}
+        {icon && <Icon name={icon} />} <span>{content}</span>
       </El>
     </li>
   );

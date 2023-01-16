@@ -12,7 +12,11 @@ const config = {
     'font-family-name-quotes': 'always-where-recommended',
     'keyframes-name-pattern': '^[a-z][a-zA-Z0-9]+$',
     'no-descending-specificity': null,
-    'selector-class-pattern': '^[a-z][a-zA-Z0-9]+$',
+    'selector-class-pattern': '^([a-z][a-zA-Z0-9]+|bi-[a-z0-9-]+)$',
+    'selector-pseudo-class-no-unknown': [
+      true,
+      { ignorePseudoClasses: 'global' },
+    ],
   },
 };
 

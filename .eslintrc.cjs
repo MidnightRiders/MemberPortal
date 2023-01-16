@@ -30,6 +30,8 @@ const config = {
         unnamedComponents: 'arrow-function',
       },
     ],
+    // This linter is for React properties, not Preact ones
+    'react/no-unknown-property': 'off',
     'react/require-default-props': 'off',
     'react/jsx-props-no-spreading': 'off',
 

@@ -54,14 +54,14 @@
 .block {
   background-color: #fff;
   border-radius: 10px 10px 10px 0;
-  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 3px 3px rgb(0 0 0 / 60%);
   padding: 1rem;
 }
 
 .callout {
   background-image: linear-gradient(
-    rgba(255, 255, 255, 0.9),
-    rgba(255, 255, 255, 0.9)
+    rgb(255 255 255 / 90%),
+    rgb(255 255 255 / 90%)
   );
   border: 1px solid;
   padding: 1rem;

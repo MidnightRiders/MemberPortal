@@ -4,6 +4,7 @@ enum Paths {
   Register = '/sign-up',
   SignIn = '/sign-in',
   SignUp = '/sign-up',
+  ResetPassword = '/reset-password',
   FAQ = '/faq',
   ContactUs = '/contact-us',
 
@@ -14,6 +15,8 @@ enum Paths {
   CurrentUser = '/user',
   Users = '/users',
   User = '/user/:id',
+  UserCurrentMembership = '/user/:userId/membership',
+  UserMembership = '/user/:userId/membership/:id',
   Transactions = '/transactions',
   Polls = '/admin/polls',
   Poll = '/admin/poll/:id',

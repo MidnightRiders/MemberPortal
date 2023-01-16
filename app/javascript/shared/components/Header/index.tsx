@@ -11,7 +11,7 @@ import styles from './styles.module.css';
 const Header = () => (
   <header className={styles.pageHeader}>
     <h1>
-      <Link href={Paths.Home}>
+      <Link unstyled href={Paths.Home}>
         <img src={logo} alt="Midnight Riders" />
       </Link>
       <small>{pageTitle.value ?? 'Member Portal'}</small>
@@ -20,7 +20,7 @@ const Header = () => (
     <div className={styles.nextMatch}>
       <h5>Next Game:</h5>
       {nextRevsMatch.value ? (
-        <Link href={pathTo(Paths.Match, nextRevsMatch.value.id)}>
+        <Link unstyled href={pathTo(Paths.Match, nextRevsMatch.value.id)}>
           <h5>
             {dayjs(nextRevsMatch.value.kickoff).format('dddd, M.D, h:ma')}
             <br />

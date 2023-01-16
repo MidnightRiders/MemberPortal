@@ -1,0 +1,14 @@
+@import url('~shared/styles/variables');
+
+a.link {
+  &:link,
+  &:visited {
+    color: $maroon;
+    text-decoration: underline;
+    transition: color 250ms;
+
+    &:hover {
+      color: $revsRed;
+    }
+  }
+}
