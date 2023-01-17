@@ -6,7 +6,7 @@ import Paths from '~shared/paths';
 
 const FourOhFour = () => (
   <Row>
-    <Column columns={6} center>
+    <Column size={6} center>
       <Block>
         <h1>404</h1>
         <p>Page not found</p>

@@ -42,7 +42,7 @@ const SignIn = makeRoute(Paths.SignIn, () => {
 
   return (
     <Row>
-      <Column columns={6} center>
+      <Column size={6} center>
         <Block as="form" onSubmit={handleLogIn}>
           <Input
             label="Username"

@@ -19,7 +19,7 @@ const Input = ({
 }: Props) => (
   <Row center>
     {label && (
-      <Column columns={labelCol}>
+      <Column size={labelCol}>
         <label
           className={clsx(styles.label, props.required && styles.required)}
           htmlFor={props.name}
@@ -29,7 +29,7 @@ const Input = ({
         </label>
       </Column>
     )}
-    <Column columns={inputCol} offset={label ? 0 : labelCol}>
+    <Column size={inputCol} offset={label ? 0 : labelCol}>
       <Field {...props} />
     </Column>
   </Row>

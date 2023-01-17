@@ -13,7 +13,7 @@ const Actions: FunctionComponent<{
   <Row center>
     <Column
       class={clsx(styles.actions, expand && styles.expand)}
-      columns={cols}
+      size={cols}
       offset={offset}
     >
       {children}

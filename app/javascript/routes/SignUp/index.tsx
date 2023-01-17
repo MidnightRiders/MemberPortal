@@ -100,10 +100,10 @@ const SignUp = makeRoute(Paths.SignUp, () => {
   return (
     <form action="/api/users" method="post" onSubmit={handleSubmit}>
       <Row>
-        <Column columns={3}>
+        <Column size={3}>
           <h2 className="white">User Information</h2>
         </Column>
-        <Column columns={9}>
+        <Column size={9}>
           <Block>
             <InputGroup
               label="Name"
@@ -160,14 +160,14 @@ const SignUp = makeRoute(Paths.SignUp, () => {
         </Column>
       </Row>
       <Row>
-        <Column columns={3}>
+        <Column size={3}>
           <h2 className="white">Contact Information</h2>
           <Callout as="p">
             <strong>We need your address</strong> to be able to send you your
             membership package.
           </Callout>
         </Column>
-        <Column columns={9}>
+        <Column size={9}>
           <Block>
             <Input
               name="email"

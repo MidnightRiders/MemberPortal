@@ -8,10 +8,10 @@ import Paths from '~shared/paths';
 
 const Contact = makeRoute(Paths.ContactUs, () => (
   <Row>
-    <Column columns={3}>
+    <Column size={3}>
       <h2 className="white">Contact Us</h2>
     </Column>
-    <Column columns={9}>
+    <Column size={9}>
       <Block>
         <Actions columns={[0, 12]} expand>
           <Button

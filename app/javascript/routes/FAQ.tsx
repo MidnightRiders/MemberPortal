@@ -11,10 +11,10 @@ const FAQ = makeRoute(Paths.FAQ, () => {
 
   return (
     <Row>
-      <Column columns={3}>
+      <Column size={3}>
         <h2 class="white">FAQ</h2>
       </Column>
-      <Column columns={9}>
+      <Column size={9}>
         <Block>
           <dl>
             <dt id="security">Is my information secure?</dt>

@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 
 const Column: FunctionComponent<
   JSX.IntrinsicElements['div'] & {
-    columns?: number;
+    size?: number;
     center?: boolean;
     offset?: number;
   }
@@ -13,13 +13,13 @@ const Column: FunctionComponent<
   class: className,
   center,
   children,
-  columns = 12,
+  size = 12,
   offset = 0,
   ...rest
 }) => (
   <div
     className={clsx(className, styles.column, center && styles.center)}
-    style={{ '--cols': columns, '--offset': center ? 0 : offset }}
+    style={{ '--cols': size, '--offset': center ? 0 : offset }}
     {...rest}
   >
     {children}

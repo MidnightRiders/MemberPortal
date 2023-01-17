@@ -38,7 +38,7 @@ const InputGroup = ({
   return (
     <Row center>
       {label && (
-        <Column columns={labelCol}>
+        <Column size={labelCol}>
           <label
             className={clsx(styles.label, required && styles.required)}
             htmlFor={fields[0].name}
@@ -48,10 +48,10 @@ const InputGroup = ({
           </label>
         </Column>
       )}
-      <Column columns={inputCol} offset={label ? 0 : labelCol}>
+      <Column size={inputCol} offset={label ? 0 : labelCol}>
         <Row>
           {fields.map((props, i) => (
-            <Column columns={fieldCols[i]!}>
+            <Column size={fieldCols[i]!}>
               <Field {...props} />
             </Column>
           ))}

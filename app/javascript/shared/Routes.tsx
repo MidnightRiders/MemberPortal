@@ -7,6 +7,7 @@ import FourOhFour from '~routes/FourOhFour';
 import Home from '~routes/Home';
 import SignIn from '~routes/SignIn';
 import SignUp from '~routes/SignUp';
+import UserNewMembership from '~routes/users/NewMembership';
 
 import { useAuthCtx } from './contexts/auth';
 import type { Route as Rte } from './makeRoute';
@@ -15,7 +16,7 @@ const unauthedRoutes: Rte[] = [Contact, FAQ];
 
 const loggedOutRoutes: Rte[] = [SignIn, SignUp];
 
-const authedRoutes: Rte[] = [Home];
+const authedRoutes: Rte[] = [Home, UserNewMembership];
 
 const RouteRedirect = ({ path, to }: { path: string; to: string }) => (
   <Route path={path}>
