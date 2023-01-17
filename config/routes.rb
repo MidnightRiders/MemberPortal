@@ -22,7 +22,6 @@ MidnightRiders::Application.routes.draw do
 
   # resources :clubs
 
-  # match 'memberships/webhooks', to: 'memberships#webhooks', via: :all
   # devise_for :users, controllers: { registrations: 'registrations' }
   # resources :users do
   #   collection do
@@ -48,6 +47,8 @@ MidnightRiders::Application.routes.draw do
   # get 'transactions', to: 'static_pages#transactions'
   # get 'faq', to: 'static_pages#faq'
   # get 'contact', to: 'static_pages#contact'
+
+  match 'memberships/webhooks', to: 'memberships#webhooks', via: :all
 
   # post 'nominate', to: 'static_pages#nominate'
   devise_for :users, skip: :all
