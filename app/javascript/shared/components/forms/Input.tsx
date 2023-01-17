@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 
-import Column from '~shared/components/layout/Column';
+import Column, { ColSize } from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
 
 import Field, { FieldProps } from './Field';
@@ -8,7 +8,7 @@ import Field, { FieldProps } from './Field';
 import styles from './styles.module.css';
 
 type Props = FieldProps & {
-  columns?: [number, number];
+  columns?: [ColSize, ColSize];
   label?: string;
 };
 

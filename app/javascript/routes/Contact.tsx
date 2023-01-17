@@ -13,7 +13,7 @@ const Contact = makeRoute(Paths.ContactUs, () => (
     </Column>
     <Column size={9}>
       <Block>
-        <Actions columns={[0, 12]} expand>
+        <Actions sizes={[0, 12]} expand>
           <Button
             leftIcon="envelope"
             as="a"

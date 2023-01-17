@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { useMemo } from 'preact/hooks';
 
-import Column from '~shared/components/layout/Column';
+import Column, { ColSize } from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
 
 import Field, { FieldProps } from './Field';
@@ -9,31 +9,28 @@ import Field, { FieldProps } from './Field';
 import styles from './styles.module.css';
 
 interface Props {
-  columns?: [number, number];
+  columns?: [ColSize, ColSize];
   label?: string;
-  fields: (FieldProps & { columns?: number })[];
+  size: (FieldProps & { size?: ColSize })[];
 }
 
 const InputGroup = ({
   columns: [labelCol, inputCol] = [4, 8],
   label,
-  fields,
+  size,
 }: Props) => {
-  const fieldCols = useMemo(() => {
-    if (fields.some((f) => f.columns)) {
-      const takenCols = fields.reduce((acc, f) => acc + (f.columns || 0), 0);
-      const remainingFields = fields.reduce(
-        (c, f) => c + (f.columns ? 0 : 1),
-        0,
-      );
+  const fieldCols = useMemo<ColSize[]>(() => {
+    if (size.some((f) => f.size)) {
+      const takenCols = size.reduce((acc, f) => acc + (f.size || 0), 0);
+      const remainingFields = size.reduce((c, f) => c + (f.size ? 0 : 1), 0);
       const remainingCols = 12 - takenCols;
       const remainingPerField = Math.round(remainingCols / remainingFields);
-      return fields.map((f) => f.columns ?? remainingPerField);
+      return size.map((f) => (f.size ?? remainingPerField) as ColSize);
     }
-    return fields.map(() => Math.round(12 / fields.length));
+    return size.map(() => Math.round(12 / size.length) as ColSize);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const required = useMemo(() => fields.some((f) => f.required), [fields]);
+  const required = useMemo(() => size.some((f) => f.required), [size]);
 
   return (
     <Row center>
@@ -41,7 +38,7 @@ const InputGroup = ({
         <Column size={labelCol}>
           <label
             className={clsx(styles.label, required && styles.required)}
-            htmlFor={fields[0].name}
+            htmlFor={size[0].name}
           >
             {label}
             {required && <span title="required"> *</span>}
@@ -50,7 +47,7 @@ const InputGroup = ({
       )}
       <Column size={inputCol} offset={label ? 0 : labelCol}>
         <Row>
-          {fields.map((props, i) => (
+          {size.map((props, i) => (
             <Column size={fieldCols[i]!}>
               <Field {...props} />
             </Column>

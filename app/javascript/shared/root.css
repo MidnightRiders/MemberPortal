@@ -125,7 +125,7 @@ h6 {
   }
 
   100% {
-    opactiy: 100%;
+    opacity: 1;
     transform: rotate(360deg);
   }
 }

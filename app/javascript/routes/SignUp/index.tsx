@@ -107,7 +107,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
           <Block>
             <InputGroup
               label="Name"
-              fields={[
+              size={[
                 {
                   name: 'firstName',
                   value: firstName,
@@ -188,7 +188,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
               rows={2}
             />
             <InputGroup
-              fields={[
+              size={[
                 {
                   name: 'city',
                   value: city,
@@ -204,7 +204,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
                   required: true,
                   minLength: 2,
                   maxLength: 3,
-                  columns: 2,
+                  size: 2,
                 },
                 {
                   name: 'postalCode',
@@ -212,7 +212,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
                   setValue: setPostalCode,
                   placeholder: 'Postal Code',
                   required: true,
-                  columns: 3,
+                  size: 3,
                 },
                 {
                   name: 'country',
@@ -220,14 +220,14 @@ const SignUp = makeRoute(Paths.SignUp, () => {
                   setValue: setCountry,
                   placeholder: 'Country',
                   required: true,
-                  columns: 3,
+                  size: 3,
                 },
               ]}
             />
           </Block>
         </Column>
       </Row>
-      <Actions columns={[3, 9]}>
+      <Actions sizes={[3, 9]}>
         <Button type="submit" leftIcon="person-fill-add">
           Sign Up
         </Button>
