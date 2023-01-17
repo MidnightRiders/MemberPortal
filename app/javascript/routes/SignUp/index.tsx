@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'preact/hooks';
-import { Redirect } from 'wouter-preact';
+import { Redirect, useLocation } from 'wouter-preact';
 
 import Button from '~shared/components/Button';
 import Actions from '~shared/components/forms/Actions';
@@ -34,6 +34,7 @@ const fields = {
 
 const SignUp = makeRoute(Paths.SignUp, () => {
   const { setUser, user } = useAuthCtx();
+  const [, setLocation] = useLocation();
 
   const [
     {
@@ -65,6 +66,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
     handleSubmit,
   ] = useForm<{ user: APIExpandedUser }, typeof fields>('/api/users', fields, {
     onSubmit: ({ user: u }) => {
+      setLocation(pathTo(Paths.UserNewMembership, u.id));
       setUser(userFromApi(u));
     },
     constructBody: (userValues) => ({ user: userValues }),

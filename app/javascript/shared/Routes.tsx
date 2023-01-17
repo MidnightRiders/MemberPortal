@@ -3,6 +3,7 @@ import { Redirect, Route, Switch, useLocation } from 'wouter-preact';
 
 import Contact from '~routes/Contact';
 import FAQ from '~routes/FAQ';
+import FourOhFour from '~routes/FourOhFour';
 import Home from '~routes/Home';
 import SignIn from '~routes/SignIn';
 import SignUp from '~routes/SignUp';
@@ -57,6 +58,7 @@ const Routes = () => {
             ...unauthedRoutes.map((r) => <Route path={r.path} component={r} />),
             ...authedRoutes.map((r) => <Route path={r.path} component={r} />),
             <RouteRedirect path="/home" to={Home.path} />,
+            <Route component={FourOhFour} />,
           ]
         : [
             ...authedRoutes.map((r) => (
@@ -66,6 +68,7 @@ const Routes = () => {
             ...loggedOutRoutes.map((r) => (
               <Route path={r.path} component={r} />
             )),
+            <Route component={FourOhFour} />,
           ]}
     </Switch>
   );
