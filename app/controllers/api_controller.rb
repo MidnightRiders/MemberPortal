@@ -1,6 +1,9 @@
 class ApiController < ActionController::API
   before_action :underscore_params!
   before_action :authenticate_user!
+  rescue_from ActiveRecord::RecordInvalid, with: :show_ar_errors
+  rescue_from ActionController::ParameterMissing, with: :show_missing_params
+  rescue_from ApiError, with: :show_api_error
 
   private
 
@@ -23,6 +26,7 @@ class ApiController < ActionController::API
   end
 
   def current_user
+    Rails.logger.info("inside current_user")
     return @current_user if defined?(@current_user)
 
     jwt = request.headers['Authorization']&.split&.last
@@ -40,5 +44,30 @@ class ApiController < ActionController::API
 
   def underscore_params!
     params.deep_transform_keys!(&:underscore)
+  end
+
+  def show_ar_errors(err)
+    render json: {
+      message: err.message,
+      errors: user.errors.transform_keys { _1.camelize(:lower) },
+      jwt: current_user&.jwt,
+    }, status: :bad_request
+  end
+
+  # @param [ActionController::ParameterMissing] err
+  def show_missing_params(err)
+    render json: {
+      message: err.message,
+      missingKeys: err.keys.map { _1.camelize(:lower) },
+      jwt: current_user&.jwt,
+    }, status: :bad_request
+  end
+
+  # @param [ApiError] err
+  def show_api_error(err)
+    render json: {
+      message: err.message,
+      jwt: current_user&.jwt,
+    }, status: err.status
   end
 end

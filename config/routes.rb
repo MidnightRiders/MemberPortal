@@ -70,6 +70,10 @@ MidnightRiders::Application.routes.draw do
           get :next_revs_match
         end
       end
+
+      namespace :purchases do
+        post 'payment-intent', action: :create_payment_intent
+      end
     end
   end
 
