@@ -65,7 +65,7 @@ class StaticPagesController < ActionController::Base
   private
 
   # def stripe_events
-  #   events = Stripe::Event.all(limit: 25, starting_after: params[:starting_after])
+  #   events = Stripe::Event.list(limit: 25, starting_after: params[:starting_after])
   #   @has_more = events.has_more
   #   events.data
   # end

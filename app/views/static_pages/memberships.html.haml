@@ -23,10 +23,10 @@
           %small
             %time= membership.created_at.strftime('%m-%d-%Y %I:%M%P')
         %td
-          = icon 'fa-regular', 'repeat fa-fw' if membership.subscription?
+          = icon 'fa-solid', 'repeat fa-fw' if membership.subscription?
           = icon 'fa-regular', 'credit-card fa-fw' if membership.stripe_charge_id.present?
-          = icon 'fa-regular', 'bolt fa-fw' if membership.override.present?
-          = icon 'fa-regular', 'warning fa-fw', title: 'No charge found or override present' unless membership.stripe_charge_id.present? || membership.override.present?
+          = icon 'fa-solid', 'bolt fa-fw' if membership.override.present?
+          = icon 'fa-solid', 'warning fa-fw', title: 'No charge found or override present' unless membership.stripe_charge_id.present? || membership.override.present?
           = membership.type
           - if membership.is_a? Family
             %br
@@ -45,9 +45,9 @@
         %td.text-right
           - if can?(:cancel, membership) && membership.refunded.nil?
             = link_to cancel_user_membership_path(membership.user, membership), class: 'button tiny alert', title: 'Cancel', data: { method: :patch, confirm: "Cancel #{membership.user.username}'s Membership?" } do
-              = icon 'fa-regular', 'ban'
+              = icon 'fa-solid', 'ban'
           - if can?(:refund, membership) && membership.refunded.nil? && membership.stripe_charge_id.present?
             = link_to cancel_user_membership_path(membership.user, membership, refund: true), class: 'button tiny alert', title: 'Cancel and Refund', data: { method: :patch, confirm: "Cancel and Refund #{membership.user.username}'s Membership?" }  do
-              = icon 'fa-regular', 'undo'
+              = icon 'fa-solid', 'undo'
 .text-right
   = will_paginate(@transactions, previous_label: 'Newer', next_label: 'Older', params: { view: params[:view] })
