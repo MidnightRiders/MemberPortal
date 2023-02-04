@@ -1,5 +1,5 @@
 # rubocop configuration file
-#
+# Configured for 1.39.0
 
 require:
   - rubocop-performance
@@ -16,7 +16,8 @@ AllCops:
   DefaultFormatter: progress
   DisplayStyleGuide: true
   DisplayCopNames: false
-  TargetRubyVersion: 2.3
+  NewCops: enable
+  TargetRubyVersion: 3.1
 
 Rails:
   Enabled: true
