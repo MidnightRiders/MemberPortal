@@ -58,7 +58,7 @@ MidnightRiders::Application.routes.draw do
       get :user, to: 'users#current', as: :current_user
       resources :users
 
-      namespace :sessions do
+      scope :sessions, controller: :sessions, as: :sessions do
         post '/', action: :create
         delete '/', action: :destroy
       end
@@ -71,7 +71,7 @@ MidnightRiders::Application.routes.draw do
         end
       end
 
-      namespace :purchases do
+      scope :purchases, controller: :purchases, as: :purchases do
         post 'payment-intent', action: :create_payment_intent
       end
     end
