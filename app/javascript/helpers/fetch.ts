@@ -27,11 +27,16 @@ export type Fetcher = <T>(
 
 const createFetch =
   (method: 'GET' | 'PATCH' | 'POST' | 'PUT' | 'DELETE'): Fetcher =>
-  async <T>(url: string, data?: unknown, options?: FetchOptions) => {
+  async <T>(
+    url: string,
+    data?: unknown,
+    { headers, ...options }: FetchOptions = {},
+  ) => {
     try {
-      let auth = options?.headers?.Authorization;
+      let auth = headers?.Authorization;
       if (!auth) {
-        auth = cookies.get(COOKIE_NAME);
+        const cookie = cookies.get(COOKIE_NAME);
+        if (cookie) auth = `Bearer ${cookie}`;
       }
       const authorization = auth ? { Authorization: auth } : {};
       const response = await fetch(url, {
@@ -43,10 +48,11 @@ const createFetch =
               .querySelector('meta[name="csrf-token"]')
               ?.getAttribute('content') ?? '',
           'Content-Type':
-            options?.headers ?? data instanceof FormData
+            headers?.['Content-Type'] ??
+            (data instanceof FormData
               ? 'multipart/form-data'
-              : 'application/json',
-          ...options?.headers,
+              : 'application/json'),
+          ...headers,
         },
         body:
           data instanceof FormData || typeof data === 'string'

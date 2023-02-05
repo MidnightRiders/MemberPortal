@@ -4,6 +4,7 @@ json.user do
   else
     json.extract! user, :id, :username, :first_name, :last_name, :member_since
   end
+  json.is_current_member user.current_member?
   json.privileges user.current_privileges
   json.gravatar user.gravatar
 end

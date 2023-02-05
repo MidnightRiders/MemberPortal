@@ -30,7 +30,7 @@ export interface APIExpandedUser extends BaseUser {
   firstName: string;
   isCurrentMember: boolean;
   lastName: string;
-  phone: number;
+  phone: string;
   postalCode: string | null;
   state: string | null;
   stripeCustomerToken: string | null;

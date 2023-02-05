@@ -9,7 +9,7 @@ class Membership < ActiveRecord::Base
   store_accessor :privileges
 
   TYPES = %w(Individual Family Relative).freeze
-  COSTS = { Individual: '1061', Family: '2091' }.freeze
+  COSTS = { Individual: 10.61, Family: 20.91 }.freeze
   PRIVILEGES = %w(admin executive_board at_large_board).freeze
 
   hstore_accessor :info,

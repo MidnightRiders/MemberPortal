@@ -3,7 +3,6 @@ class Api::UsersController < ApiController
   skip_before_action :authenticate_user!, only: %i[create]
 
   def current
-    Rails.logger.info("request for current user")
     @user = current_user
     render json: { error: 'Not logged in' }, status: :unauthorized and return unless @user.present?
 

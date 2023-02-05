@@ -1,3 +1,5 @@
+require_relative '../../lib/api_error'
+
 class ApiController < ActionController::API
   before_action :underscore_params!
   before_action :authenticate_user!
@@ -26,7 +28,6 @@ class ApiController < ActionController::API
   end
 
   def current_user
-    Rails.logger.info("inside current_user")
     return @current_user if defined?(@current_user)
 
     jwt = request.headers['Authorization']&.split&.last

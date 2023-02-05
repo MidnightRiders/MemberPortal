@@ -72,6 +72,7 @@ MidnightRiders::Application.routes.draw do
       end
 
       scope :purchases, controller: :purchases, as: :purchases do
+        get :products, action: :products
         post 'payment-intent', action: :create_payment_intent
       end
     end

@@ -1,15 +1,45 @@
 class Api::PurchasesController < ApiController
+  PRODUCTS = {
+    memberships: {
+      individual: {
+        name: 'Individual',
+        price: Membership::COSTS[:Individual],
+        description: -> { "#{Membership.new_membership_year} Individual membership" },
+        stripe_price: :individual,
+      },
+      family: {
+        name: 'Family',
+        price: Membership::COSTS[:Family],
+        description: -> { "#{Membership.new_membership_year} Family membership" },
+        stripe_price: :family,
+      },
+    },
+  }.with_indifferent_access.freeze
+
+  def products
+    products = if params[:type].present?
+      PRODUCTS[params[:type]]
+    else
+      PRODUCTS
+    end.deep_transform_values do |v|
+      v.is_a?(Proc) ? v.call : v
+    end
+    render json: { products: products || [] }.deep_transform_keys { _1.to_s.camelize(:lower) }, status: products.nil? ? :not_found : :ok
+  end
+
   def create_payment_intent
     payment_intent = Stripe::PaymentIntent.create(
-      amount: price,
+      amount: (price * 100).to_i,
       currency: 'usd',
       automatic_payment_methods: {
         enabled: true,
       },
+      customer: current_user.stripe_customer_token,
+      setup_future_usage: 'off_session',
     )
 
     render json: {
-      client_secret: payment_intent.client_secret,
+      token: payment_intent.client_secret,
       jwt: current_user.jwt,
     }, status: :ok
   end
@@ -17,21 +47,17 @@ class Api::PurchasesController < ApiController
   private
 
   def price
-    params.require(:item).then do |item|
-      case item
-      when 'individual'
-        Membership::COSTS[:Individual]
-      when 'family'
-        Membership::COSTS[:Family]
-      else
-        raise UnknownItemError, item
-      end
+    type = params.require(:type)
+    item = params.require(:item)
+    if PRODUCTS.dig(type, item).nil?
+      raise UnknownItemError.new(type, item)
     end
+    return PRODUCTS[type][item][:price]
   end
 end
 
 class UnknownItemError < ApiError
-  def initialize(item)
-    super(:bad_request, "Unknown item #{item}")
+  def initialize(type, item)
+    super(:bad_request, "Unknown item #{type}/#{item}")
   end
 end

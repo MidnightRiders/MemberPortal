@@ -16,12 +16,13 @@
 <script>if (!window.ga) window.ga = function() {};</script>
 <%= vite_client_tag %>
 <% end %>
-<meta content="initial-scale=1, maximum-scale=1" name="viewport" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
 <%= csrf_meta_tags %>
 <%= render 'shared/riders_logo' %>
 </head>
 <body>
 <div id="root"></div>
+<script src="https://js.stripe.com/v3"></script>
 <%= vite_javascript_tag 'application.tsx' %>
 </body>
 </html>

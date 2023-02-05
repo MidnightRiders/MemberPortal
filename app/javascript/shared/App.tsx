@@ -69,7 +69,7 @@ const App = () => {
         {initialized ? (
           <Routes />
         ) : (
-          <div className="loading" alt="loading" title="Loading…">
+          <div class="loading" alt="loading" title="Loading…">
             <Icon name="arrow-clockwise" />
           </div>
         )}
