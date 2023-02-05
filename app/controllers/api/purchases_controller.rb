@@ -28,6 +28,16 @@ class Api::PurchasesController < ApiController
   end
 
   def create_payment_intent
+    if current_user.nil?
+      render json: {
+        error: 'Unauthorized',
+        jwt: nil,
+      }, status: :unauthorized
+      return
+    end
+    
+    authorize! :create, Membership.new(user: current_user)
+
     payment_intent = Stripe::PaymentIntent.create(
       amount: (price * 100).to_i,
       currency: 'usd',

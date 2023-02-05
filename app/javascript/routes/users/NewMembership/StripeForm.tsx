@@ -60,11 +60,25 @@ const StripeForm = ({ token, onSubmit }: Props) => {
           elements: elementsRef.current,
           confirmParams: {
             return_url:
-              window.location.origin + pathTo(Paths.UserMembership, user!.id),
+              window.location.origin +
+              pathTo(Paths.UserCurrentMembership, { userId: user!.id }),
+            save_payment_method: true,
           },
           redirect: 'if_required',
         });
         if (result.error) throw new PaymentError(result.error.message);
+        if (result.paymentIntent.next_action?.redirect_to_url?.url) {
+          window.location.assign(
+            result.paymentIntent.next_action.redirect_to_url.url,
+          );
+          return;
+        }
+        if (result.paymentIntent.status !== 'succeeded') {
+          throw new PaymentError(
+            `Unexpected payment status: ${result.paymentIntent.status}`,
+          );
+        }
+        // TODO: update user, membership, stripe_customer_id, etc
         onSubmit();
       } catch (err) {
         const error =

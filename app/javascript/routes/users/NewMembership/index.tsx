@@ -60,7 +60,11 @@ const UserNewMembership = makeRoute(Paths.UserNewMembership, () => {
   }, [selectedProduct]);
 
   const handleSubmit = useCallback(() => {
-    window.history.pushState({}, '', pathTo(Paths.UserMembership, user!.id));
+    window.history.pushState(
+      {},
+      '',
+      pathTo(Paths.UserCurrentMembership, { userId: user!.id }),
+    );
   }, [user]);
 
   if (user?.isCurrentMember) {
