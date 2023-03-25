@@ -13,6 +13,22 @@ class Ability
         can :vote, Poll do |poll|
           poll.active?
         end
+        can :show, [User, Club, Match]
+        can :index, Match
+        can :manage, Membership do |membership|
+          membership == user.current_membership
+        end
+        can :manage, [MotM, RevGuess, PickEm], user: user
+        can :create, [MotM, RevGuess], user: user
+        can :vote, PickEm, user: user
+        if user.current_membership.is_a? Family
+          can :manage, Relative do |relative|
+            relative.family_id == user.current_membership.id
+          end
+          can :manage, User do |u|
+            user.current_membership.relatives.map(&:user).include? u
+          end
+        end
         cannot :create, :Registration
         if user.privilege? 'admin'
           can :manage, :all
@@ -31,23 +47,7 @@ class Ability
           can :transactions, :static_page
           can %i[index show], Poll
         else
-          can :show, [User, Club, Match]
-          can :index, Match
-          can :manage, Membership do |membership|
-            membership == user.current_membership
-          end
-          can :manage, [MotM, RevGuess, PickEm], user: user
-          can :create, [MotM, RevGuess], user: user
-          can :vote, PickEm, user: user
-          cannot :manage, Relative
-          if user.current_membership.is_a? Family
-            can :manage, Relative do |relative|
-              relative.family_id == user.current_membership.id
-            end
-            can :manage, User do |u|
-              user.current_membership.relatives.map(&:user).include? u
-            end
-          end
+          cannot :manage, Relative unless user.current_membership.is_a? Family
           cannot :index, [Club, Membership, Player, User, MotM, Relative, Family]
           cannot :refund, Membership
           cannot :grant_privileges, Membership
