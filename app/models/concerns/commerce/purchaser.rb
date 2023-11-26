@@ -42,7 +42,7 @@ module Commerce
     def subscribe_to(product)
       subscription = Stripe::Subscription.create(
         customer: stripe_customer,
-        items: [{ price: product.stripe_price }],
+        plan: product.stripe_price,
         trial_end: product.trial_end
       )
       product.stripe_subscription_id = subscription.id

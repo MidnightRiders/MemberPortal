@@ -175,7 +175,7 @@ RSpec.describe MembershipsController do
                 'Stripe::Subscription',
                 id: event.dig(:data, :object, :subscription),
                 current_period_start: Time.current,
-                plan: double('Stripe::Plan', id: 'individual')
+                plan: double('Stripe::Plan', id: Individual.new.stripe_price)
               )
             }
           end
