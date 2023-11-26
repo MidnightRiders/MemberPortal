@@ -102,8 +102,8 @@ class Membership < ActiveRecord::Base
   end
 
   # For Stripe Subscriptions
-  def plan
-    type.downcase
+  def stripe_price
+    raise NotImplementedError, 'Must be implemented by subclass'
   end
 
   # For Stripe Subscriptions

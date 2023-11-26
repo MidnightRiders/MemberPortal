@@ -3,6 +3,10 @@ class Family < Membership
 
   after_create :re_up_relatives
 
+  def stripe_price
+    'price_1OGXBQE6uJpa1TKpsEHE8yg0'
+  end
+
   private
 
   def re_up_relatives
