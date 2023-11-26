@@ -25,7 +25,8 @@ RSpec.describe UsersController do
       # TODO: straighten out the "undefined method .where for nil" on @user_set = @user_set.where
 
       it 'for admin users' do
-        pending 'these tests are flaky; skipping for now'
+        skip 'these tests are flaky; skipping for now'
+
         sign_in FactoryBot.create(:user, :admin)
         get :index
 
@@ -36,7 +37,8 @@ RSpec.describe UsersController do
         end
 
       it 'for Executive Board users' do
-        pending 'these tests are flaky; skipping for now'
+        skip 'these tests are flaky; skipping for now'
+
         sign_in FactoryBot.create(:user, :executive_board)
         get :index
 
