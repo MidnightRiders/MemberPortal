@@ -121,7 +121,7 @@ class Membership < ActiveRecord::Base
   end
 
   def self.price
-    (COSTS[type.to_sym] * 100).to_i.to_s
+    COSTS[self.to_s.to_sym]
   end
 
   private
