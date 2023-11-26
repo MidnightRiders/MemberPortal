@@ -1,3 +1,8 @@
+# @param {Float} base - The base price of the item in dollars and cents
+def price_plus_stripe_fee(base)
+  ((base * 102.9) + 30).to_i.to_s
+end
+
 # Model belonging to +User+ containing membership information for a given year.
 #
 class Membership < ActiveRecord::Base
@@ -9,7 +14,10 @@ class Membership < ActiveRecord::Base
   store_accessor :privileges
 
   TYPES = %w(Individual Family Relative).freeze
-  COSTS = { Individual: '1061', Family: '2091' }.freeze
+  COSTS = {
+    Individual: price_plus_stripe_fee(20),
+    Family: price_plus_stripe_fee(40),
+  }.freeze
   PRIVILEGES = %w(admin executive_board at_large_board).freeze
 
   hstore_accessor :info,
@@ -113,7 +121,7 @@ class Membership < ActiveRecord::Base
   end
 
   def self.price
-    '1061'
+    (COSTS[type.to_sym] * 100).to_i.to_s
   end
 
   private
