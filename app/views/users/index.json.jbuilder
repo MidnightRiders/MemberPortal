@@ -1,3 +1,3 @@
-json.array!(@users) do |user|
+json.array!(@user_set) do |user|
   json.partial! 'users/user_info', user: user
 end

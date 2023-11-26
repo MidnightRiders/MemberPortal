@@ -64,7 +64,7 @@
       .thd.actions
 
   .tbody
-    - @users.each do |user|
+    - @user_set.each do |user|
       - membership = user.memberships.find { |m| m.year == @year }
       %li.tr
         .td.text-center
@@ -95,4 +95,4 @@
       %strong Total:
       = @user_set.size
   .medium-8.columns.text-right
-    = will_paginate(@users, param_name: 'p', inner_window: 2, outer_window: 2)
+    = will_paginate(@user_set, param_name: 'p', inner_window: 2, outer_window: 2)
