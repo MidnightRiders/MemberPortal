@@ -9,6 +9,7 @@ class UsersController < ApplicationController
     @privilege = @params[:privilege].blank? ? nil : @params[:privilege]
     @year = @params.fetch(:year, Date.current.year).to_i
     @show_all = @params[:show_all].in? [true, 'true']
+    @users ||= User.all
     @full_user_set = @users
     @full_user_set = @full_user_set.text_search(@params[:search]) if @params[:search]
     @full_user_set = @full_user_set.where(memberships: { year: @year }) unless @show_all
