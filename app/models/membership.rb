@@ -1,6 +1,6 @@
 # @param {Float} base - The base price of the item in dollars and cents
 def price_plus_stripe_fee(base)
-  ((base * 102.9) + 30).to_i.to_s
+  (((base + 0.3) / (1 - 0.029)) * 100).round().to_i.to_s
 end
 
 # Model belonging to +User+ containing membership information for a given year.
