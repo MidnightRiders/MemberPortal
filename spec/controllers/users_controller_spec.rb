@@ -25,25 +25,21 @@ RSpec.describe UsersController do
       # TODO: straighten out the "undefined method .where for nil" on @user_set = @user_set.where
 
       it 'for admin users' do
-        skip 'these tests are flaky; skipping for now'
-
         sign_in FactoryBot.create(:user, :admin)
         get :index
 
         expect(response).to be_successful
-        expect(assigns(:user_set)).to match_array(
+        expect(assigns(:full_user_set)).to match_array(
           User.where(memberships: { year: Date.current.year }).order(last_name: :asc, first_name: :asc)
           )
         end
 
       it 'for Executive Board users' do
-        skip 'these tests are flaky; skipping for now'
-
         sign_in FactoryBot.create(:user, :executive_board)
         get :index
 
         expect(response).to be_successful
-        expect(assigns(:user_set)).to match_array(
+        expect(assigns(:full_user_set)).to match_array(
           User.where(memberships: { year: Date.current.year }).order(last_name: :asc, first_name: :asc)
         )
       end
