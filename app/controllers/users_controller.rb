@@ -21,7 +21,7 @@ class UsersController < ApplicationController
       format.html
       format.json
       format.csv {
-        render inline: @user_set.to_csv(year: @year)
+        render inline: @full_user_set.to_csv(year: @year)
       }
     end
   end
