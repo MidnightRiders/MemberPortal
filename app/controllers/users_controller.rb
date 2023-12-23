@@ -15,7 +15,7 @@ class UsersController < ApplicationController
     @full_user_set = @full_user_set.where(memberships: { year: @year }) unless @show_all
     @full_user_set = @full_user_set.where('memberships.privileges::jsonb ?| array[:privileges]', year: Date.current.year, privileges: [@privilege].flatten) if @privilege
     @full_user_set = @full_user_set.includes(:memberships).order(last_name: :asc, first_name: :asc)
-    @user_set = @full_user_set.paginate(page: @params[:p], per_page: 20)
+    @user_set = @full_user_set.paginate(page: params[:p], per_page: 20)
 
     respond_to do |format|
       format.html
