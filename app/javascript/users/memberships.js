@@ -64,16 +64,18 @@
       subscription.stripeInit();
     }
 
-    $('#new-membership').on('submit', function (e) {
+    const confirmAutorenew = function (e) {
+      $(this).off('submit', confirmAutorenew);
       const autoRenewCheckbox = /** @type {HTMLInputElement | undefined} */ (
         $(this).find('[type=checkbox][name*=subscribe]').get(0)
       );
-      if (!autoRenewCheckbox || autoRenewCheckbox.checked) return;
+      if (!autoRenewCheckbox || autoRenewCheckbox.checked) return true;
 
       if (confirm('Are you sure you wish to continue without auto-renewal enabled?')) return;
 
       e.preventDefault();
       return false;
-    });
+    };
+    $('#new-membership').on('submit', confirmAutorenew);
   });
 }).call(this, jQuery);
