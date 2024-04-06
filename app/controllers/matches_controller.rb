@@ -178,15 +178,4 @@ class MatchesController < ApplicationController
     end
     result
   end
-
-  # For use in +import+
-  def retrieve_document(url)
-    uri = URI(url)
-    req = Net::HTTP::Get.new(uri.path)
-    response = Net::HTTP.start(uri.host, uri.port) { |http| http.request(req) }
-    if response.code_type.in? [Net::HTTPRedirection, Net::HTTPFound]
-      response = Net::HTTP.get(URI(response['location']))
-    end
-    response.body
-  end
 end
