@@ -1,6 +1,6 @@
 # Controller for Man of the Match model, +MotM+.
 class MotMsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource through: :current_user
   before_action :set_match, except: [:index]
   before_action :check_eligible, only: %i(new edit create update)
 

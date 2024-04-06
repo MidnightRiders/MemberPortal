@@ -15,10 +15,24 @@ RSpec.describe 'Purchasing Membership', :js, type: :feature do
     before :each do
       login_as user
       visit new_user_membership_path(user)
+      page.execute_script('window.confirms = []; window.confirm = function(msg) { window.confirms.push(msg); return true; };')
     end
 
     it 'shows new membership form when Buy Membership button clicked' do
       expect(page).to have_css("form[action='#{user_memberships_path(user)}']")
+    end
+
+    it 'warns if autorenew is off' do
+      click_button 'Purchase Membership'
+
+      expect(page.evaluate_script('window.confirms;')).to include('Are you sure you wish to continue without auto-renewal enabled?')
+    end
+
+    it 'does not warn if autorenew is on' do
+      check 'membership_subscribe'
+      click_button 'Purchase Membership'
+
+      expect(page.evaluate_script('window.confirms;')).not_to include('Are you sure you wish to continue without auto-renewal enabled?')
     end
 
     it 'rejects an invalid card number with message' do

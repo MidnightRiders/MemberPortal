@@ -9,18 +9,19 @@ class UsersController < ApplicationController
     @privilege = @params[:privilege].blank? ? nil : @params[:privilege]
     @year = @params.fetch(:year, Date.current.year).to_i
     @show_all = @params[:show_all].in? [true, 'true']
-    @user_set = @users
-    @user_set = @user_set.text_search(@params[:search]) if @params[:search]
-    @user_set = @user_set.where(memberships: { year: @year }) unless @show_all
-    @user_set = @user_set.where('memberships.privileges::jsonb ?| array[:privileges]', year: Date.current.year, privileges: [@privilege].flatten) if @privilege
-    @user_set = @user_set.includes(:memberships).order(last_name: :asc, first_name: :asc)
-    @users = @user_set.paginate(page: @params[:p], per_page: 20)
+    @users ||= User.all
+    @full_user_set = @users
+    @full_user_set = @full_user_set.text_search(@params[:search]) if @params[:search]
+    @full_user_set = @full_user_set.where(memberships: { year: @year }) unless @show_all
+    @full_user_set = @full_user_set.where('memberships.privileges::jsonb ?| array[:privileges]', year: Date.current.year, privileges: [@privilege].flatten) if @privilege
+    @full_user_set = @full_user_set.includes(:memberships).order(last_name: :asc, first_name: :asc)
+    @user_set = @full_user_set.paginate(page: params[:p], per_page: 20)
 
     respond_to do |format|
       format.html
       format.json
       format.csv {
-        render inline: @user_set.to_csv(year: @year)
+        render inline: @full_user_set.to_csv(year: @year)
       }
     end
   end

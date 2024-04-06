@@ -1,6 +1,6 @@
 # Controller for +RevGuess+ model.
 class RevGuessesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource through: :current_user
   before_action :set_match
 
   # GET /rev_guesses/new

@@ -3,8 +3,8 @@ class Family < Membership
 
   after_create :re_up_relatives
 
-  def self.price
-    '2091'
+  def stripe_price
+    'price_1OGXBQE6uJpa1TKpsEHE8yg0'
   end
 
   private

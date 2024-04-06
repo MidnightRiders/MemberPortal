@@ -1,3 +1,8 @@
+# @param {Float} base - The base price of the item in dollars and cents
+def price_plus_stripe_fee(base)
+  (((base + 0.3) / (1 - 0.029)) * 100).round().to_i.to_s
+end
+
 # Model belonging to +User+ containing membership information for a given year.
 #
 class Membership < ActiveRecord::Base
@@ -9,7 +14,10 @@ class Membership < ActiveRecord::Base
   store_accessor :privileges
 
   TYPES = %w(Individual Family Relative).freeze
-  COSTS = { Individual: 10.61, Family: 20.91 }.freeze
+  COSTS = {
+    Individual: price_plus_stripe_fee(20),
+    Family: price_plus_stripe_fee(40),
+  }.freeze
   PRIVILEGES = %w(admin executive_board at_large_board).freeze
 
   hstore_accessor :info,
@@ -94,8 +102,8 @@ class Membership < ActiveRecord::Base
   end
 
   # For Stripe Subscriptions
-  def plan
-    type.downcase
+  def stripe_price
+    raise NotImplementedError, 'Must be implemented by subclass'
   end
 
   # For Stripe Subscriptions
@@ -113,7 +121,7 @@ class Membership < ActiveRecord::Base
   end
 
   def self.price
-    '1061'
+    COSTS[self.to_s.to_sym]
   end
 
   private
