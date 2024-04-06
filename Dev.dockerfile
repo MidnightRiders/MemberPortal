@@ -1,8 +1,20 @@
+FROM node:20.12-alpine AS node
 FROM ruby:3.1.3-alpine
 LABEL maintainer="Midnight Riders<webczar@midnightriders.com>"
 
+SHELL ["/bin/ash", "-o", "pipefail", "-c"]
+
 WORKDIR /tmp
-COPY .node-version .
+
+# Install system-level dependencies
+
+COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
+COPY --from=node /usr/local/bin/node /usr/local/bin/
+RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
+  ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx && \
+  ln -s /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack && \
+  corepack enable
+
 RUN apk update
 RUN apk add --no-cache --virtual \
     build-dependencies \
@@ -11,8 +23,6 @@ RUN apk add --no-cache --virtual \
     chromium-chromedriver \
     gcompat \
     yaml-dev \
-    nodejs="$(head -1 .node-version)-r0" \
-    npm \
     postgresql-dev \
     ruby-nokogiri \
     tzdata \
@@ -21,9 +31,7 @@ RUN apk add --no-cache --virtual \
     imagemagick-c++ \
     imagemagick-dev \
     imagemagick-libs && \
-  rm -rf /var/cache/apk/* && \
-  npm i -g corepack && \
-    corepack enable
+  rm -rf /var/cache/apk/*
 
 WORKDIR /tmp
 RUN gem install debase-ruby_core_source
