@@ -2,7 +2,9 @@
 
 /** @type {import('eslint').Linter.Config} */
 const config = {
-  extends: '@bensaufley',
+  extends: [
+    require.resolve('@bensaufley/eslint-config/preact.cjs'),
+  ],
 };
 
 module.exports = config;

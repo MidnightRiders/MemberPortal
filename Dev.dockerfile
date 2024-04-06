@@ -12,8 +12,7 @@ COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
 COPY --from=node /usr/local/bin/node /usr/local/bin/
 RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm && \
   ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx && \
-  ln -s /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack && \
-  corepack enable
+  ln -s /usr/local/lib/node_modules/corepack/dist/corepack.js /usr/local/bin/corepack
 
 RUN apk update
 RUN apk add --no-cache --virtual \
@@ -42,5 +41,5 @@ RUN apk del build-base
 
 WORKDIR /usr/src/member-portal
 
-COPY package.json yarn.lock ./
-RUN yarn install && yarn cache clean
+COPY package.json package-lock.json ./
+RUN npm install
