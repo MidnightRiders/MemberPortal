@@ -2,8 +2,17 @@
 
 /** @type {import('eslint').Linter.Config} */
 const config = {
-  extends: [
-    require.resolve('@bensaufley/eslint-config/preact.cjs'),
+  extends: ['@bensaufley', require.resolve('@bensaufley/eslint-config/preact.cjs')],
+  rules: {
+    'implicit-arrow-linebreak': 'off',
+  },
+  overrides: [
+    {
+      files: ['*.jsx', '*.tsx'],
+      parserOptions: {
+        jsx: true,
+      },
+    },
   ],
 };
 
