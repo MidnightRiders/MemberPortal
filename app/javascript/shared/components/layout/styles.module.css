@@ -59,10 +59,7 @@
 }
 
 .callout {
-  background-image: linear-gradient(
-    rgb(255 255 255 / 90%),
-    rgb(255 255 255 / 90%)
-  );
+  background-image: linear-gradient(rgb(255 255 255 / 90%), rgb(255 255 255 / 90%));
   border: 1px solid;
   padding: 1rem;
   margin-bottom: 1rem;

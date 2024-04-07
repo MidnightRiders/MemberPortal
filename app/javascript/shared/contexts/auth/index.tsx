@@ -1,7 +1,7 @@
 import cookies from 'js-cookie';
 import LogRocket from 'logrocket';
 import { createContext, type FunctionComponent, type JSX } from 'preact';
-import { type StateUpdater, useContext, useEffect, useMemo, useState } from 'preact/hooks';
+import { type Dispatch, type StateUpdater, useContext, useEffect, useMemo, useState } from 'preact/hooks';
 
 import { noop } from '~helpers/utils';
 
@@ -40,7 +40,7 @@ interface AuthContext {
   user: ExpandedUser | null;
 
   setJwt: (jwt: string | null) => void;
-  setUser: StateUpdater<ExpandedUser | null>;
+  setUser: Dispatch<StateUpdater<ExpandedUser | null>>;
 }
 
 const AuthCtx = createContext<AuthContext>({

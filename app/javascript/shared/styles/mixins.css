@@ -1,6 +1,7 @@
 @import url('~shared/styles/variables');
 
 @define-mixin breakpoint $breakpoint: $mobileBreakpoint {
+  /* stylelint-disable-next-line media-query-no-invalid */
   @media screen and (min-width: $breakpoint) {
     @mixin-content;
   }

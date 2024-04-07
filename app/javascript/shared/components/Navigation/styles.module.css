@@ -4,13 +4,7 @@
 .nav {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  background: $maroon
-    linear-gradient(
-      to right,
-      rgba(255 255 255 / 0%),
-      rgba(255 255 255 / 5%),
-      rgba(255 255 255 / 0%)
-    )
+  background: $maroon linear-gradient(to right, rgba(255 255 255 / 0%), rgba(255 255 255 / 5%), rgba(255 255 255 / 0%))
     center / 100% no-repeat;
   display: block;
   filter: drop-shadow(0 3px 6px rgb(0 0 0 / 60%));
@@ -28,15 +22,10 @@
     margin: 0;
   }
 
-  @media screen and (min-width: 78em) {
+  @media screen and (width >= 78em) {
     background: $maroon
-      linear-gradient(
-        to right,
-        rgba(255 255 255 / 0%),
-        rgba(255 255 255 / 10%),
-        rgba(255 255 255 / 0%)
-      )
-      center / 100% calc(100vw - 3rem) no-repeat;
+      linear-gradient(to right, rgba(255 255 255 / 0%), rgba(255 255 255 / 10%), rgba(255 255 255 / 0%)) center / 100%
+      calc(100vw - 3rem) no-repeat;
     left: 1.5rem;
     right: 1.5rem;
     top: 0.5rem;
@@ -140,8 +129,7 @@
     padding: 0;
 
     ul {
-      background: $maroon
-        linear-gradient(to bottom, rgb(0 0 0 / 10%), rgb(0 0 0 / 10%));
+      background: $maroon linear-gradient(to bottom, rgb(0 0 0 / 10%), rgb(0 0 0 / 10%));
 
       @mixin breakpoint {
         background-color: $maroon;

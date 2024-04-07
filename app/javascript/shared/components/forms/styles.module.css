@@ -1,6 +1,5 @@
 @import url('~shared/styles/variables');
 @import url('~shared/styles/mixins');
-
 @import url('~shared/components/layout/styles.module.css');
 
 .label {
@@ -19,14 +18,9 @@
 .textInput,
 .select,
 .textarea {
-  background: #fff
-    linear-gradient(
-      to top right,
-      $maroon,
-      $maroon 50%,
-      rgb(255 255 255 / 0%) 50%
-    )
-    no-repeat -0.5rem calc(100% + 0.5rem) / 0.5rem 0.5rem;
+  background: #fff linear-gradient(to top right, $maroon, $maroon 50%, rgb(255 255 255 / 0%) 50%) no-repeat -0.5rem calc(
+      100% + 0.5rem
+    ) / 0.5rem 0.5rem;
   border: 1px solid $silver;
   border-radius: 10px 10px 10px 0;
   box-sizing: border-box;
@@ -36,7 +30,10 @@
   font-size: 1rem;
   line-height: 1.5rem;
   padding: 0.375rem 0.75rem;
-  transition: border-color 250ms, box-shadow 250ms, background-position 250ms;
+  transition:
+    border-color 250ms,
+    box-shadow 250ms,
+    background-position 250ms;
   width: 100%;
 
   &:focus {
@@ -61,26 +58,22 @@
   padding-right: 2rem;
   position: relative;
   background-color: #fff;
-  background-image: linear-gradient(
-      to top right,
-      $maroon,
-      $maroon 50%,
-      rgb(255 255 255 / 0%) 50%
-    ),
+  background-image: linear-gradient(to top right, $maroon, $maroon 50%, rgb(255 255 255 / 0%) 50%),
     url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22%23adaeae%22%20d%3D%22M233.4%20406.6c12.5%2012.5%2032.8%2012.5%2045.3%200l192-192c12.5-12.5%2012.5-32.8%200-45.3s-32.8-12.5-45.3%200L256%20338.7%2086.6%20169.4c-12.5-12.5-32.8-12.5-45.3%200s-12.5%2032.8%200%2045.3l192%20192z%22%2F%3E%3C%2Fsvg%3E');
   background-repeat: no-repeat;
-  background-position: -0.5rem calc(100% + 0.5rem), calc(100% - 0.75rem) center;
-  background-size: 0.5rem 0.5rem, 0.75rem 0.75rem;
+  background-position:
+    -0.5rem calc(100% + 0.5rem),
+    calc(100% - 0.75rem) center;
+  background-size:
+    0.5rem 0.5rem,
+    0.75rem 0.75rem;
 
   &:focus {
-    background-image: linear-gradient(
-        to top right,
-        $maroon,
-        $maroon 50%,
-        rgb(255 255 255 / 0%) 50%
-      ),
+    background-image: linear-gradient(to top right, $maroon, $maroon 50%, rgb(255 255 255 / 0%) 50%),
       url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22%2302123f%22%20d%3D%22M233.4%20406.6c12.5%2012.5%2032.8%2012.5%2045.3%200l192-192c12.5-12.5%2012.5-32.8%200-45.3s-32.8-12.5-45.3%200L256%20338.7%2086.6%20169.4c-12.5-12.5-32.8-12.5-45.3%200s-12.5%2032.8%200%2045.3l192%20192z%22%2F%3E%3C%2Fsvg%3E');
-    background-position: 0% 100%, calc(100% - 0.75rem) center;
+    background-position:
+      0% 100%,
+      calc(100% - 0.75rem) center;
   }
 }
 
@@ -133,7 +126,10 @@
     font-size: inherit;
     font-weight: inherit;
     padding: 0 0.5rem;
-    transition: color 250ms, border-color 250ms, background-color 250ms;
+    transition:
+      color 250ms,
+      border-color 250ms,
+      background-color 250ms;
 
     &:active {
       background-color: #e0e0e0;

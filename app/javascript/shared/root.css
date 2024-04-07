@@ -1,12 +1,13 @@
 @import url('~shared/styles/mixins');
 @import url('~shared/styles/variables');
-
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css');
 @import url('normalize.css');
 
 @font-face {
   font-family: Mayflower;
-  src: local('Mayflower'), url('./assets/Mayflower.woff2') format('woff2'),
+  src:
+    local('Mayflower'),
+    url('./assets/Mayflower.woff2') format('woff2'),
     url('./assets/Mayflower.ttf') format('opentype');
 }
 
@@ -19,43 +20,23 @@ body {
 }
 
 body {
-  background: linear-gradient(
-        to bottom,
-        rgba(255 255 255 / 2.5%),
-        rgba(255 255 255 / 0%)
-      )
-      center top / 100% no-repeat fixed,
-    $navy
-      radial-gradient(
-        ellipse at center,
-        rgba(255 255 255 / 10%),
-        rgba(255 255 255 / 0%)
-      )
-      center -50vw / 100vw 100vw no-repeat fixed;
+  background:
+    linear-gradient(to bottom, rgba(255 255 255 / 2.5%), rgba(255 255 255 / 0%)) center top / 100% no-repeat fixed,
+    $navy radial-gradient(ellipse at center, rgba(255 255 255 / 10%), rgba(255 255 255 / 0%)) center -50vw / 100vw 100vw
+      no-repeat fixed;
   font-family: $sansFont;
   height: auto;
   position: relative;
 
   @mixin breakpoint {
-    background: linear-gradient(to bottom, $silver, $silver)
-        calc(50% - $maxWidthPx / 2 / 16 * 1rem - 1rem) 0 / 1rem 100% no-repeat
-        fixed,
-      linear-gradient(to bottom, $silver, $silver)
-        calc(50% + $maxWidthPx / 2 / 16 * 1rem + 1rem) 0 / 1rem 100% no-repeat
-        fixed,
-      linear-gradient(
-          to bottom,
-          rgba(255 255 255 / 2.5%),
-          rgba(255 255 255 / 0%)
-        )
-        center top / 100% no-repeat no-repeat,
-      $navy
-        radial-gradient(
-          ellipse at center,
-          rgba(255 255 255 / 10%),
-          rgba(255 255 255 / 0%)
-        )
-        center -50vw / 100vw 100vw no-repeat fixed;
+    background:
+      linear-gradient(to bottom, $silver, $silver) calc(50% - $maxWidthPx / 2 / 16 * 1rem - 1rem) 0 / 1rem 100%
+        no-repeat fixed,
+      linear-gradient(to bottom, $silver, $silver) calc(50% + $maxWidthPx / 2 / 16 * 1rem + 1rem) 0 / 1rem 100%
+        no-repeat fixed,
+      linear-gradient(to bottom, rgba(255 255 255 / 2.5%), rgba(255 255 255 / 0%)) center top / 100% no-repeat no-repeat,
+      $navy radial-gradient(ellipse at center, rgba(255 255 255 / 10%), rgba(255 255 255 / 0%)) center -50vw / 100vw 100vw
+        no-repeat fixed;
   }
 }
 

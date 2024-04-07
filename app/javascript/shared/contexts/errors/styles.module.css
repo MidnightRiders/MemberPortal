@@ -7,7 +7,7 @@
   right: 1rem;
   z-index: 1000;
 
-  @media screen and (min-width: 30em) {
+  @media screen and (width >= 30em) {
     left: auto;
     width: 28rem;
   }
@@ -22,7 +22,9 @@
   opacity: 0;
   padding: 15px;
   transform: translateY(-100%);
-  transition: transform 250ms, opacity 250ms;
+  transition:
+    transform 250ms,
+    opacity 250ms;
 
   &.mounted {
     transform: translateY(0);
