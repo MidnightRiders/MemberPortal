@@ -1,7 +1,4 @@
-import type {
-  StripeElements,
-  StripePaymentElementOptions,
-} from '@stripe/stripe-js';
+import type { StripeElements, StripePaymentElementOptions } from '@stripe/stripe-js';
 import type { JSX } from 'preact';
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import { Redirect } from 'wouter-preact';
@@ -25,9 +22,7 @@ class PaymentError extends Error {
   public readonly name = 'PaymentError';
 }
 
-const waitForElement = (element: {
-  on(event: 'ready', cb: () => void): void;
-}) =>
+const waitForElement = (element: { on(event: 'ready', cb: () => void): void }) =>
   new Promise<void>((resolve) => {
     element.on('ready', resolve);
   });
@@ -59,24 +54,18 @@ const StripeForm = ({ token, onSubmit }: Props) => {
         const result = await stripe.confirmPayment({
           elements: elementsRef.current,
           confirmParams: {
-            return_url:
-              window.location.origin +
-              pathTo(Paths.UserCurrentMembership, { userId: user!.id }),
+            return_url: window.location.origin + pathTo(Paths.UserCurrentMembership, { userId: user!.id }),
             save_payment_method: true,
           },
           redirect: 'if_required',
         });
         if (result.error) throw new PaymentError(result.error.message);
         if (result.paymentIntent.next_action?.redirect_to_url?.url) {
-          window.location.assign(
-            result.paymentIntent.next_action.redirect_to_url.url,
-          );
+          window.location.assign(result.paymentIntent.next_action.redirect_to_url.url);
           return;
         }
         if (result.paymentIntent.status !== 'succeeded') {
-          throw new PaymentError(
-            `Unexpected payment status: ${result.paymentIntent.status}`,
-          );
+          throw new PaymentError(`Unexpected payment status: ${result.paymentIntent.status}`);
         }
         // TODO: update user, membership, stripe_customer_id, etc
         onSubmit();
@@ -127,10 +116,7 @@ const StripeForm = ({ token, onSubmit }: Props) => {
     } satisfies StripePaymentElementOptions);
     paymentElement.mount(paymentRef.current!);
     elementsRef.current = elements;
-    Promise.all([
-      waitForElement(linkAuthElement),
-      waitForElement(paymentElement),
-    ]).then(() => {
+    Promise.all([waitForElement(linkAuthElement), waitForElement(paymentElement)]).then(() => {
       setLoading(false);
     });
 

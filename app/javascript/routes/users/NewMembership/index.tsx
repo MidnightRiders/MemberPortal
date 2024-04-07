@@ -24,15 +24,11 @@ const UserNewMembership = makeRoute(Paths.UserNewMembership, () => {
   const { user } = useAuthCtx();
 
   const [token, setToken] = useState('');
-  const [products, setProducts] = useState<(Product & { id: string })[] | null>(
-    null,
-  );
+  const [products, setProducts] = useState<(Product & { id: string })[] | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<string>();
   const productsGet = useGet('products');
   useOnMount(async () => {
-    const resp = await productsGet<{ products: Record<string, Product> }>(
-      '/api/purchases/products?type=memberships',
-    );
+    const resp = await productsGet<{ products: Record<string, Product> }>('/api/purchases/products?type=memberships');
 
     if (!resp) return;
 
@@ -60,11 +56,7 @@ const UserNewMembership = makeRoute(Paths.UserNewMembership, () => {
   }, [selectedProduct]);
 
   const handleSubmit = useCallback(() => {
-    window.history.pushState(
-      {},
-      '',
-      pathTo(Paths.UserCurrentMembership, { userId: user!.id }),
-    );
+    window.history.pushState({}, '', pathTo(Paths.UserCurrentMembership, { userId: user!.id }));
   }, [user]);
 
   if (user?.isCurrentMember) {
@@ -90,17 +82,9 @@ const UserNewMembership = makeRoute(Paths.UserNewMembership, () => {
         ) : (
           <Block>
             {products.map((product) => (
-              <button
-                type="button"
-                onClick={() => setSelectedProduct(product.id)}
-              >
+              <button type="button" onClick={() => setSelectedProduct(product.id)}>
                 <h3>{product.name}</h3>
-                <h4>
-                  $
-                  {Intl.NumberFormat('en-US', { currency: 'USD' }).format(
-                    product.price,
-                  )}
-                </h4>
+                <h4>${Intl.NumberFormat('en-US', { currency: 'USD' }).format(product.price)}</h4>
                 <p>{product.description}</p>
               </button>
             ))}

@@ -5,18 +5,17 @@ import Button from '~shared/components/Button';
 import Actions from '~shared/components/forms/Actions';
 import Input from '~shared/components/forms/Input';
 import InputGroup from '~shared/components/forms/InputGroup';
-import useForm, { Field } from '~shared/components/forms/useForm';
+import useForm, { type Field } from '~shared/components/forms/useForm';
 import Block from '~shared/components/layout/Block';
 import Callout from '~shared/components/layout/Callout';
 import Column from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
-import { APIExpandedUser, useAuthCtx } from '~shared/contexts/auth';
+import { type APIExpandedUser, useAuthCtx } from '~shared/contexts/auth';
 import { userFromApi } from '~shared/contexts/auth/hooks';
 import makeRoute from '~shared/makeRoute';
 import Paths, { pathTo } from '~shared/paths';
 
-const thisYear =
-  new Date().getFullYear() + (new Date().getMonth() >= 10 ? 1 : 0);
+const thisYear = new Date().getFullYear() + (new Date().getMonth() >= 10 ? 1 : 0);
 
 const fields = {
   firstName: '',
@@ -37,19 +36,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
   const [, setLocation] = useLocation();
 
   const [
-    {
-      firstName,
-      lastName,
-      memberSince,
-      username,
-      password,
-      email,
-      streetAddress,
-      city,
-      state,
-      postalCode,
-      country,
-    },
+    { firstName, lastName, memberSince, username, password, email, streetAddress, city, state, postalCode, country },
     [
       setFirstName,
       setLastName,
@@ -83,10 +70,7 @@ const SignUp = makeRoute(Paths.SignUp, () => {
     if (!firstName && !lastName) return;
 
     setUsername(
-      [
-        firstName.toLocaleLowerCase().replace(/\s+/g, ''),
-        lastName.toLocaleLowerCase().replace(/\s+/g, ''),
-      ].join(''),
+      [firstName.toLocaleLowerCase().replace(/\s+/g, ''), lastName.toLocaleLowerCase().replace(/\s+/g, '')].join(''),
     );
   }, [firstName, lastName]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -127,9 +111,10 @@ const SignUp = makeRoute(Paths.SignUp, () => {
             <Input
               label="Member Since"
               type="select"
-              options={Array.from({ length: thisYear - 1995 + 1 }, (_, i) =>
-                (1995 + i).toString(),
-              ).map((year) => ({ value: year, label: year }))}
+              options={Array.from({ length: thisYear - 1995 + 1 }, (_, i) => (1995 + i).toString()).map((year) => ({
+                value: year,
+                label: year,
+              }))}
               name="memberSince"
               value={memberSince}
               setValue={setMemberSince}
@@ -163,20 +148,12 @@ const SignUp = makeRoute(Paths.SignUp, () => {
         <Column size={3}>
           <h2 className="white">Contact Information</h2>
           <Callout as="p">
-            <strong>We need your address</strong> to be able to send you your
-            membership package.
+            <strong>We need your address</strong> to be able to send you your membership package.
           </Callout>
         </Column>
         <Column size={9}>
           <Block>
-            <Input
-              name="email"
-              type="email"
-              value={email}
-              setValue={setEmail}
-              label="Email"
-              required
-            />
+            <Input name="email" type="email" value={email} setValue={setEmail} label="Email" required />
             <Input
               type="textarea"
               value={streetAddress}

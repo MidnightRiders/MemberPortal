@@ -8,7 +8,9 @@ import Paths from '~shared/paths';
 import { pageTitle } from '~shared/signals/app';
 
 const Home = makeRoute(Paths.Home, () => {
-  const { user: _user } = useAuthCtx();
+  // TODO: use user context
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { user } = useAuthCtx();
 
   useOnMount(() => {
     const prevValue = pageTitle.value;

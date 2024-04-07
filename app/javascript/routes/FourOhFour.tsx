@@ -11,8 +11,7 @@ const FourOhFour = () => (
         <h1>404</h1>
         <p>Page not found</p>
         <p>
-          Return <Link href={Paths.Home}>Home</Link>, read the{' '}
-          <Link href={Paths.FAQ}>FAQ</Link>, or{' '}
+          Return <Link href={Paths.Home}>Home</Link>, read the <Link href={Paths.FAQ}>FAQ</Link>, or{' '}
           <Link href={Paths.ContactUs}>Contact Us</Link>.
         </p>
       </Block>

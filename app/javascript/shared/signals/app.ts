@@ -1,6 +1,6 @@
 import { signal } from '@preact/signals';
 
-import { Match } from '~helpers/matches';
+import type { Match } from '~helpers/matches';
 
 export const pageTitle = signal('');
 

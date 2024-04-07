@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks';
 
-export const useOnMount = (
-  callback: () => void | Promise<void> | (() => void),
-) => {
+export const useOnMount = (callback: () => void | Promise<void> | (() => void)) => {
   useEffect(() => {
     const resp = callback();
     if (typeof resp === 'function') return resp;
@@ -10,10 +8,7 @@ export const useOnMount = (
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 };
 
-export const useOnUpdate = (
-  callback: () => undefined | (() => undefined),
-  deps: unknown[],
-) => {
+export const useOnUpdate = (callback: () => undefined | (() => undefined), deps: unknown[]) => {
   const isInitialMount = useRef(true);
   useEffect(() => {
     if (isInitialMount.current) {

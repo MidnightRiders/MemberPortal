@@ -19,19 +19,11 @@ export type FetchOptions = Omit<RequestInit, 'body' | 'method' | 'headers'> & {
   headers?: Record<string, string>;
 };
 
-export type Fetcher = <T>(
-  url: string,
-  data?: unknown,
-  options?: FetchOptions,
-) => Promise<T>;
+export type Fetcher = <T>(url: string, data?: unknown, options?: FetchOptions) => Promise<T>;
 
 const createFetch =
   (method: 'GET' | 'PATCH' | 'POST' | 'PUT' | 'DELETE'): Fetcher =>
-  async <T>(
-    url: string,
-    data?: unknown,
-    { headers, ...options }: FetchOptions = {},
-  ) => {
+  async <T>(url: string, data?: unknown, { headers, ...options }: FetchOptions = {}) => {
     try {
       let auth = headers?.Authorization;
       if (!auth) {
@@ -43,21 +35,12 @@ const createFetch =
         method,
         headers: {
           ...authorization,
-          'X-CSRF-TOKEN':
-            document
-              .querySelector('meta[name="csrf-token"]')
-              ?.getAttribute('content') ?? '',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '',
           'Content-Type':
-            headers?.['Content-Type'] ??
-            (data instanceof FormData
-              ? 'multipart/form-data'
-              : 'application/json'),
+            headers?.['Content-Type'] ?? (data instanceof FormData ? 'multipart/form-data' : 'application/json'),
           ...headers,
         },
-        body:
-          data instanceof FormData || typeof data === 'string'
-            ? data
-            : JSON.stringify(data),
+        body: data instanceof FormData || typeof data === 'string' ? data : JSON.stringify(data),
         ...options,
       });
 
@@ -71,11 +54,7 @@ const createFetch =
         try {
           const body = await err.json();
           ({ status } = err);
-          if (
-            typeof body === 'object' &&
-            !Array.isArray(body) &&
-            'message' in body
-          ) {
+          if (typeof body === 'object' && !Array.isArray(body) && 'message' in body) {
             ({ message } = body);
           } else {
             message = err.statusText;

@@ -30,10 +30,7 @@ export const fieldIsOptional = (f: Field): boolean => {
   return !!f.optional;
 };
 
-export const fieldIsEmpty = <F extends Field>(
-  f: Field,
-  value: F extends Field<infer T> ? T : never,
-): boolean => {
+export const fieldIsEmpty = <F extends Field>(f: Field, value: F extends Field<infer T> ? T : never): boolean => {
   const isNumber = typeof f === 'object' && f.type === 'number';
   if (isNumber) {
     return value === null;
@@ -50,17 +47,10 @@ interface UseForm {
       constructBody?: (values: ValuesFromFields<F>) => unknown;
     },
     deps?: unknown[],
-  ): readonly [
-    ValuesFromFields<typeof fields>,
-    Setters<typeof fields>,
-    JSX.GenericEventHandler<HTMLFormElement>,
-  ];
+  ): readonly [ValuesFromFields<typeof fields>, Setters<typeof fields>, JSX.GenericEventHandler<HTMLFormElement>];
 }
 
-const useForm: UseForm = <
-  R,
-  F extends Record<string, Field> = Record<string, Field<string | number>>,
->(
+const useForm: UseForm = <R, F extends Record<string, Field> = Record<string, Field<string | number>>>(
   endpoint: `/api/${string}`,
   fields: F,
   {
@@ -77,10 +67,7 @@ const useForm: UseForm = <
   const [values, setValues] = useState(
     () =>
       Object.fromEntries(
-        Object.entries(fields).map(([key, field]) => [
-          key,
-          typeof field === 'object' ? field.value : field,
-        ]),
+        Object.entries(fields).map(([key, field]) => [key, typeof field === 'object' ? field.value : field]),
       ) as ValuesFromFields<F>,
   );
 
@@ -89,8 +76,7 @@ const useForm: UseForm = <
     let coerced: FieldType<F[K]> | null;
     if (
       typeof field === 'number' ||
-      (typeof field === 'object' &&
-        (typeof field.value === 'number' || field.type === 'number'))
+      (typeof field === 'object' && (typeof field.value === 'number' || field.type === 'number'))
     ) {
       coerced = value === '' ? null : (Number(value) as FieldType<F[K]>);
     } else {
@@ -103,10 +89,7 @@ const useForm: UseForm = <
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const setters: Setters<F> = useMemo(
-    () =>
-      (Object.keys(fields) as (keyof F)[]).map(
-        (key) => (value: string) => setValue(key, value),
-      ),
+    () => (Object.keys(fields) as (keyof F)[]).map((key) => (value: string) => setValue(key, value)),
     [], // eslint-disable-line react-hooks/exhaustive-deps
   );
 
@@ -116,12 +99,7 @@ const useForm: UseForm = <
     async (e) => {
       e.preventDefault();
 
-      if (
-        Object.entries(fields).some(
-          ([key, field]) =>
-            !fieldIsOptional(field) && fieldIsEmpty(field, values[key]),
-        )
-      ) {
+      if (Object.entries(fields).some(([key, field]) => !fieldIsOptional(field) && fieldIsEmpty(field, values[key]))) {
         addError(endpoint, 'Error: missing required fields');
         return;
       }

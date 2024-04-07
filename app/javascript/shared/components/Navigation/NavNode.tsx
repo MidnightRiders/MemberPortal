@@ -5,7 +5,7 @@ import { useLocation } from 'wouter-preact';
 
 import Link from '~shared/components/Link';
 
-import Icon, { IconName } from '../Icon';
+import Icon, { type IconName } from '../Icon';
 
 import styles from './styles.module.css';
 
@@ -52,13 +52,7 @@ interface ExpandableProps {
 
 const stopPropagation = (e: Event) => e.stopPropagation();
 
-export const Expandable = ({
-  content,
-  gap = false,
-  icon,
-  nodes,
-  title,
-}: ExpandableProps) => {
+export const Expandable = ({ content, gap = false, icon, nodes, title }: ExpandableProps) => {
   const [expanded, setExpanded] = useState(false);
   const toggle = useCallback(() => setExpanded((e) => !e), []);
   const [location] = useLocation();
@@ -88,22 +82,14 @@ export const Expandable = ({
   return (
     // This is not an interactive element; it just stops propagation of click events farther down the tree.
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
-    <li
-      className={clsx(styles.expandable, gap && styles.gap)}
-      onClick={stopPropagation}
-    >
+    <li className={clsx(styles.expandable, gap && styles.gap)} onClick={stopPropagation}>
       <button
         type="button"
-        className={clsx(
-          styles.expand,
-          expanded && styles.expanded,
-          title && styles.collapse,
-        )}
+        className={clsx(styles.expand, expanded && styles.expanded, title && styles.collapse)}
         onClick={toggle}
         {...(title ? { title } : {})}
       >
-        {icon && <Icon name={icon} />} <span>{content}</span>{' '}
-        <Icon name="chevron-down" />
+        {icon && <Icon name={icon} />} <span>{content}</span> <Icon name="chevron-down" />
       </button>
       {expanded && (
         <ul>
@@ -145,11 +131,7 @@ const NavNode = ({ node }: { node: Node }) => {
     return (
       <>
         <li
-          className={clsx(
-            styles.groupHeader,
-            node.gap && styles.gap,
-            node.collapse && styles.collapse,
-          )}
+          className={clsx(styles.groupHeader, node.gap && styles.gap, node.collapse && styles.collapse)}
           {...titleFromNode(node)}
         >
           {node.icon && <Icon name={node.icon} />} <span>{content}</span>
@@ -193,13 +175,7 @@ const NavNode = ({ node }: { node: Node }) => {
   };
   return (
     <li className={clsx(gap && styles.gap)}>
-      <El
-        href={href}
-        {...(external
-          ? { target: '_blank', rel: 'noreferrer' }
-          : { unstyled: true })}
-        {...linkProps}
-      >
+      <El href={href} {...(external ? { target: '_blank', rel: 'noreferrer' } : { unstyled: true })} {...linkProps}>
         {icon && <Icon name={icon} />} <span>{content}</span>
       </El>
     </li>

@@ -19,20 +19,14 @@ const Navigation = () => {
     setMobileExpand(false);
   }, [location]);
 
-  const toggleMobileExpand = useCallback<
-    JSX.GenericEventHandler<HTMLButtonElement>
-  >((e) => {
+  const toggleMobileExpand = useCallback<JSX.GenericEventHandler<HTMLButtonElement>>((e) => {
     e.preventDefault();
     setMobileExpand((v) => !v);
   }, []);
 
   return (
     <nav className={styles.nav}>
-      <button
-        type="button"
-        className={styles.mobileExpand}
-        onClick={toggleMobileExpand}
-      >
+      <button type="button" className={styles.mobileExpand} onClick={toggleMobileExpand}>
         <Icon name="list" /> Menu
       </button>
       <ul className={clsx(mobileExpand && styles.mobileExpanded)}>

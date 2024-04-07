@@ -1,7 +1,7 @@
 enum Paths {
   Home = '/',
   Login = '/login',
-  Register = '/sign-up',
+  Register = '/register',
   SignIn = '/sign-in',
   SignUp = '/sign-up',
   ResetPassword = '/reset-password',
@@ -34,13 +34,8 @@ interface PathTo {
   (path: Paths, params: Record<string, string | number>): string;
 }
 
-export const pathTo: PathTo = (
-  path: Paths,
-  params: string | number | Record<string, string | number>,
-) => {
-  const pathWithParams = Object.entries(
-    typeof params === 'object' ? params : { id: params },
-  ).reduce<string>(
+export const pathTo: PathTo = (path: Paths, params: string | number | Record<string, string | number>) => {
+  const pathWithParams = Object.entries(typeof params === 'object' ? params : { id: params }).reduce<string>(
     (p, [key, value]) => p.replace(`:${key}`, value.toString()),
     path,
   );

@@ -4,7 +4,7 @@ import { FetchError } from '~helpers/fetch';
 import { useDel, usePost } from '~shared/contexts/errors/fetch';
 import { error } from '~shared/debug';
 
-import { APIExpandedUser, ExpandedUser, useAuthCtx } from '.';
+import { type APIExpandedUser, type ExpandedUser, useAuthCtx } from '.';
 
 export const userFromApi = (apiUser: APIExpandedUser): ExpandedUser =>
   Object.entries(apiUser).reduce(
@@ -38,10 +38,7 @@ export const useLogIn = () => {
   );
 
   const logIn = useCallback(async (username: string, password: string) => {
-    const resp = await createSession<{ user: APIExpandedUser; jwt: string }>(
-      '/api/sessions',
-      { username, password },
-    );
+    const resp = await createSession<{ user: APIExpandedUser; jwt: string }>('/api/sessions', { username, password });
     if (!resp) return;
 
     setUser(userFromApi(resp.user));

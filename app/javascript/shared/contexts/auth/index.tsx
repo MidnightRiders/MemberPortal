@@ -1,13 +1,7 @@
 import cookies from 'js-cookie';
 import LogRocket from 'logrocket';
-import { createContext, FunctionComponent, JSX } from 'preact';
-import {
-  StateUpdater,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'preact/hooks';
+import { createContext, type FunctionComponent, type JSX } from 'preact';
+import { type StateUpdater, useContext, useEffect, useMemo, useState } from 'preact/hooks';
 
 import { noop } from '~helpers/utils';
 
@@ -37,10 +31,7 @@ export interface APIExpandedUser extends BaseUser {
   updatedAt: string;
 }
 
-export type ExpandedUser = Omit<
-  APIExpandedUser,
-  TimestampKeys<APIExpandedUser>
-> & {
+export type ExpandedUser = Omit<APIExpandedUser, TimestampKeys<APIExpandedUser>> & {
   [K in TimestampKeys<APIExpandedUser>]: Date;
 };
 
@@ -83,10 +74,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
     LogRocket.identify(user.id.toString(), { username: user.username });
   }, [user]);
 
-  const value = useMemo(
-    () => ({ jwt, user, setJwt, setUser }),
-    [jwt, user, setJwt, setUser],
-  );
+  const value = useMemo(() => ({ jwt, user, setJwt, setUser }), [jwt, user, setJwt, setUser]);
 
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 };

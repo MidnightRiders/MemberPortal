@@ -1,13 +1,7 @@
 import { captureException } from '@sentry/browser';
 import LogRocket from 'logrocket';
-import { createContext, FunctionComponent } from 'preact';
-import {
-  useCallback,
-  useContext,
-  useErrorBoundary,
-  useMemo,
-  useState,
-} from 'preact/hooks';
+import { createContext, type FunctionComponent } from 'preact';
+import { useCallback, useContext, useErrorBoundary, useMemo, useState } from 'preact/hooks';
 
 import { noop } from '~helpers/utils';
 
@@ -47,48 +41,39 @@ export const useErrorsCtx = () => useContext(ErrorsCtx);
 export const ErrorsProvider: FunctionComponent = ({ children }) => {
   const [errors, setErrors] = useState<Record<string, Err[]>>({});
 
-  const addError = useCallback(
-    (
-      key: string,
-      message: string,
-      { flash = 5_000, local = false }: ErrorOptions = {},
-    ) => {
-      const err: Err = { local, message, timestamp: Date.now() };
-      setErrors((prev) => ({
-        ...prev,
-        [key]: [...(prev[key] ?? []), err],
-      }));
+  const addError = useCallback((key: string, message: string, { flash = 5_000, local = false }: ErrorOptions = {}) => {
+    const err: Err = { local, message, timestamp: Date.now() };
+    setErrors((prev) => ({
+      ...prev,
+      [key]: [...(prev[key] ?? []), err],
+    }));
 
-      if (!flash) return;
+    if (!flash) return;
 
-      setTimeout(() => {
-        setErrors((prev) => {
-          const errs = prev[key];
-          if (!errs) return prev;
+    setTimeout(() => {
+      setErrors((prev) => {
+        const errs = prev[key];
+        if (!errs) return prev;
 
-          const newErrs = errs.filter((e) => e !== err);
-          if (newErrs.length === errs.length) return prev;
+        const newErrs = errs.filter((e) => e !== err);
+        if (newErrs.length === errs.length) return prev;
 
-          if (!newErrs.length) {
-            const { [key]: _, ...rest } = prev;
-            return rest;
-          }
+        if (!newErrs.length) {
+          const { [key]: _, ...rest } = prev;
+          return rest;
+        }
 
-          return {
-            ...prev,
-            [key]: newErrs,
-          };
-        });
-      }, flash);
-    },
-    [],
-  );
+        return {
+          ...prev,
+          [key]: newErrs,
+        };
+      });
+    }, flash);
+  }, []);
 
   useErrorBoundary((err, errInfo) => {
     const message: string =
-      err && 'message' in err
-        ? (err.message as string)
-        : 'An unexpected application error was encountered';
+      err && 'message' in err ? (err.message as string) : 'An unexpected application error was encountered';
     captureException(err, { extra: { ...errInfo, message } });
     LogRocket.captureException(err, { extra: { ...errInfo, message } });
     addError('global', message, { flash: 0 });
@@ -114,33 +99,21 @@ export const ErrorsProvider: FunctionComponent = ({ children }) => {
     () =>
       Object.entries(errors)
         .reduce<(Err & { origin: string })[]>(
-          (acc, [key, errs]) => [
-            ...acc,
-            ...errs
-              .filter(({ local }) => !local)
-              .map((err) => ({ ...err, origin: key })),
-          ],
+          (acc, [key, errs]) => [...acc, ...errs.filter(({ local }) => !local).map((err) => ({ ...err, origin: key }))],
           [],
         )
         .sort((a, b) => a.timestamp - b.timestamp),
     [errors],
   );
 
-  const value = useMemo(
-    () => ({ errors, addError, getError, getErrors }),
-    [errors, addError, getError, getErrors],
-  );
+  const value = useMemo(() => ({ errors, addError, getError, getErrors }), [errors, addError, getError, getErrors]);
 
   return (
     <ErrorsCtx.Provider value={value}>
       {!!sortedErrors.length && (
         <div className={styles.errors}>
           {sortedErrors.map(({ message, origin, timestamp }) => (
-            <ErrorDisplay
-              key={`${message}-${timestamp}`}
-              message={message}
-              origin={origin}
-            />
+            <ErrorDisplay key={`${message}-${timestamp}`} message={message} origin={origin} />
           ))}
         </div>
       )}

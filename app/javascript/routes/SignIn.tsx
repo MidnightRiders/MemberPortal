@@ -44,13 +44,7 @@ const SignIn = makeRoute(Paths.SignIn, () => {
     <Row>
       <Column size={6} center>
         <Block as="form" onSubmit={handleLogIn}>
-          <Input
-            label="Username"
-            value={username}
-            setValue={setUsername}
-            name="username"
-            autocomplete="username"
-          />
+          <Input label="Username" value={username} setValue={setUsername} name="username" autocomplete="username" />
           <Input
             type="password"
             name="password"
@@ -63,12 +57,7 @@ const SignIn = makeRoute(Paths.SignIn, () => {
             <Button leftIcon="box-arrow-in-right" type="submit">
               Sign In
             </Button>
-            <Button
-              as={Link}
-              href={Paths.SignUp}
-              secondary
-              leftIcon="pencil-fill"
-            >
+            <Button as={Link} href={Paths.SignUp} secondary leftIcon="pencil-fill">
               Sign Up
             </Button>
           </Actions>

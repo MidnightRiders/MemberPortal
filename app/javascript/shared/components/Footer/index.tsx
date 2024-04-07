@@ -31,13 +31,9 @@ const Footer = () => {
         )}
       </nav>
       <p>
-        Copyright ©1995 – {new Date().getFullYear()}, Midnight Riders. MLS and
-        club logos are copyright their respective owners.{' '}
-        <Link
-          external
-          unstyled
-          href="mailto:webczar+membersite@midnightriders.com"
-        >
+        Copyright ©1995 – {new Date().getFullYear()}, Midnight Riders. MLS and club logos are copyright their
+        respective owners.{' '}
+        <Link external unstyled href="mailto:webczar+membersite@midnightriders.com">
           Webmaster
         </Link>
       </p>

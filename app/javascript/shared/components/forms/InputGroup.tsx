@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import { useMemo } from 'preact/hooks';
 
-import Column, { ColSize } from '~shared/components/layout/Column';
+import Column, { type ColSize } from '~shared/components/layout/Column';
 import Row from '~shared/components/layout/Row';
 
-import Field, { FieldProps } from './Field';
+import Field, { type FieldProps } from './Field';
 
 import styles from './styles.module.css';
 
@@ -14,11 +14,7 @@ interface Props {
   size: (FieldProps & { size?: ColSize })[];
 }
 
-const InputGroup = ({
-  columns: [labelCol, inputCol] = [4, 8],
-  label,
-  size,
-}: Props) => {
+const InputGroup = ({ columns: [labelCol, inputCol] = [4, 8], label, size }: Props) => {
   const fieldCols = useMemo<ColSize[]>(() => {
     if (size.some((f) => f.size)) {
       const takenCols = size.reduce((acc, f) => acc + (f.size || 0), 0);
@@ -36,10 +32,7 @@ const InputGroup = ({
     <Row center>
       {label && (
         <Column size={labelCol}>
-          <label
-            className={clsx(styles.label, required && styles.required)}
-            htmlFor={size[0].name}
-          >
+          <label className={clsx(styles.label, required && styles.required)} htmlFor={size[0].name}>
             {label}
             {required && <span title="required"> *</span>}
           </label>

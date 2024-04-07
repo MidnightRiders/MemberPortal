@@ -3,10 +3,7 @@ import type { JSX } from 'preact';
 
 import styles from './styles.module.css';
 
-type Props<T extends keyof JSX.IntrinsicElements> = Omit<
-  JSX.IntrinsicElements[T],
-  'as'
-> & {
+type Props<T extends keyof JSX.IntrinsicElements> = Omit<JSX.IntrinsicElements[T], 'as'> & {
   as?: T;
 };
 

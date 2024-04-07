@@ -4,15 +4,11 @@ import { useState } from 'preact/hooks';
 import { Router } from 'wouter-preact';
 
 import { FetchError } from '~helpers/fetch';
-import { Match } from '~helpers/matches';
+import type { Match } from '~helpers/matches';
 import Footer from '~shared/components/Footer';
 import Header from '~shared/components/Header';
 import Navigation from '~shared/components/Navigation';
-import {
-  APIExpandedUser,
-  AuthProvider,
-  useAuthCtx,
-} from '~shared/contexts/auth';
+import { type APIExpandedUser, AuthProvider, useAuthCtx } from '~shared/contexts/auth';
 import { userFromApi } from '~shared/contexts/auth/hooks';
 import { CacheProvider } from '~shared/contexts/cache';
 import { ErrorsProvider } from '~shared/contexts/errors';
@@ -23,8 +19,7 @@ import { nextRevsMatch, pageTitle } from '~shared/signals/app';
 
 import Icon from './components/Icon';
 
-const ignoreUnauthed = (err: unknown) =>
-  err instanceof FetchError && err.status === 401;
+const ignoreUnauthed = (err: unknown) => err instanceof FetchError && err.status === 401;
 
 const App = () => {
   const getNextRevsMatch = useGet('nextRevsMatch');
@@ -35,14 +30,15 @@ const App = () => {
 
   useOnMount(() => {
     const updateNextRevsMatch = async () => {
-      const resp = await getNextRevsMatch<{ match: Match }>(
-        '/api/matches/next_revs_match',
-      );
+      const resp = await getNextRevsMatch<{ match: Match }>('/api/matches/next_revs_match');
       nextRevsMatch.value = resp ? resp.match : null;
     };
-    const poll = setInterval(() => {
-      updateNextRevsMatch();
-    }, 1_000 * 60 * 60);
+    const poll = setInterval(
+      () => {
+        updateNextRevsMatch();
+      },
+      1_000 * 60 * 60,
+    );
     updateNextRevsMatch();
 
     return () => clearInterval(poll);

@@ -42,4 +42,5 @@ RUN apk del build-base
 WORKDIR /usr/src/member-portal
 
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm install && \
+  npm cache clean --force

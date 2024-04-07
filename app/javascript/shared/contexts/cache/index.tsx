@@ -1,4 +1,4 @@
-import { createContext, FunctionComponent } from 'preact';
+import { createContext, type FunctionComponent } from 'preact';
 import { useCallback, useMemo, useState } from 'preact/hooks';
 
 import { noop } from '~helpers/utils';
@@ -32,10 +32,7 @@ export const CacheProvider: FunctionComponent = ({ children }) => {
   }, []);
 
   const get: CacheGetter = useCallback(
-    <T extends unknown>(
-      key: string,
-      orElse: T | (() => T | Promise<T>) | null = null,
-    ) => {
+    <T extends unknown>(key: string, orElse: T | (() => T | Promise<T>) | null = null) => {
       if (cached[key]) return cached[key] as T;
       if (typeof orElse === 'function') {
         const value = (orElse as () => T | Promise<T>)();

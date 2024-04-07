@@ -7,25 +7,15 @@ import type { PasswordTextFieldProps } from './Field';
 
 import styles from './styles.module.css';
 
-const Password = ({
-  type: _t,
-  name,
-  value,
-  setValue,
-  required = false,
-  ...props
-}: PasswordTextFieldProps) => {
+const Password = ({ type: _t, name, value, setValue, required = false, ...props }: PasswordTextFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const fieldRef = useRef<HTMLInputElement>(null);
 
-  const toggleShow = useCallback<JSX.MouseEventHandler<HTMLButtonElement>>(
-    (e) => {
-      e.preventDefault();
-      setShowPassword((v) => !v);
-      fieldRef.current?.focus();
-    },
-    [],
-  );
+  const toggleShow = useCallback<JSX.MouseEventHandler<HTMLButtonElement>>((e) => {
+    e.preventDefault();
+    setShowPassword((v) => !v);
+    fieldRef.current?.focus();
+  }, []);
 
   return (
     <div className={styles.password}>
@@ -44,6 +34,7 @@ const Password = ({
         type="button"
         onClick={toggleShow}
         title={showPassword ? 'Hide Password' : 'Show Password'}
+        aria-label={showPassword ? 'Hide Password' : 'Show Password'}
       >
         <Icon name={showPassword ? 'eye' : 'eye-slash'} />
       </button>

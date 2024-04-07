@@ -11,13 +11,7 @@ const ERROR_ICON_MAP: Record<string, IconName | undefined> = {
   default: 'exclamation-triangle-fill',
 };
 
-const ErrorDisplay = ({
-  message,
-  origin,
-}: {
-  message: string;
-  origin: string;
-}) => {
+const ErrorDisplay = ({ message, origin }: { message: string; origin: string }) => {
   const [mounted, setMounted] = useState(false);
 
   const icon = ERROR_ICON_MAP[origin] ?? ERROR_ICON_MAP.default!;

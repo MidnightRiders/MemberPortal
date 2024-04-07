@@ -93,11 +93,7 @@ export interface NumberTextFieldProps extends BaseTextFieldProps {
   max?: number;
 }
 
-export type TextFieldProps =
-  | SimpleTextFieldProps
-  | PasswordTextFieldProps
-  | DateTextFieldProps
-  | NumberTextFieldProps;
+export type TextFieldProps = SimpleTextFieldProps | PasswordTextFieldProps | DateTextFieldProps | NumberTextFieldProps;
 
 export interface TextareaFieldProps extends BaseTextFieldProps {
   type: 'textarea';
@@ -111,13 +107,7 @@ export interface SelectFieldProps extends BaseFieldProps {
 
 export type FieldProps = TextFieldProps | TextareaFieldProps | SelectFieldProps;
 
-const Field = ({
-  name,
-  value,
-  required = false,
-  setValue,
-  ...props
-}: FieldProps) => {
+const Field = ({ name, value, required = false, setValue, ...props }: FieldProps) => {
   if (props.type === 'select') {
     const { options } = props;
     return (
@@ -154,15 +144,7 @@ const Field = ({
   }
 
   if (props.type === 'password') {
-    return (
-      <Password
-        name={name}
-        value={value ?? ''}
-        setValue={setValue}
-        required={required}
-        {...props}
-      />
-    );
+    return <Password name={name} value={value ?? ''} setValue={setValue} required={required} {...props} />;
   }
 
   return (

@@ -29,10 +29,7 @@ const Routes = () => {
   const [location] = useLocation();
   useEffect(() => {
     let currentScroll = window.scrollY;
-    const scrollY = Math.min(
-      currentScroll,
-      document.querySelector('#root > header')?.clientHeight ?? 0,
-    );
+    const scrollY = Math.min(currentScroll, document.querySelector('#root > header')?.clientHeight ?? 0);
     if (scrollY === currentScroll) return undefined;
 
     const step = Math.max(1, Math.floor((currentScroll - scrollY) / 25));
@@ -53,22 +50,16 @@ const Routes = () => {
     <Switch>
       {user
         ? [
-            ...loggedOutRoutes.map((r) => (
-              <RouteRedirect path={r.path} to={Home.path} />
-            )),
+            ...loggedOutRoutes.map((r) => <RouteRedirect path={r.path} to={Home.path} />),
             ...unauthedRoutes.map((r) => <Route path={r.path} component={r} />),
             ...authedRoutes.map((r) => <Route path={r.path} component={r} />),
             <RouteRedirect path="/home" to={Home.path} />,
             <Route component={FourOhFour} />,
           ]
         : [
-            ...authedRoutes.map((r) => (
-              <RouteRedirect path={r.path} to={SignIn.path} />
-            )),
+            ...authedRoutes.map((r) => <RouteRedirect path={r.path} to={SignIn.path} />),
             ...unauthedRoutes.map((r) => <Route path={r.path} component={r} />),
-            ...loggedOutRoutes.map((r) => (
-              <Route path={r.path} component={r} />
-            )),
+            ...loggedOutRoutes.map((r) => <Route path={r.path} component={r} />),
             <Route component={FourOhFour} />,
           ]}
     </Switch>

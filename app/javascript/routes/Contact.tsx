@@ -14,28 +14,13 @@ const Contact = makeRoute(Paths.ContactUs, () => (
     <Column size={9}>
       <Block>
         <Actions sizes={[0, 12]} expand>
-          <Button
-            leftIcon="envelope"
-            as="a"
-            href="mailto:info@midnightriders.com"
-          >
+          <Button leftIcon="envelope" as="a" href="mailto:info@midnightriders.com">
             General Inquiries
           </Button>
-          <Button
-            ghost
-            leftIcon="envelope"
-            as="a"
-            href="mailto:membership@midnightriders.com"
-          >
+          <Button ghost leftIcon="envelope" as="a" href="mailto:membership@midnightriders.com">
             Membership Inquiries
           </Button>
-          <Button
-            ghost
-            leftIcon="at"
-            as="a"
-            href="mailto:member-portal-support@midnightriders.com"
-            secondary
-          >
+          <Button ghost leftIcon="at" as="a" href="mailto:member-portal-support@midnightriders.com" secondary>
             Member Portal Inquiries
           </Button>
         </Actions>

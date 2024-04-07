@@ -3,7 +3,7 @@ import type { JSX } from 'preact';
 
 import Link from '~shared/components/Link';
 
-import Icon, { IconName } from '../Icon';
+import Icon, { type IconName } from '../Icon';
 
 import styles from './styles.module.css';
 
@@ -39,8 +39,8 @@ const Button = <T extends 'a' | 'button' | typeof Link = 'button'>({
   if ('secondary' in rest) {
     ({ secondary, ...props } = rest);
   } else {
-    let _p: unknown;
-    ({ primary: _p, ...props } = rest);
+    let _: unknown;
+    ({ primary: _, ...props } = rest);
     primary = true;
   }
 

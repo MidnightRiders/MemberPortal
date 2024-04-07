@@ -17,7 +17,7 @@
   },
   "description": "Member Portal for Midnight Riders; migrating from HAML to Preact",
   "devDependencies": {
-    "@bensaufley/eslint-config": "^1.0.2",
+    "@bensaufley/eslint-config": "^1.1.2",
     "@preact/preset-vite": "^2.8.2",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20.12.5",
@@ -60,10 +60,10 @@
     "check": "npm-run-all --parallel --continue-on-error --aggregate-output typecheck lint",
     "format": "npm-run-all --parallel --continue-on-error --aggregate-output format:es format:css",
     "format:css": "f() { stylelint --fix --formatter unix ${1:-'app/javascript/**/*.css'}; }; f",
-    "format:es": "f() { eslint --fix --format unix ${1:-app/javascript}; }; f",
+    "format:es": "f() { bslint --format ${1:-app/javascript}; }; f",
     "lint": "npm-run-all --parallel --continue-on-error --aggregate-output lint:es lint:css",
     "lint:css": "f() { stylelint --formatter unix ${1:-'app/javascript/**/*.css'}; }; f",
-    "lint:es": "f() { eslint --format unix ${1:-app/javascript}; }; f",
+    "lint:es": "f() { bslint ${1:-app/javascript}; }; f",
     "typecheck": "tsc --noEmit"
   },
   "type": "module",
