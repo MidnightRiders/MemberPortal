@@ -21,6 +21,9 @@ class UsersController < ApplicationController
       format.html
       format.json
       format.csv {
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = 'attachment; filename=users.csv'
+
         render inline: @full_user_set.to_csv(year: @year)
       }
     end
