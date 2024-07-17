@@ -10,7 +10,7 @@
           = button_tag :submit, class: 'button small expand no-margin-bottom', title: 'Import' do
             %i.fa.fa-upload.fa-fw
   .small-3.medium-1.columns
-    = link_to users_path(format: 'csv', params: @params), html_options: { class: 'button secondary small expand', title: 'Download', download: true } do
+    = link_to users_path(format: 'csv', params: @params), class: 'button secondary small expand', title: 'Download', download: true do
       = icon 'fa-solid', 'download fa-fw'
   .small-6.medium-3.columns.text-right
     = form_tag users_path, method: :get do
